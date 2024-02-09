@@ -339,6 +339,7 @@ h3.styled {
   justify-content: space-between; }
   .header .logo-wrapper {
     display: flex;
+    margin-top: 15px;
     align-items: center;
     flex-direction: row; }
     .header .logo-wrapper a.logo {
@@ -348,8 +349,8 @@ h3.styled {
         text-decoration: none;
         opacity: 0.7; }
       .header .logo-wrapper a.logo img {
-        max-width: 90px;
-        max-height: 36px; }
+        max-width: 150px;
+        max-height: 45px; }
     .header .logo-wrapper a.quick-links-btn {
       display: flex;
       justify-content: center;

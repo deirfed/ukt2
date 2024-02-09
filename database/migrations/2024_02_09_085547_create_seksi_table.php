@@ -9,19 +9,23 @@ return new class extends Migration
 
     public function up(): void
     {
-        Schema::create('provinsi', function (Blueprint $table) {
+        Schema::create('seksi', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
             $table->string('name');
             $table->string('code')->nullable();
-            $table->string('address');
-            $table->bigInteger('admin_id')->unsigned()->nullable();
+            $table->bigInteger('walikota_id')->unsigned();
+            $table->bigInteger('provinsi_id')->unsigned();
+            $table->bigInteger('admin_id')->unsigned();
             $table->timestamps();
+
+            $table->foreign('walikota_id')->on('walikota')->references('id');
+            $table->foreign('provinsi_id')->on('provinsi')->references('id');
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('provinsi');
+        Schema::dropIfExists('seksi');
     }
 };

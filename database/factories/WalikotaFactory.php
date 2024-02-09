@@ -9,15 +9,14 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class WalikotaFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+
     public function definition(): array
     {
         return [
-            //
+            'name' => $this->faker->city,
+            'code' => $this->faker->unique()->regexify('[A-Z]{2}[0-9]{2}'),
+            'provinsi_id' => $this->faker->numberBetween(1,10),
+            'admin_id' => $this->faker->numberBetween(1,10),
         ];
     }
 }

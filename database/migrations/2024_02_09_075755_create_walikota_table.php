@@ -6,22 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-
     public function up(): void
     {
-        Schema::create('provinsi', function (Blueprint $table) {
+        Schema::create('walikota', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
             $table->string('name');
             $table->string('code')->nullable();
-            $table->string('address');
+            $table->bigInteger('provinsi_id')->unsigned();
             $table->bigInteger('admin_id')->unsigned()->nullable();
             $table->timestamps();
+
+            $table->foreign('provinsi_id')->on('provinsi')->references('id');
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('provinsi');
+        Schema::dropIfExists('walikota');
     }
 };

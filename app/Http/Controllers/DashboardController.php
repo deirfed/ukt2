@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Provinsi;
+use App\Models\Walikota;
 
 class DashboardController extends Controller
 {
@@ -14,7 +15,8 @@ class DashboardController extends Controller
     public function data_essentials()
     {
         $provinsi = Provinsi::count();
-        return view('admin.masterdata.data_essentials.index', compact(['provinsi']));
+        $walikota = Walikota::count();
+        return view('admin.masterdata.data_essentials.index', compact(['provinsi', 'walikota']));
     }
 
     public function data_assets()

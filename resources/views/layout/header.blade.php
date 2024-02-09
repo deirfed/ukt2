@@ -1,10 +1,7 @@
 <header class="header">
     <div class="logo-wrapper">
-        <a href="#" class="logo">
-            <img src="{{ asset('assets/img/jktlogo.png') }}" alt="" />
-        </a>
-        <a href="#" class="quick-links-btn" data-toggle="tooltip" data-placement="right" title="" data-original-title="Quick Links">
-            <i class="icon-menu1"></i>
+        <a href="{{ route('dashboard.index') }}" class="logo">
+            <img src="{{ asset('assets/img/fav2.png') }}" alt="" style="max-height: 200px"/>
         </a>
     </div>
     <div class="header-items">

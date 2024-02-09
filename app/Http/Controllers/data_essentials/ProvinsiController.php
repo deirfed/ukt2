@@ -37,7 +37,7 @@ class ProvinsiController extends Controller
 
     public function show($uuid)
     {
-        $provinsi =Provinsi::where('uuid', $uuid)->firstOrFail();
+        $provinsi = Provinsi::where('uuid', $uuid)->firstOrFail();
 
         return view('admin.masterdata.data_essentials.provinsi.edit', compact(['provinsi']));
     }
@@ -53,7 +53,7 @@ class ProvinsiController extends Controller
             'admin_id' => $request->input('admin_id'),
         ]);
 
-        return redirect()->route('provinsi.index')->withNotify('Data berhasil diupdate!');
+        return redirect()->route('provinsi.index')->withNotify('Data berhasil diubah!');
     }
 
     public function destroy(Request $request)

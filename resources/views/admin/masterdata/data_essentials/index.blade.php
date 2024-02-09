@@ -38,14 +38,14 @@
             </a>
         </div>
         <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12">
-            <a href="">
+            <a href="{{ route('walikota.index') }}">
                 <div class="info-tiles">
                     <div class="info-icon">
                         <i class="fa fa-database"></i>
                     </div>
                     <div class="stats-detail">
-                        <h3></h3>
-                        <p>Directory List</p>
+                        <h3>{{ $walikota }}</h3>
+                        <p>Walikota / Kab.</p>
                     </div>
                 </div>
             </a>

@@ -27,12 +27,12 @@
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <a href="{{ route('provinsi.create') }}"><button class="btn btn-primary mb-3">Tambah
                                     Data</button></a>
-                            <form class="form-inline mb-2">
-                                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
-                                    id="search-bar">
-                                <button class="btn btn-dark my-2 my-sm-0" type="submit">Pencarian</button>
-                            </form>
                         </div>
+                        <form class="form-inline mb-2">
+                            <input class="form-control mr-sm-2" type="search" placeholder="Cari sesuatu di sini..." aria-label="Search"
+                                id="search-bar">
+                            <button class="btn btn-dark my-2 my-sm-0" type="submit">Pencarian</button>
+                        </form>
                         <table class="table table-bordered table-striped" id="dataTable">
                             <thead>
                                 <tr>

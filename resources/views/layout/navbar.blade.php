@@ -5,10 +5,7 @@
     </a>
     <ul class="dropdown-menu" aria-labelledby="dashboardsDropdown">
         <li>
-            <a class="dropdown-item" href="{{ route('dashboard.index') }}">Admin Dashboard</a>
-        </li>
-        <li>
-            <a class="dropdown-item" href="">Division Dashboard</a>
+            <a class="dropdown-item" href="{{ route('dashboard.index') }}">Dashboard</a>
         </li>
     </ul>
 </li>

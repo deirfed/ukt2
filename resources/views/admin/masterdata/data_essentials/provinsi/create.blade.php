@@ -42,7 +42,7 @@
                         </div>
                         <div class="form-group">
                             <input type="text" class="form-control" id="admin_id" name="admin_id"
-                                placeholder="Admin ID" required>
+                                placeholder="Admin / Narahubung" required>
                         </div>
                         <div class="btn group-button">
                             <button type="submit" id="submit" name="submit"

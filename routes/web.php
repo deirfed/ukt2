@@ -1,11 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\SeksiController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\data_essentials\ProvinsiController;
 use App\Http\Controllers\data_essentials\WalikotaController;
-use App\Http\Controllers\RoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,5 +52,13 @@ Route::controller(WalikotaController::class)->group(function () {
     Route::get('/walikota-show/{uuid}', 'show')->name('walikota.show');
     Route::put('/walikota-update/{uuid}', 'update')->name('walikota.update');
     Route::delete('/walikota-delete', 'destroy')->name('walikota.destroy');
+});
+Route::controller(SeksiController::class)->group(function () {
+    Route::get('/seksi', 'index')->name('seksi.index');
+    Route::get('/seksi-create', 'create')->name('seksi.create');
+    Route::post('/seksi-store', 'store')->name('seksi.store');
+    Route::get('seksia-show/{uuid}', 'show')->name('seksi.show');
+    Route::put('/seksi-update/{uuid}', 'update')->name('seksi.update');
+    Route::delete('/seksi-delete', 'destroy')->name('seksi.destroy');
 });
 
