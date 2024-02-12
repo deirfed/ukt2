@@ -3194,7 +3194,7 @@ ul.statistics {
   .info-stats3.shade-one-a i {
     color: #034ea2; }
   .info-stats3.shade-one-b i {
-    color: #1d9f6b; }
+    color: #cc2626; }
   .info-stats3.shade-one-c i {
     color: #20b076; }
   .info-stats3.shade-two-a i {
@@ -4954,7 +4954,7 @@ button:focus {
     padding: 1rem 1.25rem .5rem 1.25rem; }
     .card .card-header .card-title {
       margin: 0;
-      font-size: .9rem;
+      font-size: 1.2rem;
       font-weight: 700;
       line-height: 100%; }
     .card .card-header .card-sub-title {
