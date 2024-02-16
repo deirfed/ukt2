@@ -60,14 +60,14 @@ class WalikotaController extends Controller
 
     public function destroy(Request $request)
     {
-        $id = $request->id;
-        $walikota = Walikota::findOrFail($id);
+        $provinsi = Walikota::findOrFail($request->id);
 
-        if (!$walikota) {
-            return redirect()->back();
+        if ($provinsi->canBeDeleted()) {
+            $provinsi->delete();
+
+            return redirect()->route('walikota.index')->withNotify('Data berhasil dihapus!');
+        } else {
+            return redirect()->route('walikota.index')->withError('Data tidak dapat dihapus karena masih terkait dengan data lain!');
         }
-        $walikota->delete();
-
-        return redirect()->route('walikota.index')->withNotify('Data berhasil dihapus!');
     }
 }

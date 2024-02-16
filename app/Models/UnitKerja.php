@@ -2,24 +2,26 @@
 
 namespace App\Models;
 
+use App\Models\Provinsi;
+use App\Models\Walikota;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Walikota extends Model
+class UnitKerja extends Model
 {
     use HasFactory;
 
     use SoftDeletes;
 
-    protected $table = 'walikota';
+    protected $table = 'unitkerja';
 
     protected $guarded = [];
 
     public function canBeDeleted()
     {
-        return !$this->provinsi && $this->unitkerja->isEmpty();
+        return !$this->provinsi && !$this->walikota;
     }
 
     public static function boot()
@@ -31,13 +33,13 @@ class Walikota extends Model
         });
     }
 
+    public function walikota()
+    {
+        return $this->belongsTo(Walikota::class);
+    }
+
     public function provinsi()
     {
         return $this->belongsTo(Provinsi::class);
-    }
-
-    public function unitkerja()
-    {
-        return $this->hasMany(UnitKerja::class);
     }
 }

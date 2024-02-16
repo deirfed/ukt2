@@ -41,7 +41,7 @@
                         </div>
                         <div class="form-group">
                             <label for="">Provinsi</label>
-                            <select class="form-control selectpicker" name="company_id">
+                            <select class="form-control selectpicker" name="provinsi_id">
                                 <option disabled value="" selected> - Pilih Provinsi - </option>
                                 @foreach ($provinsi as $item)
                                     <option value="{{ $item->id }}" @if ($walikota->provinsi_id == $item->id) selected @endif>{{ $item->name }} ({{ $item->code }})</option>

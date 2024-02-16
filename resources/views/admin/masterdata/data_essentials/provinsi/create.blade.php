@@ -2,7 +2,7 @@
 
 @section('title-head')
 <title>
-    Masterdata | Tambah Data Provinsi
+    Masterdata | Tambah Provinsi
 </title>
 @endsection
 
@@ -12,7 +12,7 @@
             <li class="breadcrumb-item">Masterdata</li>
             <li class="breadcrumb-item">Data Essentials</li>
             <li class="breadcrumb-item">Provinsi</li>
-            <li class="breadcrumb-item active">Tambah Provinsi</li>
+            <li class="breadcrumb-item active">Tambah Data Provinsi</li>
         </ol>
     </div>
 @endsection
@@ -25,7 +25,7 @@
                 @method('post')
                 <div class="card m-0">
                     <div class="card-header">
-                        <div class="card-title">Form Tambah Provinsi</div>
+                        <div class="card-title">Form Tambah Data Provinsi</div>
                     </div>
                     <div class="card-body">
                         <div class="form-group">

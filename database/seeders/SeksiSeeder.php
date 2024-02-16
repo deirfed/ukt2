@@ -2,16 +2,15 @@
 
 namespace Database\Seeders;
 
+use App\Models\Seksi;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class SeksiSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+
     public function run(): void
     {
-        //
+        Seksi::factory(10)->create();
     }
 }

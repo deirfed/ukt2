@@ -12,7 +12,7 @@
             <li class="breadcrumb-item">Masterdata</li>
             <li class="breadcrumb-item">Data Essentials</li>
             <li class="breadcrumb-item">Walikota/Kabupaten</li>
-            <li class="breadcrumb-item active">Tambah Walikota/Kabupaten</li>
+            <li class="breadcrumb-item active">Tambah Data Walikota/Kabupaten</li>
         </ol>
     </div>
 @endsection
@@ -25,7 +25,7 @@
                 @method('post')
                 <div class="card m-0">
                     <div class="card-header">
-                        <div class="card-title">Form Tambah Walikota/Kabupaten</div>
+                        <div class="card-title">Form Tambah Data Walikota/Kabupaten</div>
                     </div>
                     <div class="card-body">
                         <div class="form-group">

@@ -51,14 +51,14 @@
             </a>
         </div>
         <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12">
-            <a href="">
+            <a href="{{ route('unitkerja.index') }}">
                 <div class="info-tiles">
                     <div class="info-icon">
                         <i class="fa fa-database"></i>
                     </div>
                     <div class="stats-detail">
-                        <h3></h3>
-                        <p>Division List</p>
+                        <h3>{{ $unitkerja }}</h3>
+                        <p>Unit Kerja</p>
                     </div>
                 </div>
             </a>

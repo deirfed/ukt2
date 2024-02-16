@@ -6,18 +6,9 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\SeksiController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\data_essentials\ProvinsiController;
+use App\Http\Controllers\data_essentials\UnitKerjaController;
 use App\Http\Controllers\data_essentials\WalikotaController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
 
 Route::controller(LoginController::class)->group(function () {
     Route::get('/', 'login')->name('login.index');
@@ -53,12 +44,14 @@ Route::controller(WalikotaController::class)->group(function () {
     Route::put('/walikota-update/{uuid}', 'update')->name('walikota.update');
     Route::delete('/walikota-delete', 'destroy')->name('walikota.destroy');
 });
-Route::controller(SeksiController::class)->group(function () {
-    Route::get('/seksi', 'index')->name('seksi.index');
-    Route::get('/seksi-create', 'create')->name('seksi.create');
-    Route::post('/seksi-store', 'store')->name('seksi.store');
-    Route::get('seksia-show/{uuid}', 'show')->name('seksi.show');
-    Route::put('/seksi-update/{uuid}', 'update')->name('seksi.update');
-    Route::delete('/seksi-delete', 'destroy')->name('seksi.destroy');
+
+Route::controller(UnitKerjaController::class)->group(function () {
+    Route::get('/unitkerja', 'index')->name('unitkerja.index');
+    Route::get('/unitkerja-create', 'create')->name('unitkerja.create');
+    Route::post('/unitkerja-store', 'store')->name('unitkerja.store');
+    Route::get('/unitkerja-show/{uuid}', 'show')->name('unitkerja.show');
+    Route::put('/unitkerja-update/{uuid}', 'update')->name('unitkerja.update');
+    Route::delete('/unitkerja-delete', 'destroy')->name('unitkerja.destroy');
 });
+
 

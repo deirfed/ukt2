@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('code')->nullable();
             $table->string('address');
             $table->bigInteger('admin_id')->unsigned()->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

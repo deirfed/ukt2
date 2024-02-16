@@ -4,7 +4,7 @@
         $("#success-modal").modal("show");
     })
 </script>
-@elseif (session('notifyerror'))
+@elseif (session('error'))
 <script>
     $(document).ready(function() {
         $("#error-modal").modal("show");
@@ -41,7 +41,7 @@
                 <h1 class="text-center align-middle text-danger mt-2" style="font-size: 100px">
                     <i class="mdi mdi-alert-circle-outline mx-auto"></i>
                 </h1>
-                <div class="text-slate-500 mt-2">{{ session('notifyerror') ?? '-' }}</div>
+                <div class="text-slate-500 mt-2">{{ session('error') ?? '-' }}</div>
             </div>
             <div class="px-5 pb-8 text-center mt-3">
                 <button type="button" data-dismiss="modal"

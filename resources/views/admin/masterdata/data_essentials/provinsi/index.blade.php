@@ -29,8 +29,8 @@
                                     Data</button></a>
                         </div>
                         <form class="form-inline mb-2">
-                            <input class="form-control mr-sm-2" type="search" placeholder="Cari sesuatu di sini..." aria-label="Search"
-                                id="search-bar">
+                            <input class="form-control mr-sm-2" type="search" placeholder="Cari sesuatu di sini..."
+                                aria-label="Search" id="search-bar">
                             <button class="btn btn-dark my-2 my-sm-0" type="submit">Pencarian</button>
                         </form>
                         <table class="table table-bordered table-striped" id="dataTable">
@@ -62,6 +62,7 @@
                                         </td>
                                     </tr>
                                 @endforeach
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -92,4 +93,13 @@
         </div>
     </div>
     <!-- END: Delete Confirmation Modal -->
+@endsection
+
+
+@section('javascript')
+    <script type="text/javascript">
+        function toggleModal(id) {
+            $('#id').val(id);
+        }
+    </script>
 @endsection

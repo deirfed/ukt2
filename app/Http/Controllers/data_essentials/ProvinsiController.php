@@ -24,10 +24,10 @@ class ProvinsiController extends Controller
     {
         // dd($request)
         $validatedData = $request->validate([
-            'name'=> 'required',
-            'code'=> 'required',
-            'address'=> 'required',
-            'admin_id'=> 'required'
+            'name' => 'required',
+            'code' => 'required',
+            'address' => 'required',
+            'admin_id' => 'required',
         ]);
 
         Provinsi::create($validatedData);
@@ -42,7 +42,7 @@ class ProvinsiController extends Controller
         return view('admin.masterdata.data_essentials.provinsi.edit', compact(['provinsi']));
     }
 
-    public function update (Request $request, $id)
+    public function update(Request $request, $id)
     {
         $provinsi = Provinsi::findOrFail($id);
 
@@ -58,14 +58,14 @@ class ProvinsiController extends Controller
 
     public function destroy(Request $request)
     {
-        $id = $request->id;
-        $provinsi = Provinsi::findOrFail($id);
+        $provinsi = Provinsi::findOrFail($request->id);
 
-        if (!$provinsi) {
-            return redirect()->back();
+        if ($provinsi->canBeDeleted()) {
+            $provinsi->delete();
+
+            return redirect()->route('provinsi.index')->withNotify('Data berhasil dihapus!');
+        } else {
+            return redirect()->route('provinsi.index')->withError('Data tidak dapat dihapus karena masih terkait dengan data lain!');
         }
-        $provinsi->delete();
-
-        return redirect()->route('provinsi.index')->withNotify('Data berhasil dihapus!');
     }
 }
