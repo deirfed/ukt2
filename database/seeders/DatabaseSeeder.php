@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             WalikotaSeeder::class,
             UnitKerjaSeeder::class,
             SeksiSeeder::class,
+            RoleSeeder::class,
         ]);
     }
 }

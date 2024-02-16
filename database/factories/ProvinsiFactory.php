@@ -10,9 +10,9 @@ class ProvinsiFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->city,
-            'code' => $this->faker->unique()->regexify('[A-Z]{3}[0-9]{2}'),
-            'address' => $this->faker->address,
+            'name' => 'DKI Jakarta',
+            'code' => 'DKI',
+            'address' => 'Jakarta',
             'admin_id' => $this->faker->numberBetween(1,10),
         ];
     }

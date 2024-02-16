@@ -11,7 +11,7 @@ class WalikotaController extends Controller
 {
     public function index()
     {
-        $walikota = Walikota::all();
+        $walikota = Walikota::orderBy('name')->get();
         return view('admin.masterdata.data_essentials.walikota.index', compact(['walikota']));
     }
 
@@ -60,10 +60,10 @@ class WalikotaController extends Controller
 
     public function destroy(Request $request)
     {
-        $provinsi = Walikota::findOrFail($request->id);
+        $walikota = Walikota::findOrFail($request->id);
 
-        if ($provinsi->canBeDeleted()) {
-            $provinsi->delete();
+        if ($walikota->canBeDeleted()) {
+            $walikota->delete();
 
             return redirect()->route('walikota.index')->withNotify('Data berhasil dihapus!');
         } else {

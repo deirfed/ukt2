@@ -64,27 +64,27 @@
             </a>
         </div>
         <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12">
-            <a href="">
+            <a href="{{ route('seksi.index') }}">
                 <div class="info-tiles">
                     <div class="info-icon">
                         <i class="fa fa-database"></i>
                     </div>
                     <div class="stats-detail">
-                        <h3></h3>
-                        <p>Department List</p>
+                        <h3>{{ $seksi }}</h3>
+                        <p>Seksi</p>
                     </div>
                 </div>
             </a>
         </div>
         <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12">
-            <a href="">
+            <a href="{{ route('role.index') }}">
                 <div class="info-tiles">
                     <div class="info-icon">
                         <i class="fa fa-database"></i>
                     </div>
                     <div class="stats-detail">
                         <h3>1</h3>
-                        <p>Section List</p>
+                        <p>Role</p>
                     </div>
                 </div>
             </a>

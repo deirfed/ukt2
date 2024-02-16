@@ -19,7 +19,7 @@ class Walikota extends Model
 
     public function canBeDeleted()
     {
-        return !$this->provinsi && $this->unitkerja->isEmpty();
+        return !$this->provinsi && $this->unitkerja->isEmpty() && $this->seksi->isEmpty();
     }
 
     public static function boot()
@@ -31,13 +31,20 @@ class Walikota extends Model
         });
     }
 
-    public function provinsi()
+    public function seksi()
     {
-        return $this->belongsTo(Provinsi::class);
+        return $this->hasMany(Seksi::class);
     }
 
     public function unitkerja()
     {
         return $this->hasMany(UnitKerja::class);
     }
+
+    public function provinsi()
+    {
+        return $this->belongsTo(Provinsi::class);
+    }
+
+
 }

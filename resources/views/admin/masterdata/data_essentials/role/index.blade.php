@@ -1,9 +1,9 @@
 @extends('layout.base')
 
 @section('title-head')
-<title>
-    Masterdata | Role List
-</title>
+    <title>
+        Masterdata | Daftar Role
+    </title>
 @endsection
 
 @section('path')
@@ -11,8 +11,8 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">Masterdata</li>
             <li class="breadcrumb-item">Data Essentials</li>
-            <li class="breadcrumb-item">Management Role</li>
-            <li class="breadcrumb-item active">Role List</li>
+            <li class="breadcrumb-item">Manajemen Role</li>
+            <li class="breadcrumb-item active">Daftar Role</li>
         </ol>
     </div>
 @endsection
@@ -20,85 +20,44 @@
 
 @section('content')
     <div class="row gutters">
-        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
-            <div>
-                <a href="{{ route('masterdata-role.create') }}"><button class="btn btn-primary mb-3">Add Data</button></a>
-            </div>
-        </div>
-    </div>
-    <div class="row gutters">
-        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="card">
                 <div class="card-body">
-                    <h4>MRT Jakarta's User</h4>
-                    <form class="form-inline mx-auto my-2 my-lg-0 mb-10">
-                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-dark my-2 my-sm-0" type="submit">Search</button>
-                      </form>
-                    <div class="table-responsive mt-2">
-                        <table class="table table-bordered table-dark m-0" class="dataTables_filter">
+                    <div class="table-responsive">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <a href="{{ route('role.create') }}"><button class="btn btn-primary mb-3">Tambah
+                                    Data</button></a>
+                        </div>
+                        <form class="form-inline mb-2">
+                            <input class="form-control mr-sm-2" type="search" placeholder="Cari sesuatu di sini..."
+                                aria-label="Search" id="search-bar">
+                            <button class="btn btn-dark my-2 my-sm-0" type="submit">Pencarian</button>
+                        </form>
+                        <table class="table table-bordered table-striped" id="dataTable">
                             <thead>
                                 <tr>
-                                    <th class="text-center">No</th>
-                                    <th class="text-center">Name</th>
-                                    <th class="text-center">Section</th>
-                                    <th class="text-center">Contact</th>
-                                    <th class="text-center">Position</th>
-                                    <th class="text-center">Action</th>
+                                    <th class="text-center">No.</th>
+                                    <th class="text-center">Nama Role</th>
+                                    <th class="text-center">Kode</th>
+                                    <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class="text-center">1</td>
-                                    <td class="text-center">Dede Irfan</td>
-                                    <td class="text-center">PWRAMS</td>
-                                    <td class="text-center">0801</td>
-                                    <td class="text-center">aliawilllams@wafi.com</td>
-                                    <td class="text-center">
-                                        <button class="btn btn-outline-primary" data-toggle="modal"
-                                            data-target="#exampleModalCenter"><i class="fa fa-edit"></i></button>
-                                        <button class="btn btn-outline-primary"><i class="fa fa-trash"></i></button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
-            <div class="card">
-                <div class="card-body">
-                    <h4>Third Party's Users</h4>
-                    <form class="form-inline mx-auto my-2 my-lg-0 mb-10">
-                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-success my-2 my-sm-0" type="submit">Search</button>
-                      </form>
-                    <div class="table-responsive mt-2">
-                        <table class="table table-bordered table-primary m-0">
-                            <thead>
-                                <tr>
-                                    <th class="text-center">No</th>
-                                    <th class="text-center">Name</th>
-                                    <th class="text-center">Section</th>
-                                    <th class="text-center">Contact</th>
-                                    <th class="text-center">Position</th>
-                                    <th class="text-center">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="text-center">1</td>
-                                    <td class="text-center">Dede Irfan</td>
-                                    <td class="text-center">PWRAMS</td>
-                                    <td class="text-center">0801</td>
-                                    <td class="text-center">aliawilllams@wafi.com</td>
-                                    <td class="text-center">
-                                        <button class="btn btn-outline-dark" data-toggle="modal"
-                                            data-target="#exampleModalCenter"><i class="fa fa-edit"></i></button>
-                                        <button class="btn btn-outline-dark"><i class="fa fa-trash"></i></button>
-                                    </td>
-                                </tr>
+                                @foreach ($role as $item)
+                                    <tr>
+                                        <td class="text-center">{{ $loop->iteration }}</td>
+                                        <td class="text-center">{{ $item->name }}</td>
+                                        <td class="text-center">{{ $item->code }}</td>
+                                        <td class="text-center">
+                                            <a href="{{ route('role.show', $item->uuid) }}"><button
+                                                    class="btn btn-outline-primary"><i class="fa fa-edit"></i></button></a>
+                                            <a href="#" href="javascript:;" data-toggle="modal"
+                                                data-target="#delete-confirmation-modal"
+                                                onclick="toggleModal('{{ $item->id }}')"><button
+                                                    class="btn btn-outline-primary"><i class="fa fa-trash"></i></button></a>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -106,4 +65,37 @@
             </div>
         </div>
     </div>
+
+    <!-- BEGIN: Delete Confirmation Modal -->
+    <div id="delete-confirmation-modal" class="modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body p-2">
+                    <div class="p-2 text-center">
+                        <div class="text-3xl mt-2">Apakah anda yakin?</div>
+                        <div class="text-slate-500 mt-2">Peringatan: Data ini akan dihapus secara permanent</div>
+                    </div>
+                    <div class="px-5 pb-8 text-center mt-3">
+                        <form action="{{ route('role.destroy') }}" method="POST">
+                            @csrf
+                            @method('delete')
+                            <input type="text" name="id" id="id" hidden>
+                            <button type="button" data-dismiss="modal" class="btn btn-dark w-24 mr-1 me-2">Batal</button>
+                            <button type="submit" class="btn btn-primary w-24">Hapus</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END: Delete Confirmation Modal -->
+@endsection
+
+
+@section('javascript')
+    <script type="text/javascript">
+        function toggleModal(id) {
+            $('#id').val(id);
+        }
+    </script>
 @endsection

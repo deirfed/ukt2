@@ -11,6 +11,6 @@ class WalikotaSeeder extends Seeder
 
     public function run(): void
     {
-        Walikota::factory(10)->create();
+        Walikota::factory(6)->create();
     }
 }

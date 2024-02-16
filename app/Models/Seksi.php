@@ -25,4 +25,19 @@ class Seksi extends Model
             $model->uuid = Str::uuid();
         });
     }
+
+    public function unitkerja()
+    {
+        return $this->belongsTo(UnitKerja::class);
+    }
+    public function walikota()
+    {
+        return $this->belongsTo(Walikota::class);
+    }
+
+    public function provinsi()
+    {
+        return $this->belongsTo(Provinsi::class);
+    }
+
 }

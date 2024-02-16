@@ -2,7 +2,7 @@
 
 @section('title-head')
 <title>
-    Masterdata | Tambah Data Role
+    Masterdata | Ubah Data Role
 </title>
 @endsection
 
@@ -12,7 +12,7 @@
             <li class="breadcrumb-item">Masterdata</li>
             <li class="breadcrumb-item">Data Essentials</li>
             <li class="breadcrumb-item">Manajemen Role</li>
-            <li class="breadcrumb-item active">Tambah Data Role</li>
+            <li class="breadcrumb-item active">Ubah Data Role</li>
         </ol>
     </div>
 @endsection
@@ -20,25 +20,28 @@
 @section('content')
     <div class="row gutters justify-content-center">
         <div class="col-xl-4 col-lg-4 col-md-5 col-sm-6 col-12">
-            <form action="{{ route('role.store') }}" method="POST">
+            <form action="{{ route('role.update', $role->id) }}" method="POST">
                 @csrf
-                @method('post')
+                @method('put')
                 <div class="card m-0">
                     <div class="card-header">
-                        <div class="card-title">Form Tambah Data Role</div>
+                        <div class="card-title">Form Edit Role</div>
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <input type="text" class="form-control" id="name" name="name"
-                                placeholder="Nama Role" required>
+                            <label for="">Nama Seksi</label>
+                            <input type="text" hidden value="{{ $role->id }}" name="id">
+                            <input type="text" class="form-control" name="name" autocomplete="off"
+                                value="{{ $role->name }}" required>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="code" name="code"
-                                placeholder="Kode Role" required>
+                            <label for="">Kode Seksi</label>
+                            <input type="text" class="form-control" name="code" autocomplete="off"
+                                value="{{ $role->code }}" required>
                         </div>
                         <div class="btn group-button">
                             <button type="submit" id="submit" name="submit"
-                            class="btn btn-primary float-right ml-3">Submit</button>
+                                class="btn btn-primary float-right ml-3">Ubah Data</button>
                             <a href="{{ route('role.index') }}" class="btn btn-dark">Batal</a>
                         </div>
                     </div>

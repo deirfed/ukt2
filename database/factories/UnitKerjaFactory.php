@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UnitKerjaFactory extends Factory
 {
-    use SoftDeletes;
 
     public function definition(): array
     {

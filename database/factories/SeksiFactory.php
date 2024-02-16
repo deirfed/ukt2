@@ -13,8 +13,8 @@ class SeksiFactory extends Factory
             'name' => $this->faker->company,
             'code' => $this->faker->unique()->regexify('[A-Z]{2}[0-9]{2}'),
             'unitkerja_id' => $this->faker->numberBetween(1,1),
-            'provinsi_id' => $this->faker->numberBetween(1,10),
-            'walikota_id' => $this->faker->numberBetween(1,10),
+            'provinsi_id' => $this->faker->numberBetween(1,1),
+            'walikota_id' => $this->faker->numberBetween(1,6),
             'admin_id' => $this->faker->numberBetween(1,10),
         ];
     }

@@ -33,6 +33,10 @@ class UnitKerja extends Model
         });
     }
 
+    public function seksi()
+    {
+        return $this->hasMany(Seksi::class);
+    }
     public function walikota()
     {
         return $this->belongsTo(Walikota::class);

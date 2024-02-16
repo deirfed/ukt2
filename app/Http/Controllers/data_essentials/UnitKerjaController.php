@@ -12,7 +12,7 @@ class UnitKerjaController extends Controller
 {
     public function index()
     {
-        $unitkerja = UnitKerja::all();
+        $unitkerja = UnitKerja::orderBy('name')->get();
 
         return view('admin.masterdata.data_essentials.unitkerja.index', compact(['unitkerja']));
     }
@@ -66,14 +66,14 @@ class UnitKerjaController extends Controller
 
     public function destroy(Request $request)
     {
-        $provinsi = UnitKerja::findOrFail($request->id);
+        $unitkerja = UnitKerja::findOrFail($request->id);
 
-        if ($provinsi->canBeDeleted()) {
-            $provinsi->delete();
+        if ($unitkerja->canBeDeleted()) {
+            $unitkerja->delete();
 
-            return redirect()->route('unitkerja.index')->withNotify('Unit Kerja berhasil dihapus!');
+            return redirect()->route('unitkerja.index')->withNotify('Data berhasil dihapus!');
         } else {
-            return redirect()->route('unitkerja.index')->withError('Unit Kerja tidak dapat dihapus karena masih terkait dengan data lain!');
+            return redirect()->route('unitkerja.index')->withError('Data tidak dapat dihapus karena masih terkait dengan data lain!');
         }
     }
 }

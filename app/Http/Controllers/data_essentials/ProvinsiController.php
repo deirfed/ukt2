@@ -10,9 +10,8 @@ class ProvinsiController extends Controller
 {
     public function index()
     {
-        $provinsi = Provinsi::all();
-        $lastUpdate = $provinsi->max('updated_at');
-        return view('admin.masterdata.data_essentials.provinsi.index', compact(['provinsi', 'lastUpdate']));
+        $provinsi = Provinsi::orderBy('name')->get();
+        return view('admin.masterdata.data_essentials.provinsi.index', compact(['provinsi']));
     }
 
     public function create()

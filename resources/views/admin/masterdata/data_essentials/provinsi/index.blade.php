@@ -40,7 +40,7 @@
                                     <th class="text-center">Nama Provinsi</th>
                                     <th class="text-center">Kode Provinsi</th>
                                     <th class="text-center">Alamat Provinsi</th>
-                                    <th class="text-center">Admin</th>
+                                    <th class="text-center">Admin / Narahubung</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>

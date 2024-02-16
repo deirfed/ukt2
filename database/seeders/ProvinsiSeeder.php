@@ -11,6 +11,6 @@ class ProvinsiSeeder extends Seeder
 
     public function run(): void
     {
-       Provinsi::factory(10)->create();
+       Provinsi::factory(1)->create();
     }
 }

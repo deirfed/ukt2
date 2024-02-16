@@ -37,7 +37,15 @@
                                 placeholder="Kode Seksi" required>
                         </div>
                         <div class="form-group">
-                            <select class="form-control selectpicker" name="directory_id" required>
+                            <select class="form-control selectpicker" name="unitkerja_id" required>
+                                <option disabled value="" selected> - Pilih Unit Kerja - </option>
+                                @foreach ($unitkerja as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }} ({{ $item->code }})</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control selectpicker" name="walikota_id" required>
                                 <option disabled value="" selected> - Pilih Walikota/Kabupaten - </option>
                                 @foreach ($walikota as $item)
                                     <option value="{{ $item->id }}">{{ $item->name }} ({{ $item->code }})</option>
@@ -45,12 +53,16 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <select class="form-control selectpicker" name="company_id" required>
+                            <select class="form-control selectpicker" name="provinsi_id" required>
                                 <option disabled value="" selected> - Pilih Provinsi - </option>
                                 @foreach ($provinsi as $item)
                                     <option value="{{ $item->id }}">{{ $item->name }} ({{ $item->code }})</option>
                                 @endforeach
                             </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="admin_id" name="admin_id"
+                                placeholder="Admin / Narahubung" required>
                         </div>
                         <div class="btn group-button">
                             <button type="submit" id="submit" name="submit"

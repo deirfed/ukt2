@@ -41,6 +41,7 @@
                                     <th class="text-center">Nama Walikota / Kabupaten</th>
                                     <th class="text-center">Kode</th>
                                     <th class="text-center">Provinsi</th>
+                                    <th class="text-center">Admin / Narahubung</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
@@ -51,6 +52,7 @@
                                         <td class="text-center">{{ $item->name }}</td>
                                         <td class="text-center">{{ $item->code }}</td>
                                         <td class="text-center">{{ $item->provinsi->name }} ({{ $item->provinsi->code }})</td>
+                                        <td class="text-center">{{ $item->admin_id}}</td>
                                         <td class="text-center">
                                             <a href="{{ route('walikota.show', $item->uuid) }}"><button
                                                     class="btn btn-outline-primary"><i class="fa fa-edit"></i></button></a>
@@ -84,8 +86,8 @@
                             @csrf
                             @method('delete')
                             <input type="text" name="id" id="id" hidden>
-                            <button type="button" data-dismiss="modal" class="btn btn-dark w-24 mr-1 me-2">Cancel</button>
-                            <button type="submit" class="btn btn-primary w-24">Delete</button>
+                            <button type="button" data-dismiss="modal" class="btn btn-dark w-24 mr-1 me-2">Batal</button>
+                            <button type="submit" class="btn btn-primary w-24">Hapus</button>
                         </form>
                     </div>
                 </div>
