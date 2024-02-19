@@ -6016,3 +6016,22 @@ code {
     height: calc(100vh - 230px);
     overflow-y: auto;
 }
+
+.svg-container {
+    margin-top: 100px;
+    width: 400px;
+    margin: auto;
+
+}
+
+@media (min-width: 992px) {
+    .svg-container {
+        width: 800px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .svg-container {
+        width: 500px;
+    }
+}

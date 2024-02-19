@@ -3,11 +3,13 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Role;
 use Illuminate\Database\Seeder;
-use Database\Seeders\CompanySeeder;
-use Database\Seeders\DivisionSeeder;
-use Database\Seeders\DirectorySeeder;
-use Database\Seeders\DepartmentSeeder;
+use Database\Seeders\RoleSeeder;
+use Database\Seeders\SeksiSeeder;
+use Database\Seeders\ProvinsiSeeder;
+use Database\Seeders\WalikotaSeeder;
+use Database\Seeders\UnitKerjaSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,7 +21,19 @@ class DatabaseSeeder extends Seeder
             WalikotaSeeder::class,
             UnitKerjaSeeder::class,
             SeksiSeeder::class,
-            RoleSeeder::class,
+        ]);
+
+        Role::create([
+            'name' => 'Superadmin',
+            'code'  => 'SA'
+        ]);
+        Role::create([
+            'name' => 'Admin',
+            'code'  => 'A'
+        ]);
+        Role::create([
+            'name' => 'User',
+            'code'  => 'U'
         ]);
     }
 }
