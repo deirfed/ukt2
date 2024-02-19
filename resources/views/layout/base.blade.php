@@ -62,10 +62,11 @@
                 </ul>
             </div>
         </nav>
-        <div class="main-container">
 
-            {{-- Yield Path --}}
-            @yield('path')
+        {{-- Yield Path --}}
+        @yield('path')
+
+        <div class="main-container-scrollable">
 
             <div class="content-wrapper">
 

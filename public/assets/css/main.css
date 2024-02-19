@@ -3209,7 +3209,7 @@ ul.statistics {
   border: 1px solid #e4e9f1;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
-  border-radius: 2px;
+  border-radius: 20px;
   display: flex;
   align-items: center;
   flex-direction: row;
@@ -3246,7 +3246,7 @@ ul.statistics {
   min-height: 84px;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
-  border-radius: 3px;
+  border-radius: 20px;
   margin-bottom: .9rem;
   background: #ffffff;
   border: 1px solid #e4e9f1; }
@@ -4946,7 +4946,7 @@ button:focus {
   box-shadow: none;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
-  border-radius: 2px;
+  border-radius: 20px;
   margin-bottom: 1rem; }
   .card .card-header {
     background: transparent;
@@ -6011,3 +6011,8 @@ code {
   color: #f77eb9;
   word-break: break-word; }
 
+  /* EDITCSS */
+.main-container-scrollable {
+    height: calc(100vh - 230px);
+    overflow-y: auto;
+}
