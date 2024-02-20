@@ -14,7 +14,55 @@
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="appsDropdown" role="button" data-toggle="dropdown"
         aria-haspopup="true" aria-expanded="false">
-        <i class="icon-package nav-icon"></i>
+        <i class="fa fa-line-chart nav-icon"></i>
+        Kinerja
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="dashboardsDropdown">
+        <li>
+            <a class="dropdown-item" href="">Data Essentials</a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="">Data Assets</a>
+        </li>
+    </ul>
+</li>
+
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="appsDropdown" role="button" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
+        <i class="fa fa-id-card nav-icon"></i>
+        Absensi
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="dashboardsDropdown">
+        <li>
+            <a class="dropdown-item" href="">Data Essentials</a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="">Data Assets</a>
+        </li>
+    </ul>
+</li>
+
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="appsDropdown" role="button" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
+        <i class="fa fa-user-times nav-icon"></i>
+        Cuti
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="dashboardsDropdown">
+        <li>
+            <a class="dropdown-item" href="">Data Essentials</a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="">Data Assets</a>
+        </li>
+    </ul>
+</li>
+
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="appsDropdown" role="button" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
+        <i class="icon-database nav-icon"></i>
         Masterdata
     </a>
     <ul class="dropdown-menu" aria-labelledby="dashboardsDropdown">
@@ -49,22 +97,6 @@
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="appsDropdown" role="button" data-toggle="dropdown"
         aria-haspopup="true" aria-expanded="false">
-        <i class="icon-database nav-icon"></i>
-        Kelola Absensi
-    </a>
-    <ul class="dropdown-menu" aria-labelledby="dashboardsDropdown">
-        <li>
-            <a class="dropdown-item" href="">Data Essentials</a>
-        </li>
-        <li>
-            <a class="dropdown-item" href="">Data Assets</a>
-        </li>
-    </ul>
-</li>
-
-<li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" href="#" id="appsDropdown" role="button" data-toggle="dropdown"
-        aria-haspopup="true" aria-expanded="false">
         <i class="icon-info nav-icon"></i>
         Informasi
     </a>
@@ -81,7 +113,7 @@
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="appsDropdown" role="button" data-toggle="dropdown"
         aria-haspopup="true" aria-expanded="false">
-        <i class="icon-eye nav-icon"></i>
+        <i class="fa fa-usd nav-icon"></i>
         Informasi Gaji
     </a>
     <ul class="dropdown-menu" aria-labelledby="dashboardsDropdown">
