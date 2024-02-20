@@ -16,6 +16,8 @@ body {
 	align-items: center;
 	justify-content: center;
 	min-height: 100vh;
+    overflow-y: hidden;
+    overflow-x: hidden;
 }
 
 .screen {
@@ -157,6 +159,39 @@ body {
 }
 
 .login-logo{
-    max-height: 100px;
+    max-height: 200px;
     max-width: 100px;
 }
+
+@media only screen and (max-width: 600px) {
+    .screen {
+        width: 400px;
+        height: 550px;
+        overflow-x: hidden;
+        overflow-y: hidden;
+    }
+}
+
+@media only screen and (max-width: 1200px) {
+    .screen {
+        width: 600px;
+        height: 750px;
+    }
+
+    .login {
+        width: 500px;
+    }
+
+    .login__input {
+        font-size: 20px;
+    }
+
+    .login__submit {
+        font-size: 30px;
+    }
+
+    .login-logo {
+        max-width: 300px;
+    }
+}
+
