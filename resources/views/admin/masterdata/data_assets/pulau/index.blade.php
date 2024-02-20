@@ -155,26 +155,5 @@
             </div>
         </div>
     </div>
-
-    <style>
-        .svg-container {
-            margin-top: 100px;
-            width: 400px;
-            margin: auto;
-            /* Untuk memastikan SVG berada di tengah */
-        }
-
-        @media (min-width: 992px) {
-            .svg-container {
-                width: 800px;
-            }
-        }
-
-        @media (min-width: 1200px) {
-            .svg-container {
-                width: 500px;
-            }
-        }
-    </style>
 @endsection
 

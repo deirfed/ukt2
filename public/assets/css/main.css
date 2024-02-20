@@ -683,7 +683,7 @@ a.quick-tile {
     margin-top: 0;
     display: block; }
 
-@media (max-width: 400px) {
+@media (max-width: 476px) {
   .header-actions > li > a.user-settings span.user-name {
     display: none; }
   .header-actions > li:nth-child(2n) {

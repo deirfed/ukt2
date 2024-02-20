@@ -147,8 +147,8 @@
                             <p>{{ \Carbon\Carbon::now()->addHours(7)->format('d F Y H:i A') }}
                             </p>
                             <div class="dropdown show">
-                                <a class="btn btn-dark dropdown-toggle" href="#" role="button"
-                                    id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a class="btn btn-dark dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Pilih Pulau
                                 </a>
 
