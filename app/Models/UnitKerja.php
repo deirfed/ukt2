@@ -19,11 +19,6 @@ class UnitKerja extends Model
 
     protected $guarded = [];
 
-    public function canBeDeleted()
-    {
-        return !$this->provinsi && !$this->walikota;
-    }
-
     public static function boot()
     {
         parent::boot();
@@ -31,19 +26,5 @@ class UnitKerja extends Model
         self::creating(function ($model) {
             $model->uuid = Str::uuid();
         });
-    }
-
-    public function seksi()
-    {
-        return $this->hasMany(Seksi::class);
-    }
-    public function walikota()
-    {
-        return $this->belongsTo(Walikota::class);
-    }
-
-    public function provinsi()
-    {
-        return $this->belongsTo(Provinsi::class);
     }
 }

@@ -1,11 +1,15 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\Kecamatan;
+use App\Models\Kelurahan;
 use Illuminate\Http\Request;
 use App\Models\Provinsi;
 use App\Models\UnitKerja;
 use App\Models\Walikota;
 use App\Models\Seksi;
+use App\Models\Pulau;
 
 class DashboardController extends Controller
 {
@@ -20,7 +24,10 @@ class DashboardController extends Controller
         $walikota = Walikota::count();
         $unitkerja = UnitKerja::count();
         $seksi = Seksi::count();
-        return view('admin.masterdata.data_essentials.index', compact(['provinsi', 'walikota', 'unitkerja', 'seksi']));
+        $kelurahan = Kelurahan::count();
+        $kecamatan = Kecamatan::count();
+        $pulau = Pulau::count();
+        return view('admin.masterdata.data_essentials.index', compact(['provinsi', 'walikota', 'unitkerja', 'seksi', 'kelurahan', 'kecamatan', 'pulau']));
     }
 
     public function data_assets()

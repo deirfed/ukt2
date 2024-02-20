@@ -3,6 +3,10 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Kecamatan;
+use App\Models\Kelurahan;
+use App\Models\Pulau;
 use App\Models\Role;
 use Illuminate\Database\Seeder;
 use Database\Seeders\RoleSeeder;
@@ -34,6 +38,21 @@ class DatabaseSeeder extends Seeder
         Role::create([
             'name' => 'User',
             'code'  => 'U'
+        ]);
+
+        Kelurahan::create([
+            'name'=> 'Kelurahan Maju Jaya',
+            'code' => 'MJ'
+        ]);
+
+        Kecamatan::create([
+            'name'=> 'Kecamatan Maju Jaya',
+            'code' => 'MJ'
+        ]);
+
+        Pulau::create([
+            'name'=> 'Tidung',
+            'code' => 'TD'
         ]);
     }
 }

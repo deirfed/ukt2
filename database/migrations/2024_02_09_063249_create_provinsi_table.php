@@ -14,8 +14,6 @@ return new class extends Migration
             $table->uuid('uuid')->unique();
             $table->string('name');
             $table->string('code')->nullable();
-            $table->string('address');
-            $table->bigInteger('admin_id')->unsigned()->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

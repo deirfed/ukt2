@@ -2,7 +2,7 @@
 
 @section('title-head')
     <title>
-        Masterdata | Daftar Walikota/Kabupaten
+        Masterdata | Daftar Pulau
     </title>
 @endsection
 
@@ -11,8 +11,8 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">Masterdata</li>
             <li class="breadcrumb-item">Data Essentials</li>
-            <li class="breadcrumb-item">Walikota/Kabupaten</li>
-            <li class="breadcrumb-item active">Daftar Walikota/Kabupaten</li>
+            <li class="breadcrumb-item">Pulau</li>
+            <li class="breadcrumb-item active">Daftar Pulau</li>
         </ol>
     </div>
 @endsection
@@ -25,32 +25,31 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <a href="{{ route('walikota.create') }}"><button class="btn btn-primary mb-3">Tambah
+                            <a href="{{ route('pulau.create') }}"><button class="btn btn-primary mb-3">Tambah
                                     Data</button></a>
                         </div>
-                        <form class="form-inline mb-3">
-                            <input class="form-control mr-sm-2" type="search" placeholder="Cari sesuai di sini..." aria-label="Search"
-                                id="search-bar">
+                        <form class="form-inline mb-2">
+                            <input class="form-control mr-sm-2" type="search" placeholder="Cari sesuatu di sini..."
+                                aria-label="Search" id="search-bar">
                             <button class="btn btn-dark my-2 my-sm-0" type="submit">Pencarian</button>
                         </form>
-
                         <table class="table table-bordered table-striped" id="dataTable">
                             <thead>
                                 <tr>
                                     <th class="text-center">No.</th>
-                                    <th class="text-center">Nama Walikota / Kabupaten</th>
-                                    <th class="text-center">Kode</th>
+                                    <th class="text-center">Nama Pulau</th>
+                                    <th class="text-center">Kode Pulau</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($walikota as $item)
+                                @foreach ($pulau as $item)
                                     <tr>
                                         <td class="text-center">{{ $loop->iteration }}</td>
                                         <td class="text-center">{{ $item->name }}</td>
                                         <td class="text-center">{{ $item->code }}</td>
                                         <td class="text-center">
-                                            <a href="{{ route('walikota.show', $item->uuid) }}"><button
+                                            <a href="{{ route('pulau.show', $item->uuid) }}"><button
                                                     class="btn btn-outline-primary"><i class="fa fa-edit"></i></button></a>
                                             <a href="#" href="javascript:;" data-toggle="modal"
                                                 data-target="#delete-confirmation-modal"
@@ -64,7 +63,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 
@@ -78,7 +76,7 @@
                         <div class="text-slate-500 mt-2">Peringatan: Data ini akan dihapus secara permanent</div>
                     </div>
                     <div class="px-5 pb-8 text-center mt-3">
-                        <form action="{{ route('walikota.destroy') }}" method="POST">
+                        <form action="{{ route('pulau.destroy') }}" method="POST">
                             @csrf
                             @method('delete')
                             <input type="text" name="id" id="id" hidden>
@@ -92,6 +90,7 @@
     </div>
     <!-- END: Delete Confirmation Modal -->
 @endsection
+
 
 @section('javascript')
     <script type="text/javascript">

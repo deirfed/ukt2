@@ -39,38 +39,6 @@
                             <input type="text" class="form-control" name="code" autocomplete="off"
                                 value="{{ $seksi->code }}" required>
                         </div>
-                        <div class="form-group">
-                            <label for="">Unit Kerja</label>
-                            <select class="form-control selectpicker" name="unitkerja_id">
-                                <option disabled value="" selected> - Pilih Unit Kerja - </option>
-                                @foreach ($unitkerja as $item)
-                                    <option value="{{ $item->id }}" @if ($seksi->unitkerja_id == $item->id) selected @endif>{{ $item->name }} ({{ $item->code }})</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="">Walikota/Kabupaten</label>
-                            <select class="form-control selectpicker" name="walikota_id">
-                                <option disabled value="" selected> - Pilih Walikota/Kabupaten - </option>
-                                @foreach ($walikota as $item)
-                                    <option value="{{ $item->id }}" @if ($seksi->walikota_id == $item->id) selected @endif>{{ $item->name }} ({{ $item->code }})</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="">Provinsi</label>
-                            <select class="form-control selectpicker" name="provinsi_id">
-                                <option disabled value="" selected> - Pilih Provinsi - </option>
-                                @foreach ($provinsi as $item)
-                                    <option value="{{ $item->id }}" @if ($seksi->provinsi_id == $item->id) selected @endif>{{ $item->name }} ({{ $item->code }})</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="">Admin Seksi</label>
-                            <input type="text" class="form-control" name="admin_id" autocomplete="off"
-                                value="{{ $seksi->admin_id }}" required>
-                        </div>
                         <div class="btn group-button">
                             <button type="submit" id="submit" name="submit"
                                 class="btn btn-primary float-right ml-3">Ubah Data</button>

@@ -11,6 +11,6 @@ class UnitKerjaSeeder extends Seeder
 
     public function run(): void
     {
-       UnitKerja::factory(1)->create();
+       UnitKerja::factory(3)->create();
     }
 }

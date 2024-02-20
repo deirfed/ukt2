@@ -12,8 +12,6 @@ class WalikotaFactory extends Factory
         return [
             'name' => $this->faker->city,
             'code' => $this->faker->unique()->regexify('[A-Z]{2}[0-9]{2}'),
-            'provinsi_id' => $this->faker->numberBetween(1,1),
-            'admin_id' => $this->faker->numberBetween(1,10),
         ];
     }
 }

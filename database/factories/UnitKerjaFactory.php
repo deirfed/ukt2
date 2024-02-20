@@ -13,9 +13,6 @@ class UnitKerjaFactory extends Factory
         return [
             'name' => 'Unit Kerja Teknis 2',
             'code' => 'UKT 2',
-            'provinsi_id' => 1,
-            'walikota_id' => 1,
-            'admin_id' => $this->faker->numberBetween(1,10),
         ];
     }
 }

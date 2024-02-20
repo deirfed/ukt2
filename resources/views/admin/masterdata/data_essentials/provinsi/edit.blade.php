@@ -39,16 +39,6 @@
                             <input type="text" class="form-control" name="code" autocomplete="off"
                                 value="{{ $provinsi->code }}" required>
                         </div>
-                        <div class="form-group">
-                            <label for="">Alamat Provinsi</label>
-                            <input type="text" class="form-control" name="address" autocomplete="off"
-                                value="{{ $provinsi->address }}" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="">Admin Provinsi</label>
-                            <input type="text" class="form-control" name="admin_id" autocomplete="off"
-                                value="{{ $provinsi->admin_id }}" required>
-                        </div>
                         <div class="btn group-button">
                             <button type="submit" id="submit" name="submit"
                                 class="btn btn-primary float-right ml-3">Update Data</button>

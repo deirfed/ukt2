@@ -36,14 +36,6 @@
                             <input type="text" class="form-control" id="code" name="code"
                                 placeholder="Kode Provinsi" required>
                         </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="address" name="address"
-                                placeholder="Alamat Provinsi" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="admin_id" name="admin_id"
-                                placeholder="Admin / Narahubung" required>
-                        </div>
                         <div class="btn group-button">
                             <button type="submit" id="submit" name="submit"
                             class="btn btn-primary float-right ml-3">Submit</button>

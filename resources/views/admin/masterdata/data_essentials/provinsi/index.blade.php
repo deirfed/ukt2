@@ -39,8 +39,6 @@
                                     <th class="text-center">No.</th>
                                     <th class="text-center">Nama Provinsi</th>
                                     <th class="text-center">Kode Provinsi</th>
-                                    <th class="text-center">Alamat Provinsi</th>
-                                    <th class="text-center">Admin / Narahubung</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
@@ -50,8 +48,6 @@
                                         <td class="text-center">{{ $loop->iteration }}</td>
                                         <td class="text-center">{{ $item->name }}</td>
                                         <td class="text-center">{{ $item->code }}</td>
-                                        <td class="text-center">{{ $item->address }}</td>
-                                        <td class="text-center">{{ $item->admin_id }}</td>
                                         <td class="text-center">
                                             <a href="{{ route('provinsi.show', $item->uuid) }}"><button
                                                     class="btn btn-outline-primary"><i class="fa fa-edit"></i></button></a>

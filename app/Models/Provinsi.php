@@ -18,11 +18,6 @@ class Provinsi extends Model
 
     protected $guarded = [];
 
-    public function canBeDeleted()
-    {
-        return $this->walikota->isEmpty() && $this->unitkerja->isEmpty() && $this->seksi->isEmpty();
-    }
-
     public static function boot()
     {
         parent::boot();
@@ -30,20 +25,6 @@ class Provinsi extends Model
         self::creating(function ($model) {
             $model->uuid = Str::uuid();
         });
-    }
-
-    public function seksi()
-    {
-        return $this->hasMany(Seksi::class);
-    }
-    public function unitkerja()
-    {
-        return $this->hasMany(UnitKerja::class);
-    }
-
-    public function walikota()
-    {
-        return $this->hasMany(Walikota::class);
     }
 
 }

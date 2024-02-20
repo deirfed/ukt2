@@ -17,8 +17,7 @@ class WalikotaController extends Controller
 
     public function create()
     {
-        $provinsi = Provinsi::all();
-        return view('admin.masterdata.data_essentials.walikota.create', compact(['provinsi']));
+        return view('admin.masterdata.data_essentials.walikota.create');
     }
 
     public function store(Request $request)
@@ -27,8 +26,6 @@ class WalikotaController extends Controller
         $validateData = $request->validate([
             'name' => 'required',
             'code' => 'required',
-            'provinsi_id' => 'required',
-            'admin_id' => 'required',
         ]);
 
         Walikota::create($validateData);
@@ -38,10 +35,9 @@ class WalikotaController extends Controller
 
     public function show($uuid)
     {
-        $provinsi = Provinsi::all();
         $walikota = Walikota::where('uuid', $uuid)->firstOrFail();
 
-        return view('admin.masterdata.data_essentials.walikota.edit', compact(['walikota', 'provinsi']));
+        return view('admin.masterdata.data_essentials.walikota.edit', compact(['walikota']));
     }
 
     public function update(Request $request, $id)
@@ -51,8 +47,6 @@ class WalikotaController extends Controller
         $walikota->update([
             'name' => $request->input('name'),
             'code' => $request->input('code'),
-            'provinsi_id' => $request->input('provinsi_id'),
-            'admin_id' => $request->input('admin_id'),
         ]);
 
         return redirect()->route('walikota.index')->withNotify('Data berhasil diubah!');
@@ -60,14 +54,14 @@ class WalikotaController extends Controller
 
     public function destroy(Request $request)
     {
-        $walikota = Walikota::findOrFail($request->id);
+        $id = $request->id;
+        $walikota = Walikota::findOrFail($id);
 
-        if ($walikota->canBeDeleted()) {
-            $walikota->delete();
-
-            return redirect()->route('walikota.index')->withNotify('Data berhasil dihapus!');
-        } else {
-            return redirect()->route('walikota.index')->withError('Data tidak dapat dihapus karena masih terkait dengan data lain!');
+        if (!$walikota) {
+            return redirect()->back();
         }
+        $walikota->delete();
+
+        return redirect()->route('walikota.index')->withNotify('Data berhasil dihapus!');
     }
 }

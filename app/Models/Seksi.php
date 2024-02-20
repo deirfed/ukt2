@@ -26,18 +26,4 @@ class Seksi extends Model
         });
     }
 
-    public function unitkerja()
-    {
-        return $this->belongsTo(UnitKerja::class);
-    }
-    public function walikota()
-    {
-        return $this->belongsTo(Walikota::class);
-    }
-
-    public function provinsi()
-    {
-        return $this->belongsTo(Provinsi::class);
-    }
-
 }

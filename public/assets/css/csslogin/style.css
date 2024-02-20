@@ -26,6 +26,7 @@ body {
 	height: 600px;
 	width: 450px;
 	box-shadow: 0px 0px 15px black;
+    border-radius: 30px;
 }
 
 .screen__content {
@@ -183,7 +184,7 @@ body {
     }
 
     .login__input {
-        font-size: 30px;
+        font-size: 25px;
     }
 
     .login__submit {
@@ -208,11 +209,11 @@ body {
     }
 
     .login__input {
-        font-size: 30px;
+        font-size: 25px;
     }
 
     .login__submit {
-        font-size: 30px;
+        font-size: 25px;
     }
 
     .login-logo {
@@ -235,7 +236,7 @@ body {
     }
 
     .login__submit {
-        font-size: 30px;
+        font-size: 25px;
     }
 
     .login-logo {

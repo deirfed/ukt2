@@ -13,12 +13,8 @@ return new class extends Migration
             $table->uuid('uuid')->unique();
             $table->string('name');
             $table->string('code')->nullable();
-            $table->bigInteger('provinsi_id')->unsigned();
-            $table->bigInteger('admin_id')->unsigned()->nullable();
             $table->softDeletes();
             $table->timestamps();
-
-            $table->foreign('provinsi_id')->on('provinsi')->references('id');
         });
     }
 

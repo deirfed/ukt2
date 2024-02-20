@@ -12,8 +12,6 @@ class ProvinsiFactory extends Factory
         return [
             'name' => 'DKI Jakarta',
             'code' => 'DKI',
-            'address' => 'Jakarta',
-            'admin_id' => $this->faker->numberBetween(1,10),
         ];
     }
 }

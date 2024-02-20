@@ -11,7 +11,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">Masterdata</li>
             <li class="breadcrumb-item">Data Essentials</li>
-            <li class="breadcrumb-item">Unit Kerja</li>
+            <li class="breadcrumb-item">Data Unit Kerja</li>
             <li class="breadcrumb-item active">Daftar Unit Kerja</li>
         </ol>
     </div>
@@ -24,8 +24,8 @@
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <div>
-                            <a href="{{ route('unitkerja.create') }}"><button class="btn btn-primary mb-3">Add
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <a href="{{ route('unitkerja.create') }}"><button class="btn btn-primary mb-3">Tambah
                                     Data</button></a>
                         </div>
                         <form class="form-inline mb-3">
@@ -33,16 +33,14 @@
                                 aria-label="Search" id="search-bar">
                             <button class="btn btn-dark my-2 my-sm-0" type="submit">Pencarian</button>
                         </form>
-                        <table class="table table-bordered table-striped">
+
+                        <table class="table table-bordered table-striped" id="dataTable">
                             <thead>
                                 <tr>
                                     <th class="text-center">No.</th>
                                     <th class="text-center">Nama Unit Kerja</th>
                                     <th class="text-center">Kode</th>
-                                    <th class="text-center">Walikota/Kabupaten</th>
-                                    <th class="text-center">Provinsi</th>
-                                    <th class="text-center">Admin / Narahubung</th>
-                                    <th class="text-center">Action</th>
+                                    <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -51,12 +49,6 @@
                                         <td class="text-center">{{ $loop->iteration }}</td>
                                         <td class="text-center">{{ $item->name }}</td>
                                         <td class="text-center">{{ $item->code }}</td>
-                                        <td class="text-center">{{ $item->walikota->name }} ({{ $item->walikota->code }})
-                                        </td>
-                                        <td class="text-center">{{ $item->provinsi->name }} ({{ $item->provinsi->code }})
-                                        </td>
-                                        <td class="text-center">{{ $item->admin_id }}
-                                        </td>
                                         <td class="text-center">
                                             <a href="{{ route('unitkerja.show', $item->uuid) }}"><button
                                                     class="btn btn-outline-primary"><i class="fa fa-edit"></i></button></a>
@@ -72,6 +64,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 
@@ -98,4 +91,12 @@
         </div>
     </div>
     <!-- END: Delete Confirmation Modal -->
+@endsection
+
+@section('javascript')
+    <script type="text/javascript">
+        function toggleModal(id) {
+            $('#id').val(id);
+        }
+    </script>
 @endsection

@@ -1,14 +1,19 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\data_essentials\RoleController;
 use App\Http\Controllers\data_essentials\SeksiController;
 use App\Http\Controllers\data_essentials\ProvinsiController;
 use App\Http\Controllers\data_essentials\RoleUserController;
-use App\Http\Controllers\data_essentials\UnitKerjaController;
 use App\Http\Controllers\data_essentials\WalikotaController;
+use App\Http\Controllers\data_essentials\KecamatanController;
+use App\Http\Controllers\data_essentials\KelurahanController;
+use App\Http\Controllers\data_essentials\UnitKerjaController;
+use App\Http\Controllers\data_essentials\PulauController;
 
 // Route::controller(LoginController::class)->group(function () {
 //     Route::get('/', 'login')->name('login.index');
@@ -30,8 +35,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/data_essentials', 'data_essentials')->name('data_essentials.index');
         // Data Assets
         Route::get('/data_assets', 'data_assets')->name('data_assets.index');
-        // Mockup Pulau Titip di Controller Da`shboard
-        Route::get('/pulau', 'pulau')->name('pulau.index');
     });
 
     // ---------------------MASTERDATA ESSENTIALS----------------------------
@@ -54,6 +57,24 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/walikota-delete', 'destroy')->name('walikota.destroy');
     });
 
+    Route::controller(KecamatanController::class)->group(function () {
+        Route::get('/kecamatan', 'index')->name('kecamatan.index');
+        Route::get('/kecamatan-create', 'create')->name('kecamatan.create');
+        Route::post('/kecamatan-store', 'store')->name('kecamatan.store');
+        Route::get('/kecamatan-show/{uuid}', 'show')->name('kecamatan.show');
+        Route::put('/kecamatan-update/{uuid}', 'update')->name('kecamatan.update');
+        Route::delete('/kecamatan-delete', 'destroy')->name('kecamatan.destroy');
+    });
+
+    Route::controller(KelurahanController::class)->group(function () {
+        Route::get('/kelurahan', 'index')->name('kelurahan.index');
+        Route::get('/kelurahan-create', 'create')->name('kelurahan.create');
+        Route::post('/kelurahan-store', 'store')->name('kelurahan.store');
+        Route::get('/kelurahan-show/{uuid}', 'show')->name('kelurahan.show');
+        Route::put('/kelurahan-update/{uuid}', 'update')->name('kelurahan.update');
+        Route::delete('/kelurahan-delete', 'destroy')->name('kelurahan.destroy');
+    });
+
     Route::controller(UnitKerjaController::class)->group(function () {
         Route::get('/unitkerja', 'index')->name('unitkerja.index');
         Route::get('/unitkerja-create', 'create')->name('unitkerja.create');
@@ -70,6 +91,15 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/seksi-show/{uuid}', 'show')->name('seksi.show');
         Route::put('/seksi-update/{uuid}', 'update')->name('seksi.update');
         Route::delete('/seksi-delete', 'destroy')->name('seksi.destroy');
+    });
+
+    Route::controller(PulauController::class)->group(function () {
+        Route::get('/pulau', 'index')->name('pulau.index');
+        Route::get('/pulau-create', 'create')->name('pulau.create');
+        Route::post('/pulau-store', 'store')->name('pulau.store');
+        Route::get('/pulau-show/{uuid}', 'show')->name('pulau.show');
+        Route::put('/pulau-update/{uuid}', 'update')->name('pulau.update');
+        Route::delete('/pulau-delete', 'destroy')->name('pulau.destroy');
     });
 
     Route::controller(RoleController::class)->group(function () {

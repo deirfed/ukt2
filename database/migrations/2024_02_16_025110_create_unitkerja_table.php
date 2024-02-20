@@ -14,14 +14,9 @@ return new class extends Migration
             $table->uuid('uuid')->unique();
             $table->string('name');
             $table->string('code')->nullable();
-            $table->bigInteger('walikota_id')->unsigned();
-            $table->bigInteger('provinsi_id')->unsigned();
-            $table->bigInteger('admin_id')->unsigned();
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreign('walikota_id')->on('walikota')->references('id');
-            $table->foreign('provinsi_id')->on('provinsi')->references('id');
         });
     }
 

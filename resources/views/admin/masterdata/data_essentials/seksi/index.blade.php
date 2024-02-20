@@ -40,10 +40,6 @@
                                     <th class="text-center">No.</th>
                                     <th class="text-center">Nama Seksi</th>
                                     <th class="text-center">Kode</th>
-                                    <th class="text-center">Unit Kerja</th>
-                                    <th class="text-center">Walikota/Kabupaten</th>
-                                    <th class="text-center">Provinsi</th>
-                                    <th class="text-center">Admin / Narahubung</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
@@ -53,11 +49,6 @@
                                         <td class="text-center">{{ $loop->iteration }}</td>
                                         <td class="text-center">{{ $item->name }}</td>
                                         <td class="text-center">{{ $item->code }}</td>
-                                        <td class="text-center">{{ $item->unitkerja->name }} ({{ $item->unitkerja->code }})
-                                        </td>
-                                        <td class="text-center">{{ $item->walikota->name }}</td>
-                                        <td class="text-center">{{ $item->provinsi->name }}</td>
-                                        <td class="text-center">{{ $item->admin_id }}</td>
                                         <td class="text-center">
                                             <a href="{{ route('seksi.show', $item->uuid) }}"><button
                                                     class="btn btn-outline-primary"><i class="fa fa-edit"></i></button></a>

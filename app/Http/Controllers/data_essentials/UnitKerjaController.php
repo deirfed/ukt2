@@ -19,9 +19,7 @@ class UnitKerjaController extends Controller
 
     public function create()
     {
-        $walikota = Walikota::all();
-        $provinsi = Provinsi::all();
-        return view('admin.masterdata.data_essentials.unitkerja.create', compact(['walikota', 'provinsi']));
+        return view('admin.masterdata.data_essentials.unitkerja.create');
     }
 
     public function store(Request $request)
@@ -30,9 +28,6 @@ class UnitKerjaController extends Controller
         $validatedData = $request->validate([
             'name' => 'required',
             'code' => 'required',
-            'walikota_id' => 'required',
-            'provinsi_id' => 'required',
-            'admin_id' => 'required',
         ]);
 
         UnitKerja::create($validatedData);
@@ -42,11 +37,9 @@ class UnitKerjaController extends Controller
 
     public function show($uuid)
     {
-        $walikota = Walikota::all();
-        $provinsi = Provinsi::all();
         $unitkerja = UnitKerja::where('uuid', $uuid)->firstOrFail();
 
-        return view('admin.masterdata.data_essentials.unitkerja.edit', compact(['unitkerja', 'walikota', 'provinsi']));
+        return view('admin.masterdata.data_essentials.unitkerja.edit', compact(['unitkerja']));
     }
 
     public function update(Request $request, $id)
@@ -56,9 +49,6 @@ class UnitKerjaController extends Controller
         $unitkerja->update([
             'name' => $request->input('name'),
             'code' => $request->input('code'),
-            'walikota_id' => $request->input('walikota_id'),
-            'provinsi_id' => $request->input('provinsi_id'),
-            'admin_id' => $request->input('admin_id'),
         ]);
 
         return redirect()->route('unitkerja.index')->withNotify('Data berhasil diubah!');
@@ -66,14 +56,14 @@ class UnitKerjaController extends Controller
 
     public function destroy(Request $request)
     {
-        $unitkerja = UnitKerja::findOrFail($request->id);
+        $id = $request->id;
+        $unitkerja = UnitKerja::findOrFail($id);
 
-        if ($unitkerja->canBeDeleted()) {
-            $unitkerja->delete();
-
-            return redirect()->route('unitkerja.index')->withNotify('Data berhasil dihapus!');
-        } else {
-            return redirect()->route('unitkerja.index')->withError('Data tidak dapat dihapus karena masih terkait dengan data lain!');
+        if (!$unitkerja) {
+            return redirect()->back();
         }
+        $unitkerja->delete();
+
+        return redirect()->route('unitkerja.index')->withNotify('Data berhasil dihapus!');
     }
 }

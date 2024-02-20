@@ -20,11 +20,7 @@ class SeksiController extends Controller
 
     public function create()
     {
-        $walikota = Walikota::all();
-        $unitkerja = UnitKerja::all();
-        $provinsi = Provinsi::all();
-
-        return view('admin.masterdata.data_essentials.seksi.create', compact(['walikota', 'provinsi', 'unitkerja']));
+        return view('admin.masterdata.data_essentials.seksi.create');
     }
 
     public function store(Request $request)
@@ -33,10 +29,6 @@ class SeksiController extends Controller
         $validatedData = $request->validate([
             'name' => 'required',
             'code' => 'required',
-            'unitkerja_id' => 'required',
-            'walikota_id' => 'required',
-            'provinsi_id' => 'required',
-            'admin_id' => 'required',
         ]);
 
         Seksi::create($validatedData);
@@ -61,10 +53,6 @@ class SeksiController extends Controller
         $unitkerja->update([
             'name' => $request->input('name'),
             'code' => $request->input('code'),
-            'unitkerja_id' => $request->input('unitkerja_id'),
-            'walikota_id' => $request->input('walikota_id'),
-            'provinsi_id' => $request->input('provinsi_id'),
-            'admin_id' => $request->input('admin_id'),
         ]);
 
         return redirect()->route('seksi.index')->withNotify('Data berhasil diubah!');

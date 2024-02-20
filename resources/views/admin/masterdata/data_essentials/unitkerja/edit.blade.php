@@ -39,33 +39,10 @@
                             <input type="text" class="form-control" name="code" autocomplete="off"
                                 value="{{ $unitkerja->code }}" required>
                         </div>
-                        <div class="form-group">
-                            <label for="">Walikota</label>
-                            <select class="form-control selectpicker" name="walikota_id">
-                                <option disabled value="" selected> - Pilih Walikota - </option>
-                                @foreach ($walikota as $item)
-                                    <option value="{{ $item->id }}" @if ($unitkerja->provinsi_id == $item->id) selected @endif>{{ $item->name }} ({{ $item->code }})</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="">Provinsi</label>
-                            <select class="form-control selectpicker" name="provinsi_id">
-                                <option disabled value="" selected> - Pilih Provinsi - </option>
-                                @foreach ($provinsi as $item)
-                                    <option value="{{ $item->id }}" @if ($unitkerja->provinsi_id == $item->id) selected @endif>{{ $item->name }} ({{ $item->code }})</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="">Admin Provinsi</label>
-                            <input type="text" class="form-control" name="admin_id" autocomplete="off"
-                                value="{{ $unitkerja->admin_id }}" required>
-                        </div>
                         <div class="btn group-button">
                             <button type="submit" id="submit" name="submit"
                                 class="btn btn-primary float-right ml-3">Update Data</button>
-                            <a href="{{ route('unitkerja.index') }}" class="btn btn-dark">Cancel</a>
+                            <a href="{{ route('unitkerja.index') }}" class="btn btn-dark">Batal</a>
                         </div>
                     </div>
                 </div>
