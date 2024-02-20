@@ -10,9 +10,9 @@
     <div class="page-header">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">Masterdata</li>
-            <li class="breadcrumb-item">Data Essentials</li>
-            <li class="breadcrumb-item">Manajemen Role</li>
-            <li class="breadcrumb-item active">Tambah Data Relasi Role</li>
+            <li class="breadcrumb-item">Data Relasi</li>
+            <li class="breadcrumb-item">Role User</li>
+            <li class="breadcrumb-item active">Tambah Data Relasi Role User</li>
         </ol>
     </div>
 @endsection
@@ -25,7 +25,7 @@
                 @method('post')
                 <div class="card m-0">
                     <div class="card-header">
-                        <div class="card-title">Form Tambah Data Role</div>
+                        <div class="card-title">Form Tambah Data Role User</div>
                     </div>
                     <div class="card-body">
                         <div class="form-group">

@@ -10,6 +10,9 @@ use App\Models\UnitKerja;
 use App\Models\Walikota;
 use App\Models\Seksi;
 use App\Models\Pulau;
+use App\Models\Role;
+use App\Models\RoleUser;
+use App\Models\User;
 
 class DashboardController extends Controller
 {
@@ -27,12 +30,32 @@ class DashboardController extends Controller
         $kelurahan = Kelurahan::count();
         $kecamatan = Kecamatan::count();
         $pulau = Pulau::count();
-        return view('admin.masterdata.data_essentials.index', compact(['provinsi', 'walikota', 'unitkerja', 'seksi', 'kelurahan', 'kecamatan', 'pulau']));
+        $role = Role::count();
+        $users = User::count();
+        return view('admin.masterdata.data_essentials.index', compact([
+            'provinsi',
+            'walikota',
+            'unitkerja',
+            'seksi',
+            'kelurahan',
+            'kecamatan',
+            'pulau',
+            'role',
+            'users',
+        ]));
     }
 
     public function data_assets()
     {
         return view('admin.masterdata.data_assets.index');
+    }
+
+    public function data_relasi()
+    {
+        $role_user = RoleUser::count();
+        return view('admin.masterdata.data_relasi.index', compact([
+            'role_user',
+        ]));
     }
 
     public function pulau()

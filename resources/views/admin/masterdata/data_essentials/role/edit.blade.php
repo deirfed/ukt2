@@ -1,9 +1,9 @@
 @extends('layout.base')
 
 @section('title-head')
-<title>
-    Masterdata | Ubah Data Role
-</title>
+    <title>
+        Masterdata | Ubah Data Role
+    </title>
 @endsection
 
 @section('path')
@@ -29,13 +29,13 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <label for="">Nama Seksi</label>
+                            <label for="">Nama Role</label>
                             <input type="text" hidden value="{{ $role->id }}" name="id">
                             <input type="text" class="form-control" name="name" autocomplete="off"
                                 value="{{ $role->name }}" required>
                         </div>
                         <div class="form-group">
-                            <label for="">Kode Seksi</label>
+                            <label for="">Kode Role</label>
                             <input type="text" class="form-control" name="code" autocomplete="off"
                                 value="{{ $role->code }}" required>
                         </div>

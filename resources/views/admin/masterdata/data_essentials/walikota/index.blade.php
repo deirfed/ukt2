@@ -2,7 +2,7 @@
 
 @section('title-head')
     <title>
-        Masterdata | Daftar Walikota/Kabupaten
+        Masterdata | Daftar Kota/Kabupaten
     </title>
 @endsection
 
@@ -11,8 +11,8 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">Masterdata</li>
             <li class="breadcrumb-item">Data Essentials</li>
-            <li class="breadcrumb-item">Walikota/Kabupaten</li>
-            <li class="breadcrumb-item active">Daftar Walikota/Kabupaten</li>
+            <li class="breadcrumb-item">Kota/Kabupaten</li>
+            <li class="breadcrumb-item active">Daftar Kota/Kabupaten</li>
         </ol>
     </div>
 @endsection
@@ -25,12 +25,19 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <a href="{{ route('walikota.create') }}"><button class="btn btn-primary mb-3">Tambah
-                                    Data</button></a>
+                            <div class="btn-group">
+                                <a class="btn btn-outline-primary mb-3" href="{{ route('data_essentials.index') }}">
+                                    <i class="fa fa-arrow-left"></i>
+                                    Kembali
+                                </a>
+                                <a class="btn btn-primary mb-3" href="{{ route('walikota.create') }}">
+                                    Tambah Data
+                                </a>
+                            </div>
                         </div>
                         <form class="form-inline mb-3">
-                            <input class="form-control mr-sm-2" type="search" placeholder="Cari sesuai di sini..." aria-label="Search"
-                                id="search-bar">
+                            <input class="form-control mr-sm-2" type="search" placeholder="Cari sesuai di sini..."
+                                aria-label="Search" id="search-bar">
                             <button class="btn btn-dark my-2 my-sm-0" type="submit">Pencarian</button>
                         </form>
 
@@ -38,7 +45,7 @@
                             <thead>
                                 <tr>
                                     <th class="text-center">No.</th>
-                                    <th class="text-center">Nama Walikota / Kabupaten</th>
+                                    <th class="text-center">Nama Kota / Kabupaten</th>
                                     <th class="text-center">Kode</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>

@@ -25,8 +25,15 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <a href="{{ route('kelurahan.create') }}"><button class="btn btn-primary mb-3">Tambah
-                                    Data</button></a>
+                            <div class="btn-group">
+                                <a class="btn btn-outline-primary mb-3" href="{{ route('data_essentials.index') }}">
+                                    <i class="fa fa-arrow-left"></i>
+                                    Kembali
+                                </a>
+                                <a class="btn btn-primary mb-3" href="{{ route('kelurahan.create') }}">
+                                    Tambah Data
+                                </a>
+                            </div>
                         </div>
                         <form class="form-inline mb-2">
                             <input class="form-control mr-sm-2" type="search" placeholder="Cari sesuatu di sini..."

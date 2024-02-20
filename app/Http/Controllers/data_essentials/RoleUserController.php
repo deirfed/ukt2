@@ -13,14 +13,14 @@ class RoleUserController extends Controller
     public function index()
     {
         $role_user = RoleUser::orderBy('user_id', 'ASC')->get();
-        return view('admin.masterdata.data_essentials.relasi_role_user.index', compact(['role_user']));
+        return view('admin.masterdata.data_relasi.relasi_role_user.index', compact(['role_user']));
     }
 
     public function create()
     {
         $user = User::orderBy('name', 'ASC')->get();
         $role = Role::all();
-        return view('admin.masterdata.data_essentials.relasi_role_user.create', compact([
+        return view('admin.masterdata.data_relasi.relasi_role_user.create', compact([
             'user',
             'role',
         ]));
@@ -54,7 +54,7 @@ class RoleUserController extends Controller
             return back()->withNotifyerror('Data tidak ditemukan.');
         }
         $role = Role::all();
-        return view('admin.masterdata.data_essentials.relasi_role_user.edit', compact([
+        return view('admin.masterdata.data_relasi.relasi_role_user.edit', compact([
             'role_user',
             'role',
         ]));
@@ -74,8 +74,16 @@ class RoleUserController extends Controller
         return redirect()->route('role_user.index')->withNotify('Data berhasil diperbaharui!');
     }
 
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
+        $id = $request->id;
+        $role_user = RoleUser::findOrFail($id);
 
+        if (!$role_user) {
+            return redirect()->back()->withNotifyerror('Terjadi kesalahan');
+        }
+        $role_user->delete();
+
+        return redirect()->route('role_user.index')->withNotify('Data berhasil dihapus!');
     }
 }

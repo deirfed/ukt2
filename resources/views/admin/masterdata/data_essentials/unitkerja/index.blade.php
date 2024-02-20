@@ -25,8 +25,15 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <a href="{{ route('unitkerja.create') }}"><button class="btn btn-primary mb-3">Tambah
-                                    Data</button></a>
+                            <div class="btn-group">
+                                <a class="btn btn-outline-primary mb-3" href="{{ route('data_essentials.index') }}">
+                                    <i class="fa fa-arrow-left"></i>
+                                    Kembali
+                                </a>
+                                <a class="btn btn-primary mb-3" href="{{ route('unitkerja.create') }}">
+                                    Tambah Data
+                                </a>
+                            </div>
                         </div>
                         <form class="form-inline mb-3">
                             <input class="form-control mr-sm-2" type="search" placeholder="Cari sesuai di sini..."
@@ -55,7 +62,7 @@
                                             <a href="#" href="javascript:;" data-toggle="modal"
                                                 data-target="#delete-confirmation-modal"
                                                 onclick="toggleModal('{{ $item->id }}')"><button
-                                                    class="btn btn-outline-primary"><i class="fa fa-trash"></i></button></a>
+                                                    class="btn btn-outline-danger"><i class="fa fa-trash"></i></button></a>
                                         </td>
                                     </tr>
                                 @endforeach

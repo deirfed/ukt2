@@ -41,8 +41,8 @@
                         </div>
                         <div class="btn group-button">
                             <button type="submit" id="submit" name="submit"
-                                class="btn btn-primary float-right ml-3">Update Data</button>
-                            <a href="{{ route('provinsi.index') }}" class="btn btn-dark">Cancel</a>
+                                class="btn btn-primary float-right ml-3">Ubah Data</button>
+                            <a href="{{ route('provinsi.index') }}" class="btn btn-dark">Batal</a>
                         </div>
                     </div>
                 </div>

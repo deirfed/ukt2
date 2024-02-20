@@ -2,7 +2,7 @@
 
 @section('title-head')
     <title>
-        Masterdata | Daftar Relasi Role
+        Masterdata | Daftar Relasi Role User
     </title>
 @endsection
 
@@ -10,9 +10,9 @@
     <div class="page-header">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">Masterdata</li>
-            <li class="breadcrumb-item">Data Essentials</li>
-            <li class="breadcrumb-item">Manajemen Role</li>
-            <li class="breadcrumb-item active">Daftar Relasi Role</li>
+            <li class="breadcrumb-item">Data Relasi</li>
+            <li class="breadcrumb-item">Role User</li>
+            <li class="breadcrumb-item active">Daftar Relasi Role User</li>
         </ol>
     </div>
 @endsection
@@ -25,8 +25,15 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <a href="{{ route('role_user.create') }}"><button class="btn btn-primary mb-3">Tambah
-                                    Data</button></a>
+                            <div class="btn-group">
+                                <a class="btn btn-outline-primary mb-3" href="{{ route('data_relasi.index') }}">
+                                    <i class="fa fa-arrow-left"></i>
+                                    Kembali
+                                </a>
+                                <a class="btn btn-primary mb-3" href="{{ route('role_user.create') }}">
+                                    Tambah Data
+                                </a>
+                            </div>
                         </div>
                         <form class="form-inline mb-2">
                             <input class="form-control mr-sm-2" type="search" placeholder="Cari sesuatu di sini..."
@@ -54,7 +61,7 @@
                                             <a href="#" href="javascript:;" data-toggle="modal"
                                                 data-target="#delete-confirmation-modal"
                                                 onclick="toggleModal('{{ $item->id }}')"><button
-                                                    class="btn btn-outline-primary"><i class="fa fa-trash"></i></button></a>
+                                                    class="btn btn-outline-danger"><i class="fa fa-trash"></i></button></a>
                                         </td>
                                     </tr>
                                 @endforeach

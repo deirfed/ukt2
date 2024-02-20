@@ -1,9 +1,9 @@
 @extends('layout.base')
 
 @section('title-head')
-<title>
-    Masterdata | Tambah Provinsi
-</title>
+    <title>
+        Masterdata | Tambah Provinsi
+    </title>
 @endsection
 
 @section('path')
@@ -38,8 +38,8 @@
                         </div>
                         <div class="btn group-button">
                             <button type="submit" id="submit" name="submit"
-                            class="btn btn-primary float-right ml-3">Submit</button>
-                            <a href="" class="btn btn-dark">Batal</a>
+                                class="btn btn-primary float-right ml-3">Submit</button>
+                            <a href="{{ route('provinsi.index') }}" class="btn btn-dark">Batal</a>
                         </div>
                     </div>
                 </div>

@@ -1,9 +1,9 @@
 @extends('layout.base')
 
 @section('title-head')
-<title>
-    Dashboard | Data Essentials
-</title>
+    <title>
+        Dashboard | Data Essentials
+    </title>
 @endsection
 
 @section('path')
@@ -32,7 +32,7 @@
                     </div>
                     <div class="stats-detail">
                         <h3>{{ $provinsi }}</h3>
-                        <p>Daftar Provinsi</p>
+                        <p>Provinsi</p>
                     </div>
                 </div>
             </a>
@@ -45,7 +45,7 @@
                     </div>
                     <div class="stats-detail">
                         <h3>{{ $walikota }}</h3>
-                        <p>Walikota / Kab.</p>
+                        <p>Kota / Kabupaten</p>
                     </div>
                 </div>
             </a>
@@ -117,6 +117,32 @@
                 </div>
             </a>
         </div>
+        <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12">
+            <a href="{{ route('role.index') }}">
+                <div class="info-tiles">
+                    <div class="info-icon">
+                        <i class="fa fa-database"></i>
+                    </div>
+                    <div class="stats-detail">
+                        <h3>{{ $role }}</h3>
+                        <p>Role</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12">
+            <a href="{{ route('user.index') }}">
+                <div class="info-tiles">
+                    <div class="info-icon">
+                        <i class="fa fa-database"></i>
+                    </div>
+                    <div class="stats-detail">
+                        <h3>{{ $users }}</h3>
+                        <p>Users</p>
+                    </div>
+                </div>
+            </a>
+        </div>
         {{-- <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12">
             <a href="">
                 <div class="info-tiles">
@@ -165,19 +191,6 @@
                     <div class="stats-detail">
                         <h3>1</h3>
                         <p>Location List</p>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12">
-            <a href="#">
-                <div class="info-tiles">
-                    <div class="info-icon">
-                        <i class="fa fa-database"></i>
-                    </div>
-                    <div class="stats-detail">
-                        <h3>1</h3>
-                        <p>Role List</p>
                     </div>
                 </div>
             </a>

@@ -9,21 +9,22 @@
             <li class="dropdown mt-4">
                 <a href="#" id="notifications" data-toggle="dropdown" aria-haspopup="true">
                     <i class="icon-bell"></i>
-                    <span class="count-label">8</span>
+                    <span class="count-label">1</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right lrg" aria-labelledby="notifications">
                     <div class="dropdown-menu-header">
-                        Notifications (8)
+                        Notifications (1)
                     </div>
                     <ul class="header-notifications">
                         <li>
                             <a href="#">
-                                <div class="user-img away">
-                                    <img src="" alt="User" />
+                                <div class="user-img not-busy">
+                                    <img src="https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg"
+                                        alt="User" />
                                 </div>
                                 <div class="details">
-                                    <div class="user-title">Abbott</div>
-                                    <div class="noti-details">Membership has been ended.</div>
+                                    <div class="user-title">{{ auth()->user()->name }}</div>
+                                    <div class="noti-details">Mencapai target kinerja harian.</div>
                                     <div class="noti-date">Oct 20, 07:30 pm</div>
                                 </div>
                             </a>
@@ -33,21 +34,26 @@
             </li>
             <li class="dropdown mt-4">
                 <a href="#" id="userSettings" class="user-settings" data-toggle="dropdown" aria-haspopup="true">
-                    <span class="user-name">{{ auth()->user()->name }}</span>
-                    <span class="avatar">USER<span class="status busy"></span></span>
+                    <span class="text-white fw-bolder p-1">{{ auth()->user()->name }}</span>
+                    <span class="avatar header-user">
+                        <img src="https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg"
+                            alt="USR">
+                        <span class="status not-busy"></span>
+                    </span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userSettings">
                     <div class="header-profile-actions">
                         <div class="header-user-profile">
                             <div class="header-user">
-                                <img src="#" alt="Admin Template" />
+                                <img src="https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg"
+                                    alt="USER" />
                             </div>
                             <h5>{{ auth()->user()->name }}</h5>
                             <p>{{ auth()->user()->email }}</p>
                         </div>
-                        <a href="user-profile.html"><i class="icon-user1"></i> My Profile</a>
-                        <a href="account-settings.html"><i class="icon-settings1"></i> Account Settings</a>
-                        <a thref="{{ route('logout') }}"
+                        <a href="#user-profile"><i class="icon-user1"></i> My Profile</a>
+                        <a href="#user-settings"><i class="icon-settings1"></i> Account Settings</a>
+                        <a href="javascript;"
                             onclick="event.preventDefault();
                             document.getElementById('logout-form').submit();">
                             <i class="icon-log-out1"></i> Logout

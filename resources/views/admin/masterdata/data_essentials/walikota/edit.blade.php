@@ -1,9 +1,9 @@
 @extends('layout.base')
 
 @section('title-head')
-<title>
-    Masterdata | Ubah Data Walikota/Kabupaten
-</title>
+    <title>
+        Masterdata | Ubah Data Kota/Kabupaten
+    </title>
 @endsection
 
 @section('path')
@@ -11,8 +11,8 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">Masterdata</li>
             <li class="breadcrumb-item">Data Essentials</li>
-            <li class="breadcrumb-item">Walikota/Kabupaten</li>
-            <li class="breadcrumb-item active">Ubah Data Walikota/Kabupaten</li>
+            <li class="breadcrumb-item">Kota/Kabupaten</li>
+            <li class="breadcrumb-item active">Ubah Data Kota/Kabupaten</li>
         </ol>
     </div>
 @endsection
@@ -25,17 +25,17 @@
                 @method('put')
                 <div class="card m-0">
                     <div class="card-header">
-                        <div class="card-title">Form Ubah Data Walikota/Kabupaten</div>
+                        <div class="card-title">Form Ubah Data Kota/Kabupaten</div>
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <label for="">Nama Walikota/Kabupaten</label>
+                            <label for="">Nama Kota/Kabupaten</label>
                             <input type="text" hidden value="{{ $walikota->id }}" name="id">
                             <input type="text" class="form-control" name="name" autocomplete="off"
                                 value="{{ $walikota->name }}" required>
                         </div>
                         <div class="form-group">
-                            <label for="">Kode</label>
+                            <label for="">Kode Kota/Kabupaten</label>
                             <input type="text" class="form-control" name="code" autocomplete="off"
                                 value="{{ $walikota->code }}" required>
                         </div>

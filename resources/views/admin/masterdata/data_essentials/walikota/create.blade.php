@@ -1,9 +1,9 @@
 @extends('layout.base')
 
 @section('title-head')
-<title>
-    Masterdata | Tambah Walikota/Kabupaten
-</title>
+    <title>
+        Masterdata | Tambah Kota/Kabupaten
+    </title>
 @endsection
 
 @section('path')
@@ -11,8 +11,8 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">Masterdata</li>
             <li class="breadcrumb-item">Data Essentials</li>
-            <li class="breadcrumb-item">Walikota/Kabupaten</li>
-            <li class="breadcrumb-item active">Tambah Data Walikota/Kabupaten</li>
+            <li class="breadcrumb-item">Kota/Kabupaten</li>
+            <li class="breadcrumb-item active">Tambah Data Kota/Kabupaten</li>
         </ol>
     </div>
 @endsection
@@ -25,21 +25,21 @@
                 @method('post')
                 <div class="card m-0">
                     <div class="card-header">
-                        <div class="card-title">Form Tambah Data Walikota/Kabupaten</div>
+                        <div class="card-title">Form Tambah Data Kota/Kabupaten</div>
                     </div>
                     <div class="card-body">
                         <div class="form-group">
                             <input type="text" class="form-control" id="name" name="name"
-                                placeholder="Nama Walikota/Kabupaten" required>
+                                placeholder="Nama Kota/Kabupaten" required>
                         </div>
                         <div class="form-group">
                             <input type="text" class="form-control" id="code" name="code"
-                                placeholder="Kode Walikota/Kabupaten" required>
+                                placeholder="Kode Kota/Kabupaten" required>
                         </div>
                         <div class="btn group-button">
                             <button type="submit" id="submit" name="submit"
-                            class="btn btn-primary float-right ml-3">Submit</button>
-                            <a href="{{ route('walikota.index') }}" class="btn btn-dark">Cancel</a>
+                                class="btn btn-primary float-right ml-3">Submit</button>
+                            <a href="{{ route('walikota.index') }}" class="btn btn-dark">Batal</a>
                         </div>
                     </div>
                 </div>

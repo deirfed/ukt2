@@ -11,7 +11,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">Masterdata</li>
             <li class="breadcrumb-item">Data Essentials</li>
-            <li class="breadcrumb-item">Provinsi</li>
+            <li class="breadcrumb-item">Unit Kerja</li>
             <li class="breadcrumb-item active">Ubah Data Unit Kerja</li>
         </ol>
     </div>
@@ -41,7 +41,7 @@
                         </div>
                         <div class="btn group-button">
                             <button type="submit" id="submit" name="submit"
-                                class="btn btn-primary float-right ml-3">Update Data</button>
+                                class="btn btn-primary float-right ml-3">Ubah Data</button>
                             <a href="{{ route('unitkerja.index') }}" class="btn btn-dark">Batal</a>
                         </div>
                     </div>

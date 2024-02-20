@@ -10,9 +10,9 @@
     <div class="page-header">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">Masterdata</li>
-            <li class="breadcrumb-item">Data Essentials</li>
-            <li class="breadcrumb-item">Manajemen Role</li>
-            <li class="breadcrumb-item active">Ubah Data Relasi Role</li>
+            <li class="breadcrumb-item">Data Relasi</li>
+            <li class="breadcrumb-item">Role User</li>
+            <li class="breadcrumb-item active">Ubah Data Relasi Role User</li>
         </ol>
     </div>
 @endsection
@@ -25,7 +25,7 @@
                 @method('put')
                 <div class="card m-0">
                     <div class="card-header">
-                        <div class="card-title">Form Edit Role</div>
+                        <div class="card-title">Form Edit Role User</div>
                     </div>
                     <div class="card-body">
                         <div class="form-group">
@@ -46,7 +46,7 @@
                         <div class="btn group-button">
                             <button type="submit" id="submit" name="submit"
                                 class="btn btn-primary float-right ml-3">Ubah Data</button>
-                            <a href="{{ route('role.index') }}" class="btn btn-dark">Batal</a>
+                            <a href="{{ route('role_user.index') }}" class="btn btn-dark">Batal</a>
                         </div>
                     </div>
                 </div>
