@@ -64,7 +64,7 @@
     </div>
 
     <div class="row gutters">
-        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="card">
                 <div class="card-header">
                     <div class="row align-items-right">
@@ -100,7 +100,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="card">
                 <div class="card-header">
                     <div class="row align-items-right">
@@ -117,14 +117,14 @@
                     </div>
                     <!-- Row starts -->
                     <div class="row gutters">
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="info-stats3 shade-one-a">
                                 <i class="icon-opacity"></i>
                                 <h6>Open</h6>
                                 <h3>99,8%</h3>
                             </div>
                         </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="info-stats3 shade-one-b">
                                 <i class="icon-opacity"></i>
                                 <h6>Close</h6>
@@ -138,7 +138,7 @@
         </div>
     </div>
     <div class="row gutters">
-        <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="card">
                 <div class="card-header">
                     <div class="row align-items-right">
@@ -255,8 +255,8 @@
                             </div>
                             <!-- Row ends -->
                         </div>
-                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <h3>Laporan Kerusakan Fasilitas</h3>
+                        <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <h5>Laporan Kerusakan Fasilitas</h5>
                             <div class="card h-280 agenda-bg">
                                 <div class="card-body">
                                     <div class="agenda">
