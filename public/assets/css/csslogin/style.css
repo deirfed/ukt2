@@ -159,11 +159,11 @@ body {
 }
 
 .login-logo{
-    max-height: 200px;
-    max-width: 100px;
+    max-height: 800px;
+    max-width: 200px;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (min-width: 450px) {
     .screen {
         width: 400px;
         height: 550px;
@@ -171,8 +171,57 @@ body {
         overflow-y: hidden;
     }
 }
+@media only screen and (min-width: 762px) {
+    .screen {
+        width: 3000px;
+        height: 850px;
+        overflow-x: hidden;
+        overflow-y: hidden;}
 
-@media only screen and (max-width: 1200px) {
+    .login {
+        width: 700px;
+    }
+
+    .login__input {
+        font-size: 30px;
+    }
+
+    .login__submit {
+        font-size: 30px;
+    }
+
+    .login-logo {
+        width: 250px;
+
+    }
+}
+
+@media only screen and (min-width: 992px) {
+    .screen {
+        width: 800px;
+        height: 900px;
+        overflow-x: hidden;
+        overflow-y: hidden;}
+
+    .login {
+        width: 700px;
+    }
+
+    .login__input {
+        font-size: 30px;
+        color: white;
+    }
+
+    .login__submit {
+        font-size: 30px;
+    }
+
+    .login-logo {
+        max-width: 300px;
+    }
+}
+
+@media only screen and (min-width: 1200px) {
     .screen {
         width: 600px;
         height: 750px;
