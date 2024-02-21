@@ -36,36 +36,39 @@
         <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="card">
                 <div class="card-body">
-                    <h4>Daftar User Organik</h4>
-                    <form class="form-inline mx-auto my-2 my-lg-0 mb-10">
-                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-dark my-2 my-sm-0" type="submit">Search</button>
-                    </form>
-                    <div class="table-responsive mt-2">
-                        <table class="table table-bordered table-dark m-0" class="dataTables_filter">
-                            <thead>
-                                <tr>
-                                    <th class="text-center">No</th>
-                                    <th class="text-center">Name</th>
-                                    <th class="text-center">Email</th>
-                                    <th class="text-center">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($users_organik as $item)
+                    <div class="table-responsive">
+                        <h4 class="mb-2">Daftar User PNS</h4>
+                        <form class="form-inline mb-2">
+                            <input class="form-control mr-sm-2" type="search" placeholder="Cari sesuatu di sini..."
+                                aria-label="Search" id="search-bar">
+                            <button class="btn btn-primary my-2 my-sm-0" type="submit">Pencarian</button>
+                        </form>
+                        <div class="table-responsive mt-2">
+                            <table class="table table-bordered table-primary" id="dataTable">
+                                <thead>
                                     <tr>
-                                        <td class="text-center">{{ $loop->iteration }}</td>
-                                        <td class="text-center">{{ $item->name }}</td>
-                                        <td class="text-center">{{ $item->email }}</td>
-                                        <td class="text-center">
-                                            <button class="btn btn-outline-primary" data-toggle="modal"
-                                                data-target="#exampleModalCenter"><i class="fa fa-edit"></i></button>
-                                            <button class="btn btn-outline-danger"><i class="fa fa-trash"></i></button>
-                                        </td>
+                                        <th class="text-center">No.</th>
+                                        <th class="text-center">Nama </th>
+                                        <th class="text-center">Email</th>
+                                        <th class="text-center">Aksi</th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach ($users_organik as $item)
+                                        <tr>
+                                            <td class="text-center">{{ $loop->iteration }}</td>
+                                            <td class="text-center">{{ $item->name }}</td>
+                                            <td class="text-center">{{ $item->email }}</td>
+                                            <td class="text-center">
+                                                <button class="btn btn-dark" data-toggle="modal"
+                                                    data-target="#exampleModalCenter"><i class="fa fa-edit"></i></button>
+                                                <button class="btn btn-outline-danger"><i class="fa fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -73,39 +76,50 @@
         <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="card">
                 <div class="card-body">
-                    <h4>Daftar User Vendor</h4>
-                    <form class="form-inline mx-auto my-2 my-lg-0 mb-10">
-                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-success my-2 my-sm-0" type="submit">Search</button>
-                    </form>
-                    <div class="table-responsive mt-2">
-                        <table class="table table-bordered table-primary m-0">
-                            <thead>
-                                <tr>
-                                    <th class="text-center">No</th>
-                                    <th class="text-center">Name</th>
-                                    <th class="text-center">Email</th>
-                                    <th class="text-center">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($users_vendor as $item)
+                    <div class="table-responsive">
+                        <h4 class="mb-2">Daftar User PJLP</h4>
+                        <form class="form-inline mb-2">
+                            <input class="form-control mr-sm-2" type="search" placeholder="Cari sesuatu di sini..."
+                                aria-label="Search" id="search-bar-2">
+                            <button class="btn btn-dark my-2 my-sm-0" type="submit">Pencarian</button>
+                        </form>
+                        <div class="table-responsive mt-2">
+                            <table class="table table-bordered table-dark" id="dataTable-2">
+                                <thead>
                                     <tr>
-                                        <td class="text-center">{{ $loop->iteration }}</td>
-                                        <td class="text-center">{{ $item->name }}</td>
-                                        <td class="text-center">{{ $item->email }}</td>
-                                        <td class="text-center">
-                                            <button class="btn btn-outline-white text-white" data-toggle="modal"
-                                                data-target="#exampleModalCenter"><i class="fa fa-edit"></i></button>
-                                            <button class="btn btn-outline-danger"><i class="fa fa-trash"></i></button>
-                                        </td>
+                                        <th class="text-center">No.</th>
+                                        <th class="text-center">Nama</th>
+                                        <th class="text-center">Kode Email</th>
+                                        <th class="text-center">Aksi</th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach ($users_organik as $item)
+                                        <tr>
+                                            <td class="text-center">{{ $loop->iteration }}</td>
+                                            <td class="text-center">{{ $item->name }}</td>
+                                            <td class="text-center">{{ $item->email }}</td>
+                                            <td class="text-center">
+                                                <button class="btn btn-outline-primary" data-toggle="modal"
+                                                    data-target="#exampleModalCenter"><i class="fa fa-edit"></i></button>
+                                                <button class="btn btn-outline-danger"><i class="fa fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+@endsection
+
+@section('javascript')
+    <script type="text/javascript">
+        function toggleModal(id) {
+            $('#id').val(id);
+        }
+    </script>
 @endsection

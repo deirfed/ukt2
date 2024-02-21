@@ -1,10 +1,6 @@
-
-function toggleModal(id) {
-    $('#id').val(id);
-}
-document.addEventListener("DOMContentLoaded", function() {
-    var searchInput = document.getElementById("search-bar");
-    var dataTable = document.getElementById("dataTable");
+function setupSearchFunction(searchInputId, dataTableId) {
+    var searchInput = document.getElementById(searchInputId);
+    var dataTable = document.getElementById(dataTableId);
 
     searchInput.addEventListener("input", function() {
         var searchValue = searchInput.value.toLowerCase();
@@ -13,11 +9,17 @@ document.addEventListener("DOMContentLoaded", function() {
 
         rows.forEach(function(row) {
             var rowData = row.textContent.toLowerCase();
-            if (rowData.includes(searchValue)) {
-                row.style.display = "";
-            } else {
-                row.style.display = "none";
-            }
+            row.style.display = rowData.includes(searchValue) ? "" : "none";
         });
     });
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    setupSearchFunction("search-bar", "dataTable");
+
+    setupSearchFunction("search-bar-2", "dataTable-2");
 });
+
+function toggleModal(id) {
+    $('#id').val(id);
+}

@@ -40,7 +40,8 @@
                                 aria-label="Search" id="search-bar">
                             <button class="btn btn-dark my-2 my-sm-0" type="submit">Pencarian</button>
                         </form>
-                        <table class="table table-bordered table-striped" id="dataTable">
+                        <div class="table-responsive mt-2">
+                            <table class="table table-bordered table-striped" id="dataTable">
                             <thead>
                                 <tr>
                                     <th class="text-center">No.</th>
@@ -67,6 +68,7 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        </div>
                     </div>
                 </div>
             </div>
