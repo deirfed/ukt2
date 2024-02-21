@@ -33,18 +33,25 @@
         </div>
     </div>
     <div class="row gutters">
-        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <h4 class="mb-2">Daftar User PNS</h4>
+                        <div class="d-flex justify-content-center">
+                            <button class="btn btn-primary mb-2 ml-3" name="pns" onclick="toggleTable('pns')"> Daftar
+                                PNS</button>
+                            <button class="btn btn-primary mb-2 ml-3" name="koordinator"
+                                onclick="toggleTable('koordinator')"> Daftar Koordinator</button>
+                            <button class="btn btn-primary mb-2 ml-3" name="pjlp" onclick="toggleTable('pjlp')">Daftar
+                                PJLP</button>
+                        </div>
                         <form class="form-inline mb-2">
                             <input class="form-control mr-sm-2" type="search" placeholder="Cari sesuatu di sini..."
                                 aria-label="Search" id="search-bar">
                             <button class="btn btn-primary my-2 my-sm-0" type="submit">Pencarian</button>
                         </form>
                         <div class="table-responsive mt-2">
-                            <table class="table table-bordered table-primary" id="dataTable">
+                            <table class="table table-bordered table-primary" id="dataTable" name="pns">
                                 <thead>
                                     <tr>
                                         <th class="text-center">No.</th>
@@ -68,44 +75,51 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <h4 class="mb-2">Daftar User PJLP</h4>
-                        <form class="form-inline mb-2">
-                            <input class="form-control mr-sm-2" type="search" placeholder="Cari sesuatu di sini..."
-                                aria-label="Search" id="search-bar-2">
-                            <button class="btn btn-dark my-2 my-sm-0" type="submit">Pencarian</button>
-                        </form>
-                        <div class="table-responsive mt-2">
-                            <table class="table table-bordered table-dark" id="dataTable-2">
+                            <table class="table table-bordered table-primary" id="dataTable" name="koordinator"
+                                style="display: none">
                                 <thead>
                                     <tr>
                                         <th class="text-center">No.</th>
-                                        <th class="text-center">Nama</th>
-                                        <th class="text-center">Kode Email</th>
+                                        <th class="text-center">Nama </th>
+                                        <th class="text-center">Email</th>
                                         <th class="text-center">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($users_organik as $item)
                                         <tr>
-                                            <td class="text-center">{{ $loop->iteration }}</td>
-                                            <td class="text-center">{{ $item->name }}</td>
-                                            <td class="text-center">{{ $item->email }}</td>
+                                            <td class="text-center">1</td>
+                                            <td class="text-center">Lili</td>
+                                            <td class="text-center">Lolo</td>
                                             <td class="text-center">
-                                                <button class="btn btn-outline-primary" data-toggle="modal"
+                                                <button class="btn btn-dark" data-toggle="modal"
                                                     data-target="#exampleModalCenter"><i class="fa fa-edit"></i></button>
                                                 <button class="btn btn-outline-danger"><i class="fa fa-trash"></i></button>
                                             </td>
                                         </tr>
                                     @endforeach
+                                </tbody>
+                            </table>
+                            <table class="table table-bordered table-primary" id="dataTable" name="pjlp" style="display: none">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">No.</th>
+                                        <th class="text-center">Nama </th>
+                                        <th class="text-center">Email</th>
+                                        <th class="text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                        <tr>
+                                            <td class="text-center">Joko</td>
+                                            <td class="text-center">Joki</td>
+                                            <td class="text-center">Joka</td>
+                                            <td class="text-center">
+                                                <button class="btn btn-dark" data-toggle="modal"
+                                                    data-target="#exampleModalCenter"><i class="fa fa-edit"></i></button>
+                                                <button class="btn btn-outline-danger"><i class="fa fa-trash"></i></button>
+                                            </td>
+                                        </tr>
                                 </tbody>
                             </table>
                         </div>
