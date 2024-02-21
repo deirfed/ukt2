@@ -1100,9 +1100,9 @@ ul.header-tasks:last-child {
   padding: 1rem;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
-  border-radius: 2px;
+  border-radius: 20px;
   margin-bottom: 1rem;
-  background: url(../img/profile-bg.jpg) no-repeat;
+  background: url(../img/background-page.jpg) no-repeat;
   background-size: cover;
   background-position: center center;
   text-align: center;
@@ -1121,7 +1121,7 @@ ul.header-tasks:last-child {
       -moz-border-radius: 100px;
       border-radius: 100px; }
   .user-details h4 {
-    margin: 0 0 1rem 0; }
+    margin: 0 0 0.5rem 0; }
   .user-details .btn {
     margin: 1rem 0 0 0; }
 
@@ -6013,7 +6013,7 @@ code {
 
   /* EDITCSS */
 .main-container-scrollable {
-    height: calc(100vh - 230px);
+    height: calc(100vh - 250px);
     overflow-y: auto;
 }
 

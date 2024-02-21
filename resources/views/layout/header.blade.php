@@ -51,7 +51,7 @@
                             <h5>{{ auth()->user()->name }}</h5>
                             <p>{{ auth()->user()->email }}</p>
                         </div>
-                        <a href="#user-profile"><i class="icon-user1"></i> My Profile</a>
+                        <a href="{{ route('user.profile') }}"><i class="icon-user1"></i> My Profile</a>
                         <a href="#user-settings"><i class="icon-settings1"></i> Account Settings</a>
                         <a href="javascript;"
                             onclick="event.preventDefault();

@@ -46,7 +46,7 @@
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="appsDropdown" role="button" data-toggle="dropdown"
         aria-haspopup="true" aria-expanded="false">
-        <i class="fa fa-user-times nav-icon"></i>
+        <i class="fa fa-calendar-times nav-icon"></i>
         Cuti
     </a>
     <ul class="dropdown-menu" aria-labelledby="dashboardsDropdown">
