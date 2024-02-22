@@ -13,6 +13,7 @@ return new class extends Migration
             $table->uuid('uuid')->unique();
             $table->string('name');
             $table->string('code')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

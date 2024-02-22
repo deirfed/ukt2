@@ -2,8 +2,6 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\data_essentials\AreaController;
 use App\Http\Controllers\data_essentials\EmployeeTypeController;
@@ -17,6 +15,8 @@ use App\Http\Controllers\data_essentials\KecamatanController;
 use App\Http\Controllers\data_essentials\KelurahanController;
 use App\Http\Controllers\data_essentials\UnitKerjaController;
 use App\Http\Controllers\data_essentials\PulauController;
+use App\Http\Controllers\data_essentials\StrukturController;
+use App\Http\Controllers\data_essentials\TimController;
 use App\Http\Controllers\data_essentials\UserController;
 
 // Route::controller(LoginController::class)->group(function () {
@@ -109,6 +109,15 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/seksi', 'destroy')->name('seksi.destroy');
     });
 
+    Route::controller(TimController::class)->group(function () {
+        Route::get('/tim', 'index')->name('tim.index');
+        Route::get('/tim-create', 'create')->name('tim.create');
+        Route::post('/tim', 'store')->name('tim.store');
+        Route::get('/tim-show/{uuid}', 'show')->name('tim.show');
+        Route::put('/tim/{uuid}', 'update')->name('tim.update');
+        Route::delete('/tim', 'destroy')->name('tim.destroy');
+    });
+
     Route::controller(PulauController::class)->group(function () {
         Route::get('/pulau', 'index')->name('pulau.index');
         Route::get('/pulau-create', 'create')->name('pulau.create');
@@ -161,6 +170,15 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/area/{uuid}/edit', 'edit')->name('area.edit');
         Route::put('/area/{uuid}/update', 'update')->name('area.update');
         Route::delete('/area', 'destroy')->name('area.destroy');
+    });
+
+    Route::controller(StrukturController::class)->group(function () {
+        Route::get('/struktur', 'index')->name('struktur.index');
+        Route::get('/struktur-create', 'create')->name('struktur.create');
+        Route::post('/struktur', 'store')->name('struktur.store');
+        Route::get('/struktur/{uuid}/edit', 'edit')->name('struktur.edit');
+        Route::put('/struktur/{uuid}/update', 'update')->name('struktur.update');
+        Route::delete('/struktur', 'destroy')->name('struktur.destroy');
     });
 
 });

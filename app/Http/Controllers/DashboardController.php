@@ -15,6 +15,8 @@ use App\Models\Seksi;
 use App\Models\Pulau;
 use App\Models\Role;
 use App\Models\RoleUser;
+use App\Models\Struktur;
+use App\Models\Tim;
 use App\Models\User;
 
 class DashboardController extends Controller
@@ -37,6 +39,7 @@ class DashboardController extends Controller
         $users = User::count();
         $jabatan = Jabatan::count();
         $employee_type = EmployeeType::count();
+        $tim = Tim::count();
         return view('admin.masterdata.data_essentials.index', compact([
             'provinsi',
             'walikota',
@@ -48,6 +51,7 @@ class DashboardController extends Controller
             'role',
             'jabatan',
             'employee_type',
+            'tim',
             'users',
         ]));
     }
@@ -61,9 +65,11 @@ class DashboardController extends Controller
     {
         $role_user = RoleUser::count();
         $area = Area::count();
+        $struktur = Struktur::count();
         return view('admin.masterdata.data_relasi.index', compact([
             'role_user',
             'area',
+            'struktur',
         ]));
     }
 

@@ -13,6 +13,7 @@ return new class extends Migration
             $table->uuid('uuid')->unique();
             $table->bigInteger('user_id')->unsigned()->nullable();
             $table->bigInteger('role_id')->unsigned()->nullable();
+            $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('user_id')->on('users')->references('id');

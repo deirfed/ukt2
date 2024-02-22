@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Seksi extends Model
 {
     use HasFactory;
-
     use SoftDeletes;
 
     protected $table = 'seksi';

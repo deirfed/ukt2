@@ -16,6 +16,7 @@ return new class extends Migration
             $table->bigInteger('kecamatan_id')->unsigned()->nullable();
             $table->bigInteger('kelurahan_id')->unsigned()->nullable();
             $table->bigInteger('pulau_id')->unsigned()->nullable();
+            $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('provinsi_id')->on('provinsi')->references('id');

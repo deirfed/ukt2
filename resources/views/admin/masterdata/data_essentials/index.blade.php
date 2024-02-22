@@ -25,6 +25,19 @@
             </div>
         </div>
         <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12">
+            <a href="{{ route('user.index') }}">
+                <div class="info-tiles">
+                    <div class="info-icon">
+                        <i class="fa fa-database"></i>
+                    </div>
+                    <div class="stats-detail">
+                        <h3>{{ $users }}</h3>
+                        <p>Users</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12">
             <a href="{{ route('provinsi.index') }}">
                 <div class="info-tiles">
                     <div class="info-icon">
@@ -77,6 +90,21 @@
             </a>
         </div>
         <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12">
+            <a href="{{ route('pulau.index') }}">
+                <div class="info-tiles">
+                    <div class="info-icon">
+                        <i class="fa fa-database"></i>
+                    </div>
+                    <div class="stats-detail">
+                        <h3>{{ $pulau }}</h3>
+                        <p>Pulau</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="row gutters">
+        <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12">
             <a href="{{ route('unitkerja.index') }}">
                 <div class="info-tiles">
                     <div class="info-icon">
@@ -102,17 +130,15 @@
                 </div>
             </a>
         </div>
-    </div>
-    <div class="row gutters">
         <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12">
-            <a href="{{ route('pulau.index') }}">
+            <a href="{{ route('tim.index') }}">
                 <div class="info-tiles">
                     <div class="info-icon">
                         <i class="fa fa-database"></i>
                     </div>
                     <div class="stats-detail">
-                        <h3>{{ $pulau }}</h3>
-                        <p>Pulau</p>
+                        <h3>{{ $tim ?? 0 }}</h3>
+                        <p>Tim</p>
                     </div>
                 </div>
             </a>
@@ -152,19 +178,6 @@
                     <div class="stats-detail">
                         <h3>{{ $employee_type ?? 0 }}</h3>
                         <p>Employee Type</p>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12">
-            <a href="{{ route('user.index') }}">
-                <div class="info-tiles">
-                    <div class="info-icon">
-                        <i class="fa fa-database"></i>
-                    </div>
-                    <div class="stats-detail">
-                        <h3>{{ $users }}</h3>
-                        <p>Users</p>
                     </div>
                 </div>
             </a>

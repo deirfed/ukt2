@@ -10,7 +10,7 @@ class RoleController extends Controller
 {
     public function index()
     {
-        $role = Role::orderBy('name')->get();
+        $role = Role::all();
 
         return view('admin.masterdata.data_essentials.role.index', compact(['role']));
     }

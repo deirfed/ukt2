@@ -10,7 +10,7 @@ class EmployeeTypeController extends Controller
 {
     public function index()
     {
-        $employee_type = EmployeeType::orderBy('name', 'ASC')->get();
+        $employee_type = EmployeeType::all();
         return view('admin.masterdata.data_essentials.employee_type.index', compact(['employee_type']));
     }
 

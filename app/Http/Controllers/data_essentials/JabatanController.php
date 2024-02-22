@@ -10,7 +10,7 @@ class JabatanController extends Controller
 {
     public function index()
     {
-        $jabatan = Jabatan::orderBy('name', 'ASC')->get();
+        $jabatan = Jabatan::all();
         return view('admin.masterdata.data_essentials.jabatan.index', compact(['jabatan']));
     }
 

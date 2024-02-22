@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Provinsi;
-use App\Models\Walikota;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;

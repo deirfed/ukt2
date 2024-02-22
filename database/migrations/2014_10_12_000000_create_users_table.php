@@ -10,10 +10,19 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique()->nullable();
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('hp_number')->nullable();
-            $table->string('role')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('nip')->nullable();
+            $table->string('gender')->nullable();
+            $table->string('tempat_lahir')->nullable();
+            $table->date('tanggal_lahir')->nullable();
+            $table->string('alamat')->nullable();
+            $table->string('photo')->nullable();
+            $table->string('ttd')->nullable();
+            $table->string('bio')->nullable();
+            $table->string('active')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
