@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Area;
+use App\Models\EmployeeType;
+use App\Models\Jabatan;
 use App\Models\Kecamatan;
 use App\Models\Kelurahan;
 use Illuminate\Http\Request;
@@ -32,6 +35,8 @@ class DashboardController extends Controller
         $pulau = Pulau::count();
         $role = Role::count();
         $users = User::count();
+        $jabatan = Jabatan::count();
+        $employee_type = EmployeeType::count();
         return view('admin.masterdata.data_essentials.index', compact([
             'provinsi',
             'walikota',
@@ -41,6 +46,8 @@ class DashboardController extends Controller
             'kecamatan',
             'pulau',
             'role',
+            'jabatan',
+            'employee_type',
             'users',
         ]));
     }
@@ -53,8 +60,10 @@ class DashboardController extends Controller
     public function data_relasi()
     {
         $role_user = RoleUser::count();
+        $area = Area::count();
         return view('admin.masterdata.data_relasi.index', compact([
             'role_user',
+            'area',
         ]));
     }
 

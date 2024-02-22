@@ -131,6 +131,32 @@
             </a>
         </div>
         <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12">
+            <a href="{{ route('jabatan.index') }}">
+                <div class="info-tiles">
+                    <div class="info-icon">
+                        <i class="fa fa-database"></i>
+                    </div>
+                    <div class="stats-detail">
+                        <h3>{{ $jabatan ?? 0 }}</h3>
+                        <p>Jabatan</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12">
+            <a href="{{ route('employee-type.index') }}">
+                <div class="info-tiles">
+                    <div class="info-icon">
+                        <i class="fa fa-database"></i>
+                    </div>
+                    <div class="stats-detail">
+                        <h3>{{ $employee_type ?? 0 }}</h3>
+                        <p>Employee Type</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12">
             <a href="{{ route('user.index') }}">
                 <div class="info-tiles">
                     <div class="info-icon">

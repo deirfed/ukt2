@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\data_essentials\AreaController;
+use App\Http\Controllers\data_essentials\EmployeeTypeController;
+use App\Http\Controllers\data_essentials\JabatanController;
 use App\Http\Controllers\data_essentials\RoleController;
 use App\Http\Controllers\data_essentials\SeksiController;
 use App\Http\Controllers\data_essentials\ProvinsiController;
@@ -115,6 +118,24 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/pulau', 'destroy')->name('pulau.destroy');
     });
 
+    Route::controller(JabatanController::class)->group(function () {
+        Route::get('/jabatan', 'index')->name('jabatan.index');
+        Route::get('/jabatan-create', 'create')->name('jabatan.create');
+        Route::post('/jabatan', 'store')->name('jabatan.store');
+        Route::get('/jabatan-show/{uuid}', 'show')->name('jabatan.show');
+        Route::put('/jabatan/{uuid}', 'update')->name('jabatan.update');
+        Route::delete('/jabatan', 'destroy')->name('jabatan.destroy');
+    });
+
+    Route::controller(EmployeeTypeController::class)->group(function () {
+        Route::get('/employee-type', 'index')->name('employee-type.index');
+        Route::get('/employee-type-create', 'create')->name('employee-type.create');
+        Route::post('/employee-type', 'store')->name('employee-type.store');
+        Route::get('/employee-type-show/{uuid}', 'show')->name('employee-type.show');
+        Route::put('/employee-type/{uuid}', 'update')->name('employee-type.update');
+        Route::delete('/employee-type', 'destroy')->name('employee-type.destroy');
+    });
+
     Route::controller(RoleController::class)->group(function () {
         Route::get('/role', 'index')->name('role.index');
         Route::get('/role-create', 'create')->name('role.create');
@@ -131,6 +152,15 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/role-user/{uuid}/edit', 'edit')->name('role_user.edit');
         Route::put('/role-user/{uuid}/update', 'update')->name('role_user.update');
         Route::delete('/role-user', 'destroy')->name('role_user.destroy');
+    });
+
+    Route::controller(AreaController::class)->group(function () {
+        Route::get('/area', 'index')->name('area.index');
+        Route::get('/area-create', 'create')->name('area.create');
+        Route::post('/area', 'store')->name('area.store');
+        Route::get('/area/{uuid}/edit', 'edit')->name('area.edit');
+        Route::put('/area/{uuid}/update', 'update')->name('area.update');
+        Route::delete('/area', 'destroy')->name('area.destroy');
     });
 
 });
