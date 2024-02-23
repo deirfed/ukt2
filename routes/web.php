@@ -18,6 +18,7 @@ use App\Http\Controllers\data_essentials\PulauController;
 use App\Http\Controllers\data_essentials\StrukturController;
 use App\Http\Controllers\data_essentials\TimController;
 use App\Http\Controllers\data_essentials\UserController;
+use App\Http\Controllers\pages\KinerjaController;
 
 // Route::controller(LoginController::class)->group(function () {
 //     Route::get('/', 'login')->name('login.index');
@@ -180,5 +181,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/struktur/{uuid}/update', 'update')->name('struktur.update');
         Route::delete('/struktur', 'destroy')->name('struktur.destroy');
     });
+
+
+
+    // KINERJA
+    Route::controller(KinerjaController::class)->group(function () {
+        Route::get('/kinerja', 'index')->name('kinerja.index');
+        Route::get('/formasi', 'formasi')->name('formasi.index');
+    });
+
 
 });
