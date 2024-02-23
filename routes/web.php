@@ -50,7 +50,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/users-create', 'create')->name('user.create');
         Route::post('/users', 'store')->name('user.store');
         Route::get('/users-show/{uuid}', 'show')->name('user.show');
-        Route::put('/users/{uuid}', 'update')->name('user.update');
+        Route::put('/users/{id}', 'update')->name('user.update');
         Route::delete('/users', 'destroy')->name('user.destroy');
         Route::get('/user-profile', 'user_profile')->name('user.profile');
     });

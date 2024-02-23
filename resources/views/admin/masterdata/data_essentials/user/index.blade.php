@@ -38,12 +38,18 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         <div class="d-flex justify-content-center">
-                            <button class="btn btn-primary mb-2 ml-3" name="pns" onclick="toggleTable('pns')"> Daftar
-                                PNS</button>
-                            <button class="btn btn-primary mb-2 ml-3" name="koordinator"
-                                onclick="toggleTable('koordinator')"> Daftar Koordinator</button>
-                            <button class="btn btn-primary mb-2 ml-3" name="pjlp" onclick="toggleTable('pjlp')">Daftar
-                                PJLP</button>
+                            <a href="{{ route('user.index') }}" class="btn btn-primary mb-2 ml-3">
+                                Semua User
+                            </a>
+                            <a href="{{ route('user.index') }}?employee_type_id=1" class="btn btn-primary mb-2 ml-3">
+                                Daftar PNS
+                            </a>
+                            <a href="{{ route('user.index') }}?employee_type_id=2" class="btn btn-primary mb-2 ml-3">
+                                Daftar Koordinator
+                            </a>
+                            <a href="{{ route('user.index') }}?employee_type_id=3" class="btn btn-primary mb-2 ml-3">
+                                Daftar PJLP
+                            </a>
                         </div>
                         <form class="form-inline mb-2">
                             <input class="form-control mr-sm-2" type="search" placeholder="Cari sesuatu di sini..."
@@ -61,65 +67,23 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($users_organik as $item)
+                                    @foreach ($users as $item)
                                         <tr>
                                             <td class="text-center">{{ $loop->iteration }}</td>
                                             <td class="text-center">{{ $item->name }}</td>
                                             <td class="text-center">{{ $item->email }}</td>
                                             <td class="text-center">
-                                                <button class="btn btn-dark" data-toggle="modal"
-                                                    data-target="#exampleModalCenter"><i class="fa fa-edit"></i></button>
-                                                <button class="btn btn-outline-danger"><i class="fa fa-trash"></i></button>
+                                                <a href="{{ route('user.show', $item->uuid) }}"><button
+                                                        class="btn btn-outline-warning"><i
+                                                            class="fa fa-edit"></i></button></a>
+                                                <a href="#" href="javascript:;" data-toggle="modal"
+                                                    data-target="#delete-confirmation-modal"
+                                                    onclick="toggleModal('{{ $item->id }}')"><button
+                                                        class="btn btn-outline-danger"><i
+                                                            class="fa fa-trash"></i></button></a>
                                             </td>
                                         </tr>
                                     @endforeach
-                                </tbody>
-                            </table>
-                            <table class="table table-bordered table-primary" id="dataTable" name="koordinator"
-                                style="display: none">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">No.</th>
-                                        <th class="text-center">Nama </th>
-                                        <th class="text-center">Email</th>
-                                        <th class="text-center">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($users_organik as $item)
-                                        <tr>
-                                            <td class="text-center">1</td>
-                                            <td class="text-center">Lili</td>
-                                            <td class="text-center">Lolo</td>
-                                            <td class="text-center">
-                                                <button class="btn btn-dark" data-toggle="modal"
-                                                    data-target="#exampleModalCenter"><i class="fa fa-edit"></i></button>
-                                                <button class="btn btn-outline-danger"><i class="fa fa-trash"></i></button>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                            <table class="table table-bordered table-primary" id="dataTable" name="pjlp" style="display: none">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">No.</th>
-                                        <th class="text-center">Nama </th>
-                                        <th class="text-center">Email</th>
-                                        <th class="text-center">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                        <tr>
-                                            <td class="text-center">Joko</td>
-                                            <td class="text-center">Joki</td>
-                                            <td class="text-center">Joka</td>
-                                            <td class="text-center">
-                                                <button class="btn btn-dark" data-toggle="modal"
-                                                    data-target="#exampleModalCenter"><i class="fa fa-edit"></i></button>
-                                                <button class="btn btn-outline-danger"><i class="fa fa-trash"></i></button>
-                                            </td>
-                                        </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -128,6 +92,29 @@
             </div>
         </div>
     </div>
+    <!-- BEGIN: Delete Confirmation Modal -->
+    <div id="delete-confirmation-modal" class="modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body p-2">
+                    <div class="p-2 text-center">
+                        <div class="text-3xl mt-2">Apakah anda yakin?</div>
+                        <div class="text-slate-500 mt-2">Peringatan: Data ini akan dihapus secara permanent</div>
+                    </div>
+                    <div class="px-5 pb-8 text-center mt-3">
+                        <form action="{{ route('user.destroy') }}" method="POST">
+                            @csrf
+                            @method('delete')
+                            <input type="text" name="id" id="id" hidden>
+                            <button type="button" data-dismiss="modal" class="btn btn-dark w-24 mr-1 me-2">Batal</button>
+                            <button type="submit" class="btn btn-primary w-24">Hapus</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END: Delete Confirmation Modal -->
 @endsection
 
 @section('javascript')
