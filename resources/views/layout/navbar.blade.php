@@ -14,15 +14,15 @@
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="appsDropdown" role="button" data-toggle="dropdown"
         aria-haspopup="true" aria-expanded="false">
-        <i class="fa fa-line-chart nav-icon"></i>
+        <i class="icon-database nav-icon"></i>
         Kinerja
     </a>
     <ul class="dropdown-menu" aria-labelledby="dashboardsDropdown">
         <li>
-            <a class="dropdown-item" href="">Data Essentials</a>
+            <a class="dropdown-item" href="{{ route('kinerja.index') }}">List Laporan Kerja</a>
         </li>
         <li>
-            <a class="dropdown-item" href="">Data Assets</a>
+            <a class="dropdown-item" href="{{ route('formasi.index') }}">Formasi Personel</a>
         </li>
     </ul>
 </li>

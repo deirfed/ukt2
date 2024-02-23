@@ -1125,6 +1125,64 @@ ul.header-tasks:last-child {
   .user-details .btn {
     margin: 1rem 0 0 0; }
 
+.tim-formasi-pertamanan {
+  padding: 1rem;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 20px;
+  margin-bottom: 1rem;
+  background: url(../img/pertamanan-bg.jpg) no-repeat;
+  background-size: cover;
+  background-position: center center;
+  text-align: center;
+  color: #000000;
+  text-shadow: 0 0 10px #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column; }
+  .tim-formasi-pertamanan .user-thumb {
+    margin: 0 0 1rem 0; }
+    .tim-formasi-pertamanan .user-thumb img {
+      width: 110px;
+      height: 110px;
+      -webkit-border-radius: 100px;
+      -moz-border-radius: 100px;
+      border-radius: 100px; }
+  .tim-formasi-pertamanan h4 {
+    margin: 0 0 0.5rem 0; }
+  .tim-formasi-pertamanan .btn {
+    margin: 1rem 0 0 0; }
+
+.tim-formasi-pencahayaan {
+  padding: 1rem;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 20px;
+  margin-bottom: 1rem;
+  background: url(../img/pencahayaan-bg.jpg) no-repeat;
+  background-size: cover;
+  background-position: center center;
+  text-align: center;
+  color: #000000;
+  text-shadow: 0 0 10px #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column; }
+  .tim-formasi-pencahayaan .user-thumb {
+    margin: 0 0 1rem 0; }
+    .tim-formasi-pencahayaan .user-thumb img {
+      width: 110px;
+      height: 110px;
+      -webkit-border-radius: 100px;
+      -moz-border-radius: 100px;
+      border-radius: 100px; }
+  .tim-formasi-pencahayaan h4 {
+    margin: 0 0 0.5rem 0; }
+  .tim-formasi-pencahayaan .btn {
+    margin: 1rem 0 0 0; }
+
 .user-photos {
   padding: 1rem;
   -webkit-border-radius: 2px;
@@ -6033,5 +6091,44 @@ code {
 @media (min-width: 1200px) {
     .svg-container {
         width: 500px;
+    }
+}
+
+.modal-image{
+    margin: 0 auto;
+    max-width: 500px;
+}
+
+.row-modal-user {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.formasi-modal {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.user-card {
+    text-align: center;
+    margin: 10px;
+}
+
+.user-card img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 5px;
+}
+
+.user-card h5 {
+    margin: 0;
+}
+
+@media (max-width: 576px) {
+    .formasi-modal {
+        flex-direction: column;
     }
 }
