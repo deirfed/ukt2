@@ -28,7 +28,7 @@
                                     <img src="https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg"
                                         alt="Admin Template" />
                                 </div>
-                                <h4>Tim Abdul Kohar Mudzakir</h4>
+                                <h4>Koord. Abdul Kohar Mudzakir</h4>
                                 <h5>Seksi Pencahayaan I</h5>
                                 <p>Pulau Tidung</p>
                                 <button class="btn btn-light" data-toggle="modal" data-target=".detailPersonel">Lihat Daftar
@@ -41,7 +41,7 @@
                                     <img src="https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg"
                                         alt="Admin Template" />
                                 </div>
-                                <h4>Tim Joko Driyono Putra Harefa</h4>
+                                <h4>Koord. Joko Driyono Putra Harefa</h4>
                                 <h5>Seksi Pertamanan I</h5>
                                 <p>Pulau Karya</p>
                                 <button class="btn btn-light" data-toggle="modal" data-target=".detailPersonel">Lihat Daftar Personel</button>
@@ -53,7 +53,7 @@
                                     <img src="https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg"
                                         alt="Admin Template" />
                                 </div>
-                                <h4>Tim Rocky Gerung</h4>
+                                <h4>Koord. Rocky Gerung</h4>
                                 <h5>Seksi Pertamanan II</h5>
                                 <p>Pulau Panggang</p>
                                 <button class="btn btn-light" data-toggle="modal" data-target=".detailPersonel">Lihat Daftar Personel</button>
@@ -65,7 +65,7 @@
                                     <img src="https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg"
                                         alt="Admin Template" />
                                 </div>
-                                <h4>Tim La Nyalla Martadinata</h4>
+                                <h4>Koord. La Nyalla Martadinata</h4>
                                 <h5>Seksi Pertamanan III</h5>
                                 <p>Pulau Sebira</p>
                                 <button class="btn btn-light" data-toggle="modal" data-target=".detailPersonel">Lihat Daftar Personel</button>
@@ -77,7 +77,7 @@
                                     <img src="https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg"
                                         alt="Admin Template" />
                                 </div>
-                                <h4>Tim Lucky Ariowibowo</h4>
+                                <h4>Koord. Lucky Ariowibowo</h4>
                                 <h5>Seksi Pencahayaan II</h5>
                                 <p>Pulau Pramuka</p>
                                 <button class="btn btn-light" data-toggle="modal" data-target=".detailPersonel">Lihat Daftar Personel</button>
@@ -89,7 +89,7 @@
                                     <img src="https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg"
                                         alt="Admin Template" />
                                 </div>
-                                <h4>Tim Jono Purowoto</h4>
+                                <h4>Koord. Jono Purowoto</h4>
                                 <h5>Seksi Pencahayaan III</h5>
                                 <p>Pulau Pari</p>
                                 <button class="btn btn-light" data-toggle="modal" data-target=".detailPersonel">Lihat Daftar Personel</button>
