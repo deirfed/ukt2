@@ -2,7 +2,7 @@
 
 @section('title-head')
     <title>
-        Kinerja | Daftar Kinerja Personel
+        Kinerja | Daftar Laporan Kinerja
     </title>
 @endsection
 
@@ -10,7 +10,7 @@
     <div class="page-header">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">Kinerja</li>
-            <li class="breadcrumb-item">Daftar Kinerja Personel</li>
+            <li class="breadcrumb-item">Daftar Laporan Kinerja</li>
         </ol>
     </div>
 @endsection
@@ -24,14 +24,18 @@
                     <div class="table-responsive">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div class="btn-group">
-                                <a class="btn btn-primary mb-3" href="{{ route('kinerja.index') }}">
-                                    <i class="fa fa-arrow-left"></i>
-                                    Kembali
+                                <a class="btn btn-primary mb-3" href="{{ route('kinerja.create') }}">
+                                    <i class="fa fa-plus"></i>
+                                    Tambah Data
                                 </a>
-                                <a class="btn btn-outline-primary mb-3" href="{{ route('kinerja.index') }}">
+                                <a class="btn btn-outline-primary mb-3" href="#">
+                                    <i class="fa fa-filter"></i>
+                                    Filter
+                                </a>
+                                <a class="btn btn-outline-danger mb-3" href="#">
                                     Export ke PDF
                                 </a>
-                                <a class="btn btn-outline-primary mb-3" href="{{ route('kinerja.index') }}">
+                                <a class="btn btn-outline-success mb-3" href="#">
                                     Export ke Excel
                                 </a>
                             </div>
@@ -47,10 +51,11 @@
                                     <tr>
                                         <th class="text-center">No.</th>
                                         <th class="text-center">Unit Kerja</th>
-                                        <th class="text-center">Tim</th>
                                         <th class="text-center">Seksi</th>
+                                        <th class="text-center">Tim</th>
                                         <th class="text-center">Pulau</th>
                                         <th class="text-center">Koordinator</th>
+                                        <th class="text-center">PJLP</th>
                                         <th class="text-center">Giat/Pekerjaan</th>
                                         <th class="text-center">Aksi</th>
                                     </tr>
@@ -60,10 +65,11 @@
                                     <tr>
                                         <td class="text-center">1</td>
                                         <td class="text-center"> UKT 2</td>
-                                        <td class="text-center">Tim Pencahayaan I</td>
                                         <td class="text-center">Pencahayaan</td>
+                                        <td class="text-center">Tim Pencahayaan I</td>
                                         <td class="text-center">Untung Jawa</td>
                                         <td class="text-center">Abduk Kohar Mudzakir</td>
+                                        <td class="text-center">Bambang</td>
                                         <td class="text-center">Perbaikan lampu depan masjid al-ikhlas</td>
                                         <td class="text-center">
                                             <button class="btn btn-outline-primary" data-toggle="modal"
@@ -73,10 +79,11 @@
                                     <tr>
                                         <td class="text-center">1</td>
                                         <td class="text-center"> UKT 2</td>
-                                        <td class="text-center">Tim Pertamanan I</td>
                                         <td class="text-center">Pertamanan</td>
+                                        <td class="text-center">Tim Pertamanan I</td>
                                         <td class="text-center">Tidung</td>
                                         <td class="text-center">Ridwan Faldi Rakabuming</td>
+                                        <td class="text-center">Kurmen</td>
                                         <td class="text-center">Perbaikan drainase mampet depan masjid al-amin</td>
                                         <td class="text-center">
                                             <button class="btn btn-outline-primary" data-toggle="modal"

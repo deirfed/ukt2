@@ -15,6 +15,31 @@ class KinerjaController extends Controller
         return view('pages.kinerja.index');
     }
 
+    public function create()
+    {
+        return view('pages.kinerja.create');
+    }
+
+    public function store(Request $request)
+    {
+        //
+    }
+
+    public function edit(string $uuid)
+    {
+        //
+    }
+
+    public function update(Request $request, string $uuid)
+    {
+        //
+    }
+
+    public function destroy(Request $request)
+    {
+        //
+    }
+
     public function formasi()
     {
         $this_year = Carbon::now()->format('Y');
@@ -34,8 +59,6 @@ class KinerjaController extends Controller
                 'anggota' => $anggota,
             ];
         }
-        // return response()->json($formasi_tim);
-        // dd($formasi_tim);
 
         return view('pages.kinerja.formasi', ['formasi_tim' => $formasi_tim]);
     }

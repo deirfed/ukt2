@@ -195,6 +195,12 @@ Route::group(['middleware' => 'auth'], function () {
     // KINERJA
     Route::controller(KinerjaController::class)->group(function () {
         Route::get('/kinerja', 'index')->name('kinerja.index');
+        Route::get('/kinerja-create', 'create')->name('kinerja.create');
+        Route::post('/kinerja', 'store')->name('kinerja.store');
+        Route::get('/kinerja/{uuid}/edit', 'edit')->name('kinerja.edit');
+        Route::put('/kinerja/{uuid}/update', 'update')->name('kinerja.update');
+        Route::delete('/kinerja', 'destroy')->name('kinerja.destroy');
+
         Route::get('/formasi', 'formasi')->name('formasi.index');
     });
 
