@@ -24,7 +24,7 @@
                     <div class="row gutters">
                         @foreach ($formasi_tim as $formasi)
                             <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12">
-                                <div class="tim-formasi-pencahayaan h-320">
+                                <div class="tim-formasi h-320" id="tim-formasi-{{ $formasi['seksi'] }}">
                                     <div class="user-thumb">
                                         <img src="https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg"
                                             alt="Admin Template" />
@@ -125,11 +125,11 @@
                     <div class="row-modal-user gutters">
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="formasi-modal" id="anggotaModalBody">
-                                <div class="user-card">
+                                {{-- <div class="user-card">
                                     <img src="https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg"
                                         alt="Photo" />
                                     <h5>Muhammad Pikri</h5>
-                                </div>
+                                </div> --}}
                                 {{-- <div class="user-card">
                                     <img src="https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg"
                                         alt="Admin Template" />
@@ -155,6 +155,23 @@
             </div>
         </div>
     </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var formasiTimElements = document.querySelectorAll('.tim-formasi');
+
+            formasiTimElements.forEach(function(element) {
+                var seksi = element.querySelector('h5').innerText;
+
+                if (seksi.includes('Pencahayaan')) {
+                    element.classList.add('tim-formasi-pencahayaan');
+                } else if (seksi.includes('Pertamanan')) {
+                    element.classList.add('tim-formasi-pertamanan');
+                }
+            });
+        });
+    </script>
 @endsection
 
 @section('javascript')

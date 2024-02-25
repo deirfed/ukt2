@@ -2,15 +2,14 @@
 
 namespace Database\Seeders;
 
-use App\Models\Provinsi;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class ProvinsiSeeder extends Seeder
+class UserSeeder extends Seeder
 {
-
-    public function run(): void
+    public function run()
     {
-       Provinsi::factory(1)->create();
+        User::factory(15)->create();
     }
 }
