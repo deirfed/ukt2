@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\data_essentials\AreaController;
 use App\Http\Controllers\data_essentials\EmployeeTypeController;
+use App\Http\Controllers\data_essentials\FormasiTimController;
 use App\Http\Controllers\data_essentials\JabatanController;
 use App\Http\Controllers\data_essentials\RoleController;
 use App\Http\Controllers\data_essentials\SeksiController;
@@ -182,7 +183,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/struktur', 'destroy')->name('struktur.destroy');
     });
 
-
+    Route::controller(FormasiTimController::class)->group(function () {
+        Route::get('/formasi-tim', 'index')->name('formasi_tim.index');
+        Route::get('/formasi-tim-create', 'create')->name('formasi_tim.create');
+        Route::post('/formasi-tim', 'store')->name('formasi_tim.store');
+        Route::get('/formasi-tim/{uuid}/edit', 'edit')->name('formasi_tim.edit');
+        Route::put('/formasi-tim/{uuid}/update', 'update')->name('formasi_tim.update');
+        Route::delete('/formasi-tim', 'destroy')->name('formasi_tim.destroy');
+    });
 
     // KINERJA
     Route::controller(KinerjaController::class)->group(function () {

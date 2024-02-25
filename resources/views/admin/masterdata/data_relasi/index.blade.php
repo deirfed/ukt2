@@ -63,6 +63,19 @@
                 </div>
             </a>
         </div>
+        <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12">
+            <a href="{{ route('formasi_tim.index') }}">
+                <div class="info-tiles">
+                    <div class="info-icon">
+                        <i class="fa fa-database"></i>
+                    </div>
+                    <div class="stats-detail">
+                        <h3>{{ $formasi_tim ?? 0 }}</h3>
+                        <p>Formasi Tim</p>
+                    </div>
+                </div>
+            </a>
+        </div>
     </div>
     {{-- <div class="row gutters">
         <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12">

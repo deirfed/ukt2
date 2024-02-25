@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Area;
 use App\Models\EmployeeType;
+use App\Models\FormasiTim;
 use App\Models\Jabatan;
 use App\Models\Kecamatan;
 use App\Models\Kelurahan;
@@ -66,10 +67,12 @@ class DashboardController extends Controller
         $role_user = RoleUser::count();
         $area = Area::count();
         $struktur = Struktur::count();
+        $formasi_tim = FormasiTim::count();
         return view('admin.masterdata.data_relasi.index', compact([
             'role_user',
             'area',
             'struktur',
+            'formasi_tim',
         ]));
     }
 
