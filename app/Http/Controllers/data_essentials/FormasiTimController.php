@@ -86,12 +86,7 @@ class FormasiTimController extends Controller
 
     public function update(Request $request, string $uuid)
     {
-        $formasi_tim = FormasiTim::where('uuid', $uuid)->first();
-
-        if(!$formasi_tim)
-        {
-            return back()->withNotifyerror('Something went wrong!');
-        }
+        $formasi_tim = FormasiTim::where('uuid', $uuid)->firstOrFail();
 
         $formasi_tim->update([
             'struktur_id' => $request->struktur_id,

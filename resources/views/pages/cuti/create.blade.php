@@ -18,37 +18,40 @@
 @section('content')
     <div class="row gutters justify-content-center">
         <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12 col-12">
-            <form action="" method="POST">
-                @csrf
-                @method('post')
-                <div class="card m-0">
-                    <div class="card-header">
-                        <div class="card-title">Form Permohonan Cuti / Izin</div>
-                        <div class="warning-izin mt-3">
-                            <p>*Izin Sakit wajib menyertakan Surat Keterangan Dokter</p>
-                        </div>
-                    </div>
-                    <div class="card-body">
+            <div class="card m-0">
+                <div class="card-header">
+                    <div class="card-title">Form Permohonan Cuti / Izin</div>
+                </div>
+                <div class="card-body">
+                    <form action="{{ route('cuti.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('post')
                         <div class="row">
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="jenis_pengajuan">Jenis Pengajuan</label>
-                                    <select class="form-control" id="jenis_pengajuan" name="jenis_pengajuan">
-                                        <option value="cuti_tahunan">Cuti Tahunan</option>
-                                        <option value="izin_sakit">Izin Sakit</option>
+                                    <select class="form-control" id="jenis_cuti_id" name="jenis_cuti_id" required>
+                                        <option value="" selected disabled>- pilih jenis cuti -</option>
+                                        @foreach ($jenis_cuti as $item)
+                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                        @endforeach
                                     </select>
+                                    <p id="alert" class="text-danger" style="display: none">*Izin Sakit wajib
+                                        menyertakan Surat Keterangan Dokter</p>
                                 </div>
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 mt-2">
                                             <label for="jenis_pengajuan">Tanggal Mulai:</label>
-                                            <input type="text" class="form-control" id="tanggal_awal"
-                                                placeholder="Tanggal Awal">
+                                            <input type="text" type="text" onfocus="(this.type='date')"
+                                                onblur="(this.type='text')" class="form-control" id="tanggal_awal"
+                                                name="tanggal_awal" placeholder="Tanggal Awal" required>
                                         </div>
                                         <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 mt-2">
                                             <label for="jenis_pengajuan">Tanggal Akhir:</label>
-                                            <input type="text" class="form-control" id="tanggal_akhir"
-                                                placeholder="Tanggal Akhir">
+                                            <input type="text" type="text" onfocus="(this.type='date')"
+                                                onblur="(this.type='text')" class="form-control" id="tanggal_akhir"
+                                                name="tanggal_akhir" placeholder="Tanggal Akhir" required>
                                         </div>
                                     </div>
                                 </div>
@@ -56,75 +59,106 @@
                                     <div class="row">
                                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-2">
                                             <label for="jenis_pengajuan">Total Permohonan (Hari):</label>
-                                            <input type="text" class="form-control" id="tanggal_awal"
-                                                placeholder="1 Hari" value="2 Hari (dinamis sesuai tanggal, kyk di SF kita)" disabled>
+                                            <input type="text" class="form-control" id="total_hari"
+                                                placeholder="total hari cuti" disabled>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" id="total_cuti_tahunan">
                                 <div class="form-group">
-                                    <label for="nama">Cuti Tersedia</label>
-                                    <input type="text" class="form-control" id="name" placeholder="Nama"
-                                        value="12 Hari" disabled>
+                                    <label for="nama">Cuti Tahunan Tersedia</label>
+                                    <input type="text" class="form-control" value="{{ $konfigurasi_cuti->jumlah }} Hari"
+                                        disabled>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-2">
                                 <label for="catatan">Catatan:</label>
-                                <textarea id="input_catatan" class="form-control" name="input_catatan" rows="5"></textarea>
+                                <textarea id="catatan" class="form-control" name="catatan" rows="5"></textarea>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-2">
                                 <label for="catatan">Lampiran:</label>
                                 <div class="">
-                                    <form action="/">
-                                        <input type="file" id="myFile" name="filename">
-                                    </form>
+                                    <input type="file" id="lampiran" name="lampiran" accept="image/*,.pdf">
                                 </div>
+
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-2 justify-content-center d-flex">
                                 <div class="row">
                                     <button class="btn btn-dark mx-2">Batal</button>
-                                    <button class="btn btn-primary mx-2">Ajukan</button>
+                                    <button type="submit" class="btn btn-primary mx-2">Ajukan</button>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 @endsection
 
 @section('javascript')
     <script>
-        $(document).ready(function() {
-            $('#tanggal_awal').datepicker({
-                format: 'yyyy-mm-dd',
-            });
-        });
+        var tanggalAkhir = document.getElementById('tanggal_akhir');
+        tanggalAkhir.addEventListener('change', hitungJumlahHariCuti);
 
-        $(document).ready(function() {
-            $('#tanggal_akhir').datepicker({
-                format: 'yyyy-mm-dd',
-            });
-        });
+        function hitungJumlahHariCuti() {
+            var tanggalMulai = document.getElementById('tanggal_awal').value;
+            var tanggalSelesai = document.getElementById('tanggal_akhir').value;
+
+            var jumlahHariCuti = hitungJumlahHari(tanggalMulai, tanggalSelesai);
+
+            document.getElementById('total_hari').value = jumlahHariCuti + ' hari';
+        }
+
+        function hitungJumlahHari(tanggalMulai, tanggalSelesai) {
+            var satuHari = 24 * 60 * 60 * 1000;
+            var tanggalMulaiObj = new Date(tanggalMulai);
+            var tanggalSelesaiObj = new Date(tanggalSelesai);
+
+            var selisihHari = Math.abs((tanggalSelesaiObj - tanggalMulaiObj) / satuHari) +
+                1;
+
+            var totalHari = selisihHari;
+
+            for (var i = 0; i < selisihHari; i++) {
+                var currentDay = new Date(tanggalMulaiObj.getTime() + (i * satuHari)).getDay();
+
+                if (currentDay === 6 || currentDay === 0) {
+                    totalHari--;
+                }
+            }
+
+            return totalHari;
+        }
+
 
 
         document.addEventListener('DOMContentLoaded', function() {
-            var jenisPengajuan = document.getElementById('jenis_pengajuan');
-            var warningIzinDiv = document.querySelector('.warning-izin');
+            var jenisCuti = document.getElementById('jenis_cuti_id');
+            var totalCutiTahunan = document.getElementById('total_cuti_tahunan');
+            var alert = document.getElementById('alert');
+            var lampiran = document.getElementById('lampiran');
 
-            jenisPengajuan.addEventListener('change', function() {
-                if (jenisPengajuan.value === 'izin_sakit') {
-                    warningIzinDiv.style.display = 'block';
+            jenisCuti.addEventListener('change', function() {
+                if (jenisCuti.value === '2') {
+                    alert.style.display = 'block';
+                    totalCutiTahunan.style.display = 'none';
+                    lampiran.required = true;
+                } else if (jenisCuti.value === '1') {
+                    totalCutiTahunan.style.display = 'block';
+                    alert.style.display = 'none';
+                    lampiran.required = false;
                 } else {
-                    warningIzinDiv.style.display = 'none';
+                    alert.style.display = 'none';
+                    totalCutiTahunan.style.display = 'none';
+                    lampiran.required = false;
                 }
             });
         });

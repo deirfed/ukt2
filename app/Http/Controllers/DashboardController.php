@@ -6,9 +6,11 @@ use App\Models\Area;
 use App\Models\EmployeeType;
 use App\Models\FormasiTim;
 use App\Models\Jabatan;
+use App\Models\JenisCuti;
 use App\Models\Kategori;
 use App\Models\Kecamatan;
 use App\Models\Kelurahan;
+use App\Models\KonfigurasiCuti;
 use Illuminate\Http\Request;
 use App\Models\Provinsi;
 use App\Models\UnitKerja;
@@ -43,6 +45,7 @@ class DashboardController extends Controller
         $employee_type = EmployeeType::count();
         $tim = Tim::count();
         $kategori = Kategori::count();
+        $jenis_cuti = JenisCuti::count();
         return view('admin.masterdata.data_essentials.index', compact([
             'provinsi',
             'walikota',
@@ -56,6 +59,7 @@ class DashboardController extends Controller
             'employee_type',
             'tim',
             'kategori',
+            'jenis_cuti',
             'users',
         ]));
     }
@@ -71,11 +75,13 @@ class DashboardController extends Controller
         $area = Area::count();
         $struktur = Struktur::count();
         $formasi_tim = FormasiTim::count();
+        $konfigurasi_cuti = KonfigurasiCuti::count();
         return view('admin.masterdata.data_relasi.index', compact([
             'role_user',
             'area',
             'struktur',
             'formasi_tim',
+            'konfigurasi_cuti',
         ]));
     }
 

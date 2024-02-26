@@ -7,6 +7,7 @@ use App\Http\Controllers\data_essentials\AreaController;
 use App\Http\Controllers\data_essentials\EmployeeTypeController;
 use App\Http\Controllers\data_essentials\FormasiTimController;
 use App\Http\Controllers\data_essentials\JabatanController;
+use App\Http\Controllers\data_essentials\JenisCutiController;
 use App\Http\Controllers\data_essentials\KategoriController;
 use App\Http\Controllers\data_essentials\RoleController;
 use App\Http\Controllers\data_essentials\SeksiController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\data_essentials\RoleUserController;
 use App\Http\Controllers\data_essentials\WalikotaController;
 use App\Http\Controllers\data_essentials\KecamatanController;
 use App\Http\Controllers\data_essentials\KelurahanController;
+use App\Http\Controllers\data_essentials\KonfigurasiCutiController;
 use App\Http\Controllers\data_essentials\UnitKerjaController;
 use App\Http\Controllers\data_essentials\PulauController;
 use App\Http\Controllers\data_essentials\StrukturController;
@@ -167,6 +169,15 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/kategori', 'destroy')->name('kategori.destroy');
     });
 
+    Route::controller(JenisCutiController::class)->group(function () {
+        Route::get('/jenis-cuti', 'index')->name('jenis_cuti.index');
+        Route::get('/jenis-cuti-create', 'create')->name('jenis_cuti.create');
+        Route::post('/jenis-cuti', 'store')->name('jenis_cuti.store');
+        Route::get('/jenis-cuti/{uuid}/edit', 'edit')->name('jenis_cuti.edit');
+        Route::put('/jenis-cuti/{uuid}', 'update')->name('jenis_cuti.update');
+        Route::delete('/jenis-cuti', 'destroy')->name('jenis_cuti.destroy');
+    });
+
     Route::controller(RoleUserController::class)->group(function () {
         Route::get('/role-user', 'index')->name('role_user.index');
         Route::get('/role-user-create', 'create')->name('role_user.create');
@@ -203,6 +214,15 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/formasi-tim', 'destroy')->name('formasi_tim.destroy');
     });
 
+    Route::controller(KonfigurasiCutiController::class)->group(function () {
+        Route::get('/konfigurasi_cuti', 'index')->name('konfigurasi_cuti.index');
+        Route::get('/konfigurasi_cuti-create', 'create')->name('konfigurasi_cuti.create');
+        Route::post('/konfigurasi_cuti', 'store')->name('konfigurasi_cuti.store');
+        Route::get('/konfigurasi_cuti/{uuid}/edit', 'edit')->name('konfigurasi_cuti.edit');
+        Route::put('/konfigurasi_cuti/{uuid}/update', 'update')->name('konfigurasi_cuti.update');
+        Route::delete('/konfigurasi_cuti', 'destroy')->name('konfigurasi_cuti.destroy');
+    });
+
     // KINERJA
     Route::controller(KinerjaController::class)->group(function () {
         Route::get('/kinerja', 'index')->name('kinerja.index');
@@ -218,6 +238,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::controller(CutiController::class)->group(function () {
         Route::get('/cuti-setting', 'index')->name('cuti.index');
         Route::get('/cuti-create', 'create')->name('cuti.create');
+        Route::post('/cuti', 'store')->name('cuti.store');
     });
 
 });
