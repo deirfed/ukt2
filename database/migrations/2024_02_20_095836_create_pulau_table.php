@@ -11,8 +11,8 @@ return new class extends Migration
     {
         Schema::create('pulau', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid')->unique();
             $table->string('name');
+            $table->uuid('uuid')->unique();
             $table->string('code')->nullable();
             $table->softDeletes();
             $table->timestamps();

@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('jabatan', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid')->unique();
             $table->string('name');
+            $table->uuid('uuid')->unique();
             $table->string('code')->nullable();
             $table->softDeletes();
             $table->timestamps();

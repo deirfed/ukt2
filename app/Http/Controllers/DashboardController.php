@@ -6,6 +6,7 @@ use App\Models\Area;
 use App\Models\EmployeeType;
 use App\Models\FormasiTim;
 use App\Models\Jabatan;
+use App\Models\Kategori;
 use App\Models\Kecamatan;
 use App\Models\Kelurahan;
 use Illuminate\Http\Request;
@@ -41,6 +42,7 @@ class DashboardController extends Controller
         $jabatan = Jabatan::count();
         $employee_type = EmployeeType::count();
         $tim = Tim::count();
+        $kategori = Kategori::count();
         return view('admin.masterdata.data_essentials.index', compact([
             'provinsi',
             'walikota',
@@ -53,6 +55,7 @@ class DashboardController extends Controller
             'jabatan',
             'employee_type',
             'tim',
+            'kategori',
             'users',
         ]));
     }

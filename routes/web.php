@@ -7,6 +7,7 @@ use App\Http\Controllers\data_essentials\AreaController;
 use App\Http\Controllers\data_essentials\EmployeeTypeController;
 use App\Http\Controllers\data_essentials\FormasiTimController;
 use App\Http\Controllers\data_essentials\JabatanController;
+use App\Http\Controllers\data_essentials\KategoriController;
 use App\Http\Controllers\data_essentials\RoleController;
 use App\Http\Controllers\data_essentials\SeksiController;
 use App\Http\Controllers\data_essentials\ProvinsiController;
@@ -154,6 +155,15 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/role-show/{uuid}', 'show')->name('role.show');
         Route::put('/role/{uuid}', 'update')->name('role.update');
         Route::delete('/role', 'destroy')->name('role.destroy');
+    });
+
+    Route::controller(KategoriController::class)->group(function () {
+        Route::get('/kategori', 'index')->name('kategori.index');
+        Route::get('/kategori-create', 'create')->name('kategori.create');
+        Route::post('/kategori', 'store')->name('kategori.store');
+        Route::get('/kategori/{uuid}/edit', 'edit')->name('kategori.edit');
+        Route::put('/kategori/{uuid}', 'update')->name('kategori.update');
+        Route::delete('/kategori', 'destroy')->name('kategori.destroy');
     });
 
     Route::controller(RoleUserController::class)->group(function () {

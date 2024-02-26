@@ -19,6 +19,7 @@ return new class extends Migration
             $table->bigInteger('pulau_id')->unsigned()->nullable();
             $table->bigInteger('koordinator_id')->unsigned()->nullable();
             $table->bigInteger('anggota_id')->unsigned()->nullable();
+            $table->bigInteger('kategori_id')->unsigned()->nullable();
             $table->string('kegiatan')->nullable();
             $table->string('deskripsi')->nullable();
             $table->string('lokasi')->nullable();
@@ -27,6 +28,7 @@ return new class extends Migration
             $table->string('photo_before')->nullable();
             $table->string('photo_after')->nullable();
             $table->string('status')->nullable();
+            $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('formasi_tim_id')->on('formasi_tim')->references('id');
@@ -36,6 +38,7 @@ return new class extends Migration
             $table->foreign('pulau_id')->on('pulau')->references('id');
             $table->foreign('koordinator_id')->on('users')->references('id');
             $table->foreign('anggota_id')->on('users')->references('id');
+            $table->foreign('kategori_id')->on('kategori')->references('id');
         });
     }
 

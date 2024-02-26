@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('formasi_tim', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid')->unique();
             $table->bigInteger('struktur_id')->unsigned()->nullable();
+            $table->uuid('uuid')->unique();
             $table->bigInteger('area_id')->unsigned()->nullable();
             $table->bigInteger('koordinator_id')->unsigned()->nullable();
             $table->bigInteger('anggota_id')->unsigned()->nullable();
