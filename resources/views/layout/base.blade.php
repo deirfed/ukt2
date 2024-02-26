@@ -22,6 +22,8 @@
         crossorigin="anonymous" />
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
 
 </head>
 
@@ -45,7 +47,7 @@
     <div class="container-fluid">
         <!-- Navigation start -->
         <nav class="navbar navbar-expand-lg custom-navbar">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#WafiAdminNavbar"
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#OmbakAdmin"
                 aria-controls="" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon">
                     <i></i>
@@ -53,7 +55,7 @@
                     <i></i>
                 </span>
             </button>
-            <div class="collapse navbar-collapse" id="WafiAdminNavbar">
+            <div class="collapse navbar-collapse" id="OmbakAdmin">
                 <ul class="navbar-nav">
                     {{-- Include Navbar Dashboard --}}
                     @include('layout.navbar')
@@ -96,6 +98,7 @@
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-slimScroll/1.3.8/jquery.slimscroll.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
 
 

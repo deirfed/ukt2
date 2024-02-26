@@ -1,4 +1,4 @@
-var series = 
+var series =
 {
 	"monthDataSeries1": {
 		"prices": [
@@ -51,7 +51,7 @@ var options = {
 		width: 3,
 	},
 	series: [{
-		name: "Wafi Admin",
+		name: "Ombak Admin",
 		data: series.monthDataSeries1.prices
 	}],
 	title: {

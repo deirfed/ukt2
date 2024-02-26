@@ -184,7 +184,7 @@ $(function() {
 
 $(function() {
 	$('.projectLog').slimScroll({
-		height: "170px",
+		height: "300px",
 		color: '#e5e8f2',
 		alwaysVisible: false,
 		size: "4px",

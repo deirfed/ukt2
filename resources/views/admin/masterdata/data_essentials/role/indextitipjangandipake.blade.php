@@ -53,7 +53,7 @@
                                     <td class="text-center">Dede Irfan</td>
                                     <td class="text-center">PWRAMS</td>
                                     <td class="text-center">0801</td>
-                                    <td class="text-center">aliawilllams@wafi.com</td>
+                                    <td class="text-center">aliawilllams@Ombak.com</td>
                                     <td class="text-center">
                                         <button class="btn btn-outline-primary" data-toggle="modal"
                                             data-target="#exampleModalCenter"><i class="fa fa-edit"></i></button>

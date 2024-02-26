@@ -6132,3 +6132,8 @@ code {
         flex-direction: column;
     }
 }
+
+.warning-izin{
+    color: red;
+    display: none;
+}

@@ -21,6 +21,7 @@ use App\Http\Controllers\data_essentials\StrukturController;
 use App\Http\Controllers\data_essentials\TimController;
 use App\Http\Controllers\data_essentials\UserController;
 use App\Http\Controllers\pages\KinerjaController;
+use App\Http\Controllers\pages\CutiController;
 
 // Route::controller(LoginController::class)->group(function () {
 //     Route::get('/', 'login')->name('login.index');
@@ -210,9 +211,13 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/kinerja/{uuid}/edit', 'edit')->name('kinerja.edit');
         Route::put('/kinerja/{uuid}/update', 'update')->name('kinerja.update');
         Route::delete('/kinerja', 'destroy')->name('kinerja.destroy');
-
         Route::get('/formasi', 'formasi')->name('formasi.index');
     });
 
+    // CUTI
+    Route::controller(CutiController::class)->group(function () {
+        Route::get('/cuti-setting', 'index')->name('cuti.index');
+        Route::get('/cuti-create', 'create')->name('cuti.create');
+    });
 
 });

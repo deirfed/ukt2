@@ -10,7 +10,7 @@
     <div class="page-header">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">Kinerja</li>
-            <li class="breadcrumb-item">Daftar Laporan Kinerja</li>
+            <li class="breadcrumb-item active">Daftar Laporan Kinerja</li>
         </ol>
     </div>
 @endsection
@@ -117,7 +117,7 @@
                         <div
                             class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 modal-image mb-5 d-flex justify-content-center">
                             <img src="{{ asset('assets/img/background-page.jpg') }}" class="img-fluid"
-                                style="border-radius: 20px" alt="Wafi Dashboard">
+                                style="border-radius: 20px" alt="Ombak Admin">
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                             <div class="form-group">

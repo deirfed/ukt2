@@ -10,7 +10,7 @@
     <div class="page-header">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">Kinerja</li>
-            <li class="breadcrumb-item">Daftar Laporan Kinerja</li>
+            <li class="breadcrumb-item active">Daftar Laporan Kinerja</li>
         </ol>
     </div>
 @endsection

@@ -42,32 +42,34 @@
                         </form>
                         <div class="table-responsive mt-2">
                             <table class="table table-bordered table-striped" id="dataTable">
-                            <thead>
-                                <tr>
-                                    <th class="text-center">No.</th>
-                                    <th class="text-center">Nama Provinsi</th>
-                                    <th class="text-center">Kode Provinsi</th>
-                                    <th class="text-center">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($provinsi as $item)
+                                <thead>
                                     <tr>
-                                        <td class="text-center">{{ $loop->iteration }}</td>
-                                        <td class="text-center">{{ $item->name }}</td>
-                                        <td class="text-center">{{ $item->code }}</td>
-                                        <td class="text-center">
-                                            <a href="{{ route('provinsi.show', $item->uuid) }}"><button
-                                                    class="btn btn-outline-primary"><i class="fa fa-edit"></i></button></a>
-                                            <a href="#" href="javascript:;" data-toggle="modal"
-                                                data-target="#delete-confirmation-modal"
-                                                onclick="toggleModal('{{ $item->id }}')"><button
-                                                    class="btn btn-outline-primary"><i class="fa fa-trash"></i></button></a>
-                                        </td>
+                                        <th class="text-center">No.</th>
+                                        <th class="text-center">Nama Provinsi</th>
+                                        <th class="text-center">Kode Provinsi</th>
+                                        <th class="text-center">Aksi</th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach ($provinsi as $item)
+                                        <tr>
+                                            <td class="text-center">{{ $loop->iteration }}</td>
+                                            <td class="text-center">{{ $item->name }}</td>
+                                            <td class="text-center">{{ $item->code }}</td>
+                                            <td class="text-center">
+                                                <a href="{{ route('provinsi.show', $item->uuid) }}"><button
+                                                        class="btn btn-outline-primary"><i
+                                                            class="fa fa-edit"></i></button></a>
+                                                <a href="#" href="javascript:;" data-toggle="modal"
+                                                    data-target="#delete-confirmation-modal"
+                                                    onclick="toggleModal('{{ $item->id }}')"><button
+                                                        class="btn btn-outline-primary"><i
+                                                            class="fa fa-trash"></i></button></a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
