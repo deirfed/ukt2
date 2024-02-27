@@ -53,6 +53,13 @@
                                                 onblur="(this.type='text')" class="form-control" id="tanggal_akhir"
                                                 name="tanggal_akhir" placeholder="Tanggal Akhir" required>
                                         </div>
+                                        @error('tanggal_akhir')
+                                            <div class="container">
+                                                <p class="text-danger">
+                                                    {{ $message }}
+                                                </p>
+                                            </div>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -68,7 +75,7 @@
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" id="total_cuti_tahunan">
                                 <div class="form-group">
                                     <label for="nama">Cuti Tahunan Tersedia</label>
-                                    <input type="text" class="form-control" value="{{ $konfigurasi_cuti->jumlah }} Hari"
+                                    <input type="text" class="form-control" value="{{ $konfigurasi_cuti->jumlah }} hari"
                                         disabled>
                                 </div>
                             </div>
@@ -85,7 +92,13 @@
                                 <div class="">
                                     <input type="file" id="lampiran" name="lampiran" accept="image/*,.pdf">
                                 </div>
-
+                                @error('lampiran')
+                                    <div class="container">
+                                        <p class="text-danger">
+                                            {{ $message }}
+                                        </p>
+                                    </div>
+                                @enderror
                             </div>
                         </div>
                         <div class="row">
