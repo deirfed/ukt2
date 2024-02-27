@@ -204,6 +204,66 @@
                                                 </td>
                                             </tr>
                                         @endif
+                                        {{-- <tr>
+                                            <td class="text-center">1</td>
+                                            <td class="text-center">Zaki Putra</td>
+                                            <td class="text-center"> 2 Hari
+                                            </td>
+                                            <td class="text-center">
+                                                <a href=""><button class="btn btn-outline-primary"><i
+                                                            class="fa fa-check"></i></button></a>
+                                                <a href=""><button class="btn btn-outline-primary"><i
+                                                            class="fa fa-times"></i></button></a>
+                                                <a href="#" href="javascript:;" data-toggle="modal"
+                                                    data-target=""><button class="btn btn-outline-primary"><i
+                                                            class="fa fa-eye"></i></button></a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">1</td>
+                                            <td class="text-center">Putra Roh Kudus</td>
+                                            <td class="text-center"> 2 Hari
+                                            </td>
+                                            <td class="text-center">
+                                                <a href=""><button class="btn btn-outline-primary"><i
+                                                            class="fa fa-check"></i></button></a>
+                                                <a href=""><button class="btn btn-outline-primary"><i
+                                                            class="fa fa-times"></i></button></a>
+                                                <a href="#" href="javascript:;" data-toggle="modal"
+                                                    data-target=""><button class="btn btn-outline-primary"><i
+                                                            class="fa fa-eye"></i></button></a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">1</td>
+                                            <td class="text-center">Ahmad Monarki</td>
+                                            <td class="text-center"> 2 Hari
+                                            </td>
+                                            <td class="text-center">
+                                                <a href=""><button class="btn btn-outline-primary"><i
+                                                            class="fa fa-check"></i></button></a>
+                                                <a href=""><button class="btn btn-outline-primary"><i
+                                                            class="fa fa-times"></i></button></a>
+                                                <a href="#" href="javascript:;" data-toggle="modal"
+                                                    data-target=""><button class="btn btn-outline-primary"><i
+                                                            class="fa fa-eye"></i></button></a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">1</td>
+                                            <td class="text-center">Ahmad Jejen Jajuli</td>
+                                            <td class="text-center"> 2 Hari
+                                            </td>
+                                            <td class="text-center">
+                                                <a href=""><button class="btn btn-outline-primary"><i
+                                                            class="fa fa-check"></i></button></a>
+                                                <a href=""><button class="btn btn-outline-primary"><i
+                                                            class="fa fa-times"></i></button></a>
+                                                <a href="#" href="javascript:;" data-toggle="modal"
+                                                    data-target=""><button class="btn btn-outline-primary"><i
+                                                            class="fa fa-eye"></i></button></a>
+                                            </td>
+                                        </tr> --}}
                                     </tbody>
                                 </table>
                             </div>
