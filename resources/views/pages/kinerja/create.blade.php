@@ -10,7 +10,7 @@
     <div class="page-header">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">Kinerja</li>
-            <li class="breadcrumb-item active">Daftar Laporan Kinerja</li>
+            <li class="breadcrumb-item active">Input Laporan Kinerja</li>
         </ol>
     </div>
 @endsection
@@ -23,16 +23,23 @@
                 @method('post')
                 <div class="card m-0">
                     <div class="card-header">
-                        <div class="card-title">Form Tambah Data Laporan Kinerja</div>
+                        <div class="card-title">Laporan Kerja</div>
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <input type="text" class="form-control" id="name" name="name"
-                                placeholder="Nama Seksi" required>
+                            <label for="">Nama</label>
+                            <input type="text" class="form-control" name="code" autocomplete="off"
+                                value="Joko Susilo" disabled>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="code" name="code"
-                                placeholder="Kode Seksi" required>
+                            <label for="">Pulau & Team</label>
+                            <input type="text" class="form-control" name="code" autocomplete="off"
+                                value="Joko Susilo" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Koordinator</label>
+                            <input type="text" class="form-control" name="code" autocomplete="off"
+                                value="Joko Susilo" disabled>
                         </div>
                         <div class="btn group-button">
                             <button type="submit" id="submit" name="submit"

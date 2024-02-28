@@ -78,7 +78,7 @@
     </ul>
 </li>
 
-<li class="nav-item dropdown">
+{{-- <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="appsDropdown" role="button" data-toggle="dropdown"
         aria-haspopup="true" aria-expanded="false">
         <i class="icon-settings nav-icon"></i>
@@ -124,4 +124,4 @@
             <a class="dropdown-item" href="">Data Assets</a>
         </li>
     </ul>
-</li>
+</li> --}}

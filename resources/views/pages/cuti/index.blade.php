@@ -16,7 +16,7 @@
 @endsection
 
 @section('content')
-    <div class="row gutters">
+    {{-- <div class="row gutters">
         <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
             <div class="info-stats4">
                 <div class="info-icon">
@@ -61,7 +61,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <div class="row gutters">
         <div class="col-xl-8 col-lg-7 col-md-12 col-sm-12 col-12">
             <div class="card h-250">
@@ -78,9 +78,11 @@
                             </form>
                         </div>
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3 text-left">
+                            @if ($cuti->count() > 0)
                             <button class="btn btn-primary">Export to Excel</i></button>
                             <button class="btn btn-primary">Export to PDF</button>
                             <button class="btn btn-primary"><i class="fa fa-filter"></i></button>
+                            @endif
                         </div>
                     </div>
                     <div class="projectLog">
@@ -141,6 +143,13 @@
                                                 </td>
                                             </tr>
                                         @endforeach
+                                        @if ($cuti->count() == 0)
+                                            <tr>
+                                                <td class="text-center" colspan="9">
+                                                    Tidak ada data.
+                                                </td>
+                                            </tr>
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>
