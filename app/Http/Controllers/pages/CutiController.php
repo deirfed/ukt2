@@ -53,6 +53,7 @@ class CutiController extends Controller
         $tanggal_awal = $request->tanggal_awal;
         $tanggal_akhir = $request->tanggal_akhir;
         $catatan = $request->catatan;
+        $lampiran = $request->lampiran;
         $status = 'Diproses';
         $seksi_id = FormasiTim::where('koordinator_id', $user_id)->orWhere('anggota_id', $user_id)->firstOrFail()->struktur->seksi->id;
         $approved_by_id = User::where('jabatan_id', 2)->whereHas('struktur', function($query) use ($seksi_id) {
@@ -97,6 +98,13 @@ class CutiController extends Controller
             'catatan' => $catatan,
             'status' => $status,
         ]);
+        if ($request->hasFile('lampiran') && $lampiran != '') {
+            $data = Cuti::findOrFail($cuti->id);
+            $lampiran = '';
+            $data->update([
+                'lampiran' => $lampiran,
+            ]);
+        }
         return redirect()->route('cuti.index')->withNotify('Data berhasil ditambah!');
     }
 }
