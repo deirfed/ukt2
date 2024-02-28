@@ -25,7 +25,7 @@
                 @method('put')
                 <div class="card m-0">
                     <div class="card-header">
-                        <div class="card-title">Form Ubah Data Formasi Tim</div>
+                        <div class="card-title">Form Ubah Data Konfigurasi Cuti</div>
                     </div>
                     <div class="card-body">
                         <div class="form-group">

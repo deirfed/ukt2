@@ -29,11 +29,6 @@ class JenisCutiController extends Controller
         return redirect()->route('jenis_cuti.index')->withNotify('Data berhasil ditambah!');
     }
 
-    public function show(string $id)
-    {
-        //
-    }
-
     public function edit(string $uuid)
     {
         $jenis_cuti = JenisCuti::where('uuid', $uuid)->firstOrFail();

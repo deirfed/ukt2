@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\pages\AbsensiController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
@@ -7,6 +8,7 @@ use App\Http\Controllers\data_essentials\AreaController;
 use App\Http\Controllers\data_essentials\EmployeeTypeController;
 use App\Http\Controllers\data_essentials\FormasiTimController;
 use App\Http\Controllers\data_essentials\JabatanController;
+use App\Http\Controllers\data_essentials\JenisAbsensiController;
 use App\Http\Controllers\data_essentials\JenisCutiController;
 use App\Http\Controllers\data_essentials\KategoriController;
 use App\Http\Controllers\data_essentials\RoleController;
@@ -16,6 +18,7 @@ use App\Http\Controllers\data_essentials\RoleUserController;
 use App\Http\Controllers\data_essentials\WalikotaController;
 use App\Http\Controllers\data_essentials\KecamatanController;
 use App\Http\Controllers\data_essentials\KelurahanController;
+use App\Http\Controllers\data_essentials\KonfigurasiAbsensiController;
 use App\Http\Controllers\data_essentials\KonfigurasiCutiController;
 use App\Http\Controllers\data_essentials\UnitKerjaController;
 use App\Http\Controllers\data_essentials\PulauController;
@@ -178,6 +181,15 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/jenis-cuti', 'destroy')->name('jenis_cuti.destroy');
     });
 
+    Route::controller(JenisAbsensiController::class)->group(function () {
+        Route::get('/jenis-absensi', 'index')->name('jenis_absensi.index');
+        Route::get('/jenis-absensi-create', 'create')->name('jenis_absensi.create');
+        Route::post('/jenis-absensi', 'store')->name('jenis_absensi.store');
+        Route::get('/jenis-absensi/{uuid}/edit', 'edit')->name('jenis_absensi.edit');
+        Route::put('/jenis-absensi/{uuid}', 'update')->name('jenis_absensi.update');
+        Route::delete('/jenis-absensi', 'destroy')->name('jenis_absensi.destroy');
+    });
+
     Route::controller(RoleUserController::class)->group(function () {
         Route::get('/role-user', 'index')->name('role_user.index');
         Route::get('/role-user-create', 'create')->name('role_user.create');
@@ -215,12 +227,21 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     Route::controller(KonfigurasiCutiController::class)->group(function () {
-        Route::get('/konfigurasi_cuti', 'index')->name('konfigurasi_cuti.index');
-        Route::get('/konfigurasi_cuti-create', 'create')->name('konfigurasi_cuti.create');
-        Route::post('/konfigurasi_cuti', 'store')->name('konfigurasi_cuti.store');
-        Route::get('/konfigurasi_cuti/{uuid}/edit', 'edit')->name('konfigurasi_cuti.edit');
-        Route::put('/konfigurasi_cuti/{uuid}/update', 'update')->name('konfigurasi_cuti.update');
-        Route::delete('/konfigurasi_cuti', 'destroy')->name('konfigurasi_cuti.destroy');
+        Route::get('/konfigurasi-cuti', 'index')->name('konfigurasi_cuti.index');
+        Route::get('/konfigurasi-cuti-create', 'create')->name('konfigurasi_cuti.create');
+        Route::post('/konfigurasi-cuti', 'store')->name('konfigurasi_cuti.store');
+        Route::get('/konfigurasi-cuti/{uuid}/edit', 'edit')->name('konfigurasi_cuti.edit');
+        Route::put('/konfigurasi-cuti/{uuid}/update', 'update')->name('konfigurasi_cuti.update');
+        Route::delete('/konfigurasi-cuti', 'destroy')->name('konfigurasi_cuti.destroy');
+    });
+
+    Route::controller(KonfigurasiAbsensiController::class)->group(function () {
+        Route::get('/konfigurasi-absensi', 'index')->name('konfigurasi_absensi.index');
+        Route::get('/konfigurasi-absensi-create', 'create')->name('konfigurasi_absensi.create');
+        Route::post('/konfigurasi-absensi', 'store')->name('konfigurasi_absensi.store');
+        Route::get('/konfigurasi-absensi/{uuid}/edit', 'edit')->name('konfigurasi_absensi.edit');
+        Route::put('/konfigurasi-absensi/{uuid}/update', 'update')->name('konfigurasi_absensi.update');
+        Route::delete('/konfigurasi-absensi', 'destroy')->name('konfigurasi_absensi.destroy');
     });
 
     // KINERJA
@@ -239,6 +260,23 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/cuti-setting', 'index')->name('cuti.index');
         Route::get('/cuti-create', 'create')->name('cuti.create');
         Route::post('/cuti', 'store')->name('cuti.store');
+        Route::get('/cuti/{uuid}/edit', 'edit')->name('cuti.edit');
+        Route::put('/cuti/{uuid}/update', 'update')->name('cuti.update');
+        Route::delete('/cuti', 'destroy')->name('cuti.destroy');
+
+        Route::put('/cuti/approve', 'approve')->name('cuti.approve');
+        Route::put('/cuti/reject', 'reject')->name('cuti.reject');
+    });
+
+    // ABSENSI
+    Route::controller(AbsensiController::class)->group(function () {
+        Route::get('/absensi', 'index')->name('absensi.index');
+        Route::get('/absensiku', 'my_index')->name('absensi.my_index');
+        Route::get('/absensi-create', 'create')->name('absensi.create');
+        Route::post('/absensi', 'store')->name('absensi.store');
+        Route::get('/absensi/{uuid}/edit', 'edit')->name('absensi.edit');
+        Route::put('/absensi/{uuid}/update', 'update')->name('absensi.update');
+        Route::delete('/absensi', 'destroy')->name('absensi.destroy');
     });
 
 });

@@ -35,10 +35,10 @@
     </a>
     <ul class="dropdown-menu" aria-labelledby="dashboardsDropdown">
         <li>
-            <a class="dropdown-item" href="">Data Essentials</a>
+            <a class="dropdown-item" href="{{ route('absensi.index') }}">Data Absensi</a>
         </li>
         <li>
-            <a class="dropdown-item" href="">Data Assets</a>
+            <a class="dropdown-item" href="{{ route('absensi.my_index') }}">Absensi</a>
         </li>
     </ul>
 </li>
@@ -51,10 +51,10 @@
     </a>
     <ul class="dropdown-menu" aria-labelledby="dashboardsDropdown">
         <li>
-            <a class="dropdown-item" href="{{ route('cuti.index') }}">Pengaturan Cuti / Izin</a>
+            <a class="dropdown-item" href="{{ route('cuti.index') }}">Data Cuti/Izin</a>
         </li>
         <li>
-            <a class="dropdown-item" href="{{ route('cuti.create') }}">Permohonan Cuti / Izin</a>
+            <a class="dropdown-item" href="{{ route('cuti.create') }}">Permohonan Cuti/Izin</a>
         </li>
     </ul>
 </li>

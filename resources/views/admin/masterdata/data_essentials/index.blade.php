@@ -208,6 +208,19 @@
                 </div>
             </a>
         </div>
+        <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12">
+            <a href="{{ route('jenis_absensi.index') }}">
+                <div class="info-tiles">
+                    <div class="info-icon">
+                        <i class="fa fa-database"></i>
+                    </div>
+                    <div class="stats-detail">
+                        <h3>{{ $jenis_absensi ?? 0 }}</h3>
+                        <p>Jenis Absensi</p>
+                    </div>
+                </div>
+            </a>
+        </div>
         {{-- <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12">
             <a href="">
                 <div class="info-tiles">

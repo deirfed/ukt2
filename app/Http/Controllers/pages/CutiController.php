@@ -11,13 +11,15 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Storage;
 
 class CutiController extends Controller
 {
     public function index()
     {
-        $cuti = Cuti::all();
-        $approval_cuti = Cuti::where('approved_by_id', auth()->user()->id)->get();
+        $cuti = Cuti::orderBy('created_at', 'DESC')->get();
+        $approval_cuti = Cuti::where('approved_by_id', auth()->user()->id)
+                        ->where('status', 'Diproses')->get();
         return view('pages.cuti.index', compact([
             'cuti',
             'approval_cuti',
@@ -119,5 +121,44 @@ class CutiController extends Controller
         }
 
         return redirect()->route('cuti.index')->withNotify('Data berhasil ditambah!');
+    }
+
+    public function destroy(Request $request)
+    {
+        $request->validate([
+            'id' => 'required'
+        ]);
+        $cuti = Cuti::findOrFail($request->id);
+        if($cuti->lampiran != null)
+        {
+            Storage::delete($cuti->lampiran);
+        }
+        $cuti->forceDelete();
+
+        return redirect()->route('cuti.index')->withNotify('Data berhasil dihapus secara permanen!');
+    }
+
+    public function approve(Request $request)
+    {
+        $request->validate([
+            'id' => 'required'
+        ]);
+        $cuti = Cuti::findOrFail($request->id);
+        $cuti->status = 'Diterima';
+        $cuti->save();
+
+        return redirect()->route('cuti.index')->withNotify('Data berhasil diterima!');
+    }
+
+    public function reject(Request $request)
+    {
+        $request->validate([
+            'id' => 'required'
+        ]);
+        $cuti = Cuti::findOrFail($request->id);
+        $cuti->status = 'Ditolak';
+        $cuti->save();
+
+        return redirect()->route('cuti.index')->withNotify('Data berhasil ditolak!');
     }
 }

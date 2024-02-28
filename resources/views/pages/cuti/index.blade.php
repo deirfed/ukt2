@@ -2,7 +2,7 @@
 
 @section('title-head')
     <title>
-        Cuti | Permohonan Cuti / Izin
+        Cuti | Data Pengajuan Cuti / Izin
     </title>
 @endsection
 
@@ -10,7 +10,7 @@
     <div class="page-header">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">Cuti</li>
-            <li class="breadcrumb-item active">Pengaturan Cuti</li>
+            <li class="breadcrumb-item active">Pengajuan Cuti</li>
         </ol>
     </div>
 @endsection
@@ -79,9 +79,9 @@
                         </div>
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3 text-left">
                             @if ($cuti->count() > 0)
-                            <button class="btn btn-primary">Export to Excel</i></button>
-                            <button class="btn btn-primary">Export to PDF</button>
-                            <button class="btn btn-primary"><i class="fa fa-filter"></i></button>
+                                <button class="btn btn-primary">Export to Excel</i></button>
+                                <button class="btn btn-primary">Export to PDF</button>
+                                <button class="btn btn-primary"><i class="fa fa-filter"></i></button>
                             @endif
                         </div>
                     </div>
@@ -116,7 +116,7 @@
                                                     {{ $item->known_by->name }}
                                                 </td>
                                                 <td class="text-center">
-                                                    @if ($item->status == 'Approved')
+                                                    @if ($item->status == 'Diterima')
                                                         {{ $item->approved_by->name }}
                                                     @else
                                                         -
@@ -129,15 +129,18 @@
                                                     </span>
                                                 </td>
                                                 <td class="text-center">
-                                                    <a href="#" class="btn btn-outline-primary" title="Print">
+                                                    <a href="javascript:;" class="btn btn-outline-primary" title="Print">
                                                         <i class="fa fa-print"></i>
                                                     </a>
-                                                    <a href="javascript:;" class="btn btn-outline-primary" title="Lihat"
-                                                        data-toggle="modal" data-target="#modalLampiran"
+                                                    <a href="javascript:;" class="btn btn-outline-primary"
+                                                        title="Lihat lampiran" data-toggle="modal"
+                                                        data-target="#modalLampiran"
                                                         data-lampiran="{{ asset('storage/' . $item->lampiran) }}">
                                                         <i class="fa fa-eye"></i>
                                                     </a>
-                                                    <a href="#" class="btn btn-outline-secondary" title="Hapus">
+                                                    <a href="javascript:;" class="btn btn-outline-secondary" title="Hapus"
+                                                        data-toggle="modal" data-target="#deleteModal"
+                                                        data-id="{{ $item->id }}">
                                                         <i class="fa fa-trash"></i>
                                                     </a>
                                                 </td>
@@ -172,11 +175,11 @@
                                 <button class="btn btn-dark my-2 my-sm-0" type="submit">Pencarian</button>
                             </form>
                         </div>
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3 text-left">
+                        {{-- <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3 text-left">
                             @if ($approval_cuti->count() > 0)
                                 <a href="javascript:;" class="btn btn-primary">Setujui Semua</a>
                             @endif
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="projectLog">
                         <div class="logs-container">
@@ -199,16 +202,18 @@
                                                     {{ $item->jumlah }} hari
                                                 </td>
                                                 <td class="text-center">
-                                                    <a href="javascript:;" class="btn btn-outline-primary"
-                                                        title="Approve">
+                                                    <a href="javascript:;" class="btn btn-outline-primary" title="Terima"
+                                                        data-toggle="modal" data-target="#approveModal"
+                                                        data-id="{{ $item->id }}">
                                                         <i class="fa fa-check"></i>
                                                     </a>
                                                     <a href="javascript:;" class="btn btn-outline-secondary"
-                                                        title="Tolak">
+                                                        title="Tolak" data-toggle="modal" data-target="#rejectModal"
+                                                        data-id="{{ $item->id }}">
                                                         <i class="fa fa-times"></i>
                                                     </a>
                                                     <a href="javascript:;" class="btn btn-outline-primary"
-                                                        title="Lihat">
+                                                        title="Lihat detail">
                                                         <i class="fa fa-eye"></i>
                                                     </a>
                                                 </td>
@@ -230,6 +235,7 @@
             </div>
         </div>
     </div>
+
     <div class="modal fade" id="modalLampiran" tabindex="-1" role="dialog" aria-labelledby="detailPersonel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -255,14 +261,113 @@
             </div>
         </div>
     </div>
+
+    <!-- BEGIN: konfirmasi hapus modal -->
+    <div id="deleteModal" class="modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body p-2">
+                    <div class="p-2 text-center">
+                        <div class="mt-2 fw-bolder">Apakah anda yakin?</div>
+                        <div class="text-slate-500 mt-2">
+                            <p>
+                                Data pengajuan ini akan dihapus secara <b>Permanen</b>!
+                            </p>
+                        </div>
+                        <form id="deleteForm" action="{{ route('cuti.destroy') }}" method="POST" hidden>
+                            @csrf
+                            @method('delete')
+                            <input type="text" name="id" id="id">
+                        </form>
+                    </div>
+                    <div class="px-5 pb-8 text-center mt-3">
+                        <button type="submit" form="deleteForm" class="btn btn-primary w-24 mr-1 me-2">Hapus</button>
+                        <button type="button" data-dismiss="modal" class="btn btn-dark w-24 mr-1 me-2">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END:  konfirmasi hapus Modal -->
+
+    <!-- BEGIN: konfirmasi approve modal -->
+    <div id="approveModal" class="modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body p-2">
+                    <div class="p-2 text-center">
+                        <div class="mt-2 fw-bolder">Apakah anda yakin?</div>
+                        <div class="text-slate-500 mt-2">
+                            <p>
+                                Status pengajuan izin ini akan diubah jadi <b>"Diterima"</b>!
+                            </p>
+                        </div>
+                        <form id="approveForm" action="{{ route('cuti.approve') }}" method="POST" hidden>
+                            @csrf
+                            @method('put')
+                            <input type="text" name="id" id="approve_id">
+                        </form>
+                    </div>
+                    <div class="px-5 pb-8 text-center mt-3">
+                        <button type="submit" form="approveForm" class="btn btn-primary w-24 mr-1 me-2">Submit</button>
+                        <button type="button" data-dismiss="modal" class="btn btn-dark w-24 mr-1 me-2">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END:  konfirmasi approve Modal -->
+
+    <!-- BEGIN: konfirmasi reject modal -->
+    <div id="rejectModal" class="modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body p-2">
+                    <div class="p-2 text-center">
+                        <div class="mt-2 fw-bolder">Apakah anda yakin?</div>
+                        <div class="text-slate-500 mt-2">
+                            <p>
+                                Status pengajuan izin ini akan diubah jadi <b>"Ditolak"</b>!
+                            </p>
+                        </div>
+                        <form id="rejectForm" action="{{ route('cuti.reject') }}" method="POST" hidden>
+                            @csrf
+                            @method('put')
+                            <input type="text" name="id" id="reject_id">
+                        </form>
+                    </div>
+                    <div class="px-5 pb-8 text-center mt-3">
+                        <button type="submit" form="rejectForm" class="btn btn-primary w-24 mr-1 me-2">Submit</button>
+                        <button type="button" data-dismiss="modal" class="btn btn-dark w-24 mr-1 me-2">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END:  konfirmasi reject Modal -->
 @endsection
 
 @section('javascript')
     <script>
         $(document).ready(function() {
+            $('#deleteModal').on('show.bs.modal', function(e) {
+                var id = $(e.relatedTarget).data('id');
+                document.getElementById("id").value = id;
+            });
+
             $('#modalLampiran').on('show.bs.modal', function(e) {
                 var lampiran = $(e.relatedTarget).data('lampiran');
                 document.getElementById("photoLampiran").src = lampiran;
+            });
+
+            $('#approveModal').on('show.bs.modal', function(e) {
+                var id = $(e.relatedTarget).data('id');
+                document.getElementById("approve_id").value = id;
+            });
+
+            $('#rejectModal').on('show.bs.modal', function(e) {
+                var id = $(e.relatedTarget).data('id');
+                document.getElementById("reject_id").value = id;
             });
         });
     </script>

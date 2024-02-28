@@ -43,11 +43,6 @@ class KonfigurasiCutiController extends Controller
         return redirect()->route('konfigurasi_cuti.index')->withNotify('Data berhasil ditambah!');
     }
 
-    public function show(string $id)
-    {
-        //
-    }
-
     public function edit(string $uuid)
     {
         $this_year = Carbon::now()->format('Y');

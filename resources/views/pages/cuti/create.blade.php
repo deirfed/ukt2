@@ -90,7 +90,7 @@
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-2">
                                 <label for="catatan">Lampiran:</label>
                                 <div class="">
-                                    <input type="file" id="lampiran" name="lampiran" accept="image/*,.pdf">
+                                    <input type="file" id="lampiran" name="lampiran" accept="image/*">
                                 </div>
                                 @error('lampiran')
                                     <div class="container">
