@@ -125,26 +125,6 @@
                     <div class="row-modal-user gutters">
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="formasi-modal" id="anggotaModalBody">
-                                {{-- <div class="user-card">
-                                    <img src="https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg"
-                                        alt="Photo" />
-                                    <h5>Muhammad Pikri</h5>
-                                </div> --}}
-                                {{-- <div class="user-card">
-                                    <img src="https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg"
-                                        alt="Admin Template" />
-                                    <h5>Ahmad Jajuli</h5>
-                                </div>
-                                <div class="user-card">
-                                    <img src="https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg"
-                                        alt="Admin Template" />
-                                    <h5>Pukimak Putra</h5>
-                                </div>
-                                <div class="user-card">
-                                    <img src="https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg"
-                                        alt="Admin Template" />
-                                    <h5>Henceutalia Putri</h5>
-                                </div> --}}
                             </div>
                         </div>
                     </div>

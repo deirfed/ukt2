@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('jumlah')->nullable();
             $table->string('catatan')->nullable();
             $table->string('lampiran')->nullable();
+            $table->bigInteger('known_by_id')->unsigned()->nullable();
             $table->bigInteger('approved_by_id')->unsigned()->nullable();
             $table->string('status')->nullable();
             $table->softDeletes();
@@ -25,6 +26,7 @@ return new class extends Migration
 
             $table->foreign('user_id')->on('users')->references('id');
             $table->foreign('jenis_cuti_id')->on('jenis_cuti')->references('id');
+            $table->foreign('known_by_id')->on('users')->references('id');
             $table->foreign('approved_by_id')->on('users')->references('id');
         });
     }

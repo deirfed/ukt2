@@ -10,6 +10,7 @@ use App\Models\KonfigurasiCuti;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Intervention\Image\Facades\Image;
 
 class CutiController extends Controller
 {
@@ -60,19 +61,16 @@ class CutiController extends Controller
             $query->where('seksi_id', $seksi_id);
         })->firstOrFail()->id;
 
-        // if(auth()->user()->jabatan->id == 5) {
-        //     $approved_by_id = FormasiTim::whereYear('periode', Carbon::now()->format('Y'))
-        //                         ->where('anggota_id', $user_id)
-        //                         ->firstOrFail()
-        //                         ->koordinator->id;
-        // } elseif (auth()->user()->jabatan->id == 4) {
-        //     $approved_by_id = FormasiTim::whereYear('periode', Carbon::now()->format('Y'))
-        //             ->where('koordinator_id', $user_id)
-        //             ->firstOrFail()
-        //             ->koordinator->id;
-        // } else {
-        //     return back()->withError('Jabatan anda tidak bisa mengajukan cuti melalui sistem ini.');
-        // }
+        $known_by_id = '';
+        $jabatan_id = auth()->user()->jabatan->id;
+
+        if($jabatan_id == 4) {
+            $known_by_id = $user_id;
+        } else if ($jabatan_id == 5) {
+            $known_by_id = FormasiTim::where('anggota_id', $user_id)->firstOrFail()->koordinator->id;
+        } else {
+            return redirect()->route('cuti.index')->withError('Jabatan anda tidak bisa mengajukan cuti di sistem ini.');
+        }
 
         $tanggalAwal = Carbon::parse($request->tanggal_awal);
         $tanggalAkhir = Carbon::parse($request->tanggal_akhir);
@@ -87,6 +85,7 @@ class CutiController extends Controller
             $tanggalAwal->addDay();
         }
         $jumlah = $jumlahHariCuti;
+        $heightPhoto = 500;
 
         $cuti = Cuti::create([
             'user_id' => $user_id,
@@ -94,17 +93,31 @@ class CutiController extends Controller
             'tanggal_awal' => $tanggal_awal,
             'tanggal_akhir' => $tanggal_akhir,
             'jumlah' => $jumlah,
+            'known_by_id' => $known_by_id,
             'approved_by_id' => $approved_by_id,
             'catatan' => $catatan,
             'status' => $status,
         ]);
+
         if ($request->hasFile('lampiran') && $lampiran != '') {
-            $data = Cuti::findOrFail($cuti->id);
-            $lampiran = '';
-            $data->update([
-                'lampiran' => $lampiran,
-            ]);
+            $cuti = Cuti::findOrFail($cuti->id);
+
+            $image = Image::make($request->file('lampiran'));
+
+            $imageName = time().'-'.$request->file('lampiran')->getClientOriginalName();
+            $detailPath = 'cuti/lampiran/';
+            $destinationPath = public_path('storage/'. $detailPath);
+
+            $image->resize(null, $heightPhoto, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+
+            $lampiran = $image->save($destinationPath.$imageName);
+
+            $cuti->lampiran = $detailPath.$imageName;
+            $cuti->save();
         }
+
         return redirect()->route('cuti.index')->withNotify('Data berhasil ditambah!');
     }
 }

@@ -90,13 +90,14 @@
                                     <thead>
                                         <tr>
                                             <th class="text-center">No.</th>
-                                            <th class="text-center">Nama</th>
-                                            <th class="text-center">Tanggal Pengajuan</th>
-                                            <th class="text-center">Jenis Pengajuan</th>
-                                            <th class="text-center">Jumlah Hari</th>
-                                            <th class="text-center">Approved by</th>
-                                            <th class="text-center">Status</th>
-                                            <th class="text-center">Aksi</th>
+                                            <th class="text-center text-wrap">Nama</th>
+                                            <th class="text-center text-wrap">Tanggal Pengajuan</th>
+                                            <th class="text-center text-wrap">Jenis Pengajuan</th>
+                                            <th class="text-center text-wrap">Jumlah Hari</th>
+                                            <th class="text-center text-wrap">Diketahui</th>
+                                            <th class="text-center text-wrap">Disetujui</th>
+                                            <th class="text-center text-wrap">Status</th>
+                                            <th class="text-center text-wrap">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -104,9 +105,14 @@
                                             <tr>
                                                 <td class="text-center">{{ $loop->iteration }}</td>
                                                 <td class="text-center">{{ $item->user->name }}</td>
-                                                <td class="text-center">{{ $item->tanggal_awal }}</td>
+                                                <td class="text-center text-wrap">
+                                                    {{ $item->tanggal_awal }} - {{ $item->tanggal_akhir }}
+                                                </td>
                                                 <td class="text-center">{{ $item->jenis_cuti->name }}</td>
                                                 <td class="text-center">{{ $item->jumlah }} hari</td>
+                                                <td class="text-center">
+                                                    {{ $item->known_by->name }}
+                                                </td>
                                                 <td class="text-center">
                                                     @if ($item->status == 'Approved')
                                                         {{ $item->approved_by->name }}
@@ -124,7 +130,9 @@
                                                     <a href="#" class="btn btn-outline-primary" title="Print">
                                                         <i class="fa fa-print"></i>
                                                     </a>
-                                                    <a href="#" class="btn btn-outline-primary" title="Lihat">
+                                                    <a href="javascript:;" class="btn btn-outline-primary" title="Lihat"
+                                                        data-toggle="modal" data-target="#modalLampiran"
+                                                        data-lampiran="{{ asset('storage/' . $item->lampiran) }}">
                                                         <i class="fa fa-eye"></i>
                                                     </a>
                                                     <a href="#" class="btn btn-outline-secondary" title="Hapus">
@@ -204,66 +212,6 @@
                                                 </td>
                                             </tr>
                                         @endif
-                                        {{-- <tr>
-                                            <td class="text-center">1</td>
-                                            <td class="text-center">Zaki Putra</td>
-                                            <td class="text-center"> 2 Hari
-                                            </td>
-                                            <td class="text-center">
-                                                <a href=""><button class="btn btn-outline-primary"><i
-                                                            class="fa fa-check"></i></button></a>
-                                                <a href=""><button class="btn btn-outline-primary"><i
-                                                            class="fa fa-times"></i></button></a>
-                                                <a href="#" href="javascript:;" data-toggle="modal"
-                                                    data-target=""><button class="btn btn-outline-primary"><i
-                                                            class="fa fa-eye"></i></button></a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">1</td>
-                                            <td class="text-center">Putra Roh Kudus</td>
-                                            <td class="text-center"> 2 Hari
-                                            </td>
-                                            <td class="text-center">
-                                                <a href=""><button class="btn btn-outline-primary"><i
-                                                            class="fa fa-check"></i></button></a>
-                                                <a href=""><button class="btn btn-outline-primary"><i
-                                                            class="fa fa-times"></i></button></a>
-                                                <a href="#" href="javascript:;" data-toggle="modal"
-                                                    data-target=""><button class="btn btn-outline-primary"><i
-                                                            class="fa fa-eye"></i></button></a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">1</td>
-                                            <td class="text-center">Ahmad Monarki</td>
-                                            <td class="text-center"> 2 Hari
-                                            </td>
-                                            <td class="text-center">
-                                                <a href=""><button class="btn btn-outline-primary"><i
-                                                            class="fa fa-check"></i></button></a>
-                                                <a href=""><button class="btn btn-outline-primary"><i
-                                                            class="fa fa-times"></i></button></a>
-                                                <a href="#" href="javascript:;" data-toggle="modal"
-                                                    data-target=""><button class="btn btn-outline-primary"><i
-                                                            class="fa fa-eye"></i></button></a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">1</td>
-                                            <td class="text-center">Ahmad Jejen Jajuli</td>
-                                            <td class="text-center"> 2 Hari
-                                            </td>
-                                            <td class="text-center">
-                                                <a href=""><button class="btn btn-outline-primary"><i
-                                                            class="fa fa-check"></i></button></a>
-                                                <a href=""><button class="btn btn-outline-primary"><i
-                                                            class="fa fa-times"></i></button></a>
-                                                <a href="#" href="javascript:;" data-toggle="modal"
-                                                    data-target=""><button class="btn btn-outline-primary"><i
-                                                            class="fa fa-eye"></i></button></a>
-                                            </td>
-                                        </tr> --}}
                                     </tbody>
                                 </table>
                             </div>
@@ -273,4 +221,40 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modalLampiran" tabindex="-1" role="dialog" aria-labelledby="detailPersonel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Data Lampiran</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row-modal-user gutters">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="formasi-modal p-2 text-center">
+                                <img id="photoLampiran" src="#" alt="LAMPIRAN" class="img-thumbnail">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+@section('javascript')
+    <script>
+        $(document).ready(function() {
+            $('#modalLampiran').on('show.bs.modal', function(e) {
+                var lampiran = $(e.relatedTarget).data('lampiran');
+                document.getElementById("photoLampiran").src = lampiran;
+            });
+        });
+    </script>
 @endsection

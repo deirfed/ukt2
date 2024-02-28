@@ -34,6 +34,11 @@ class Cuti extends Model
         return $this->belongsTo(JenisCuti::class);
     }
 
+    public function known_by()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function approved_by()
     {
         return $this->belongsTo(User::class);
