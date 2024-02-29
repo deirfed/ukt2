@@ -59,9 +59,11 @@ class CutiController extends Controller
         $lampiran = $request->lampiran;
         $status = 'Diproses';
         $seksi_id = FormasiTim::where('koordinator_id', $user_id)->orWhere('anggota_id', $user_id)->firstOrFail()->struktur->seksi->id;
-        $approved_by_id = User::where('jabatan_id', 2)->whereHas('struktur', function($query) use ($seksi_id) {
-            $query->where('seksi_id', $seksi_id);
-        })->firstOrFail()->id;
+        $approved_by_id = User::where('jabatan_id', 2)
+                        ->whereHas('struktur', function($query) use ($seksi_id) {
+                            $query->where('seksi_id', $seksi_id);
+                        })
+                        ->firstOrFail()->id;
 
         $known_by_id = '';
         $jabatan_id = auth()->user()->jabatan->id;
@@ -80,13 +82,21 @@ class CutiController extends Controller
         $jumlahHariCuti = 0;
 
         while ($tanggalAwal->lessThanOrEqualTo($tanggalAkhir)) {
-            if ($tanggalAwal->dayOfWeek != Carbon::SATURDAY && $tanggalAwal->dayOfWeek != Carbon::SUNDAY) {
-                $jumlahHariCuti++;
-            }
+            // if ($tanggalAwal->dayOfWeek != Carbon::SATURDAY && $tanggalAwal->dayOfWeek != Carbon::SUNDAY) {
+            //     $jumlahHariCuti++;
+            // }
 
+            $jumlahHariCuti++;
             $tanggalAwal->addDay();
         }
-        $jumlah = $jumlahHariCuti;
+
+        if($jenis_cuti_id == 1){
+            $jumlahSisaCuti = KonfigurasiCuti::where('jenis_cuti_id', 1)->where('user_id', $user_id)->firstOrFail()->jumlah;
+            if ($jumlahHariCuti > $jumlahSisaCuti){
+                return back()->withError('Jumlah hari Cuti yang anda ajukan melebihi sisa Cuti yang anda miliki.');
+            }
+        }
+
         $heightPhoto = 500;
 
         $cuti = Cuti::create([
@@ -94,7 +104,7 @@ class CutiController extends Controller
             'jenis_cuti_id' => $jenis_cuti_id,
             'tanggal_awal' => $tanggal_awal,
             'tanggal_akhir' => $tanggal_akhir,
-            'jumlah' => $jumlah,
+            'jumlah' => $jumlahHariCuti,
             'known_by_id' => $known_by_id,
             'approved_by_id' => $approved_by_id,
             'catatan' => $catatan,
@@ -120,7 +130,7 @@ class CutiController extends Controller
             $cuti->save();
         }
 
-        return redirect()->route('cuti.index')->withNotify('Data berhasil ditambah!');
+        return redirect()->route('cuti.saya')->withNotify('Data berhasil ditambah!');
     }
 
     public function destroy(Request $request)
@@ -135,7 +145,7 @@ class CutiController extends Controller
         }
         $cuti->forceDelete();
 
-        return redirect()->route('cuti.index')->withNotify('Data berhasil dihapus secara permanen!');
+        return redirect()->route('cuti.saya')->withNotify('Data berhasil dihapus secara permanen!');
     }
 
     public function approve(Request $request)
@@ -144,10 +154,16 @@ class CutiController extends Controller
             'id' => 'required'
         ]);
         $cuti = Cuti::findOrFail($request->id);
+        $konfigurasi_cuti = KonfigurasiCuti::where('user_id', $cuti->user_id)->firstOrFail();
         $cuti->status = 'Diterima';
         $cuti->save();
 
-        return redirect()->route('cuti.index')->withNotify('Data berhasil diterima!');
+        if($cuti->jenis_cuti->id == 1){
+            $konfigurasi_cuti->jumlah = $konfigurasi_cuti->jumlah - $cuti->jumlah;
+            $konfigurasi_cuti->save();
+        }
+
+        return redirect()->route('cuti.approval_page')->withNotify('Data berhasil diterima!');
     }
 
     public function reject(Request $request)
@@ -159,21 +175,27 @@ class CutiController extends Controller
         $cuti->status = 'Ditolak';
         $cuti->save();
 
-        return redirect()->route('cuti.index')->withNotify('Data berhasil ditolak!');
+        return redirect()->route('cuti.approval_page')->withNotify('Data berhasil ditolak!');
     }
 
     public function cuti_saya()
     {
-        return view('pages.cuti.my_index');
+        $cuti = Cuti::where('user_id',auth()->user()->id)
+                    ->orderBy('tanggal_awal', 'DESC')
+                    ->orderBy('tanggal_akhir', 'DESC')
+                    ->get();
+        $konfigurasi_cuti = KonfigurasiCuti::where('jenis_cuti_id', 1)
+                            ->where('user_id',auth()->user()->id)
+                            ->orWhere('user_id',auth()->user()->id)
+                            ->firstOrFail();
+        return view('pages.cuti.my_index', compact(['cuti', 'konfigurasi_cuti']));
     }
 
     public function approval_page()
     {
-        $cuti = Cuti::orderBy('created_at', 'DESC')->get();
         $approval_cuti = Cuti::where('approved_by_id', auth()->user()->id)
                         ->where('status', 'Diproses')->get();
         return view('pages.cuti.approval', compact([
-            'cuti',
             'approval_cuti',
         ]));
     }

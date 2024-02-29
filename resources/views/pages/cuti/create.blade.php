@@ -140,13 +140,13 @@
 
             var totalHari = selisihHari;
 
-            for (var i = 0; i < selisihHari; i++) {
-                var currentDay = new Date(tanggalMulaiObj.getTime() + (i * satuHari)).getDay();
+            // for (var i = 0; i < selisihHari; i++) {
+            //     var currentDay = new Date(tanggalMulaiObj.getTime() + (i * satuHari)).getDay();
 
-                if (currentDay === 6 || currentDay === 0) {
-                    totalHari--;
-                }
-            }
+            //     if (currentDay === 6 || currentDay === 0) {
+            //         totalHari--;
+            //     }
+            // }
 
             return totalHari;
         }

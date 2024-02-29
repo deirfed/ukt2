@@ -38,61 +38,6 @@
                         </div>
                     </div>
 
-                    {{-- YG ISI DATABASE TA COMMENT DLU --}}
-                    {{-- <div class="projectLog">
-                        <div class="logs-container">
-                            <div class="table-responsive mt-2">
-                                <table class="table table-bordered table-striped" id="dataTable-2">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center">No.</th>
-                                            <th class="text-center">Nama</th>
-                                            <th class="text-center">Jenis Pengajuan</th>
-                                            <th class="text-center">Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($approval_cuti as $item)
-                                            <tr>
-                                                <td class="text-center">{{ $loop->iteration }}</td>
-                                                <td class="text-center">{{ $item->user->name }}</td>
-                                                <td class="text-center">
-                                                    {{ $item->jenis_cuti }} hari
-                                                </td>
-                                                <td class="text-center">
-                                                    <a href="javascript:;" class="btn btn-outline-primary" title="Terima"
-                                                        data-toggle="modal" data-target="#approveModal"
-                                                        data-id="{{ $item->id }}">
-                                                        <i class="fa fa-check"></i>
-                                                    </a>
-                                                    <a href="javascript:;" class="btn btn-outline-secondary"
-                                                        title="Tolak" data-toggle="modal" data-target="#rejectModal"
-                                                        data-id="{{ $item->id }}">
-                                                        <i class="fa fa-times"></i>
-                                                    </a>
-                                                    <a href="javascript:;" class="btn btn-outline-primary"
-                                                        title="Lihat detail" data-toggle="modal" data-target="modalLampiran">
-                                                        <i class="fa fa-eye"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                        @if ($approval_cuti->count() == 0)
-                                            <tr>
-                                                <td class="text-center" colspan="4">
-                                                    Tidak ada data.
-                                                </td>
-                                            </tr>
-                                        @endif
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div> --}}
-
-
-
-                    {{-- DISPLAY ONLY DELETE NANTI --}}
                     <div class="projectLog">
                         <div class="logs-container">
                             <div class="table-responsive mt-2">
@@ -100,33 +45,63 @@
                                     <thead>
                                         <tr>
                                             <th class="text-center">No.</th>
-                                            <th class="text-center">Nama</th>
-                                            <th class="text-center">Jenis Permohonan</th>
-                                            <th class="text-center">Aksi</th>
+                                            <th class="text-center text-wrap">Nama</th>
+                                            <th class="text-center text-wrap">Jabatan</th>
+                                            <th class="text-center text-wrap">Tanggal Pengajuan</th>
+                                            <th class="text-center text-wrap">Jumlah Hari</th>
+                                            <th class="text-center text-wrap">Jenis Pengajuan</th>
+                                            <th class="text-center text-wrap">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td class="text-center">1</td>
-                                            <td class="text-center">{{ auth()->user()->name }}</td>
-                                            <td class="text-center">
-                                                Cuti Tahunan
-                                            </td>
-                                            <td class="text-center">
-                                                <a href="javascript:;" class="btn btn-primary" title="Terima"
-                                                    data-toggle="modal" data-target="#approveModal" data-id="">
-                                                    <i class="fa fa-check"></i>
-                                                </a>
-                                                <a href="javascript:;" class="btn btn-secondary" title="Tolak"
-                                                    data-toggle="modal" data-target="#rejectModal" data-id="">
-                                                    <i class="fa fa-times"></i>
-                                                </a>
-                                                <a href="javascript:;" class="btn btn-outline-primary" title="Lihat detail"
-                                                    data-toggle="modal" data-target="#modalLampiran">
-                                                    <i class="fa fa-eye"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
+                                        @foreach ($approval_cuti as $item)
+                                            <tr>
+                                                <td class="text-center">{{ $loop->iteration }}</td>
+                                                <td class="text-center">{{ $item->user->name }}</td>
+                                                <td class="text-center">{{ $item->user->jabatan->name }}</td>
+                                                <td class="text-center text-wrap">
+                                                    {{ $item->tanggal_awal }} s/d {{ $item->tanggal_akhir }}
+                                                </td>
+                                                <td class="text-center">{{ $item->jumlah }} hari</td>
+                                                <td class="text-center">{{ $item->jenis_cuti->name }}</td>
+                                                <td class="text-center">
+                                                    <a href="javascript:;" class="btn btn-outline-primary" title="Terima"
+                                                        data-toggle="modal" data-target="#approveModal"
+                                                        data-id="{{ $item->id }}">
+                                                        <i class="fa fa-check"></i>
+                                                    </a>
+                                                    <a href="javascript:;" class="btn btn-outline-secondary" title="Tolak"
+                                                        data-toggle="modal" data-target="#rejectModal"
+                                                        data-id="{{ $item->id }}">
+                                                        <i class="fa fa-times"></i>
+                                                    </a>
+                                                    <a href="javascript:;" class="btn btn-outline-primary"
+                                                        title="Lihat lampiran" data-toggle="modal"
+                                                        data-target="#modalDetailPengajuan"
+                                                        data-lampiran="{{ $item->lampiran != null ? asset('storage/' . $item->lampiran) : 'https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg' }}"
+                                                        data-nama="{{ $item->user->name }}"
+                                                        data-jenis_cuti="{{ $item->jenis_cuti->name }} ({{ $item->jumlah }} hari)"
+                                                        data-koordinator="{{ $item->known_by->name }}"
+                                                        data-periode="{{ $item->tanggal_awal }} s/d {{ $item->tanggal_akhir }}"
+                                                        data-tim="{{ $item->user->struktur->tim->name }} (Pulau {{ $item->user->area->pulau->name }})"
+                                                        data-catatan="{{ $item->catatan }}"
+                                                        data-status="@if ($item->status == 'Diproses') <h5>*Pengajuan Cuti masih Dalam Proses persetujuan</h5>
+                                                        @elseif($item->status == 'Ditolak')
+                                                            <h5>*Pengajuan Cuti <span style='color: red'>Ditolak</span>
+                                                        @else
+                                                            <h5>*Pengajuan Cuti Sudah <span style='color: green'>Disetujui</span> pada Tanggal {{ $item->updated_at }}</h5> @endif">
+                                                        <i class="fa fa-eye"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                        @if ($approval_cuti->count() == 0)
+                                            <tr>
+                                                <td class="text-center" colspan="7">
+                                                    Tidak ada data.
+                                                </td>
+                                            </tr>
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>
@@ -137,7 +112,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="modalLampiran" tabindex="-1" role="dialog" aria-labelledby="modalLampiran"
+    <div class="modal fade" id="modalDetailPengajuan" tabindex="-1" role="dialog" aria-labelledby="modalDetailPengajuan"
         aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -159,36 +134,40 @@
                         <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="nama">Nama Pemohon Cuti</label>
-                                <input type="text" class="form-control" id="name" placeholder="Nama"
-                                    value="{{ auth()->user()->name }}" disabled>
+                                <input type="text" class="form-control" id="nama" placeholder="Nama"
+                                    value="" disabled>
                             </div>
                             <div class="form-group">
                                 <label for="koordinator">Koordinator</label>
-                                <input type="koordinator" class="form-control" id="email" placeholder="Email"
-                                    value="Abdul Kahar" disabled>
+                                <input type="text" class="form-control" id="koordinator" placeholder="Koordinator"
+                                    value="" disabled>
                             </div>
                             <div class="form-group">
                                 <label for="tim">Tim</label>
-                                <input type="text" class="form-control" id="tim" placeholder="Nomer HP"
-                                    value="Pencahayaan II (Pulau Untung Jawa)" disabled>
+                                <input type="text" class="form-control" id="tim" placeholder="Tim"
+                                    value="" disabled>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="seksi">Jenis Pengajuan</label>
-                                <input type="text" class="form-control" id="pulau" placeholder="Seksi"
-                                    value="Cuti Tahunan (2 Hari)" disabled>
+                                <input type="text" class="form-control" id="jenis_cuti" placeholder="Seksi"
+                                    value="" disabled>
                             </div>
                             <div class="form-group">
-                                <label for="pulau">Periode Permohonan Cuti</label>
-                                <input type="text" class="form-control" id="pulau" placeholder="Pulau"
-                                    value="21/01/2024 s/d 23/01/2024" disabled>
+                                <label for="periode">Periode Permohonan Cuti</label>
+                                <input type="text" class="form-control" id="periode" placeholder="periode"
+                                    value="" disabled>
                             </div>
                             <div class="form-group">
                                 <label for="ciTy">Deskripsi</label>
-                                <input type="koordinator" class="form-control" id="pulau" placeholder="Koordinator"
-                                    value="Izin cuti mau liburan ke Maladewa" disabled>
+                                <input type="text" class="form-control" id="catatan" placeholder="Deskripsi"
+                                    value="" disabled>
                             </div>
+                        </div>
+                    </div>
+                    <div class="row-modal-user gutters">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" id="status">
                         </div>
                     </div>
                 </div>
@@ -293,9 +272,24 @@
                 document.getElementById("id").value = id;
             });
 
-            $('#modalLampiran').on('show.bs.modal', function(e) {
+            $('#modalDetailPengajuan').on('show.bs.modal', function(e) {
                 var lampiran = $(e.relatedTarget).data('lampiran');
+                var nama = $(e.relatedTarget).data('nama');
+                var jenis_cuti = $(e.relatedTarget).data('jenis_cuti');
+                var koordinator = $(e.relatedTarget).data('koordinator');
+                var periode = $(e.relatedTarget).data('periode');
+                var tim = $(e.relatedTarget).data('tim');
+                var catatan = $(e.relatedTarget).data('catatan');
+                var status = $(e.relatedTarget).data('status');
+
                 document.getElementById("photoLampiran").src = lampiran;
+                document.getElementById("nama").value = nama;
+                document.getElementById("jenis_cuti").value = jenis_cuti;
+                document.getElementById("koordinator").value = koordinator;
+                document.getElementById("periode").value = periode;
+                document.getElementById("tim").value = tim;
+                document.getElementById("catatan").value = catatan;
+                document.getElementById("status").innerHTML = status;
             });
 
             $('#approveModal').on('show.bs.modal', function(e) {
