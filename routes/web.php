@@ -274,7 +274,7 @@ Route::group(['middleware' => 'auth'], function () {
     // ABSENSI
     Route::controller(AbsensiController::class)->group(function () {
         Route::get('/absensi', 'index')->name('absensi.index');
-        Route::get('/my-absensi', 'my_index')->name('absensi.my_index');
+        Route::get('/absensi-saya', 'my_index')->name('absensi.saya');
         Route::get('/absensi-create', 'create')->name('absensi.create');
         Route::post('/absensi', 'store')->name('absensi.store');
         Route::get('/absensi/{uuid}/edit', 'edit')->name('absensi.edit');

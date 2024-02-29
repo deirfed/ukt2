@@ -93,11 +93,6 @@
                                                         data-lampiran="{{ asset('storage/' . $item->lampiran) }}">
                                                         <i class="fa fa-eye"></i>
                                                     </a>
-                                                    <a href="javascript:;" class="btn btn-outline-secondary" title="Hapus"
-                                                        data-toggle="modal" data-target="#deleteModal"
-                                                        data-id="{{ $item->id }}">
-                                                        <i class="fa fa-trash"></i>
-                                                    </a>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -179,7 +174,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
-                    <button type="button" class="btn btn-primary" >Filter Data</button>
+                    <button type="button" class="btn btn-primary">Filter Data</button>
                 </div>
             </div>
         </div>
@@ -212,46 +207,12 @@
             </div>
         </div>
     </div>
-
     {{-- END: Pengajuan Cuti --}}
-
-    <!-- BEGIN: konfirmasi hapus modal -->
-    <div id="deleteModal" class="modal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body p-2">
-                    <div class="p-2 text-center">
-                        <div class="mt-2 fw-bolder">Apakah anda yakin?</div>
-                        <div class="text-slate-500 mt-2">
-                            <p>
-                                Data pengajuan ini akan dihapus secara <b>Permanen</b>!
-                            </p>
-                        </div>
-                        <form id="deleteForm" action="{{ route('cuti.destroy') }}" method="POST" hidden>
-                            @csrf
-                            @method('delete')
-                            <input type="text" name="id" id="id">
-                        </form>
-                    </div>
-                    <div class="px-5 pb-8 text-center mt-3">
-                        <button type="submit" form="deleteForm" class="btn btn-primary w-24 mr-1 me-2">Hapus</button>
-                        <button type="button" data-dismiss="modal" class="btn btn-dark w-24 mr-1 me-2">Tutup</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- END:  konfirmasi hapus Modal -->
 @endsection
 
 @section('javascript')
     <script>
         $(document).ready(function() {
-            $('#deleteModal').on('show.bs.modal', function(e) {
-                var id = $(e.relatedTarget).data('id');
-                document.getElementById("id").value = id;
-            });
-
             $('#modalLampiran').on('show.bs.modal', function(e) {
                 var lampiran = $(e.relatedTarget).data('lampiran');
                 document.getElementById("photoLampiran").src = lampiran;
