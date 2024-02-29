@@ -2,7 +2,7 @@
 
 @section('title-head')
     <title>
-        Absensi | Data Absensi Saya
+        Absensi | Data Absensi
     </title>
 @endsection
 
@@ -10,7 +10,7 @@
     <div class="page-header">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">Absensi</li>
-            <li class="breadcrumb-item active">Data Absensi Saya</li>
+            <li class="breadcrumb-item active">Data Absensi Lapangan</li>
         </ol>
     </div>
 @endsection
@@ -20,20 +20,28 @@
     <div class="row gutters">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Data Absensi Lapangan</div>
+                </div>
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div class="btn-group">
-                                <a class="btn btn-primary mb-3" href="{{ route('absensi.create') }}">
-                                    Tambah Data
-                                </a>
-                            </div>
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <form class="form-inline mb-2">
+                                <input class="form-control mr-sm-2" type="search" placeholder="Cari sesuatu di sini..."
+                                    aria-label="Search" id="search-bar">
+                                <button class="btn btn-dark my-2 my-sm-0" type="submit">Pencarian</button>
+                            </form>
                         </div>
-                        <form class="form-inline mb-2">
-                            <input class="form-control mr-sm-2" type="search" placeholder="Cari sesuatu di sini..."
-                                aria-label="Search" id="search-bar">
-                            <button class="btn btn-dark my-2 my-sm-0" type="submit">Pencarian</button>
-                        </form>
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3 text-left">
+                            {{-- @if ($absensi->count() > 0) --}}
+                            <button class="btn btn-primary">Export to Excel</i></button>
+                            <button class="btn btn-primary">Export to PDF</button>
+                            <a href="" class="btn btn-primary" data-toggle="modal" data-target="#modalFilter"><i
+                                    class="fa fa-filter"></i></a>
+                            {{-- @endif --}}
+                        </div>
+                    </div>
+                    <div class="table-responsive">
                         <table class="table table-bordered table-striped" id="dataTable">
                             <thead>
                                 <tr>
@@ -106,6 +114,68 @@
         </div>
     </div>
     <!-- END: Delete Confirmation Modal -->
+
+    {{-- BEGIN: Filter Modal --}}
+    <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="modalFilter" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Filter Data Absensi</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row gutters">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="">Pulau</label>
+                                <select name="pulau" class="form-control" required>
+                                    <option value="" selected disabled>- pilih pulau -</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Seksi</label>
+                                <select name="seksi" class="form-control" required>
+                                    <option value="" selected disabled>- pilih seksi -</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="koordinator">Koordinator</label>
+                                <select name="koordinator" class="form-control" required>
+                                    <option value="" selected disabled>- pilih koordinator -</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="koordinator">Tim</label>
+                                <select name="koordinator" class="form-control" required>
+                                    <option value="" selected disabled>- pilih tim -</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <label for="periode">Periode</label>
+                    <div class="form-row gutters">
+                        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="form-group">
+                                <input type="date" class="form-control" id="start" placeholder="start">
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="form-group">
+                                <input type="date" class="form-control" id="end" placeholder="end">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn-primary">Filter Data</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- END: Filter Modal --}}
 @endsection
 
 

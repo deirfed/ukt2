@@ -247,6 +247,7 @@ Route::group(['middleware' => 'auth'], function () {
     // KINERJA
     Route::controller(KinerjaController::class)->group(function () {
         Route::get('/kinerja', 'index')->name('kinerja.index');
+        Route::get('/my-kinerja', 'my_index')->name('kinerja.saya');
         Route::get('/kinerja-create', 'create')->name('kinerja.create');
         Route::post('/kinerja', 'store')->name('kinerja.store');
         Route::get('/kinerja/{uuid}/edit', 'edit')->name('kinerja.edit');
@@ -263,15 +264,17 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/cuti/{uuid}/edit', 'edit')->name('cuti.edit');
         Route::put('/cuti/{uuid}/update', 'update')->name('cuti.update');
         Route::delete('/cuti', 'destroy')->name('cuti.destroy');
-
         Route::put('/cuti/approve', 'approve')->name('cuti.approve');
         Route::put('/cuti/reject', 'reject')->name('cuti.reject');
+
+        Route::get('/cuti-saya', 'cuti_saya')->name('cuti.saya');
+        Route::get('/cuti-approval', 'approval_page')->name('cuti.approval_page');
     });
 
     // ABSENSI
     Route::controller(AbsensiController::class)->group(function () {
         Route::get('/absensi', 'index')->name('absensi.index');
-        Route::get('/absensiku', 'my_index')->name('absensi.my_index');
+        Route::get('/my-absensi', 'my_index')->name('absensi.my_index');
         Route::get('/absensi-create', 'create')->name('absensi.create');
         Route::post('/absensi', 'store')->name('absensi.store');
         Route::get('/absensi/{uuid}/edit', 'edit')->name('absensi.edit');

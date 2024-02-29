@@ -34,12 +34,12 @@
                         <div class="form-group">
                             <label for="">Pulau & Team</label>
                             <input type="text" class="form-control" name="code" autocomplete="off"
-                                value="Joko Susilo" disabled>
+                                value="Untung Jawa (Pencahayaan I)" disabled>
                         </div>
                         <div class="form-group">
                             <label for="">Koordinator</label>
                             <input type="text" class="form-control" name="code" autocomplete="off"
-                                value="Joko Susilo" disabled>
+                                value="Ahamd Subekti" disabled>
                         </div>
                         <div class="btn group-button">
                             <button type="submit" id="submit" name="submit"

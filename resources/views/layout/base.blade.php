@@ -41,9 +41,6 @@
     <!-- Screen overlay start -->
     <div class="screen-overlay"></div>
 
-    {{-- Include Quick Layout --}}
-    @include('layout.quick_layout')
-
     <div class="container-fluid">
         <!-- Navigation start -->
         <nav class="navbar navbar-expand-lg custom-navbar">

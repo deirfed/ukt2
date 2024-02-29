@@ -15,6 +15,11 @@ class KinerjaController extends Controller
         return view('pages.kinerja.index');
     }
 
+    public function my_index()
+    {
+        return view('pages.kinerja.my_index');
+    }
+
     public function create()
     {
         return view('pages.kinerja.create');

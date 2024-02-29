@@ -11,23 +11,24 @@ class AbsensiController extends Controller
 {
     public function index()
     {
-        //
+        $absensi = Absensi::where('user_id', auth()->user()->id)
+            ->orderBy('tanggal', 'DESC')
+            ->get();
+        return view('pages.absensi.index', compact(['absensi']));
     }
 
     public function my_index()
     {
-        $absensi = Absensi::where('user_id', auth()->user()->id)->orderBy('tanggal', 'DESC')->get();
-        return view('pages.absensi.my_index', compact([
-            'absensi',
-        ]));
+        $absensi = Absensi::where('user_id', auth()->user()->id)
+            ->orderBy('tanggal', 'DESC')
+            ->get();
+        return view('pages.absensi.my_index', compact(['absensi']));
     }
 
     public function create()
     {
         $jenis_absensi = JenisAbsensi::all();
-        return view('pages.absensi.create', compact([
-            'jenis_absensi',
-        ]));
+        return view('pages.absensi.create', compact(['jenis_absensi']));
     }
 
     public function store(Request $request)

@@ -161,4 +161,20 @@ class CutiController extends Controller
 
         return redirect()->route('cuti.index')->withNotify('Data berhasil ditolak!');
     }
+
+    public function cuti_saya()
+    {
+        return view('pages.cuti.my_index');
+    }
+
+    public function approval_page()
+    {
+        $cuti = Cuti::orderBy('created_at', 'DESC')->get();
+        $approval_cuti = Cuti::where('approved_by_id', auth()->user()->id)
+                        ->where('status', 'Diproses')->get();
+        return view('pages.cuti.approval', compact([
+            'cuti',
+            'approval_cuti',
+        ]));
+    }
 }
