@@ -269,6 +269,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('/cuti-saya', 'cuti_saya')->name('cuti.saya');
         Route::get('/cuti-approval', 'approval_page')->name('cuti.approval_page');
+        Route::get('/cuti/{uuid}/export-pdf', 'pdf')->name('cuti.pdf');
     });
 
     // ABSENSI

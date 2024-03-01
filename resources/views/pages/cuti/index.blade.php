@@ -33,8 +33,9 @@
                         </div>
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3 text-left">
                             @if ($cuti->count() > 0)
-                                <button class="btn btn-primary">Export to Excel</i></button>
-                                <button class="btn btn-primary">Export to PDF</button>
+                                <button data-toggle="modal" data-target="#modalDownloadExcel" title="Export Excel"
+                                    class="btn btn-primary">Export
+                                    to Excel</i></button>
                                 <a href="" class="btn btn-primary" data-toggle="modal" data-target="#modalFilter"><i
                                         class="fa fa-filter"></i></a>
                             @endif
@@ -48,6 +49,7 @@
                                         <tr>
                                             <th class="text-center">No.</th>
                                             <th class="text-center text-wrap">Nama</th>
+                                            <th class="text-center text-wrap">Jabatan</th>
                                             <th class="text-center text-wrap">Tanggal Pengajuan</th>
                                             <th class="text-center text-wrap">Jenis Pengajuan</th>
                                             <th class="text-center text-wrap">Jumlah Hari</th>
@@ -62,8 +64,9 @@
                                             <tr>
                                                 <td class="text-center">{{ $loop->iteration }}</td>
                                                 <td class="text-center">{{ $item->user->name }}</td>
+                                                <td class="text-center">{{ $item->user->jabatan->name }}</td>
                                                 <td class="text-center text-wrap">
-                                                    {{ $item->tanggal_awal }} s/d {{ $item->tanggal_akhir }}
+                                                    {{ $item->tanggal_awal == $item->tanggal_akhir ? $item->tanggal_awal : $item->tanggal_awal . ' - ' . $item->tanggal_akhir }}
                                                 </td>
                                                 <td class="text-center">{{ $item->jenis_cuti->name }}</td>
                                                 <td class="text-center">{{ $item->jumlah }} hari</td>
@@ -84,13 +87,18 @@
                                                     </span>
                                                 </td>
                                                 <td class="text-center">
-                                                    <a href="javascript:;" class="btn btn-outline-primary" title="Print">
-                                                        <i class="fa fa-print"></i>
-                                                    </a>
+                                                    @if ($item->status == 'Diterima')
+                                                        <a href="javascript:;" class="btn btn-outline-primary"
+                                                            title="Print" title="Download PDF" data-toggle="modal"
+                                                            data-target="#modalDownloadPDF"
+                                                            data-href="{{ route('cuti.pdf', $item->uuid) }}">
+                                                            <i class="fa fa-print"></i>
+                                                        </a>
+                                                    @endif
                                                     <a href="javascript:;" class="btn btn-outline-primary"
                                                         title="Lihat lampiran" data-toggle="modal"
                                                         data-target="#modalLampiran"
-                                                        data-lampiran="{{ asset('storage/' . $item->lampiran) }}">
+                                                        data-lampiran="{{ $item->lampiran != null ? asset('storage/' . $item->lampiran) : 'https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg' }}">
                                                         <i class="fa fa-eye"></i>
                                                     </a>
                                                 </td>
@@ -208,6 +216,62 @@
         </div>
     </div>
     {{-- END: Pengajuan Cuti --}}
+
+    {{-- BEGIN: Konfirmasi PDF --}}
+    <div id="modalDownloadPDF" class="modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body p-2">
+                    <div class="p-2 text-center">
+                        <div class="mt-2 fw-bolder">Apakah anda yakin?</div>
+                        <div class="mt-2">
+                            <img style="height: 100px;" src="https://cdn-icons-png.flaticon.com/256/337/337946.png"
+                                alt="PDF">
+                        </div>
+                        <div class="text-slate-500 mt-2">
+                            <p>
+                                Data ini akan di-generate dalam format PDF!
+                            </p>
+                        </div>
+                    </div>
+                    <div class="px-5 pb-8 text-center mt-3">
+                        <a id="downloadPDF" href="#" target="_blank"
+                            class="btn btn-primary w-24 mr-1 me-2">Download</a>
+                        <button type="button" data-dismiss="modal" class="btn btn-dark w-24 mr-1 me-2">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- END: Konfirmasi PDF --}}
+
+    {{-- BEGIN: Konfirmasi Excel --}}
+    <div id="modalDownloadExcel" class="modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body p-2">
+                    <div class="p-2 text-center">
+                        <div class="mt-2 fw-bolder">Apakah anda yakin?</div>
+                        <div class="mt-2">
+                            <img style="height: 100px;"
+                                src="https://i.pinimg.com/originals/1b/db/8a/1bdb8ac897512116cbac58ffe7560d82.png"
+                                alt="PDF">
+                        </div>
+                        <div class="text-slate-500 mt-2">
+                            <p>
+                                Data ini akan di-generate dalam format Excel!
+                            </p>
+                        </div>
+                    </div>
+                    <div class="px-5 pb-8 text-center mt-3">
+                        <a href="javascript:;" target="_blank" class="btn btn-primary w-24 mr-1 me-2">Download</a>
+                        <button type="button" data-dismiss="modal" class="btn btn-dark w-24 mr-1 me-2">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- END: Konfirmasi Excel --}}
 @endsection
 
 @section('javascript')
@@ -216,6 +280,12 @@
             $('#modalLampiran').on('show.bs.modal', function(e) {
                 var lampiran = $(e.relatedTarget).data('lampiran');
                 document.getElementById("photoLampiran").src = lampiran;
+            });
+
+            $('#modalDownloadPDF').on('show.bs.modal', function(e) {
+                var href = $(e.relatedTarget).data('href');
+                console.log(href);
+                document.getElementById("downloadPDF").href = href;
             });
         });
     </script>

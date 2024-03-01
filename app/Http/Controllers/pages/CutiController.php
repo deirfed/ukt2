@@ -8,6 +8,7 @@ use App\Models\FormasiTim;
 use App\Models\JenisCuti;
 use App\Models\KonfigurasiCuti;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
@@ -198,5 +199,20 @@ class CutiController extends Controller
         return view('pages.cuti.approval', compact([
             'approval_cuti',
         ]));
+    }
+
+    public function pdf($uuid)
+    {
+        $cuti = Cuti::where('uuid', $uuid)->firstOrFail();
+        $tanggal = ($cuti->tanggal_awal == $cuti->tanggal_akhir) ? Carbon::parse($cuti->tanggal_awal)->isoFormat('D MMMM Y') : Carbon::parse($cuti->tanggal_awal)->isoFormat('D MMMM Y') . ' s/d ' . Carbon::parse($cuti->tanggal_akhir)->isoFormat('D MMMM Y');
+        $tahun = Carbon::parse($cuti->tanggal_awal)->isoFormat('Y');
+        $tanggal_approve = 'Jakarta, ' . Carbon::parse($cuti->updated_at)->isoFormat('D MMMM Y');
+        $pdf = Pdf::loadView('pages.cuti.export.pdf', [
+            'cuti' => $cuti,
+            'tanggal' => $tanggal,
+            'tahun' => $tahun,
+            'tanggal_approve' => $tanggal_approve,
+        ]);
+        return $pdf->stream(Carbon::now()->format('Ymd_') . 'Surat ' . $cuti->jenis_cuti->name . '_' . $cuti->user->name . '.pdf');
     }
 }

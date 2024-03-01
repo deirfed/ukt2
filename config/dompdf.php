@@ -96,7 +96,7 @@ return array(
             "https://" => ["rules" => []]
         ],
 
-         /**
+        /**
           * @var string
           */
         'log_output_file' => null,
@@ -104,7 +104,7 @@ return array(
         /**
          * Whether to enable font subsetting or not.
          */
-        "enable_font_subsetting" => false,
+        "enable_font_subsetting" => true,
 
         /**
          * The PDF rendering backend to use
@@ -171,7 +171,7 @@ return array(
          */
         "default_paper_size" => "a4",
 
-         /**
+        /**
           * The default paper orientation.
           *
           * The orientation of the page (portrait or landscape).

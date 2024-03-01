@@ -77,9 +77,14 @@
                                                     </span>
                                                 </td>
                                                 <td class="text-center">
-                                                    <a href="javascript:;" class="btn btn-outline-primary" title="Print">
-                                                        <i class="fa fa-print"></i>
-                                                    </a>
+                                                    @if ($item->status == 'Diterima')
+                                                        <a href="javascript:;" class="btn btn-outline-primary"
+                                                            title="Print" title="Download PDF" data-toggle="modal"
+                                                            data-target="#modalDownloadPDF"
+                                                            data-href="{{ route('cuti.pdf', $item->uuid) }}">
+                                                            <i class="fa fa-print"></i>
+                                                        </a>
+                                                    @endif
                                                     <a href="javascript:;" class="btn btn-outline-primary"
                                                         title="Lihat lampiran" data-toggle="modal"
                                                         data-target="#modalDetailPengajuan"
@@ -146,8 +151,8 @@
                         <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="nama">Nama Pemohon Cuti</label>
-                                <input type="text" class="form-control" id="nama" placeholder="Nama" value=""
-                                    disabled>
+                                <input type="text" class="form-control" id="nama" placeholder="Nama"
+                                    value="" disabled>
                             </div>
                             <div class="form-group">
                                 <label for="koordinator">Koordinator</label>
@@ -221,6 +226,30 @@
         </div>
     </div>
     <!-- END:  konfirmasi hapus Modal -->
+
+    {{-- BEGIN: Konfirmasi PDF --}}
+    <div id="modalDownloadPDF" class="modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body p-2">
+                    <div class="p-2 text-center">
+                        <div class="mt-2 fw-bolder">Apakah anda yakin?</div>
+                        <div class="text-slate-500 mt-2">
+                            <p>
+                                Data ini akan di-generate dalam format PDF!
+                            </p>
+                        </div>
+                    </div>
+                    <div class="px-5 pb-8 text-center mt-3">
+                        <a id="downloadPDF" href="#" target="_blank"
+                            class="btn btn-primary w-24 mr-1 me-2">Download</a>
+                        <button type="button" data-dismiss="modal" class="btn btn-dark w-24 mr-1 me-2">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- END: Konfirmasi PDF --}}
 @endsection
 @section('javascript')
     <script>
@@ -248,6 +277,12 @@
                 document.getElementById("tim").value = tim;
                 document.getElementById("catatan").value = catatan;
                 document.getElementById("status").innerHTML = status;
+            });
+
+            $('#modalDownloadPDF').on('show.bs.modal', function(e) {
+                var href = $(e.relatedTarget).data('href');
+                console.log(href);
+                document.getElementById("downloadPDF").href = href;
             });
         });
     </script>
