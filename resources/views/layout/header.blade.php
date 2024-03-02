@@ -36,8 +36,8 @@
                 <a href="#" id="userSettings" class="user-settings" data-toggle="dropdown" aria-haspopup="true">
                     <span class="text-white fw-bolder p-1">{{ auth()->user()->name }}</span>
                     <span class="avatar header-user">
-                        <img src="https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg"
-                            alt="USR">
+                        <img src="{{ auth()->user()->photo != null ? asset('storage/' . auth()->user()->photo) : 'https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg' }}"
+                            alt="Photo">
                         <span class="status not-busy"></span>
                     </span>
                 </a>
@@ -45,8 +45,8 @@
                     <div class="header-profile-actions">
                         <div class="header-user-profile">
                             <div class="header-user">
-                                <img src="https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg"
-                                    alt="USER" />
+                                <img src="{{ auth()->user()->photo != null ? asset('storage/' . auth()->user()->photo) : 'https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg' }}"
+                                    alt="Photo">
                             </div>
                             <h5>{{ auth()->user()->name }}</h5>
                             <p>{{ auth()->user()->email }}</p>

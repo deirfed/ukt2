@@ -60,6 +60,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/users', 'store')->name('user.store');
         Route::get('/users-show/{uuid}', 'show')->name('user.show');
         Route::put('/users/{id}', 'update')->name('user.update');
+        Route::put('/user/photo-profil', 'update_photo')->name('user.update_photo');
+        Route::put('/user/photo-ttd', 'update_ttd')->name('user.update_ttd');
         Route::delete('/users', 'destroy')->name('user.destroy');
         Route::get('/user-profile', 'user_profile')->name('user.profile');
     });

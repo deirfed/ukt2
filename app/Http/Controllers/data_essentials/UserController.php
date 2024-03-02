@@ -12,6 +12,8 @@ use App\Models\Struktur;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class UserController extends Controller
 {
@@ -148,11 +150,75 @@ class UserController extends Controller
 
     public function destroy(Request $request)
     {
-        return back()->withNotifyerror('Data tidak bisa dihapus');
+        return back()->withError('Data tidak bisa dihapus');
     }
 
     public function user_profile()
     {
         return view('pages.profile.index');
+    }
+
+    public function update_photo(Request $request)
+    {
+        $request->validate([
+            'photo' =>'required',
+        ]);
+
+        $user = User::findOrFail(auth()->user()->id);
+        if($user->photo != null)
+        {
+            Storage::delete($user->photo);
+        }
+
+        if ($request->hasFile('photo') && $request->photo != '') {
+            $image = Image::make($request->file('photo'));
+
+            $imageName = time().'-'.$request->file('photo')->getClientOriginalName();
+            $detailPath = 'user/profil/';
+            $destinationPath = public_path('storage/'. $detailPath);
+
+            $image->resize(null, 100, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+
+            $image->save($destinationPath.$imageName);
+
+            $user->photo = $detailPath.$imageName;
+            $user->save();
+        }
+
+        return redirect()->route('user.profile')->withNotify('Data berhasil diubah!');
+    }
+
+    public function update_ttd(Request $request)
+    {
+        $request->validate([
+            'photo' =>'required',
+        ]);
+
+        $user = User::findOrFail(auth()->user()->id);
+        if($user->ttd != null)
+        {
+            Storage::delete($user->photo);
+        }
+
+        if ($request->hasFile('photo') && $request->photo != '') {
+            $image = Image::make($request->file('photo'));
+
+            $imageName = time().'-'.$request->file('photo')->getClientOriginalName();
+            $detailPath = 'user/ttd/';
+            $destinationPath = public_path('storage/'. $detailPath);
+
+            $image->resize(null, 90, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+
+            $image->save($destinationPath.$imageName);
+
+            $user->ttd = $detailPath.$imageName;
+            $user->save();
+        }
+
+        return redirect()->route('user.profile')->withNotify('Data berhasil diubah!');
     }
 }
