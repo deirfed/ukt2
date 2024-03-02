@@ -219,10 +219,15 @@
                                 Status pengajuan izin ini akan diubah jadi <b>"Diterima"</b>!
                             </p>
                         </div>
-                        <form id="approveForm" action="{{ route('cuti.approve') }}" method="POST" hidden>
+                        <form id="approveForm" class="form mt-5" action="{{ route('cuti.approve') }}" method="POST">
                             @csrf
                             @method('put')
-                            <input type="text" name="id" id="approve_id">
+                            <input type="text" name="id" id="approve_id" hidden>
+                            <div class="form-group">
+                                <label for="jenis_pengajuan">Masukan Nomor Surat</label>
+                                <input type="text" class="form-control" name="no_surat"
+                                    placeholder="input nomor surat" required>
+                            </div>
                         </form>
                     </div>
                     <div class="px-5 pb-8 text-center mt-3">

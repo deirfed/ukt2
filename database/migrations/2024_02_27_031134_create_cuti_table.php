@@ -21,6 +21,7 @@ return new class extends Migration
             $table->bigInteger('known_by_id')->unsigned()->nullable();
             $table->bigInteger('approved_by_id')->unsigned()->nullable();
             $table->string('status')->nullable();
+            $table->string('no_surat')->nullable();
             $table->softDeletes();
             $table->timestamps();
 

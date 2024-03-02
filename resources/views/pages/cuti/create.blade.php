@@ -43,15 +43,15 @@
                                     <div class="row">
                                         <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 mt-2">
                                             <label for="jenis_pengajuan">Tanggal Mulai:</label>
-                                            <input type="text" type="text" onfocus="(this.type='date')"
-                                                onblur="(this.type='text')" class="form-control" id="tanggal_awal"
-                                                name="tanggal_awal" placeholder="Tanggal Awal" required>
+                                            <input type="text" onfocus="(this.type='date')" onblur="(this.type='text')"
+                                                class="form-control" id="tanggal_awal" name="tanggal_awal"
+                                                placeholder="Tanggal Awal" required>
                                         </div>
                                         <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 mt-2">
                                             <label for="jenis_pengajuan">Tanggal Akhir:</label>
-                                            <input type="text" type="text" onfocus="(this.type='date')"
-                                                onblur="(this.type='text')" class="form-control" id="tanggal_akhir"
-                                                name="tanggal_akhir" placeholder="Tanggal Akhir" required>
+                                            <input type="text" onfocus="(this.type='date')" onblur="(this.type='text')"
+                                                class="form-control" id="tanggal_akhir" name="tanggal_akhir"
+                                                placeholder="Tanggal Akhir" required>
                                         </div>
                                         @error('tanggal_akhir')
                                             <div class="container">

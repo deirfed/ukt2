@@ -28,7 +28,7 @@
                         @endif
                     </u>
                 </p>
-                <p class="mt-1">Nomor: ___/__.__.__</p>
+                <p class="mt-1">Nomor: {{ $cuti->no_surat ?? '-' }}</p>
             </div>
             <div class="mt-5">
                 <ol>
@@ -75,20 +75,31 @@
                             <span class="font-weight-bold">{{ $tanggal ?? '-' }}</span>, dengan ketentuan
                             sebagai berikut:
                         </p>
+
                         <ol type="a" class="mt-1 text-justify">
-                            <li>
-                                Sebelum menjalankan cuti wajib menyelesaikan pekerjaan dan melaporkan kepada atasan
-                                langsung.
-                            </li>
-                            <li>
-                                Setelah menjalankan cuti wajib melaporkan diri kepada atasan langsung dan bekerja
-                                kembali sebagaimana mestinya.
-                            </li>
+                            @if ($cuti->jenis_cuti->id == 1)
+                                <li>
+                                    Sebelum menjalankan cuti wajib menyelesaikan pekerjaan dan melaporkan kepada atasan
+                                    langsung.
+                                </li>
+                                <li>
+                                    Setelah menjalankan cuti wajib melaporkan diri kepada atasan langsung dan bekerja
+                                    kembali sebagaimana mestinya.
+                                </li>
+                            @else
+                                <li>
+                                    Periksakan diri ke klinik/puskesmas/rumah sakit agar mendapatkan penanganan yang
+                                    tepat.
+                                </li>
+                                <li>
+                                    Segera melaporkan perkembangan kondisi kesehatan kepada atasan langsung dan kembali
+                                    bekerja sebagaimana mestinya setelah pulih.
+                                </li>
+                            @endif
                         </ol>
                     </li>
                     <li class="mt-3 text-justify">
-                        Demikian Surat Izin ini dibuat untuk dapat
-                        dipergunakan sebagaimana mestinya.
+                        Demikian Surat Izin ini dibuat untuk dapat dipergunakan sebagaimana mestinya.
                     </li>
                 </ol>
             </div>
@@ -115,9 +126,10 @@
                         <tr>
                             <td></td>
                             <td class="text-center">
-                                <div>
-                                    <img style="height: 35mm"
-                                        src="{{ public_path('storage/' . $cuti->approved_by->ttd) }}" alt="TTD">
+                                <div class="my-5"></div>
+                                <div class="my-5">
+                                    {{-- <img style="height: 35mm"
+                                        src="{{ public_path('storage/' . $cuti->approved_by->ttd) }}" alt="TTD"> --}}
                                 </div>
                             </td>
                         </tr>
@@ -140,7 +152,7 @@
             </div>
 
             <div class="mt-5">
-                <p class="mb-0">Tembusan:</p>
+                <p class="mb-0 mt-5">Tembusan:</p>
                 <ol class="mt-0">
                     <li>Bupati Kabupaten Adm. Kep. Seribu</li>
                     <li>Panitia penerimaan Hasil Pekerjaan Sekretariat Kab. Kep. Seribu</li>

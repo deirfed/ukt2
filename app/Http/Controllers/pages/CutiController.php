@@ -2,28 +2,55 @@
 
 namespace App\Http\Controllers\pages;
 
+use App\Exports\cuti\CutiExport;
 use App\Http\Controllers\Controller;
 use App\Models\Cuti;
 use App\Models\FormasiTim;
 use App\Models\JenisCuti;
 use App\Models\KonfigurasiCuti;
+use App\Models\Pulau;
+use App\Models\Seksi;
+use App\Models\Tim;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CutiController extends Controller
 {
     public function index()
     {
         $cuti = Cuti::orderBy('created_at', 'DESC')->get();
-        $approval_cuti = Cuti::where('approved_by_id', auth()->user()->id)
-                        ->where('status', 'Diproses')->get();
+
+        $pulau = Pulau::orderBy('name', 'ASC')->get();
+        $seksi  = Seksi::all();
+        $koordinator  = User::whereRelation('jabatan', 'id', '=', 4)->get();
+        $tim = Tim::orderBy('name', 'ASC')->get();
+
+        $pulau_id = '';
+        $seksi_id = '';
+        $koordinator_id = '';
+        $tim_id = '';
+        $status = '';
+        $start_date = '';
+        $end_date = '';
+
         return view('pages.cuti.index', compact([
             'cuti',
-            'approval_cuti',
+            'pulau',
+            'seksi',
+            'koordinator',
+            'tim',
+            'pulau_id',
+            'seksi_id',
+            'koordinator_id',
+            'tim_id',
+            'status',
+            'start_date',
+            'end_date',
         ]));
     }
 
@@ -152,11 +179,13 @@ class CutiController extends Controller
     public function approve(Request $request)
     {
         $request->validate([
-            'id' => 'required'
+            'id' => 'required',
+            'no_surat' => 'required',
         ]);
         $cuti = Cuti::findOrFail($request->id);
         $konfigurasi_cuti = KonfigurasiCuti::where('user_id', $cuti->user_id)->firstOrFail();
         $cuti->status = 'Diterima';
+        $cuti->no_surat = $request->no_surat;
         $cuti->save();
 
         if($cuti->jenis_cuti->id == 1){
@@ -214,5 +243,91 @@ class CutiController extends Controller
             'tanggal_approve' => $tanggal_approve,
         ]);
         return $pdf->stream(Carbon::now()->format('Ymd_') . 'Surat ' . $cuti->jenis_cuti->name . '_' . $cuti->user->name . '.pdf');
+    }
+
+    public function excel(Request $request)
+    {
+        $pulau_id = $request->pulau_id;
+        $seksi_id = $request->seksi_id;
+        $koordinator_id = $request->koordinator_id;
+        $tim_id = $request->tim_id;
+        $status = $request->status;
+        $start_date = $request->start_date;
+        $end_date = $request->end_date ?? $start_date;
+
+        $waktu = Carbon::now()->format('Ymd');
+
+        return Excel::download(new CutiExport($pulau_id, $seksi_id, $koordinator_id, $tim_id, $status, $start_date, $end_date), $waktu . '_data cuti.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+    }
+
+    public function filter(Request $request)
+    {
+        $pulau_id = $request->pulau_id;
+        $seksi_id = $request->seksi_id;
+        $koordinator_id = $request->koordinator_id;
+        $tim_id = $request->tim_id;
+        $status = $request->status;
+        $start_date = $request->start_date;
+        $end_date = $request->end_date ?? $start_date;
+
+        $cuti = Cuti::query();
+
+        // Filter by pulau_id
+        $cuti->when($pulau_id, function ($query) use ($request) {
+            return $query->whereRelation('user.area.pulau', 'id', '=', $request->pulau_id);
+        });
+
+        // Filter by seksi_id
+        $cuti->when($seksi_id, function ($query) use ($request) {
+            return $query->whereRelation('user.struktur.seksi', 'id', '=', $request->seksi_id);
+        });
+
+        // Filter by koordinator_id
+        $cuti->when($koordinator_id, function ($query) use ($request) {
+            $periode = Carbon::now()->format('Y');
+            $anggota_id = FormasiTim::where('koordinator_id', $request->koordinator_id)->where('periode', $periode)->pluck('anggota_id');
+            $koordinator_id = FormasiTim::where('koordinator_id', $request->koordinator_id)->where('periode', $periode)->pluck('koordinator_id');
+            $users_id = $anggota_id->merge($koordinator_id);
+            return $query->whereIn('user_id', $users_id);
+        });
+
+        // Filter by tim_id
+        $cuti->when($tim_id, function ($query) use ($request) {
+            return $query->whereRelation('user.struktur.tim', 'id', '=', $request->tim_id);
+        });
+
+        // Filter by status
+        $cuti->when($status, function ($query) use ($request) {
+            return $query->where('status', $request->status);
+        });
+
+        // Filter by tanggal
+        if ($start_date != null and $end_date != null) {
+            $cuti->when($start_date, function ($query) use ($start_date) {
+                return $query->whereDate('tanggal_awal', '>=', $start_date);
+            });
+            $cuti->when($end_date, function ($query) use ($end_date) {
+                return $query->whereDate('tanggal_akhir', '<=', $end_date);
+            });
+        }
+
+        $pulau = Pulau::orderBy('name', 'ASC')->get();
+        $seksi  = Seksi::all();
+        $koordinator  = User::whereRelation('jabatan', 'id', '=', 4)->get();
+        $tim = Tim::orderBy('name', 'ASC')->get();
+        return view('pages.cuti.index', [
+            'cuti' => $cuti->orderBy('tanggal_awal', 'DESC')->get(),
+            'pulau' => $pulau,
+            'seksi' => $seksi,
+            'koordinator' => $koordinator,
+            'tim' => $tim,
+            'pulau_id' => $pulau_id,
+            'seksi_id' => $seksi_id,
+            'koordinator_id' => $koordinator_id,
+            'tim_id' => $tim_id,
+            'status' => $status,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+        ]);
     }
 }
