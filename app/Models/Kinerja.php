@@ -63,4 +63,9 @@ class Kinerja extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function kategori()
+    {
+        return $this->belongsTo(Kategori::class);
+    }
 }

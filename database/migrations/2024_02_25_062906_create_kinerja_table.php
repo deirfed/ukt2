@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('kinerja', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid')->unique();
             $table->string('ticket_number')->unique();
+            $table->uuid('uuid')->unique();
             $table->bigInteger('formasi_tim_id')->unsigned()->nullable();
             $table->bigInteger('unitkerja_id')->unsigned()->nullable();
             $table->bigInteger('seksi_id')->unsigned()->nullable();
@@ -23,10 +23,10 @@ return new class extends Migration
             $table->string('kegiatan')->nullable();
             $table->string('deskripsi')->nullable();
             $table->string('lokasi')->nullable();
-            $table->dateTime('mulai')->nullable();
-            $table->dateTime('selesai')->nullable();
-            $table->string('photo_before')->nullable();
-            $table->string('photo_after')->nullable();
+            $table->date('tanggal')->nullable();
+            $table->time('waktu_mulai')->nullable();
+            $table->time('waktu_selesai')->nullable();
+            $table->json('photo')->nullable();
             $table->string('status')->nullable();
             $table->softDeletes();
             $table->timestamps();

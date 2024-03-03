@@ -255,6 +255,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/kinerja/{uuid}/edit', 'edit')->name('kinerja.edit');
         Route::put('/kinerja/{uuid}/update', 'update')->name('kinerja.update');
         Route::delete('/kinerja', 'destroy')->name('kinerja.destroy');
+
+        Route::get('/kinerja/filter', 'filter')->name('kinerja.filter');
+        Route::get('/kinerja/export-excel', 'excel')->name('kinerja.excel');
+
         Route::get('/formasi', 'formasi')->name('formasi.index');
     });
 
