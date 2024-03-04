@@ -27,6 +27,9 @@ use App\Http\Controllers\data_essentials\TimController;
 use App\Http\Controllers\data_essentials\UserController;
 use App\Http\Controllers\pages\KinerjaController;
 use App\Http\Controllers\pages\CutiController;
+use App\Http\Controllers\pages\GudangController;
+use App\Http\Controllers\pages\GudangUtamaController;
+use App\Http\Controllers\pages\PengadaanController;
 
 // Route::controller(LoginController::class)->group(function () {
 //     Route::get('/', 'login')->name('login.index');
@@ -292,4 +295,73 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/absensi', 'destroy')->name('absensi.destroy');
     });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // Pengadaan
+    Route::controller(PengadaanController::class)->group(function () {
+        Route::get('/pengadaan', 'index')->name('pengadaan.index');
+        Route::get('/list-data', 'list_data')->name('pengadaan.list-data');
+        Route::get('/pengadaan-create', 'create')->name('pengadaan.create');
+        Route::post('/pengadaan', 'store')->name('pengadaan.store');
+        Route::get('/pengadaan/{uuid}/edit', 'edit')->name('pengadaan.edit');
+        Route::put('/pengadaan/{uuid}/update', 'update')->name('pengadaan.update');
+        Route::delete('/pengadaan', 'destroy')->name('pengadaan.destroy');
+    });
+    Route::controller(GudangController::class)->group(function () {
+        Route::get('/gudang', 'index')->name('gudang.index');
+        Route::get('/gudang-distribusi', 'creat_distribusi')->name('gudang.distribusi');
+        Route::get('/gudang-create', 'create')->name('gudang.create');
+        Route::post('/gudang', 'store')->name('gudang.store');
+        Route::get('/gudang/{uuid}/edit', 'edit')->name('gudang.edit');
+        Route::put('/gudang/{uuid}/update', 'update')->name('gudang.update');
+        Route::delete('/gudang', 'destroy')->name('gudang.destroy');
+    });
 });

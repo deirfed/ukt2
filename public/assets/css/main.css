@@ -6137,3 +6137,8 @@ code {
     color: red;
     display: none;
 }
+
+
+.font-bolder{
+    font-weight: 700;
+}

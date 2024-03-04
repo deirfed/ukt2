@@ -83,3 +83,57 @@
         </li>
     </ul>
 </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="appsDropdown" role="button" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
+        <i class="icon-truck nav-icon"></i>
+        Manajemen Asset
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="dashboardsDropdown">
+        <li>
+            <a class="dropdown-item" href="{{ route('pengadaan.index') }}">Daftar Pengadaan</a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="{{ route('gudang.index') }}">Gudang</a>
+        </li>
+    </ul>
+</li>

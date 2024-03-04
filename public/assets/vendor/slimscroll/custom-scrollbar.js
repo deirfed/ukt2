@@ -82,34 +82,6 @@ $(function() {
 
 
 
-// Chat App Page
-// Chat Container Scroll
-$(function() {
-	$('.usersContainerScroll').slimScroll({
-		height: "100%",
-		color: '#e6ecf3',
-		alwaysVisible: false,
-		size: "4px",
-		distance: '1px',
-		railVisible: false,
-		railColor: "#e6ecf3",
-	});
-});
-// Chat Users Container Scroll
-$(function() {
-	$('.chatContainerScroll').slimScroll({
-		height: "100%",
-		color: '#e6ecf3',
-		alwaysVisible: false,
-		size: "4px",
-		distance: '1px',
-		railVisible: false,
-		railColor: "#e6ecf3",
-	});
-});
-
-
-
 // Tasks App Page
 // Tasks Labels Container Scroll
 $(function() {
@@ -221,5 +193,29 @@ $(function() {
 		distance: '3px',
 		railVisible: false,
 		railColor: "#c7cdd4",
+	});
+});
+
+$(function() {
+	$('.usersContainerScroll').slimScroll({
+		height: "100%",
+		color: '#e6ecf3',
+		alwaysVisible: false,
+		size: "4px",
+		distance: '1px',
+		railVisible: false,
+		railColor: "#e6ecf3",
+	});
+});
+
+$(function() {
+	$('.materialContainerScroll').slimScroll({
+		height: "100%",
+		color: '#e6ecf3',
+		alwaysVisible: false,
+		size: "4px",
+		distance: '1px',
+		railVisible: false,
+		railColor: "#e6ecf3",
 	});
 });
