@@ -6,13 +6,15 @@ use App\Models\Barang;
 use App\Models\Kontrak;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\KonfigurasiGudang;
 
 class BarangController extends Controller
 {
     public function index()
     {
         $barang = Barang::all();
-        return view('pages.barang.index', compact(['barang']));
+        $gudang_tujuan = KonfigurasiGudang::all();
+        return view('pages.barang.index', compact(['barang', 'gudang_tujuan']));
     }
 
     public function create()
@@ -37,9 +39,19 @@ class BarangController extends Controller
     {
     }
 
-    public function gudang()
+    public function pengiriman()
     {
-        $barang = Barang::all();
-        return view('pages.barang.gudang', compact(['barang']));
+        return view('pages.barang.pengiriman');
+    }
+
+    public function penerimaan()
+    {
+        $barang  = Barang::all();
+        return view('pages.barang.penerimaan', compact(['barang']));
+    }
+
+    public function my_gudang()
+    {
+        return view('pages.barang.my_gudang');
     }
 }

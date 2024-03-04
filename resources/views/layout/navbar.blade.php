@@ -84,44 +84,6 @@
     </ul>
 </li>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="appsDropdown" role="button" data-toggle="dropdown"
         aria-haspopup="true" aria-expanded="false">
@@ -131,6 +93,15 @@
     <ul class="dropdown-menu" aria-labelledby="dashboardsDropdown">
         <li>
             <a class="dropdown-item" href="{{ route('barang.index') }}">Daftar Asset / Barang</a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="{{ route('barang.pengiriman') }}">Pengiriman</a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="{{ route('barang.penerimaan') }}">Penerimaan</a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="{{ route('barang.my_gudang') }}">Gudang Saya</a>
         </li>
     </ul>
 </li>
