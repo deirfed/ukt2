@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\data_essentials\MasterGudangController;
 use App\Models\Area;
 use App\Models\EmployeeType;
 use App\Models\FormasiTim;
+use App\Models\Gudang;
 use App\Models\Jabatan;
 use App\Models\JenisAbsensi;
 use App\Models\JenisCuti;
@@ -13,6 +15,9 @@ use App\Models\Kecamatan;
 use App\Models\Kelurahan;
 use App\Models\KonfigurasiAbsensi;
 use App\Models\KonfigurasiCuti;
+use App\Models\KonfigurasiGudang;
+use App\Models\Kontrak;
+use App\Models\KontrakBarang;
 use Illuminate\Http\Request;
 use App\Models\Provinsi;
 use App\Models\UnitKerja;
@@ -49,6 +54,8 @@ class DashboardController extends Controller
         $kategori = Kategori::count();
         $jenis_cuti = JenisCuti::count();
         $jenis_absensi = JenisAbsensi::count();
+        $kontrak = Kontrak::count();
+        $gudang = Gudang::count();
         return view('admin.masterdata.data_essentials.index', compact([
             'provinsi',
             'walikota',
@@ -65,6 +72,8 @@ class DashboardController extends Controller
             'jenis_cuti',
             'jenis_absensi',
             'users',
+            'kontrak',
+            'gudang',
         ]));
     }
 
@@ -81,6 +90,7 @@ class DashboardController extends Controller
         $formasi_tim = FormasiTim::count();
         $konfigurasi_cuti = KonfigurasiCuti::count();
         $konfigurasi_absensi = KonfigurasiAbsensi::count();
+        $konfigurasi_gudang = KonfigurasiGudang::count();
         return view('admin.masterdata.data_relasi.index', compact([
             'role_user',
             'area',
@@ -88,6 +98,7 @@ class DashboardController extends Controller
             'formasi_tim',
             'konfigurasi_cuti',
             'konfigurasi_absensi',
+            'konfigurasi_gudang',
         ]));
     }
 

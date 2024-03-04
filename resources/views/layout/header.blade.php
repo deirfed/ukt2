@@ -48,7 +48,7 @@
                                 <img src="{{ auth()->user()->photo != null ? asset('storage/' . auth()->user()->photo) : 'https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg' }}"
                                     alt="Photo">
                             </div>
-                            <h5>{{ auth()->user()->name }}</h5>
+                            <h5 class="text-center">{{ auth()->user()->name }}</h5>
                             <p>{{ auth()->user()->email }}</p>
                         </div>
                         <a href="{{ route('user.profile') }}"><i class="icon-user1"></i> My Profile</a>

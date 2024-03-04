@@ -20,17 +20,17 @@ use App\Http\Controllers\data_essentials\KecamatanController;
 use App\Http\Controllers\data_essentials\KelurahanController;
 use App\Http\Controllers\data_essentials\KonfigurasiAbsensiController;
 use App\Http\Controllers\data_essentials\KonfigurasiCutiController;
+use App\Http\Controllers\data_essentials\KonfigurasiGudangController;
+use App\Http\Controllers\data_essentials\KontrakController;
 use App\Http\Controllers\data_essentials\UnitKerjaController;
 use App\Http\Controllers\data_essentials\PulauController;
 use App\Http\Controllers\data_essentials\StrukturController;
 use App\Http\Controllers\data_essentials\TimController;
 use App\Http\Controllers\data_essentials\UserController;
+use App\Http\Controllers\data_essentials\GudangController;
+use App\Http\Controllers\pages\BarangController;
 use App\Http\Controllers\pages\KinerjaController;
 use App\Http\Controllers\pages\CutiController;
-use App\Http\Controllers\pages\GudangController;
-use App\Http\Controllers\pages\GudangUtamaController;
-use App\Http\Controllers\pages\PengadaanController;
-
 // Route::controller(LoginController::class)->group(function () {
 //     Route::get('/', 'login')->name('login.index');
 // });
@@ -195,6 +195,26 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/jenis-absensi', 'destroy')->name('jenis_absensi.destroy');
     });
 
+    Route::controller(KontrakController::class)->group(function () {
+        Route::get('/kontrak', 'index')->name('kontrak.index');
+        Route::get('/kontrak-create', 'create')->name('kontrak.create');
+        Route::post('/kontrak', 'store')->name('kontrak.store');
+        Route::get('/kontrak/{uuid}/edit', 'edit')->name('kontrak.edit');
+        Route::put('/kontrak/{uuid}/update', 'update')->name('kontrak.update');
+        Route::delete('/kontrak', 'destroy')->name('kontrak.destroy');
+    });
+
+    Route::controller(GudangController::class)->group(function () {
+        Route::get('/gudang', 'index')->name('gudang.index');
+        Route::get('/gudang-create', 'create')->name('gudang.create');
+        Route::post('/gudang', 'store')->name('gudang.store');
+        Route::get('/gudang/{uuid}/edit', 'edit')->name('gudang.edit');
+        Route::put('/gudang/{uuid}/update', 'update')->name('gudang.update');
+        Route::delete('/gudang', 'destroy')->name('gudang.destroy');
+    });
+
+    // ---------------------MASTERDATA RELASI----------------------------
+
     Route::controller(RoleUserController::class)->group(function () {
         Route::get('/role-user', 'index')->name('role_user.index');
         Route::get('/role-user-create', 'create')->name('role_user.create');
@@ -248,6 +268,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/konfigurasi-absensi/{uuid}/update', 'update')->name('konfigurasi_absensi.update');
         Route::delete('/konfigurasi-absensi', 'destroy')->name('konfigurasi_absensi.destroy');
     });
+    Route::controller(KonfigurasiGudangController::class)->group(function () {
+        Route::get('/konfigurasi-gudang', 'index')->name('konfigurasi_gudang.index');
+        Route::get('/konfigurasi-gudang-create', 'create')->name('konfigurasi_gudang.create');
+        Route::post('/konfigurasi-gudang', 'store')->name('konfigurasi_gudang.store');
+        Route::get('/konfigurasi-gudang/{uuid}/edit', 'edit')->name('konfigurasi_gudang.edit');
+        Route::put('/konfigurasi-gudang/{uuid}/update', 'update')->name('konfigurasi_gudang.update');
+        Route::delete('/konfigurasi-gudang', 'destroy')->name('konfigurasi_gudang.destroy');
+    });
 
     // KINERJA
     Route::controller(KinerjaController::class)->group(function () {
@@ -295,73 +323,13 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/absensi', 'destroy')->name('absensi.destroy');
     });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // Pengadaan
-    Route::controller(PengadaanController::class)->group(function () {
-        Route::get('/pengadaan', 'index')->name('pengadaan.index');
-        Route::get('/list-data', 'list_data')->name('pengadaan.list-data');
-        Route::get('/pengadaan-create', 'create')->name('pengadaan.create');
-        Route::post('/pengadaan', 'store')->name('pengadaan.store');
-        Route::get('/pengadaan/{uuid}/edit', 'edit')->name('pengadaan.edit');
-        Route::put('/pengadaan/{uuid}/update', 'update')->name('pengadaan.update');
-        Route::delete('/pengadaan', 'destroy')->name('pengadaan.destroy');
-    });
-    Route::controller(GudangController::class)->group(function () {
-        Route::get('/gudang', 'index')->name('gudang.index');
-        Route::get('/gudang-distribusi', 'creat_distribusi')->name('gudang.distribusi');
-        Route::get('/gudang-create', 'create')->name('gudang.create');
-        Route::post('/gudang', 'store')->name('gudang.store');
-        Route::get('/gudang/{uuid}/edit', 'edit')->name('gudang.edit');
-        Route::put('/gudang/{uuid}/update', 'update')->name('gudang.update');
-        Route::delete('/gudang', 'destroy')->name('gudang.destroy');
+    // Barang
+    Route::controller(BarangController::class)->group(function () {
+        Route::get('/barang', 'index')->name('barang.index');
+        Route::get('/barang-create', 'create')->name('barang.create');
+        Route::post('/barang', 'store')->name('barang.store');
+        Route::get('/barang/{uuid}/edit', 'edit')->name('barang.edit');
+        Route::put('/barang/{uuid}/update', 'update')->name('barang.update');
+        Route::delete('/barang', 'destroy')->name('barang.destroy');
     });
 });

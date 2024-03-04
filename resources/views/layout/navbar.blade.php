@@ -130,10 +130,7 @@
     </a>
     <ul class="dropdown-menu" aria-labelledby="dashboardsDropdown">
         <li>
-            <a class="dropdown-item" href="{{ route('pengadaan.index') }}">Daftar Pengadaan</a>
-        </li>
-        <li>
-            <a class="dropdown-item" href="{{ route('gudang.index') }}">Gudang</a>
+            <a class="dropdown-item" href="{{ route('barang.index') }}">Daftar Asset / Barang</a>
         </li>
     </ul>
 </li>

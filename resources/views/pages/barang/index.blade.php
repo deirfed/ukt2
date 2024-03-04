@@ -2,7 +2,7 @@
 
 @section('title-head')
     <title>
-        Manajemen Asset | Pengadaan
+        Manajemen Asset | Barang
     </title>
 @endsection
 
@@ -10,7 +10,7 @@
     <div class="page-header">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">Manajemen Asset</li>
-            <li class="breadcrumb-item active">Data Pengadaan</li>
+            <li class="breadcrumb-item active">Data Barang</li>
         </ol>
     </div>
 @endsection
@@ -21,7 +21,7 @@
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">List Data Pengadaan</div>
+                    <div class="card-title">List Data Barang</div>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -33,8 +33,9 @@
                             </form>
                         </div>
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3 text-left">
-                            <a href="{{ route('pengadaan.create') }}"><button class="btn btn-primary">Tambah
-                                    Data</i></button></a>
+                            <a href="{{ route('barang.create') }}" class="btn btn-primary">Tambah Barang</a>
+                            <a href="" class="btn btn-primary" data-toggle="modal" data-target="#modalFilter"><i
+                                    class="fa fa-filter"></i></a>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -43,47 +44,41 @@
                                 <tr>
                                     <th class="text-center">No.</th>
                                     <th class="text-center">No. Kontrak</th>
-                                    <th class="text-center">Nama Kontrak</th>
-                                    <th class="text-center">Tahun Kontrak</th>
-                                    <th class="text-center">Dokumen Kontrak</th>
+                                    <th class="text-center">Nama Barang</th>
+                                    <th class="text-center">Merk Barang</th>
+                                    <th class="text-center">Jenis Barang</th>
+                                    {{-- <th class="text-center">Kode Barang</th> --}}
+                                    <th class="text-center">Stock Awal</th>
+                                    <th class="text-center">Satuan</th>
+                                    <th class="text-center">Harga Barang</th>
+                                    <th class="text-center">Spesifikasi Barang</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- @foreach ($absensi as $item) --}}
+                                @foreach ($barang as $item)
                                 <tr>
-                                    <td class="text-center">1</td>
-                                    <td class="text-center">S4892.DKI</td>
-                                    <td class="text-center">Pengadaan Consumable Kepulauan Seribu</td>
-                                    <td class="text-center">2023</td>
-                                    <td class="text-center"><a href="" target="_blank" class="btn btn-primary">Lihat Dokumen Kontrak</a></td>
+                                    <td class="text-center">{{ $loop->iteration }}</td>
+                                    <td class="text-center">{{ $item->kontrak->no_kontrak }}</td>
+                                    <td class="text-center">{{ $item->name }}</td>
+                                    <td class="text-center">{{ $item->merk }}</td>
+                                    <td class="text-center">{{ $item->jenis }}</td>
+                                    {{-- <td class="text-center">{{ $item->code }}</td> --}}
+                                    <td class="text-center">{{ $item->stock_awal }}</td>
+                                    <td class="text-center">{{ $item->satuan }}</td>
+                                    <td class="text-center">Rp.{{ $item->harga }}</td>
+                                    <td class="text-center">{{ $item->spesifikasi }}</td>
                                     <td class="text-center">
-                                        <a href="#"><button class="btn btn-outline-primary"><i
+                                        <a href="{{ route('barang.edit', $item->uuid) }}"><button class="btn btn-outline-primary"><i
                                                     class="fa fa-edit"></i></button></a>
-                                        <a href="{{ route('pengadaan.list-data') }}" target="_blank"><button
+                                        <a href="#"><button
                                                 class="btn btn-outline-primary"><i class="fa fa-eye"></i></button></a>
                                         <a href="#" href="javascript:;" data-toggle="modal"
                                             data-target="#delete-confirmation-modal" onclick="#"><button
                                                 class="btn btn-outline-danger"><i class="fa fa-trash"></i></button></a>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td class="text-center">2</td>
-                                    <td class="text-center">S3984.DKI</td>
-                                    <td class="text-center">Pengadaan Consumable Kepulauan Seribu</td>
-                                    <td class="text-center">2023</td>
-                                    <td class="text-center"><a href="" target="_blank" class="btn btn-primary">Lihat Dokumen Kontrak</a></td>
-                                    <td class="text-center">
-                                        <a href="#"><button class="btn btn-outline-primary"><i
-                                                    class="fa fa-edit"></i></button></a>
-                                        <a href="{{ route('pengadaan.list-data') }}" target="_blank"><button
-                                                class="btn btn-outline-primary"><i class="fa fa-eye"></i></button></a>
-                                        <a href="#" href="javascript:;" data-toggle="modal"
-                                            data-target="#delete-confirmation-modal" onclick="#"><button
-                                                class="btn btn-outline-danger"><i class="fa fa-trash"></i></button></a>
-                                    </td>
-                                </tr>
-                                {{-- @endforeach --}}
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -121,7 +116,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Filter Data Absensi</h5>
+                    <h5 class="modal-title">Filter Data Barang</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -130,41 +125,25 @@
                     <div class="form-row gutters">
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="form-group">
-                                <label for="">Pulau</label>
-                                <select name="pulau" class="form-control" required>
-                                    <option value="" selected disabled>- pilih pulau -</option>
+                                <label for="">Kontrak</label>
+                                <select name="kontrak" class="form-control" required>
+                                    <option value="" selected disabled>- pilih kontrak -</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="">Seksi</label>
-                                <select name="seksi" class="form-control" required>
-                                    <option value="" selected disabled>- pilih seksi -</option>
+                                <label for="">Jenis Barang</label>
+                                <select name="jenis_barang" class="form-control" required>
+                                    <option value="" selected disabled>- pilih jenis barang -</option>
+                                    <option value="consumable" >Consumable</option>
+                                    <option value="tools" >Tools</option>
+
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="koordinator">Koordinator</label>
-                                <select name="koordinator" class="form-control" required>
-                                    <option value="" selected disabled>- pilih koordinator -</option>
+                                <label for="periode">Tahun Pengadaan</label>
+                                <select name="periode" class="form-control" required>
+                                    <option value="" selected disabled>- pilih periode pengadaan -</option>
                                 </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="koordinator">Tim</label>
-                                <select name="koordinator" class="form-control" required>
-                                    <option value="" selected disabled>- pilih tim -</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <label for="periode">Periode</label>
-                    <div class="form-row gutters">
-                        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="form-group">
-                                <input type="date" class="form-control" id="start" placeholder="start">
-                            </div>
-                        </div>
-                        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="form-group">
-                                <input type="date" class="form-control" id="end" placeholder="end">
                             </div>
                         </div>
                     </div>

@@ -221,57 +221,33 @@
                 </div>
             </a>
         </div>
-        {{-- <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12">
-            <a href="">
+
+        <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12">
+            <a href="{{ route('kontrak.index') }}">
                 <div class="info-tiles">
                     <div class="info-icon">
                         <i class="fa fa-database"></i>
                     </div>
                     <div class="stats-detail">
-                        <h3>1</h3>
-                        <p>Area List</p>
+                        <h3>{{ $kontrak ?? 0 }}</h3>
+                        <p>Kontrak<g/p>
                     </div>
                 </div>
             </a>
         </div>
+
         <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12">
-            <a href="">
+            <a href="{{ route('gudang.index') }}">
                 <div class="info-tiles">
                     <div class="info-icon">
                         <i class="fa fa-database"></i>
                     </div>
                     <div class="stats-detail">
-                        <h3>1</h3>
-                        <p>Region List</p>
+                        <h3>{{ $gudang ?? 0 }}</h3>
+                        <p>Gudang<g/p>
                     </div>
                 </div>
             </a>
         </div>
-        <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12">
-            <a href="">
-                <div class="info-tiles">
-                    <div class="info-icon">
-                        <i class="fa fa-database"></i>
-                    </div>
-                    <div class="stats-detail">
-                        <h3>1</h3>
-                        <p>Line List</p>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12">
-            <a href="">
-                <div class="info-tiles">
-                    <div class="info-icon">
-                        <i class="fa fa-database"></i>
-                    </div>
-                    <div class="stats-detail">
-                        <h3>1</h3>
-                        <p>Location List</p>
-                    </div>
-                </div>
-            </a>
-        </div> --}}
     </div>
 @endsection
