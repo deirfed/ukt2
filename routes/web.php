@@ -38,8 +38,12 @@ use App\Http\Controllers\pages\CutiController;
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/', function () {return redirect('login');})->middleware('guest');
-Route::get('/', function () {return redirect('dashboard');})->middleware('auth');
+Route::get('/', function () {
+    return redirect('login');
+})->middleware('guest');
+Route::get('/', function () {
+    return redirect('dashboard');
+})->middleware('auth');
 
 Route::group(['middleware' => 'auth'], function () {
     // ---------------------DASHBOARDCONTROLLER----------------------------

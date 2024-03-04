@@ -164,7 +164,6 @@
             </div>
         </div>
     </div>
-
     {{-- END: Filter Modal --}}
 
 
@@ -187,9 +186,9 @@
                                 <select name="pulau" class="form-control" required>
                                     <option value="" selected disabled>- pilih gudang pengiriman -</option>
                                     @foreach ($gudang_tujuan as $item)
-                                    <option value="{{ $item->id }}">{{ $item->gudang->name }}
-                                    </option>
-                                @endforeach
+                                        <option value="{{ $item->id }}">{{ $item->gudang->name }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -199,7 +198,8 @@
                             <div class="form-group">
                                 <label for="">Nama Barang</label>
                                 <input type="text" class="form-control"
-                                    placeholder="Masukkan Jumlah Barang yang akan dikirim" value="Semen Tiga Roda" disabled>
+                                    placeholder="Masukkan Jumlah Barang yang akan dikirim" value="Semen Tiga Roda"
+                                    disabled>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
@@ -231,7 +231,8 @@
                             <div class="form-group">
                                 <label for="">Nama Barang</label>
                                 <input type="text" class="form-control"
-                                    placeholder="Masukkan Jumlah Barang yang akan dikirim" value="Cat Putih Dulux" disabled>
+                                    placeholder="Masukkan Jumlah Barang yang akan dikirim" value="Cat Putih Dulux"
+                                    disabled>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">

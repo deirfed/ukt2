@@ -109,7 +109,7 @@
                         <i class="fa fa-database"></i>
                     </div>
                     <div class="stats-detail">
-                        <h3>{{ $konfigurasi_absensi ?? 0 }}</h3>
+                        <h3>{{ $konfigurasi_gudang ?? 0 }}</h3>
                         <p>Konfigurasi Gudang</p>
                     </div>
                 </div>

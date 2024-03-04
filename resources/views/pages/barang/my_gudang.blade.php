@@ -56,21 +56,21 @@
                             </thead>
                             <tbody>
                                 {{-- @foreach ($barang as $item) --}}
-                                    <tr>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">Semen Tiga Roda</td>
-                                        <td class="text-center">Consumable</td>
-                                        <td class="text-center">2024</td>
-                                        <td class="text-center">220</td>
-                                        <td class="text-center">210</td>
-                                        <td class="text-center">Zak</td>
-                                        <td class="text-center">
-                                            <a href="#"><button
-                                                    class="btn btn-outline-primary"><i class="fa fa-hand"></i></button></a>
-                                            <a href="#"><button class="btn btn-outline-primary"><i
-                                                        class="fa fa-eye"></i></button></a>
-                                        </td>
-                                    </tr>
+                                <tr>
+                                    <td class="text-center">1</td>
+                                    <td class="text-center">Semen Tiga Roda</td>
+                                    <td class="text-center">Consumable</td>
+                                    <td class="text-center">2024</td>
+                                    <td class="text-center">220</td>
+                                    <td class="text-center">210</td>
+                                    <td class="text-center">Zak</td>
+                                    <td class="text-center">
+                                        <a href="#"><button class="btn btn-outline-primary"><i
+                                                    class="fa fa-hand"></i></button></a>
+                                        <a href="#"><button class="btn btn-outline-primary"><i
+                                                    class="fa fa-eye"></i></button></a>
+                                    </td>
+                                </tr>
                                 {{-- @endforeach --}}
                             </tbody>
                         </table>
