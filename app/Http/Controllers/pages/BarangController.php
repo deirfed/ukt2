@@ -54,4 +54,10 @@ class BarangController extends Controller
     {
         return view('pages.barang.my_gudang');
     }
+
+
+    public function transaksi()
+    {
+        return view('pages.barang.transaksi_barang');
+    }
 }

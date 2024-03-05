@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('merk')->nullable();
             $table->string('jenis')->nullable();
             $table->string('stock_awal')->nullable();
+            $table->string('stock_aktual')->nullable();
             $table->string('satuan')->nullable();
             $table->string('harga')->nullable();
             $table->string('spesifikasi')->nullable();

@@ -17,7 +17,7 @@
 
 @section('content')
     <div class="row gutters">
-        <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12">
+        <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="user-details h-320">
                 <a href="javascript:;" data-toggle="modal" data-target="#formPhotoProfilModal">
                     <div class="user-thumb">
@@ -33,14 +33,14 @@
                 <p>Pulau {{ auth()->user()->area->pulau->name }}</p>
             </div>
         </div>
-        <div class="col-xl-8 col-lg-6 col-md-12 col-sm-12 col-12">
-            <div class="card h-320">
+        <div class="col-xl-8 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="card">
                 <div class="card-header">
                     <h5>Informasi Saya</h5>
                 </div>
                 <div class="card-body">
                     <div class="row gutters">
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="nama">Nama</label>
                                 <input type="text" class="form-control" id="name" placeholder="Nama"
@@ -58,7 +58,7 @@
                                     value="{{ auth()->user()->phone }}">
                             </div>
                         </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="seksi">Seksi</label>
                                 <input type="text" class="form-control" id="pulau" placeholder="Seksi"
@@ -86,7 +86,8 @@
                 </div>
             </div>
         </div>
-
+    </div>
+    <div class="row gutters">
         <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
             <div class="info-stats4">
                 <div class="info-icon">
@@ -118,9 +119,7 @@
                     <h4>TTD</h4>
                     <div class="user-thumb">
                         <a href="javascript:;" data-toggle="modal" data-target="#formPhotoTTDModal">
-                            <img style="height: 100px"
-                                src="{{ auth()->user()->ttd != null ? asset('storage/' . auth()->user()->ttd) : 'https://t3.ftcdn.net/jpg/05/52/37/18/360_F_552371867_LkVmqMEChRhMMHDQ2drOS8cwhAWehgVc.jpg' }}"
-                                alt="Photo">
+                    <p>Lihat Tanda Tangan Saya</p>
                         </a>
                     </div>
                 </div>

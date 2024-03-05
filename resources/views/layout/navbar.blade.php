@@ -101,7 +101,10 @@
             <a class="dropdown-item" href="{{ route('barang.penerimaan') }}">Penerimaan</a>
         </li>
         <li>
-            <a class="dropdown-item" href="{{ route('barang.my_gudang') }}">Gudang Saya</a>
+            <a class="dropdown-item" href="{{ route('barang.my_gudang') }}">Gudang Saya (Pulau)</a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="{{ route('barang.transaksi') }}">Transaksi Barang<a>
         </li>
     </ul>
 </li>

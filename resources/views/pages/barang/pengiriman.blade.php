@@ -64,8 +64,8 @@
                                     </td>
                                     <td class="text-center">-</td>
                                     <td class="text-center">
-                                        <a href="#"><button class="btn btn-outline-primary"><i
-                                                    class="fa fa-eye"></i></button></a>
+                                        <a href="#" class="btn btn-outline-primary" data-toggle="modal"
+                                            data-target="#modalLampiran"><i class="fa fa-eye"></i></a>
                                     </td>
                                 </tr>
                                 <tr>
@@ -82,8 +82,8 @@
                                     </td>
                                     <td class="text-center">Barang Sesuai</td>
                                     <td class="text-center">
-                                        <a href="#"><button class="btn btn-outline-primary"><i
-                                                    class="fa fa-eye"></i></button></a>
+                                        <a href="#" class="btn btn-outline-primary" data-toggle="modal"
+                                            data-target="#modalLampiran"><i class="fa fa-eye"></i></a>
                                     </td>
                                 </tr>
                             </tbody>
@@ -93,4 +93,90 @@
             </div>
         </div>
     </div>
+
+
+    {{-- BEGIN: Lampiran Modal --}}
+    <div class="modal fade" id="modalLampiran" tabindex="-1" role="dialog" aria-labelledby="modalLampiran"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Lampiran Pengiriman Barang</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row gutters">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="">
+                                <table style="font-size: 15px">
+                                    <tbody class="mb-5">
+                                        <tr>
+                                            <td>No. Kontrak</td>
+                                            <td> : </td>
+                                            <td class="font-bolder">
+                                                S.5875/DKI
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Nama Barang</td>
+                                            <td> : </td>
+                                            <td class="font-bolder">
+                                               Semen Tiga Roda
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Jumlah</td>
+                                            <td> : </td>
+                                            <td class="font-bolder">
+                                                30 Zak
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Catatan</td>
+                                            <td> : </td>
+                                            <td class="font-bolder">
+                                                -
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="card">
+                                <div class="card-header text-center">
+                                    <h4 class="text-primary">Dokumentasi Pengiriman</h4>
+                                </div>
+                                <div class="formasi-modal p-2 text-center">
+                                    <img id="photoLampiran" src="#" alt="LAMPIRAN" class="img-thumbnail">
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                    <input type="file">
+                                </div>
+                                <p class="text-center">Lampiran belum tersedia, silakan input lampiran</p>
+                            </div>
+                        </div>
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="card">
+                                <div class="card-header text-center">
+                                    <h4>Dokumentasi Penerimaan</h4>
+                                </div>
+                                <div class="formasi-modal p-2 text-center">
+                                    <img id="photoLampiran" src="#" alt="LAMPIRAN" class="img-thumbnail">
+                                </div>
+                                <p class="text-center">Lampiran belum tersedia/belum diinput dari koordinator Pulau</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- END: Lampiran Modal --}}
 @endsection

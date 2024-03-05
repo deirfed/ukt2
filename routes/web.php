@@ -339,5 +339,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/pengiriman', 'pengiriman')->name('barang.pengiriman');
         Route::get('/penerimaan', 'penerimaan')->name('barang.penerimaan');
         Route::get('/my_gudang', 'my_gudang')->name('barang.my_gudang');
+        Route::get('/transaksi_barang', 'transaksi')->name('barang.transaksi');
     });
 });

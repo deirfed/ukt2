@@ -73,8 +73,8 @@
                                         <td class="text-center">{{ $item->satuan }}</td>
                                         <td class="text-center">{{ $item->spesifikasi }}</td>
                                         <td class="text-center">
-                                            <a href="" data-toggle="modal" data-target="#modalTerimaBarang"><button
-                                                    class="btn btn-outline-primary"><i class="fa fa-check"></i></button></a>
+                                            <a href="" data-toggle="modal" data-target="#modalTerimaBarang"
+                                                class="btn btn-outline-primary"><i class="fa fa-check"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -92,24 +92,83 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Terima Barang Semen (30 Zak)</h5>
+                    <h5 class="modal-title">Lampiran Penerimaan Barang</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-row gutters">
+                    <div class="row gutters">
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="form-group">
-                                <label for="">Dokumentasi Penerimaan</label>
-                                <input type="file" class="form-control" name="terima" id="terima">
+                            <div class="">
+                                <table style="font-size: 15px">
+                                    <tbody class="mb-5">
+                                        <tr>
+                                            <td>No. Kontrak</td>
+                                            <td> : </td>
+                                            <td class="font-bolder">
+                                                S.5875/DKI
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Nama Barang</td>
+                                            <td> : </td>
+                                            <td class="font-bolder">
+                                                Semen Tiga Roda
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Jumlah</td>
+                                            <td> : </td>
+                                            <td class="font-bolder">
+                                                30 Zak
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Catatan</td>
+                                            <td> : </td>
+                                            <td class="font-bolder">
+                                                -
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="card">
+                                <div class="card-header text-center">
+                                    <h4>Dokumentasi Pengiriman</h4>
+                                </div>
+                                <div class="formasi-modal p-2 text-center">
+                                    <img id="photoLampiran" src="#" alt="LAMPIRAN" class="img-thumbnail">
+                                </div>
+                                <p class="text-center">Lampiran belum tersedia/belum diinput dari Admin Gudang Utama</p>
+                            </div>
+                        </div>
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="card">
+                                <div class="card-header text-center">
+                                    <h4 class="text-primary">Dokumentasi Penerimaan</h4>
+                                </div>
+                                <div class="formasi-modal p-2 text-center">
+                                    <img id="photoLampiran" src="#" alt="LAMPIRAN" class="img-thumbnail">
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                    <input type="file">
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                    <input type="text" class="form-control mt-2" placeholder="Catatan (Opsional)">
+
+                                </div>
+                                <p class="text-center">Lampiran belum tersedia, silakan input lampiran</p>
+
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
-                    <button type="button" class="btn btn-primary">Terima Barang</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Tutup</button>
                 </div>
             </div>
         </div>
@@ -118,7 +177,8 @@
     {{-- END Modal Penerimaan --}}
 
     {{-- BEGIN: Filter Modal --}}
-    <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="modalFilter" aria-hidden="true">
+    <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="modalFilter"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
