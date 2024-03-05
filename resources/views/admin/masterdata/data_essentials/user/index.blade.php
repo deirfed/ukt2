@@ -20,22 +20,25 @@
 
 @section('content')
     <div class="row gutters">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <div class="btn-group">
-                <a class="btn btn-outline-primary mb-3" href="{{ route('data_essentials.index') }}">
-                    <i class="fa fa-arrow-left"></i>
-                    Kembali
-                </a>
-                <a class="btn btn-primary mb-3" href="{{ route('user.create') }}">
-                    Tambah Data
-                </a>
-            </div>
-        </div>
-    </div>
-    <div class="row gutters">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="card">
                 <div class="card-body">
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <br>
+                            <form class="form-inline mb-2">
+                                <input class="form-control mr-sm-2" type="search" placeholder="Cari sesuatu di sini..."
+                                    aria-label="Search" id="search-bar">
+                                <button class="btn btn-dark my-2 my-sm-0" type="submit">Pencarian</button>
+                            </form>
+                        </div>
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3 text-left">
+                            <a href="{{ route('data_essentials.index') }}" class="btn btn-outline-primary"><i
+                                    class="fa fa-arrow-left"></i>Kembali</a>
+                            <a href="{{ route('user.create') }}" class="btn btn-primary">Tambah
+                                Data</a>
+                        </div>
+                    </div>
                     <div class="table-responsive">
                         <div class="d-flex justify-content-center">
                             <a href="{{ route('user.index') }}" class="btn btn-primary mb-2 ml-3">
@@ -51,11 +54,6 @@
                                 Daftar PJLP
                             </a>
                         </div>
-                        <form class="form-inline mb-2">
-                            <input class="form-control mr-sm-2" type="search" placeholder="Cari sesuatu di sini..."
-                                aria-label="Search" id="search-bar">
-                            <button class="btn btn-primary my-2 my-sm-0" type="submit">Pencarian</button>
-                        </form>
                         <div class="table-responsive mt-2">
                             <table class="table table-bordered table-primary" id="dataTable" name="pns">
                                 <thead>

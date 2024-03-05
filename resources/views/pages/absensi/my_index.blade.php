@@ -22,18 +22,16 @@
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div class="btn-group">
-                                <a class="btn btn-primary mb-3" href="{{ route('absensi.create') }}">
-                                    Tambah Data
-                                </a>
-                            </div>
-                        </div>
                         <form class="form-inline mb-2">
                             <input class="form-control mr-sm-2" type="search" placeholder="Cari sesuatu di sini..."
                                 aria-label="Search" id="search-bar">
                             <button class="btn btn-dark my-2 my-sm-0" type="submit">Pencarian</button>
                         </form>
+                        <div class="btn-group">
+                            <a class="btn btn-primary mb-3" href="{{ route('absensi.create') }}">
+                                Tambah Data
+                            </a>
+                        </div>
                         <table class="table table-bordered table-striped" id="dataTable">
                             <thead>
                                 <tr>

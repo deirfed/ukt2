@@ -10,7 +10,7 @@
     <div class="page-header">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">Cuti</li>
-            <li class="breadcrumb-item active">Pengajuan Cuti</li>
+            <li class="breadcrumb-item active">Data Pengajuan Cuti</li>
         </ol>
     </div>
 @endsection
@@ -19,9 +19,6 @@
     <div class="row gutters">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="card h-250">
-                <div class="card-header">
-                    <div class="card-title">Data Pengajuan Cuti / Izin</div>
-                </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">

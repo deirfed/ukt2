@@ -10,7 +10,7 @@
     <div class="page-header">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">Manajemen Asset</li>
-            <li class="breadcrumb-item active">Data Barang</li>
+            <li class="breadcrumb-item active">Data List Barang</li>
         </ol>
     </div>
 @endsection
@@ -20,13 +20,10 @@
     <div class="row gutters">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="card">
-                <div class="card-header">
-                    <div class="card-title">List Data Barang</div>
-                </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <h5>Lokasi: Gudang Utama</h5>
+                            <h4>Lokasi: Gudang Utama</h4>
                             <br>
                             <form class="form-inline mb-2">
                                 <input class="form-control mr-sm-2" type="search" placeholder="Cari sesuatu di sini..."

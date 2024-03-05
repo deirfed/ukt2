@@ -24,6 +24,8 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="row gutters">
         <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12">
             <a href="{{ route('user.index') }}">
                 <div class="info-tiles">
@@ -102,8 +104,6 @@
                 </div>
             </a>
         </div>
-    </div>
-    <div class="row gutters">
         <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12">
             <a href="{{ route('unitkerja.index') }}">
                 <div class="info-tiles">
@@ -230,7 +230,7 @@
                     </div>
                     <div class="stats-detail">
                         <h3>{{ $kontrak ?? 0 }}</h3>
-                        <p>Kontrak<g/p>
+                        <p>Kontrak</p>
                     </div>
                 </div>
             </a>
@@ -244,7 +244,7 @@
                     </div>
                     <div class="stats-detail">
                         <h3>{{ $gudang ?? 0 }}</h3>
-                        <p>Gudang<g/p>
+                        <p>Gudang</p>
                     </div>
                 </div>
             </a>

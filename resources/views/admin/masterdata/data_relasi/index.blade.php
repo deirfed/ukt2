@@ -24,6 +24,8 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="row gutters">
         <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12">
             <a href="{{ route('role_user.index') }}">
                 <div class="info-tiles">

@@ -14,6 +14,7 @@ return new class extends Migration
             $table->bigInteger('gudang_id')->unsigned()->nullable();
             $table->bigInteger('pulau_id')->unsigned()->nullable();
             $table->bigInteger('seksi_id')->unsigned()->nullable();
+            // $table->bigInteger('koordinator_id')->unsigned()->nullable(); lu yang assign yak ini
             $table->year('periode')->nullable();
             $table->softDeletes();
             $table->timestamps();

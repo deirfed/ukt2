@@ -24,13 +24,6 @@
                     <div class="row">
                     </div>
                     <div class="table-responsive">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div class="btn-group">
-                                <a class="btn btn-primary mb-3" href="{{ route('kinerja.create') }}">
-                                    Tambah Data
-                                </a>
-                            </div>
-                        </div>
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <form class="form-inline mb-2">
                                 <input class="form-control mr-sm-2" type="search" placeholder="Cari sesuatu di sini..."
@@ -39,6 +32,9 @@
                             </form>
                         </div>
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3 text-left">
+                            <a class="btn btn-primary" href="{{ route('kinerja.create') }}">
+                                Tambah Data
+                            </a>
                             <button data-toggle="modal" data-target="#modalDownloadExcel" title="Export Excel"
                                 class="btn btn-primary">
                                 <i class="fa fa-file-excel"></i>
