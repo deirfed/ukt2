@@ -22,4 +22,9 @@ class Kontrak extends Model
             $model->uuid = Str::uuid();
         });
     }
+
+    public function seksi()
+    {
+        return $this->belongsTo(Seksi::class);
+    }
 }

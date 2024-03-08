@@ -47,7 +47,9 @@
                                         <th class="text-center">No.</th>
                                         <th class="text-center">Nama Kontrak</th>
                                         <th class="text-center">No. Kontrak</th>
+                                        <th class="text-center">Seksi</th>
                                         <th class="text-center">Tahun Pengadaan</th>
+                                        <th class="text-center">Dokumen</th>
                                         <th class="text-center">Aksi</th>
                                     </tr>
                                 </thead>
@@ -57,7 +59,15 @@
                                             <td class="text-center">{{ $loop->iteration }}</td>
                                             <td class="text-center">{{ $item->name }}</td>
                                             <td class="text-center">{{ $item->no_kontrak }}</td>
+                                            <td class="text-center">{{ $item->seksi->name }}</td>
                                             <td class="text-center">{{ $item->periode }}</td>
+                                            <td class="text-center">
+                                                <a href="{{ asset('storage/' . $item->lampiran) }}" target="_blank">
+                                                    <button class="btn btn-outline-primary">
+                                                        <i class="fa fa-file"></i>
+                                                    </button>
+                                                </a>
+                                            </td>
                                             <td class="text-center">
                                                 <a href="{{ route('kontrak.edit', $item->uuid) }}"><button
                                                         class="btn btn-outline-primary"><i

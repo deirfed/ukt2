@@ -10,10 +10,14 @@ return new class extends Migration
     {
         Schema::create('gudang', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid')->unique();
             $table->string('name');
+            $table->uuid('uuid')->unique();
             $table->string('code');
+            $table->bigInteger('pulau_id')->unsigned()->nullable();
+            $table->softDeletes();
             $table->timestamps();
+
+            $table->foreign('pulau_id')->on('pulau')->references('id');
         });
     }
 

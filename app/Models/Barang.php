@@ -29,4 +29,9 @@ class Barang extends Model
     {
         return $this->belongsTo(Kontrak::class);
     }
+
+    public function seksi()
+    {
+        return $this->belongsTo(Seksi::class);
+    }
 }

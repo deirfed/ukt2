@@ -10,9 +10,10 @@ return new class extends Migration
     {
         Schema::create('barang', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->nullable();
             $table->uuid('uuid')->unique();
             $table->bigInteger('kontrak_id')->unsigned()->nullable();
-            $table->string('name')->nullable();
+            $table->bigInteger('seksi_id')->unsigned()->nullable();
             $table->string('code')->nullable();
             $table->string('merk')->nullable();
             $table->string('jenis')->nullable();
@@ -21,10 +22,12 @@ return new class extends Migration
             $table->string('satuan')->nullable();
             $table->string('harga')->nullable();
             $table->string('spesifikasi')->nullable();
+            $table->string('photo')->nullable();
+            $table->softDeletes();
+            $table->timestamps();
 
             $table->foreign('kontrak_id')->on('kontrak')->references('id');
-
-            $table->timestamps();
+            $table->foreign('seksi_id')->on('seksi')->references('id');
         });
     }
 

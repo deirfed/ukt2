@@ -19,7 +19,7 @@
 @section('content')
     <div class="row gutters justify-content-center">
         <div class="col-xl-6 col-lg-8 col-md-12 col-sm-12 col-12">
-            <form action="{{ route('barang.update', $barang->id) }}" method="POST">
+            <form action="{{ route('barang.update', $barang->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('put')
                 <div class="card m-0">
@@ -47,7 +47,8 @@
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="jenis">Jenis Barang</label>
-                                    <select class="form-control" name="jenis">
+                                    <select class="form-control" name="jenis" required>
+                                        <option value="">- pilih jenis barang-</option>
                                         <option value="consumable"
                                             {{ strcasecmp($barang->jenis, 'consumable') === 0 ? 'selected' : '' }}>
                                             Consumable</option>
@@ -103,6 +104,20 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="form-row gutters">
+                            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="name">Photo Barang</label>
+                                    <div class="container my-2">
+                                        <img class="img-thumbnail" id="previewImage" style="height: 200px"
+                                            src="{{ $barang->photo != null ? asset('storage/' . $barang->photo) : 'https://media.istockphoto.com/id/1000398280/vector/photo-not-available-icon-isolated-on-white-background.jpg?s=170667a&w=0&k=20&c=O-C_gKquacdLvHl-jDHN80Cy9_LqbI0Fqj7foLIm6wo=' }}"
+                                            alt="Photo Barang">
+                                    </div>
+                                    <input type="file" class="form-control" id="imageInput" name="photo"
+                                        accept="image/*" required>
+                                </div>
+                            </div>
+                        </div>
                         <div class="btn group-button">
                             <button type="submit" id="submit" name="submit"
                                 class="btn btn-primary float-right ml-3">Submit</button>
@@ -113,4 +128,26 @@
             </form>
         </div>
     </div>
+@endsection
+
+@section('javascript')
+    <script>
+        const imageInput = document.getElementById('imageInput');
+        const previewImage = document.getElementById('previewImage');
+
+        imageInput.addEventListener('change', function(event) {
+            const selectedFile = event.target.files[0];
+
+            if (selectedFile) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    previewImage.style.display = 'block';
+                }
+
+                reader.readAsDataURL(selectedFile);
+            }
+        });
+    </script>
 @endsection

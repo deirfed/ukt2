@@ -22,4 +22,9 @@ class Gudang extends Model
             $model->uuid = Str::uuid();
         });
     }
+
+    public function pulau()
+    {
+        return $this->belongsTo(Pulau::class);
+    }
 }

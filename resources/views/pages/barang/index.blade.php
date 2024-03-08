@@ -46,7 +46,9 @@
                                 <tr>
                                     <th class="text-center">No.</th>
                                     <th class="text-center">Pilih</th>
+                                    <th class="text-center">Tahun</th>
                                     <th class="text-center">No. Kontrak</th>
+                                    <th class="text-center">Seksi</th>
                                     <th class="text-center">Nama Barang</th>
                                     <th class="text-center">Merk Barang</th>
                                     <th class="text-center">Jenis Barang</th>
@@ -65,22 +67,27 @@
                                         <td class="text-center checkbox">
                                             <input type="checkbox">
                                         </td>
+                                        <td class="text-center">{{ $item->kontrak->periode }}</td>
                                         <td class="text-center">{{ $item->kontrak->no_kontrak }}</td>
-                                        <td class="text-center">{{ $item->name }}</td>
+                                        <td class="text-center">{{ $item->kontrak->seksi->name }}</td>
+                                        <td class="text-center font-weight-bolder">{{ $item->name }}</td>
                                         <td class="text-center">{{ $item->merk }}</td>
                                         <td class="text-center">{{ $item->jenis }}</td>
                                         {{-- <td class="text-center">{{ $item->code }}</td> --}}
-                                        <td class="text-center">{{ $item->stock_awal }} ({{ $item->satuan }})</td>
-                                        <td class="text-center">{{ $item->stock_aktual }} ({{ $item->satuan }})</td>
+                                        <td class="text-center">{{ $item->stock_awal }} {{ $item->satuan }}</td>
+                                        <td class="text-center">{{ $item->stock_aktual }} {{ $item->satuan }}</td>
                                         {{-- <td class="text-center">Rp.{{ $item->harga }}</td> --}}
                                         <td class="text-center">{{ $item->spesifikasi }}</td>
                                         <td class="text-center">
                                             <a href="{{ route('barang.edit', $item->uuid) }}"
                                                 class="btn btn-outline-primary"><i class="fa fa-edit"></i></a>
                                             <a href="#" class="btn btn-outline-primary" data-toggle="modal"
-                                                data-target="#modalLampiran"><i class="fa fa-eye"></i></a>
+                                                data-target="#modalLampiran"
+                                                data-photo="{{ $item->photo != null ? asset('storage/' . $item->photo) : 'https://media.istockphoto.com/id/1000398280/vector/photo-not-available-icon-isolated-on-white-background.jpg?s=170667a&w=0&k=20&c=O-C_gKquacdLvHl-jDHN80Cy9_LqbI0Fqj7foLIm6wo=' }}"><i
+                                                    class="fa fa-eye"></i></a>
                                             <a href="#" href="javascript:;" data-toggle="modal"
-                                                data-target="#delete-confirmation-modal" onclick="#"
+                                                data-target="#delete-confirmation-modal"
+                                                onclick="toggleModal('{{ $item->id }}')"
                                                 class="btn btn-outline-danger"><i class="fa fa-trash"></i></a>
                                         </td>
                                     </tr>
@@ -215,7 +222,7 @@
                                 <select name="pulau" class="form-control" required>
                                     <option value="" selected disabled>- pilih gudang pengiriman -</option>
                                     @foreach ($gudang_tujuan as $item)
-                                        <option value="{{ $item->id }}">{{ $item->gudang->name }}
+                                        <option value="{{ $item->id }}">{{ $item->name }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -307,6 +314,12 @@
                 } else {
                     $('#kirimBarangButton').hide();
                 }
+            });
+
+            $('#modalLampiran').on('show.bs.modal', function(e) {
+                var photo = $(e.relatedTarget).data('photo');
+
+                document.getElementById("photoLampiran").src = photo;
             });
         });
     </script>

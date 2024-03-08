@@ -39,6 +39,16 @@
                             <input type="text" class="form-control" name="code" autocomplete="off"
                                 value="{{ $gudang->code }}" required>
                         </div>
+                        <div class="form-group">
+                            <label for="">Pulau</label>
+                            <select name="pulau_id" class="form-control" required>
+                                <option value="" disabled selected>- pilih pulau -</option>
+                                @foreach ($pulau as $item)
+                                    <option value="{{ $item->id }}" @if ($item->id == $gudang->pulau->id) selected @endif>
+                                        Pulau {{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div class="btn group-button">
                             <button type="submit" id="submit" name="submit"
                                 class="btn btn-primary float-right ml-3">Ubah Data</button>

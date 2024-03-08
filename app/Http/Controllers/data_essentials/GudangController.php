@@ -5,6 +5,8 @@ namespace App\Http\Controllers\data_essentials;
 use App\Models\Gudang;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Pulau;
+use App\Models\Seksi;
 
 class GudangController extends Controller
 {
@@ -16,18 +18,23 @@ class GudangController extends Controller
 
     public function create()
     {
-        return view('admin.masterdata.data_essentials.gudang.create');
+        $pulau = Pulau::all();
+        return view('admin.masterdata.data_essentials.gudang.create', compact(['pulau']));
     }
 
     public function store(Request $request)
     {
-        // dd($request)
-        $validatedData = $request->validate([
+        $request->validate([
             'name' => 'required',
+            'pulau_id' => 'required',
             'code' => 'required',
         ]);
 
-        Gudang::create($validatedData);
+        Gudang::create([
+            'name' => $request->name,
+            'pulau_id' => $request->pulau_id,
+            'code' => $request->code,
+        ]);
 
         return redirect()->route('gudang.index')->withNotify('Data berhasil ditambah!');
     }
@@ -35,8 +42,9 @@ class GudangController extends Controller
     public function edit($uuid)
     {
         $gudang = Gudang::where('uuid', $uuid)->firstOrFail();
+        $pulau = Pulau::all();
 
-        return view('admin.masterdata.data_essentials.gudang.edit', compact(['gudang']));
+        return view('admin.masterdata.data_essentials.gudang.edit', compact(['gudang', 'pulau']));
     }
 
     public function update(Request $request, $id)
@@ -44,8 +52,9 @@ class GudangController extends Controller
         $gudang = Gudang::findOrFail($id);
 
         $gudang->update([
-            'name' => $request->input('name'),
-            'code' => $request->input('code'),
+            'name' => $request->name,
+            'code' => $request->code,
+            'pulau_id' => $request->pulau_id,
         ]);
 
         return redirect()->route('gudang.index')->withNotify('Data berhasil diubah!');

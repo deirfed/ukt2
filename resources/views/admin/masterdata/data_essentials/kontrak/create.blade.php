@@ -20,7 +20,7 @@
 @section('content')
     <div class="row gutters justify-content-center">
         <div class="col-xl-4 col-lg-4 col-md-5 col-sm-6 col-12">
-            <form action="{{ route('kontrak.store') }}" method="POST">
+            <form action="{{ route('kontrak.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('post')
                 <div class="card m-0">
@@ -36,11 +36,31 @@
                             <input type="text" class="form-control" id="name" name="name"
                                 placeholder="Nama Kontrak" required>
                         </div>
-                        <select name="periode" class="form-control" required>
-                            <option value="" selected disabled>- pilih periode pengadaan-</option>
-                            <option value="{{ $this_year }}">{{ $this_year }}</option>
-                            <option value="{{ $this_year + 1 }}">{{ $this_year + 1 }}</option>
-                        </select>
+                        <div class="form-group">
+                            <select name="seksi_id" class="form-control" required>
+                                <option value="" selected disabled>- pilih periode seksi -</option>
+                                @foreach ($seksi as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <select name="periode" class="form-control" required>
+                                <option value="" selected disabled>- pilih periode pengadaan-</option>
+                                <option value="{{ $this_year }}">{{ $this_year }}</option>
+                                <option value="{{ $this_year + 1 }}">{{ $this_year + 1 }}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Dokumen Kontrak <span class="text-danger">(PDF Max: 1MB)</span></label>
+                            <input type="file" class="form-control" name="lampiran" placeholder="Dokumen Kontrak Kontrak"
+                                required accept="application/pdf" required>
+                            @error('lampiran')
+                                <div class="container">
+                                    <p class="text-danger">{{ $message }}</p>
+                                </div>
+                            @enderror
+                        </div>
                         <div class="btn group-button">
                             <button type="submit" id="submit" name="submit"
                                 class="btn btn-primary float-right ml-3">Submit</button>

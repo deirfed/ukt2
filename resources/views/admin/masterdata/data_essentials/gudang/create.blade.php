@@ -36,6 +36,14 @@
                             <input type="text" class="form-control" id="code" name="code"
                                 placeholder="Kode Gudang" required>
                         </div>
+                        <div class="form-group">
+                            <select name="pulau_id" class="form-control" required>
+                                <option value="" disabled selected>- pilih pulau -</option>
+                                @foreach ($pulau as $item)
+                                    <option value="{{ $item->id }}">Pulau {{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div class="btn group-button">
                             <button type="submit" id="submit" name="submit"
                                 class="btn btn-primary float-right ml-3">Submit</button>

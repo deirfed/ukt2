@@ -14,6 +14,7 @@ use App\Models\User;
 use Intervention\Image\Facades\Image;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
 
@@ -232,7 +233,21 @@ class KinerjaController extends Controller
 
     public function destroy(Request $request)
     {
-        //
+        $request->validate([
+            'id' => 'required',
+        ]);
+
+        $id = $request->id;
+        $kinerja = Kinerja::findOrFail($id);
+        if($kinerja->photo != null)
+        {
+            foreach(json_decode($kinerja->photo) as $photo)
+            {
+                Storage::delete($photo);
+            }
+        }
+        $kinerja->forceDelete();
+        return redirect()->route('kinerja.saya')->withNotify('Data berhasil dihapus!');
     }
 
     public function formasi()

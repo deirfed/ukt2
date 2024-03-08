@@ -10,11 +10,16 @@ return new class extends Migration
     {
         Schema::create('kontrak', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid')->unique();
             $table->string('name');
+            $table->uuid('uuid')->unique();
             $table->string('no_kontrak');
+            $table->bigInteger('seksi_id')->unsigned()->nullable();
             $table->year('periode');
+            $table->string('lampiran')->nullable();
+            $table->softDeletes();
             $table->timestamps();
+
+            $table->foreign('seksi_id')->on('seksi')->references('id');
         });
     }
 

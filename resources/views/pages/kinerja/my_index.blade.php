@@ -83,6 +83,11 @@
                                                     data-target="#detailKinerja" data-photo='{{ $item->photo }}'>
                                                     <i class="fa fa-eye"></i>
                                                 </button>
+                                                <a href="#" href="javascript:;" data-toggle="modal"
+                                                    data-target="#delete-confirmation-modal"
+                                                    onclick="toggleModal('{{ $item->id }}')"><button
+                                                        class="btn btn-outline-secondary"><i
+                                                            class="fa fa-trash"></i></button></a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -206,6 +211,31 @@
         </div>
     </div>
     {{-- END: Konfirmasi Excel --}}
+
+    <!-- BEGIN: Delete Confirmation Modal -->
+    <div id="delete-confirmation-modal" class="modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body p-2">
+                    <div class="p-2 text-center">
+                        <div class="text-3xl mt-2">Apakah anda yakin?</div>
+                        <div class="text-slate-500 mt-2">Peringatan: Data ini akan dihapus secara permanent</div>
+                    </div>
+                    <div class="px-5 pb-8 text-center mt-3">
+                        <form action="{{ route('kinerja.destroy') }}" method="POST">
+                            @csrf
+                            @method('delete')
+                            <input type="text" name="id" id="id" hidden>
+                            <button type="button" data-dismiss="modal"
+                                class="btn btn-dark w-24 mr-1 me-2">Batal</button>
+                            <button type="submit" class="btn btn-primary w-24">Hapus</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END: Delete Confirmation Modal -->
 @endsection
 
 
@@ -227,6 +257,10 @@
 
                 document.getElementById("photo_modal").innerHTML = photoHTML;
             });
+
+            function toggleModal(id) {
+                $('#id').val(id);
+            }
         });
     </script>
 @endsection

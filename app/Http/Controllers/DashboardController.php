@@ -90,7 +90,6 @@ class DashboardController extends Controller
         $formasi_tim = FormasiTim::count();
         $konfigurasi_cuti = KonfigurasiCuti::count();
         $konfigurasi_absensi = KonfigurasiAbsensi::count();
-        $konfigurasi_gudang = KonfigurasiGudang::count();
         return view('admin.masterdata.data_relasi.index', compact([
             'role_user',
             'area',
@@ -98,7 +97,6 @@ class DashboardController extends Controller
             'formasi_tim',
             'konfigurasi_cuti',
             'konfigurasi_absensi',
-            'konfigurasi_gudang',
         ]));
     }
 

@@ -47,6 +47,7 @@
                                         <th class="text-center">No.</th>
                                         <th class="text-center">Nama Gudang</th>
                                         <th class="text-center">Kode Gudang</th>
+                                        <th class="text-center">Pulau</th>
                                         <th class="text-center">Aksi</th>
                                     </tr>
                                 </thead>
@@ -56,6 +57,7 @@
                                             <td class="text-center">{{ $loop->iteration }}</td>
                                             <td class="text-center">{{ $item->name }}</td>
                                             <td class="text-center">{{ $item->code }}</td>
+                                            <td class="text-center">{{ $item->pulau->name }}</td>
                                             <td class="text-center">
                                                 <a href="{{ route('gudang.edit', $item->uuid) }}"><button
                                                         class="btn btn-outline-primary"><i

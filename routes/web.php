@@ -272,14 +272,16 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/konfigurasi-absensi/{uuid}/update', 'update')->name('konfigurasi_absensi.update');
         Route::delete('/konfigurasi-absensi', 'destroy')->name('konfigurasi_absensi.destroy');
     });
-    Route::controller(KonfigurasiGudangController::class)->group(function () {
-        Route::get('/konfigurasi-gudang', 'index')->name('konfigurasi_gudang.index');
-        Route::get('/konfigurasi-gudang-create', 'create')->name('konfigurasi_gudang.create');
-        Route::post('/konfigurasi-gudang', 'store')->name('konfigurasi_gudang.store');
-        Route::get('/konfigurasi-gudang/{uuid}/edit', 'edit')->name('konfigurasi_gudang.edit');
-        Route::put('/konfigurasi-gudang/{uuid}/update', 'update')->name('konfigurasi_gudang.update');
-        Route::delete('/konfigurasi-gudang', 'destroy')->name('konfigurasi_gudang.destroy');
-    });
+
+    // Route::controller(KonfigurasiGudangController::class)->group(function () {
+    //     Route::get('/konfigurasi-gudang', 'index')->name('konfigurasi_gudang.index');
+    //     Route::get('/konfigurasi-gudang-create', 'create')->name('konfigurasi_gudang.create');
+    //     Route::post('/konfigurasi-gudang', 'store')->name('konfigurasi_gudang.store');
+    //     Route::get('/konfigurasi-gudang/{uuid}/edit', 'edit')->name('konfigurasi_gudang.edit');
+    //     Route::put('/konfigurasi-gudang/{uuid}/update', 'update')->name('konfigurasi_gudang.update');
+    //     Route::delete('/konfigurasi-gudang', 'destroy')->name('konfigurasi_gudang.destroy');
+    // });
+
 
     // KINERJA
     Route::controller(KinerjaController::class)->group(function () {
