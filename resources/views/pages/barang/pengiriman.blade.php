@@ -31,10 +31,8 @@
                             </form>
                         </div>
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3 text-left">
-                            <a href="" class="btn btn-primary" data-toggle="modal"
-                                data-target="#bast-confirmation-modal">Buat BAST Pengiriman</a>
-                            <a href="" class="btn btn-primary" data-toggle="modal" data-target="#modalFilter"><i
-                                    class="fa fa-filter"></i></a>
+                            <a href="javascript:;" title="Filter" class="btn btn-primary" data-toggle="modal"
+                                data-target="#modalFilter"><i class="fa fa-filter"></i> Filter</a>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -42,62 +40,48 @@
                             <thead>
                                 <tr>
                                     <th class="text-center">No.</th>
-                                    <th class="text-center">Nama & Jumlah</th>
-                                    <th class="text-center"> Pengirim</th>
-                                    <th class="text-center"> Tujuan</th>
-                                    <th class="text-center">Status Pengiriman</th>
-                                    <th class="text-center">Dikirim</th>
-                                    <th class="text-center">Diterima</th>
+                                    <th class="text-center">No. Resi</th>
+                                    <th class="text-center">Asal</th>
+                                    <th class="text-center">Tujuan</th>
+                                    <th class="text-center">Pengirim</th>
+                                    <th class="text-center">Tanggal Kirim</th>
+                                    <th class="text-center">Penerima</th>
+                                    <th class="text-center">Tanggal Terima</th>
                                     <th class="text-center">Catatan</th>
+                                    <th class="text-center">Status</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($barang as $item)
+                                @foreach ($pengiriman_barang as $item)
                                     <tr>
                                         <td class="text-center">{{ $loop->iteration }}</td>
-                                        <td class="text-center">{{ $item->name }} ({{ $item->stock_awal }}
-                                            {{ $item->satuan }})</td>
+                                        <td class="text-center">{{ $item->no_resi }}</td>
                                         <td class="text-center">Gudang Utama</td>
-                                        <td class="text-center">Gudang Pencahayaan Pulau Tidung</td>
-                                        <td class="text-center"><button class="btn btn-warning">Proses Pengiriman</button>
-                                        </td>
-                                        <td class="text-center">13/02/2023
-                                            <br> Pukul 19:40
-                                        </td>
-                                        <td class="text-center">-
-                                            <br> -
-                                        </td>
-                                        <td class="text-center">-</td>
+                                        <td class="text-center">{{ $item->gudang->name }}</td>
+                                        <td class="text-center text-wrap">{{ $item->submitter->name }}</td>
                                         <td class="text-center">
-                                            <a href="#" class="btn btn-outline-primary" data-toggle="modal"
-                                                data-target="#modalLampiran" data-nama="{{ $item->name }}"
-                                                data-stock_awal="{{ $item->stock_awal }}"
-                                                data-satuan="{{ $item->satuan }}"
-                                                data-no_kontrak="{{ $item->kontrak->no_kontrak }}"><i
-                                                    class="fa fa-eye"></i></a>
+                                            {{ $item->tanggal_kirim ?? '-' }}
+                                        </td>
+                                        <td class="text-center text-wrap">{{ $item->receiver->name ?? '-' }}</td>
+                                        <td class="text-center">
+                                            {{ $item->tanggal_terima ?? '-' }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ $item->catatan }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ $item->status }}
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="{{ route('pengiriman.show', $item->no_resi) }}"
+                                                class="btn btn-outline-primary" title="Lihat Detail">
+                                                <i class="fa fa-eye"></i>
+                                            </a>
                                         </td>
                                     </tr>
-                                    {{-- <tr>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">Semen (30Zak)</td>
-                                        <td class="text-center">Gudang Utama</td>
-                                        <td class="text-center">Gudang Pertamanan Pulau Tidung</td>
-                                        <td class="text-center"><button class="btn btn-primary">Diterima</button></td>
-                                        <td class="text-center">13/02/2023
-                                            <br> Pukul 19:40
-                                        </td>
-                                        <td class="text-center">14/02/2023
-                                            <br> Pukul 08:10
-                                        </td>
-                                        <td class="text-center">Barang Sesuai</td>
-                                        <td class="text-center">
-                                            <a href="#" class="btn btn-outline-primary" data-toggle="modal"
-                                                data-target="#modalLampiran"><i class="fa fa-eye"></i></a>
-                                        </td>
-                                    </tr> --}}
+                                @endforeach
                             </tbody>
-                            @endforeach
                         </table>
                     </div>
                 </div>

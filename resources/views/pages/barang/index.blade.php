@@ -33,11 +33,16 @@
                         </div>
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3 text-left">
                             <a href="{{ route('barang.create') }}" class="btn btn-primary">Tambah Barang</a>
-                            <a href="#" id="kirimBarangButton" class="btn btn-primary" style="display: none;"
-                                data-toggle="modal" data-target="#modalKirimBarang">Kirim
-                                Barang</a>
-                            <a href="" class="btn btn-primary" data-toggle="modal" data-target="#modalFilter"><i
-                                    class="fa fa-filter"></i></a>
+                            <button type="submit" form="form-kirim" id="kirimBarangButton" class="btn btn-warning"
+                                style="display: none;">
+                                <i class="fa fa-paper-plane"></i>
+                                Kirim Barang
+                            </button>
+                            <a href="javascript:;" title="Filter" class="btn btn-primary" data-toggle="modal"
+                                data-target="#modalFilter"><i class="fa fa-filter"></i></a>
+                            <a href="{{ route('barang.index') }}" class="btn btn-primary" title="Reset Filter">
+                                <i class="fa fa-refresh"></i>
+                            </a>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -61,37 +66,41 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($barang as $item)
-                                    <tr>
-                                        <td class="text-center">{{ $loop->iteration }}</td>
-                                        <td class="text-center checkbox">
-                                            <input type="checkbox">
-                                        </td>
-                                        <td class="text-center">{{ $item->kontrak->periode }}</td>
-                                        <td class="text-center">{{ $item->kontrak->no_kontrak }}</td>
-                                        <td class="text-center">{{ $item->kontrak->seksi->name }}</td>
-                                        <td class="text-center font-weight-bolder">{{ $item->name }}</td>
-                                        <td class="text-center">{{ $item->merk }}</td>
-                                        <td class="text-center">{{ $item->jenis }}</td>
-                                        {{-- <td class="text-center">{{ $item->code }}</td> --}}
-                                        <td class="text-center">{{ $item->stock_awal }} {{ $item->satuan }}</td>
-                                        <td class="text-center">{{ $item->stock_aktual }} {{ $item->satuan }}</td>
-                                        {{-- <td class="text-center">Rp.{{ $item->harga }}</td> --}}
-                                        <td class="text-center">{{ $item->spesifikasi }}</td>
-                                        <td class="text-center">
-                                            <a href="{{ route('barang.edit', $item->uuid) }}"
-                                                class="btn btn-outline-primary"><i class="fa fa-edit"></i></a>
-                                            <a href="#" class="btn btn-outline-primary" data-toggle="modal"
-                                                data-target="#modalLampiran"
-                                                data-photo="{{ $item->photo != null ? asset('storage/' . $item->photo) : 'https://media.istockphoto.com/id/1000398280/vector/photo-not-available-icon-isolated-on-white-background.jpg?s=170667a&w=0&k=20&c=O-C_gKquacdLvHl-jDHN80Cy9_LqbI0Fqj7foLIm6wo=' }}"><i
-                                                    class="fa fa-eye"></i></a>
-                                            <a href="#" href="javascript:;" data-toggle="modal"
-                                                data-target="#delete-confirmation-modal"
-                                                onclick="toggleModal('{{ $item->id }}')"
-                                                class="btn btn-outline-danger"><i class="fa fa-trash"></i></a>
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                <form id="form-kirim" action="{{ route('barang.kirim.create') }}" method="GET">
+                                    @csrf
+                                    @method('GET')
+                                    @foreach ($barang as $item)
+                                        <tr>
+                                            <td class="text-center">{{ $loop->iteration }}</td>
+                                            <td class="text-center checkbox">
+                                                <input type="checkbox" name="barang_id[]" value="{{ $item->id }}">
+                                            </td>
+                                            <td class="text-center">{{ $item->kontrak->periode }}</td>
+                                            <td class="text-center">{{ $item->kontrak->no_kontrak }}</td>
+                                            <td class="text-center">{{ $item->kontrak->seksi->name }}</td>
+                                            <td class="text-center font-weight-bolder">{{ $item->name }}</td>
+                                            <td class="text-center">{{ $item->merk }}</td>
+                                            <td class="text-center">{{ $item->jenis }}</td>
+                                            {{-- <td class="text-center">{{ $item->code }}</td> --}}
+                                            <td class="text-center">{{ $item->stock_awal }} {{ $item->satuan }}</td>
+                                            <td class="text-center">{{ $item->stock_aktual }} {{ $item->satuan }}</td>
+                                            {{-- <td class="text-center">Rp.{{ $item->harga }}</td> --}}
+                                            <td class="text-center">{{ $item->spesifikasi }}</td>
+                                            <td class="text-center">
+                                                <a href="{{ route('barang.edit', $item->uuid) }}"
+                                                    class="btn btn-outline-primary"><i class="fa fa-edit"></i></a>
+                                                <a href="#" class="btn btn-outline-primary" data-toggle="modal"
+                                                    data-target="#modalLampiran"
+                                                    data-photo="{{ $item->photo != null ? asset('storage/' . $item->photo) : 'https://media.istockphoto.com/id/1000398280/vector/photo-not-available-icon-isolated-on-white-background.jpg?s=170667a&w=0&k=20&c=O-C_gKquacdLvHl-jDHN80Cy9_LqbI0Fqj7foLIm6wo=' }}"><i
+                                                        class="fa fa-eye"></i></a>
+                                                <a href="#" href="javascript:;" data-toggle="modal"
+                                                    data-target="#delete-confirmation-modal"
+                                                    onclick="toggleModal('{{ $item->id }}')"
+                                                    class="btn btn-outline-danger"><i class="fa fa-trash"></i></a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </form>
                             </tbody>
                         </table>
                     </div>
@@ -115,7 +124,8 @@
                             @csrf
                             @method('delete')
                             <input type="text" name="id" id="id" hidden>
-                            <button type="button" data-dismiss="modal" class="btn btn-dark w-24 mr-1 me-2">Batal</button>
+                            <button type="button" data-dismiss="modal"
+                                class="btn btn-dark w-24 mr-1 me-2">Batal</button>
                             <button type="submit" class="btn btn-primary w-24">Hapus</button>
                         </form>
                     </div>
@@ -159,45 +169,69 @@
     <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="modalFilter"
         aria-hidden="true">
         <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Filter Data Barang</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-row gutters">
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="form-group">
-                                <label for="">Kontrak</label>
-                                <select name="kontrak" class="form-control" required>
-                                    <option value="" selected disabled>- pilih kontrak -</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="">Jenis Barang</label>
-                                <select name="jenis_barang" class="form-control" required>
-                                    <option value="" selected disabled>- pilih jenis barang -</option>
-                                    <option value="consumable">Consumable</option>
-                                    <option value="tools">Tools</option>
+            <form action="{{ route('barang.filter') }}" method="GET">
+                @csrf
+                @method('GET')
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Filter Data Barang</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-row gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="">Kontrak</label>
+                                    <select name="kontrak_id" class="form-control">
+                                        <option value="" selected disabled>- pilih kontrak -</option>
+                                        @foreach ($kontrak as $item)
+                                            <option value="{{ $item->id }}">{{ $item->no_kontrak }}
+                                                - {{ $item->name }}
+                                                - {{ $item->seksi->name }} - ({{ $item->periode }})
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="periode">Tahun Pengadaan</label>
+                                    <select name="periode" class="form-control">
+                                        <option value="" selected disabled>- pilih periode pengadaan -</option>
+                                        <option value="{{ $tahun - 3 }}">{{ $tahun - 3 }}</option>
+                                        <option value="{{ $tahun - 2 }}">{{ $tahun - 2 }}</option>
+                                        <option value="{{ $tahun - 1 }}">{{ $tahun - 1 }}</option>
+                                        <option value="{{ $tahun }}">{{ $tahun }}</option>
+                                        <option value="{{ $tahun + 1 }}">{{ $tahun + 1 }}</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Jenis Barang</label>
+                                    <select name="jenis" class="form-control">
+                                        <option value="" selected disabled>- pilih jenis barang -</option>
+                                        <option value="consumable">Consumable</option>
+                                        <option value="tools">Tools</option>
 
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="periode">Tahun Pengadaan</label>
-                                <select name="periode" class="form-control" required>
-                                    <option value="" selected disabled>- pilih periode pengadaan -</option>
-                                </select>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Seksi</label>
+                                    <select name="seksi_id" class="form-control">
+                                        <option value="" selected disabled>- pilih seksi -</option>
+                                        @foreach ($seksi as $item)
+                                            <option value="{{ $item->id }}">Seksi {{ $item->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary">Filter Data</button>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
-                    <button type="button" class="btn btn-primary">Filter Data</button>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
     {{-- END: Filter Modal --}}
@@ -209,13 +243,13 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Filter Kirim Barang</h5>
+                    <h5 class="modal-title">Form Kirim Barang</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-row gutters">
+                    {{-- <div class="form-row gutters">
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Gudang Tujuan</label>
@@ -286,11 +320,11 @@
                                 <input type="text" class="form-control" name="" id="">
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
-                    <button type="button" class="btn btn-primary">Kirim Barang</button>
+                    <button type="submit" class="btn btn-primary">Kirim Barang</button>
                 </div>
             </div>
         </div>

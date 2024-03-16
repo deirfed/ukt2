@@ -74,14 +74,21 @@
                             </div>
                         </div>
                         <div class="form-row gutters">
-                            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="name">Stock Awal</label>
                                     <input type="text" class="form-control" name="stock_awal"
                                         value="{{ $barang->stock_awal }}">
                                 </div>
                             </div>
-                            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="name">Stock Aktual</label>
+                                    <input type="text" class="form-control" name="stock_aktual"
+                                        value="{{ $barang->stock_aktual }}">
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="name">Satuan Barang</label>
                                     <input type="text" class="form-control" name="satuan"

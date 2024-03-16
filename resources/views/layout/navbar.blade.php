@@ -95,11 +95,11 @@
             <a class="dropdown-item" href="{{ route('barang.index') }}">Daftar Asset / Barang</a>
         </li>
         <li>
-            <a class="dropdown-item" href="{{ route('barang.pengiriman') }}">Pengiriman</a>
+            <a class="dropdown-item" href="{{ route('pengiriman.index') }}">Pengiriman</a>
         </li>
-        <li>
+        {{-- <li>
             <a class="dropdown-item" href="{{ route('barang.penerimaan') }}">Penerimaan</a>
-        </li>
+        </li> --}}
         <li>
             <a class="dropdown-item" href="{{ route('barang.my_gudang') }}">Gudang Saya (Pulau)</a>
         </li>

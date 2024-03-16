@@ -9,6 +9,8 @@ use App\Http\Controllers\Controller;
 use App\Imports\BarangImport;
 use App\Models\Gudang;
 use App\Models\KonfigurasiGudang;
+use App\Models\Seksi;
+use Carbon\Carbon;
 use Faker\Provider\Base;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
@@ -20,7 +22,18 @@ class BarangController extends Controller
     {
         $barang = Barang::all();
         $gudang_tujuan = Gudang::all();
-        return view('pages.barang.index', compact(['barang', 'gudang_tujuan']));
+
+        $kontrak = Kontrak::all();
+        $seksi = Seksi::all();
+        $tahun = Carbon::now()->format("Y");
+
+        return view('pages.barang.index', compact([
+            'barang',
+            'gudang_tujuan',
+            'kontrak',
+            'seksi',
+            'tahun',
+        ]));
     }
 
     public function create()
@@ -128,9 +141,52 @@ class BarangController extends Controller
         return view('pages.barang.my_gudang');
     }
 
-
     public function transaksi()
     {
         return view('pages.barang.transaksi_barang');
+    }
+
+    public function filter(Request $request)
+    {
+        $periode = $request->periode;
+        $kontrak_id = $request->kontrak_id;
+        $jenis = $request->jenis;
+        $seksi_id = $request->seksi_id;
+
+        $barang = Barang::query();
+
+        // Filter by periode
+        $barang->when($periode, function ($query) use ($request) {
+            return $query->whereRelation('kontrak', 'periode', '=', $request->periode);
+        });
+
+        // Filter by kontrak_id
+        $barang->when($kontrak_id, function ($query) use ($request) {
+            return $query->whereRelation('kontrak', 'id', '=', $request->kontrak_id);
+        });
+
+        // Filter by jenis
+        $barang->when($jenis, function ($query) use ($request) {
+            return $query->where('jenis', $request->jenis);
+        });
+
+        // Filter by seksi_id
+        $barang->when($seksi_id, function ($query) use ($request) {
+            return $query->whereRelation('kontrak.seksi', 'id', '=', $request->seksi_id);
+        });
+
+        $gudang_tujuan = Gudang::all();
+
+        $kontrak = Kontrak::all();
+        $seksi = Seksi::all();
+        $tahun = Carbon::now()->format("Y");
+
+        return view('pages.barang.index', [
+            'barang' => $barang->orderBy('name', 'ASC')->get(),
+            'gudang_tujuan' => $gudang_tujuan,
+            'kontrak' => $kontrak,
+            'seksi' => $seksi,
+            'tahun' => $tahun,
+        ]);
     }
 }
