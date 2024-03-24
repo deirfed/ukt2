@@ -111,7 +111,7 @@
                                     @endforeach
                                     @if ($barang->count() == 0)
                                         <tr>
-                                            <td class="text-center">
+                                            <td class="text-center" colspan="12">
                                                 Data barang tidak ditemukan, kemungkinan stock barang sudah habis hubungi
                                                 PIC terkait.
                                             </td>
