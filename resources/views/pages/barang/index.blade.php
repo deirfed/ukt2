@@ -112,7 +112,8 @@
                                     @if ($barang->count() == 0)
                                         <tr>
                                             <td class="text-center" colspan="12">
-                                                Data barang tidak ditemukan, kemungkinan stock barang sudah habis hubungi
+                                                Data barang tidak ditemukan, kemungkinan stock barang sudah habis silahkan
+                                                hubungi
                                                 PIC terkait.
                                             </td>
                                         </tr>
