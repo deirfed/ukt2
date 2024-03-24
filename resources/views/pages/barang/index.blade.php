@@ -109,6 +109,14 @@
                                             </td>
                                         </tr>
                                     @endforeach
+                                    @if ($barang->count() == 0)
+                                        <tr>
+                                            <td class="text-center">
+                                                Data barang tidak ditemukan, kemungkinan stock barang sudah habis hubungi
+                                                PIC terkait.
+                                            </td>
+                                        </tr>
+                                    @endif
                                 </form>
                             </tbody>
                         </table>
