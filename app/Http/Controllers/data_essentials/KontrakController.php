@@ -25,11 +25,11 @@ class KontrakController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request)
         $validatedData = $request->validate([
             'name' => 'required',
             'no_kontrak' => 'required',
-            'periode' => 'required',
+            'nilai_kontrak' => 'required',
+            'tanggal' => 'required',
             'seksi_id' => 'required',
             'lampiran' => 'file|mimes:pdf|max:1024',
         ], [
@@ -39,7 +39,8 @@ class KontrakController extends Controller
         $kontrak = Kontrak::create([
             'name' => $request->name,
             'no_kontrak' => $request->no_kontrak,
-            'periode' => $request->periode,
+            'nilai_kontrak' => $request->nilai_kontrak,
+            'tanggal' => $request->tanggal,
             'seksi_id' => $request->seksi_id,
         ]);
 
@@ -67,9 +68,10 @@ class KontrakController extends Controller
         $kontrak = Kontrak::findOrFail($id);
 
         $kontrak->update([
-            'name' => $request->input('name'),
-            'no_kontrak' => $request->input('no_kontrak'),
-            'periode' => $request->input('periode'),
+            'name' => $request->name,
+            'no_kontrak' => $request->no_kontrak,
+            'nilai_kontrak' => $request->nilai_kontrak,
+            'tanggal' => $request->tanggal,
         ]);
 
         return redirect()->route('kontrak.index')->withNotify('Data berhasil diubah!');

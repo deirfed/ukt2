@@ -34,7 +34,8 @@
                         </div>
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3 text-left">
                             <a href="{{ route('data_essentials.index') }}" class="btn btn-outline-primary"><i
-                                    class="fa fa-arrow-left"></i>Kembali</a>
+                                    class="fa fa-arrow-left"></i> Kembali
+                            </a>
                             <a href="{{ route('gudang.create') }}" class="btn btn-primary">Tambah
                                 Data</a>
                         </div>

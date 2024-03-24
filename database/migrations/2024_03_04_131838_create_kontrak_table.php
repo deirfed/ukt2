@@ -13,8 +13,9 @@ return new class extends Migration
             $table->string('name');
             $table->uuid('uuid')->unique();
             $table->string('no_kontrak');
+            $table->string('nilai_kontrak');
             $table->bigInteger('seksi_id')->unsigned()->nullable();
-            $table->year('periode');
+            $table->date('tanggal')->nullable();
             $table->string('lampiran')->nullable();
             $table->softDeletes();
             $table->timestamps();

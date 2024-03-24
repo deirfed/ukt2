@@ -33,7 +33,7 @@
                                     <label for="no_kontrak">Kontrak Pengadaan</label>
                                     <input type="text" hidden value="{{ $barang->id }}" name="id">
                                     <input type="text" class="form-control" id="start"
-                                        value="{{ $barang->kontrak->name }} ({{ $barang->kontrak->periode }})" disabled>
+                                        value="{{ $barang->kontrak->name }} ({{ $barang->kontrak->tanggal }})" disabled>
                                 </div>
                             </div>
                         </div>
@@ -99,7 +99,7 @@
                         <div class="form-row gutters">
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <label for="name">Harga Barang</label>
+                                    <label for="name">Harga Barang (Rp.)</label>
                                     <input type="text" class="form-control" name="harga" value="{{ $barang->harga }}">
                                 </div>
                             </div>
@@ -114,15 +114,18 @@
                         <div class="form-row gutters">
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <label for="name">Photo Barang</label>
-                                    <div class="container my-2">
-                                        <img class="img-thumbnail" id="previewImage" style="height: 200px"
-                                            src="{{ $barang->photo != null ? asset('storage/' . $barang->photo) : 'https://media.istockphoto.com/id/1000398280/vector/photo-not-available-icon-isolated-on-white-background.jpg?s=170667a&w=0&k=20&c=O-C_gKquacdLvHl-jDHN80Cy9_LqbI0Fqj7foLIm6wo=' }}"
-                                            alt="Photo Barang">
+                                    <label for="name">Photo Barang <span class="text-secondary">(*max: 3
+                                            photo)</span></label>
+                                    <div class="row-group d-flex preview-container my-2">
                                     </div>
-                                    <input type="file" class="form-control" id="imageInput" name="photo"
-                                        accept="image/*" required>
+                                    <input type="file" class="form-control image-input" name="photo[]"
+                                        accept="image/*" required multiple>
                                 </div>
+                                @error('photo')
+                                    <p class="text-danger">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
                             </div>
                         </div>
                         <div class="btn group-button">
@@ -139,22 +142,30 @@
 
 @section('javascript')
     <script>
-        const imageInput = document.getElementById('imageInput');
-        const previewImage = document.getElementById('previewImage');
+        const imageInputs = document.querySelectorAll('.image-input');
+        const previewContainer = document.querySelector('.preview-container');
 
-        imageInput.addEventListener('change', function(event) {
-            const selectedFile = event.target.files[0];
+        imageInputs.forEach(input => {
+            input.addEventListener('change', function(event) {
+                previewContainer.innerHTML = '';
 
-            if (selectedFile) {
-                const reader = new FileReader();
+                const files = event.target.files;
+                for (const file of files) {
+                    const reader = new FileReader();
 
-                reader.onload = function(e) {
-                    previewImage.src = e.target.result;
-                    previewImage.style.display = 'block';
+                    reader.onload = function(e) {
+                        const previewImage = document.createElement('img');
+                        previewImage.className = 'preview-image';
+                        previewImage.src = e.target.result;
+                        previewImage.style = 'width: 120px;';
+                        previewImage.className = 'img-thumbnail btn-group mt-2 me-2 d-inline-flex';
+
+                        previewContainer.appendChild(previewImage);
+                    }
+
+                    reader.readAsDataURL(file);
                 }
-
-                reader.readAsDataURL(selectedFile);
-            }
+            });
         });
     </script>
 @endsection

@@ -34,7 +34,8 @@
                         </div>
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3 text-left">
                             <a href="{{ route('data_essentials.index') }}" class="btn btn-outline-primary"><i
-                                    class="fa fa-arrow-left"></i>Kembali</a>
+                                    class="fa fa-arrow-left"></i> Kembali
+                            </a>
                             <a href="{{ route('kontrak.create') }}" class="btn btn-primary">Tambah
                                 Data</a>
                         </div>
@@ -47,8 +48,9 @@
                                         <th class="text-center">No.</th>
                                         <th class="text-center">Nama Kontrak</th>
                                         <th class="text-center">No. Kontrak</th>
+                                        <th class="text-center">Nilai Kontrak</th>
                                         <th class="text-center">Seksi</th>
-                                        <th class="text-center">Tahun Pengadaan</th>
+                                        <th class="text-center">Tanggal</th>
                                         <th class="text-center">Dokumen</th>
                                         <th class="text-center">Aksi</th>
                                     </tr>
@@ -59,8 +61,9 @@
                                             <td class="text-center">{{ $loop->iteration }}</td>
                                             <td class="text-center">{{ $item->name }}</td>
                                             <td class="text-center">{{ $item->no_kontrak }}</td>
+                                            <td class="text-center">Rp. {{ $item->nilai_kontrak }}</td>
                                             <td class="text-center">{{ $item->seksi->name }}</td>
-                                            <td class="text-center">{{ $item->periode }}</td>
+                                            <td class="text-center">{{ $item->tanggal }}</td>
                                             <td class="text-center">
                                                 <a href="{{ asset('storage/' . $item->lampiran) }}" target="_blank">
                                                     <button class="btn btn-outline-primary">

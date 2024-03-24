@@ -29,8 +29,13 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <label for="">Nama Kontrak</label>
+                            <label for="">Seksi</label>
                             <input type="text" hidden value="{{ $kontrak->id }}" name="id">
+                            <input type="text" class="form-control" autocomplete="off"
+                                value="{{ $kontrak->seksi->name }}" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Nama Kontrak</label>
                             <input type="text" class="form-control" name="name" autocomplete="off"
                                 value="{{ $kontrak->name }}" required>
                         </div>
@@ -40,9 +45,14 @@
                                 value="{{ $kontrak->no_kontrak }}" required>
                         </div>
                         <div class="form-group">
-                            <label for="">Tahun Pengadaan</label>
-                            <input type="text" class="form-control" name="periode" autocomplete="off"
-                                value="{{ $kontrak->tahun }}" required>
+                            <label for="">Nilai Kontrak (Rp.)</label>
+                            <input type="text" class="form-control" name="nilai_kontrak" autocomplete="off"
+                                value="{{ $kontrak->nilai_kontrak }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Tanggal</label>
+                            <input type="date" class="form-control" name="tanggal" autocomplete="off"
+                                value="{{ $kontrak->tanggal }}" required>
                         </div>
                         <div class="btn group-button">
                             <button type="submit" id="submit" name="submit"

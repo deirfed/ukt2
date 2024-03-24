@@ -20,7 +20,7 @@ class BarangController extends Controller
 {
     public function index()
     {
-        $barang = Barang::all();
+        $barang = Barang::where('stock_aktual', '>', 0)->get();
         $gudang_tujuan = Gudang::all();
 
         $kontrak = Kontrak::all();
@@ -39,6 +39,10 @@ class BarangController extends Controller
     public function create()
     {
         $kontrak = Kontrak::all();
+        $kontrak->map(function ($item, $key) {
+            $item->periode = Carbon::parse($item->tanggal)->format('Y');
+            return $item;
+        });
 
         return view('pages.barang.create', compact(['kontrak']));
     }
@@ -72,6 +76,13 @@ class BarangController extends Controller
 
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'photo.*' => 'required|file|image',
+            'photo' => 'max:3',
+        ], [
+            'photo.max' => '*Photo yang dilampirkan maksimal 3.'
+        ]);
+
         $barang = Barang::findOrFail($id);
 
         $barang->update([
@@ -86,21 +97,33 @@ class BarangController extends Controller
             'spesifikasi' => $request->input('spesifikasi'),
         ]);
 
-        if ($request->hasFile('photo') && $request->photo != '')
+        if ($request->hasFile('photo'))
         {
-            $image = Image::make($request->file('photo'));
+            if($barang->photo != null)
+            {
+                foreach(json_decode($barang->photo) as $photo)
+                {
+                    Storage::delete($photo);
+                }
+            }
 
-            $imageName = time().'-'.$request->file('photo')->getClientOriginalName();
+            $lampiranPaths = [];
             $detailPath = 'asset/photo_awal/';
-            $destinationPath = public_path('storage/'. $detailPath);
+            foreach ($request->file('photo') as $file) {
+                $image = Image::make($file);
 
-            $image->resize(null, 500, function ($constraint) {
-                $constraint->aspectRatio();
-            });
+                $imageName = time().'-'.$file->getClientOriginalName();
+                $destinationPath = public_path('storage/'. $detailPath);
 
-            $image->save($destinationPath.$imageName);
+                $image->resize(null, 500, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
 
-            $barang->photo = $detailPath.$imageName;
+                $image->save($destinationPath.$imageName);
+                $lampiranPaths[] = $detailPath . $imageName;
+            }
+
+            $barang->photo = json_encode($lampiranPaths);
             $barang->save();
         }
 
@@ -118,7 +141,10 @@ class BarangController extends Controller
         $barang = Barang::findOrFail($id);
         if($barang->photo != null)
         {
-            Storage::delete($barang->photo);
+            foreach(json_decode($barang->photo) as $photo)
+            {
+                Storage::delete($photo);
+            }
         }
         $barang->forceDelete();
         return redirect()->route('barang.index')->withNotify('Data berhasil dihapus!');
@@ -156,8 +182,10 @@ class BarangController extends Controller
         $barang = Barang::query();
 
         // Filter by periode
-        $barang->when($periode, function ($query) use ($request) {
-            return $query->whereRelation('kontrak', 'periode', '=', $request->periode);
+        $barang->when($periode, function ($query) use ($periode) {
+            return $query->whereHas('kontrak', function ($query) use ($periode) {
+                $query->whereYear('tanggal', $periode);
+            });
         });
 
         // Filter by kontrak_id

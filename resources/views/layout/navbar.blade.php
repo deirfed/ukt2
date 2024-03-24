@@ -92,19 +92,16 @@
     </a>
     <ul class="dropdown-menu" aria-labelledby="dashboardsDropdown">
         <li>
-            <a class="dropdown-item" href="{{ route('barang.index') }}">Daftar Asset / Barang</a>
+            <a class="dropdown-item" href="{{ route('barang.index') }}">Barang Gudang Utama</a>
         </li>
         <li>
             <a class="dropdown-item" href="{{ route('pengiriman.index') }}">Pengiriman</a>
         </li>
-        {{-- <li>
-            <a class="dropdown-item" href="{{ route('barang.penerimaan') }}">Penerimaan</a>
-        </li> --}}
         <li>
-            <a class="dropdown-item" href="{{ route('barang.my_gudang') }}">Gudang Saya (Pulau)</a>
+            <a class="dropdown-item" href="{{ route('barang.pulau.index') }}">Barang Gudang Pulau</a>
         </li>
         <li>
-            <a class="dropdown-item" href="{{ route('barang.transaksi') }}">Transaksi Barang<a>
+            <a class="dropdown-item" href="{{ route('transaksi.barang.index') }}">Transaksi Barang<a>
         </li>
     </ul>
 </li>

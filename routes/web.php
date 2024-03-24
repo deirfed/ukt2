@@ -29,9 +29,11 @@ use App\Http\Controllers\data_essentials\TimController;
 use App\Http\Controllers\data_essentials\UserController;
 use App\Http\Controllers\data_essentials\GudangController;
 use App\Http\Controllers\pages\BarangController;
+use App\Http\Controllers\pages\BarangPulauController;
 use App\Http\Controllers\pages\KinerjaController;
 use App\Http\Controllers\pages\CutiController;
 use App\Http\Controllers\pages\PengirimanBarangController;
+use App\Http\Controllers\pages\TransaksiBarangPulauController;
 
 // Route::controller(LoginController::class)->group(function () {
 //     Route::get('/', 'login')->name('login.index');
@@ -333,7 +335,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Barang
     Route::controller(BarangController::class)->group(function () {
-        Route::get('/barang', 'index')->name('barang.index');
+        Route::get('/barang-gudang-utama', 'index')->name('barang.index');
         Route::get('/barang-create', 'create')->name('barang.create');
         Route::get('/barang/filter', 'filter')->name('barang.filter');
         Route::post('/barang', 'store')->name('barang.store');
@@ -342,11 +344,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/barang', 'destroy')->name('barang.destroy');
 
         Route::get('/penerimaan', 'penerimaan')->name('barang.penerimaan');
-        Route::get('/my_gudang', 'my_gudang')->name('barang.my_gudang');
-        Route::get('/transaksi_barang', 'transaksi')->name('barang.transaksi');
     });
 
-    // Barang
+    // Pengiriman Barang
     Route::controller(PengirimanBarangController::class)->group(function () {
         Route::get('/pengiriman', 'index')->name('pengiriman.index');
         Route::get('/pengiriman/{no_resi}/detail', 'show')->name('pengiriman.show');
@@ -354,5 +354,20 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/pengiriman-barang/create', 'create')->name('barang.kirim.create');
         Route::post('/pengiriman-barang/store', 'store')->name('barang.kirim.store');
         Route::put('/pengiriman-barang/terima', 'terima')->name('pengiriman.barang.terima');
+        Route::put('/pengiriman-barang/{id}/photo-terima', 'photoTerima')->name('pengiriman.barang.photo.terima');
+        Route::get('/pengiriman-barang/generate-BAST', 'generateBAST')->name('pengiriman.barang.generate.BAST');
+    });
+
+    // Barang Pulau
+    Route::controller(BarangPulauController::class)->group(function () {
+        Route::get('/barang-pulau', 'index')->name('barang.pulau.index');
+    });
+
+    // Transaksi Barang Pulau
+    Route::controller(TransaksiBarangPulauController::class)->group(function () {
+        Route::get('/transaksi-barang', 'index')->name('transaksi.barang.index');
+        Route::get('/transaksi-barang/create', 'create')->name('transaksi.barang.create');
+        Route::post('/transaksi-barang', 'store')->name('transaksi.barang.store');
+        Route::get('/transaksi-barang/export-excel', 'excel')->name('transaksi.barang.excel');
     });
 });

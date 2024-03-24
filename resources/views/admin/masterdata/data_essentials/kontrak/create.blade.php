@@ -29,6 +29,14 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group">
+                            <select name="seksi_id" class="form-control" required>
+                                <option value="" selected disabled>- pilih seksi -</option>
+                                @foreach ($seksi as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <input type="text" class="form-control" id="no_kontrak" name="no_kontrak"
                                 placeholder="No. Kontrak" required>
                         </div>
@@ -37,19 +45,12 @@
                                 placeholder="Nama Kontrak" required>
                         </div>
                         <div class="form-group">
-                            <select name="seksi_id" class="form-control" required>
-                                <option value="" selected disabled>- pilih periode seksi -</option>
-                                @foreach ($seksi as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                @endforeach
-                            </select>
+                            <input type="text" class="form-control" name="nilai_kontrak"
+                                placeholder="Nilai Kontrak (Rp.)" required>
                         </div>
                         <div class="form-group">
-                            <select name="periode" class="form-control" required>
-                                <option value="" selected disabled>- pilih periode pengadaan-</option>
-                                <option value="{{ $this_year }}">{{ $this_year }}</option>
-                                <option value="{{ $this_year + 1 }}">{{ $this_year + 1 }}</option>
-                            </select>
+                            <input type="text" placeholder="Tanggal Kontrak" onblur="(this.type='text')"
+                                onfocus="(this.type='date')" class="form-control" name="tanggal">
                         </div>
                         <div class="form-group">
                             <label for="">Dokumen Kontrak <span class="text-danger">(PDF Max: 1MB)</span></label>

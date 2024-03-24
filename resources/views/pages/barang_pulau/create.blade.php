@@ -2,7 +2,7 @@
 
 @section('title-head')
     <title>
-        Manajemen Asset | Form Kirim Barang
+        Manajemen Asset | Form Pengambilan Barang
     </title>
 @endsection
 
@@ -11,7 +11,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">Manajemen Asset</li>
             <li class="breadcrumb-item">Barang</li>
-            <li class="breadcrumb-item active">Form Kirim Barang</li>
+            <li class="breadcrumb-item active">Form Pengambilan Barang</li>
         </ol>
     </div>
 @endsection
@@ -20,17 +20,16 @@
 @section('content')
     <div class="row gutters justify-content-center">
         <div class="col-xl-6 col-lg-6 col-md-7 col-sm-8 col-12">
-            <form action="{{ route('barang.kirim.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('transaksi.barang.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('post')
                 <div class="card m-0">
                     <div class="card-header">
-                        <div class="card-title text-center">Form Pengiriman Barang</div>
+                        <div class="card-title text-center">Form Pengambilan Barang</div>
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <label>Submitter</label>
-                            <input type="text" name="submitter_id" value="{{ auth()->user()->id }}" hidden>
+                            <label>PIC</label>
                             <input type="text" class="form-control" value="{{ auth()->user()->name }}" disabled>
                         </div>
                         <div class="form-group">
@@ -38,18 +37,14 @@
                             <input type="text" class="form-control" value="{{ auth()->user()->jabatan->name }}" disabled>
                         </div>
                         <div class="form-group">
-                            <label>Tanggal Pengiriman</label>
-                            <input type="text" placeholder="Tanggal Pengiriman" onfocus="(this.type='datetime-local')"
-                                onblur="(this.type='text')" class="form-control" name="tanggal_kirim" required>
+                            <label>Tanggal Pengambilan</label>
+                            <input type="text" placeholder="Tanggal Pengambilan" onfocus="(this.type='datetime-local')"
+                                onblur="(this.type='text')" class="form-control" name="tanggal" required>
                         </div>
                         <div class="form-group">
-                            <label>Gudang Pulau Tujuan</label>
-                            <select name="gudang_id" class="form-control" required>
-                                <option value="" selected disabled>- pilih gudang pulau tujuan -</option>
-                                @foreach ($gudang as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                @endforeach
-                            </select>
+                            <label>Kegiatan</label>
+                            <input type="text" placeholder="Nama Kegiatan" class="form-control" name="kegiatan" required
+                                autocomplete="off">
                         </div>
                         <div class="form-group">
                             <label for="list">List Barang</label>
@@ -61,17 +56,17 @@
                                             <th class="text-center">Nama Barang</th>
                                             <th class="text-center text-wrap">Stock Tersedia</th>
                                             <th class="text-center">Qty. Barang</th>
-                                            <th class="text-center">Photo Bukti Kirim</th>
+                                            <th class="text-center">Photo Bukti Pengambilan</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($barang as $item)
+                                        @foreach ($barang_pulau as $item)
                                             <tr>
                                                 <td class="text-center">{{ $loop->iteration }}</td>
                                                 <td class="font-weight-bolder">
-                                                    {{ $item->name }}
-                                                    <input type="text" name="barang_id[]" value="{{ $item->id }}"
-                                                        hidden>
+                                                    {{ $item->barang->name }}
+                                                    <input type="text" name="barang_pulau_id[]"
+                                                        value="{{ $item->id }}" hidden>
                                                 </td>
                                                 <td class="text-center">{{ $item->stock_aktual }} {{ $item->satuan }}</td>
                                                 <td class="text-center">
@@ -96,7 +91,7 @@
                         </div>
                         <div class="btn group-button">
                             <button type="submit" id="submit" name="submit"
-                                class="btn btn-primary float-right ml-3">Submit Pengiriman</button>
+                                class="btn btn-primary float-right ml-3">Submit Pengambilan</button>
                             <a href="{{ route('barang.index') }}" class="btn btn-dark">Batal</a>
                         </div>
                     </div>

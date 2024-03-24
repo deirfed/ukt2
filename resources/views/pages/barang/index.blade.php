@@ -45,13 +45,16 @@
                             </a>
                         </div>
                     </div>
+                    <div class="row container">
+                        <p>Note: Untuk bisa memilih barang, wajib mengupload photo barang terlebih dahulu.</p>
+                    </div>
                     <div class="table-responsive">
                         <table class="table table-bordered table-striped" id="dataTable">
                             <thead>
                                 <tr>
                                     <th class="text-center">No.</th>
                                     <th class="text-center">Pilih</th>
-                                    <th class="text-center">Tahun</th>
+                                    <th class="text-center">Tanggal</th>
                                     <th class="text-center">No. Kontrak</th>
                                     <th class="text-center">Seksi</th>
                                     <th class="text-center">Nama Barang</th>
@@ -73,9 +76,11 @@
                                         <tr>
                                             <td class="text-center">{{ $loop->iteration }}</td>
                                             <td class="text-center checkbox">
-                                                <input type="checkbox" name="barang_id[]" value="{{ $item->id }}">
+                                                @if ($item->photo != null)
+                                                    <input type="checkbox" name="barang_id[]" value="{{ $item->id }}">
+                                                @endif
                                             </td>
-                                            <td class="text-center">{{ $item->kontrak->periode }}</td>
+                                            <td class="text-center">{{ $item->kontrak->tanggal }}</td>
                                             <td class="text-center">{{ $item->kontrak->no_kontrak }}</td>
                                             <td class="text-center">{{ $item->kontrak->seksi->name }}</td>
                                             <td class="text-center font-weight-bolder">{{ $item->name }}</td>
@@ -88,12 +93,16 @@
                                             <td class="text-center">{{ $item->spesifikasi }}</td>
                                             <td class="text-center">
                                                 <a href="{{ route('barang.edit', $item->uuid) }}"
-                                                    class="btn btn-outline-primary"><i class="fa fa-edit"></i></a>
-                                                <a href="#" class="btn btn-outline-primary" data-toggle="modal"
-                                                    data-target="#modalLampiran"
-                                                    data-photo="{{ $item->photo != null ? asset('storage/' . $item->photo) : 'https://media.istockphoto.com/id/1000398280/vector/photo-not-available-icon-isolated-on-white-background.jpg?s=170667a&w=0&k=20&c=O-C_gKquacdLvHl-jDHN80Cy9_LqbI0Fqj7foLIm6wo=' }}"><i
-                                                        class="fa fa-eye"></i></a>
-                                                <a href="#" href="javascript:;" data-toggle="modal"
+                                                    class="btn btn-outline-primary" title="Edit"><i
+                                                        class="fa fa-edit"></i>
+                                                </a>
+                                                @if ($item->photo != null)
+                                                    <a href="#" class="btn btn-outline-primary" title="Lihat Photo"
+                                                        data-toggle="modal" data-target="#modalLampiran"
+                                                        data-photo="{{ $item->photo }}"><i class="fa fa-eye"></i>
+                                                    </a>
+                                                @endif
+                                                <a href="#" href="javascript:;" title="Hapus" data-toggle="modal"
                                                     data-target="#delete-confirmation-modal"
                                                     onclick="toggleModal('{{ $item->id }}')"
                                                     class="btn btn-outline-danger"><i class="fa fa-trash"></i></a>
@@ -146,12 +155,9 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <div class="row-modal-user gutters">
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="formasi-modal p-2 text-center">
-                                <img id="photoLampiran" src="#" alt="LAMPIRAN" class="img-thumbnail">
-                            </div>
+                <div class="modal-body d-flex justify-content-center">
+                    <div class="row gutters">
+                        <div id="photo_modal" class="container">
                         </div>
                     </div>
                 </div>
@@ -161,7 +167,6 @@
             </div>
         </div>
     </div>
-
     {{-- END: Lampiran Modal --}}
 
 
@@ -189,7 +194,7 @@
                                         @foreach ($kontrak as $item)
                                             <option value="{{ $item->id }}">{{ $item->no_kontrak }}
                                                 - {{ $item->name }}
-                                                - {{ $item->seksi->name }} - ({{ $item->periode }})
+                                                - {{ $item->seksi->name }} - ({{ $item->tanggal }})
                                             </option>
                                         @endforeach
                                     </select>
@@ -351,9 +356,17 @@
             });
 
             $('#modalLampiran').on('show.bs.modal', function(e) {
-                var photo = $(e.relatedTarget).data('photo');
+                var photoArray = $(e.relatedTarget).data('photo');
+                var photoHTML = '';
 
-                document.getElementById("photoLampiran").src = photo;
+                photoArray.forEach(function(item) {
+                    var photoPath = "{{ asset('storage/') }}" + '/' + item;
+                    photoHTML +=
+                        '<div class""><img class="img-thumbnail img-fluid" style="width: 400px;" src="' +
+                        photoPath + '" alt="photo"></div>';
+                });
+
+                document.getElementById("photo_modal").innerHTML = photoHTML;
             });
         });
     </script>
