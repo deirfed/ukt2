@@ -52,14 +52,6 @@
                     <i></i>
                 </span>
             </button>
-            <div class="collapse navbar-collapse" id="UKT2.ORGAdmin">
-                <ul class="navbar-nav">
-                    {{-- Include Navbar Dashboard --}}
-                    @include('layout.navbar')
-
-
-                </ul>
-            </div>
         </nav>
 
         {{-- Yield Path --}}

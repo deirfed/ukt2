@@ -105,4 +105,32 @@ class DashboardController extends Controller
         return view('admin.masterdata.data_assets.pulau.index');
     }
 
+    public function aset_kasie()
+    {
+        return view('pages.home.aset_kasie');
+    }
+
+    public function aset_koordinator()
+    {
+        return view('pages.home.aset_koordinator');
+    }
+
+    public function aset_pjlp()
+    {
+        return view('pages.home.aset_pjlp');
+    }
+    public function simoja_kasie()
+    {
+        return view('pages.home.simoja_kasie');
+    }
+
+    public function simoja_koordinator()
+    {
+        return view('pages.home.simoja_koordinator');
+    }
+
+    public function simoja_pjlp()
+    {
+        return view('pages.home.simoja_pjlp');
+    }
 }

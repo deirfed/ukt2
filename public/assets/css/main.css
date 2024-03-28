@@ -3502,14 +3502,14 @@ ul.statistics {
     margin: 0; }
 
 .launch-box {
-  background: #cc2626;
+  background: rgba(115, 192, 236, 0.6);
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
-  border-radius: 2px;
+  border-radius: 25px;
   padding: 1rem;
   display: flex;
   flex-direction: column;
-  color: #ffffff;
+  color: black;
   text-align: center;
   margin: 0 0 1rem 0;
   position: relative;
@@ -3520,13 +3520,17 @@ ul.statistics {
     top: 20%;
     right: -20%;
     opacity: 0.2;
-    background: url(../img/stripes.png) no-repeat;
+    background: none;
     background-size: 100%;
     width: 90%;
     height: 90%; }
-  .launch-box h6 {
+  .launch-box h2 {
     font-weight: 700;
-    margin: 0 0 2rem 0; }
+    margin: 0 0 1rem 0; }
+  .launch-box i {
+    font-size: 50px;
+    font-weight: 700;
+    margin: 0 0 1rem 0; }
   .launch-box .num {
     text-align: center;
     font-size: 2rem;
@@ -3537,6 +3541,49 @@ ul.statistics {
       display: block;
       text-align: center; }
   .launch-box p {
+    line-height: 150%;
+    margin: 0 0 .5rem 0; }
+
+.launch-box-2 {
+  background: rgba(1, 133, 210, 0.6);
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 25px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  color: black;
+  text-align: center;
+  margin: 0 0 1rem 0;
+  position: relative;
+  overflow: hidden; }
+  .launch-box-2:after {
+    content: '';
+    position: absolute;
+    top: 20%;
+    right: -20%;
+    opacity: 0.2;
+    background: none;
+    background-size: 100%;
+    width: 90%;
+    height: 90%; }
+  .launch-box-2 h2 {
+    font-weight: 700;
+    margin: 0 0 1rem 0; }
+  .launch-box-2 i {
+    font-size: 50px;
+    font-weight: 700;
+    margin: 0 0 1rem 0; }
+  .launch-box-2 .num {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700; }
+    .launch-box-2 .num span {
+      text-transform: uppercase;
+      font-size: .8rem;
+      display: block;
+      text-align: center; }
+  .launch-box-2 p {
     line-height: 150%;
     margin: 0 0 .5rem 0; }
 
@@ -6101,7 +6148,7 @@ code {
 
   /* EDITCSS */
 .main-container-scrollable {
-    height: calc(100vh - 250px);
+    height: calc(100vh - 240px);
     overflow-y: auto;
 }
 

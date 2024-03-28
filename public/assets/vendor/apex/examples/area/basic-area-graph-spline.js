@@ -11,10 +11,10 @@ var options = {
 		width: 3
 	},
 	series: [{
-		name: 'Ombak Admin',
+		name: 'UKT2.ORG Admin',
 		data: [3100, 4000, 2800, 5100, 4200, 1090, 1000]
 	}, {
-		name: 'Ombak Dashboard',
+		name: 'UKT2.ORG Dashboard',
 		data: [1100, 3200, 4500, 3200, 3400, 5200, 4100]
 	}],
 	grid: {

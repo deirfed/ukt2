@@ -61,6 +61,16 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/data_assets', 'data_assets')->name('data_assets.index');
         // Data Relasi
         Route::get('/data_relasi', 'data_relasi')->name('data_relasi.index');
+
+        // DUMMY ROUTE KEPERLUAN VIEW
+        Route::get('/aset-kasie', 'aset_kasie')->name('aset-kasie.index');
+        Route::get('/aset-koordinator', 'aset_koordinator')->name('aset-koordinator.index');
+        Route::get('/aset-pjlp', 'aset_pjlp')->name('aset-pjlp.index');
+        Route::get('/simoja-kasie', 'simoja_kasie')->name('simoja-kasie.index');
+        Route::get('/simoja-koordinator', 'simoja_koordinator')->name('simoja-koordinator.index');
+        Route::get('/simoja-pjlp', 'simoja_pjlp')->name('simoja-pjlp.index');
+
+
     });
 
     // ---------------------MASTERDATA ESSENTIALS----------------------------

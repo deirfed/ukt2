@@ -2,7 +2,7 @@
 
 @section('title-head')
     <title>
-        Admin Dashboard | OMBAK Kep. Seribu
+        Admin Dashboard | UKT2.ORG Kep. Seribu
     </title>
 @endsection
 

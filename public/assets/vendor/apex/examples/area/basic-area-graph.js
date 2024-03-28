@@ -51,7 +51,7 @@ var options = {
 		width: 3,
 	},
 	series: [{
-		name: "Ombak Admin",
+		name: "UKT2.ORG Admin",
 		data: series.monthDataSeries1.prices
 	}],
 	title: {

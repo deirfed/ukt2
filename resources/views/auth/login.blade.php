@@ -3,13 +3,13 @@
 
     <head>
         <meta charset="UTF-8">
-        <title>Login | OMBAK Kep. Seribu</title>
+        <title>Login | UKT2.ORG Kep. Seribu</title>
         <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.2.0/css/all.css'>
         <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.2.0/css/fontawesome.css'>
         <link rel="stylesheet" href="{{ asset('assets/css/csslogin/style.css') }}">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
             integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        <link rel="shortcut icon" href="{{ asset('assets/img/jktlogo.png') }}">
+        <link rel="shortcut icon" href="{{ asset('assets/img/ukt2logo.png') }}">
 
     </head>
 
@@ -19,7 +19,7 @@
 
                 <div class="screen__content">
                     <div class="title">
-                        <img src="{{ asset('assets/img/jktlogo.png') }}" alt="" class="login-logo">
+                        <img src="{{ asset('assets/img/ukt2logo.png') }}" alt="" class="login-logo">
                     </div>
                     <form class="login" action="{{ route('login') }}" method="POST">
                         @csrf
