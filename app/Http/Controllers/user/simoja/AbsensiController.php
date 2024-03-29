@@ -90,7 +90,7 @@ class AbsensiController extends Controller
         $latitude = 'xxx';
         $longitude = 'xxx';
 
-        if($waktu >= Carbon::parse('01:00:00') and $waktu <= Carbon::parse('02:00:00')) {
+        if($waktu >= Carbon::parse('05:00:00') and $waktu <= Carbon::parse('12:00:00')) {
             $validasi = Absensi::where('user_id', $user_id)->whereDate('tanggal', $tanggal)->count();
             if($validasi > 0) {
                 return back()->withError('Anda sudah melakukan Absen Masuk hari ini.');
@@ -105,7 +105,7 @@ class AbsensiController extends Controller
                 $status_absen = 'Tepat Waktu';
                 $telat = 0;
             }
-        } elseif($waktu > Carbon::parse('02:00:00') and $waktu <= Carbon::parse('22:00:00')) {
+        } elseif($waktu > Carbon::parse('12:00:00') and $waktu <= Carbon::parse('22:00:00')) {
             $validasi = Absensi::where('user_id', $user_id)->whereDate('tanggal', $tanggal)->count();
             if($validasi > 0) {
                 return back()->withError('Anda sudah melakukan Absen Pulang hari ini.');

@@ -60,7 +60,7 @@
                             <div class="container">
                                 <div class="mt-2 mx-auto" id="my_camera"></div>
                                 <div class="mb-3 text-center">
-                                    <div id="result">Silahkan ambol photo absen terlebih dahulu...</div>
+                                    <div id="result">Silahkan ambil photo absen terlebih dahulu...</div>
                                 </div>
                                 <div class="text-center">
                                     <div class="btn-group">
