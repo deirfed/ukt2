@@ -11,7 +11,8 @@ class RoleMiddleware
     public function handle($request, Closure $next, ...$roles)
     {
         if (!$request->user() || !$request->user()->hasRole(...$roles)) {
-            abort(403, 'Unauthorized action.');
+            // abort(403, 'Unauthorized action.');
+            return redirect()->route('dashboard.index')->withError('Anda tidak memiliki otorisasi melakukan aksi ini!.');
         }
 
         return $next($request);

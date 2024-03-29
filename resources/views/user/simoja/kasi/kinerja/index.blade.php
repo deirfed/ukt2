@@ -10,7 +10,7 @@
     <div class="page-header">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">Kinerja</li>
-            <li class="breadcrumb-item active">Daftar Laporan Kinerja Seksi Pertamanan</li>
+            <li class="breadcrumb-item active">Daftar Laporan Kinerja Seksi {{ auth()->user()->struktur->seksi->name }}</li>
     </div>
 @endsection
 
@@ -21,20 +21,18 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="d-flex justify-content-center mb-3 text-center" style="text-decoration: underline">Rekap
-                        Kinerja Seksi Pertamanan</h4>
+                        Kinerja Seksi {{ auth()->user()->struktur->seksi->name }}</h4>
                     <div class="row d-flex justify-content-between align-items-center">
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-3 text-left">
-                            {{-- @if ($absensi->count() > 0) --}}
                             <div class="d-flex justify-content-start align-items-center flex-wrap">
                                 <a href="{{ route('simoja.kasi.index') }}"
-                                    class="btn btn-outline-primary mr-2 mb-2 mb-sm-0"><i
-                                        class="fa fa-arrow-left"></i>Kembali</a>
+                                    class="btn btn-outline-primary mr-2 mb-2 mb-sm-0"><i class="fa fa-arrow-left"></i>
+                                    Kembali</a>
                                 <button class="btn btn-primary mr-2 mb-2 mb-sm-0">Export to Excel</button>
                                 <button class="btn btn-primary mr-2 mb-2 mb-sm-0">Export to PDF</button>
                                 <a href="" class="btn btn-primary mb-2 mb-sm-0" data-toggle="modal"
                                     data-target="#modalFilter"><i class="fa fa-filter"></i></a>
                             </div>
-                            {{-- @endif --}}
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <form class="form-inline mb-2 d-flex justify-content-end">
@@ -52,28 +50,33 @@
                                     <th class="text-center">Tanggal</th>
                                     <th class="text-center">Nama</th>
                                     <th class="text-center">Pulau</th>
-                                    <th class="text-center">Koordinator / Tim</th>
-                                    <th class="text-center">Giat/Pekerjaan</th>
+                                    <th class="text-center">Koordinator</th>
+                                    <th class="text-center">Tim</th>
+                                    <th class="text-center">Giat</th>
+                                    <th class="text-center">Deskripsi</th>
                                     <th class="text-center">Lokasi</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- @foreach ($absensi as $item) --}}
-                                <tr>
-                                    <td class="text-center">1</td>
-                                    <td class="text-center">12/12/2023</td>
-                                    <td class="text-center">Dede</td>
-                                    <td class="text-center">Pulau Untung Jawa</td>
-                                    <td class="text-center">Tio Muhamad <br> (Tim Pertamanan 1)</td>
-                                    <td class="text-center">Perbaikan Drainase dan Pembersihan Pipa Pembuangan</td>
-                                    <td class="text-center">Depan Masjid Al Ikhwan</td>
-                                    <td class="text-center">
-                                        <a href="#" data-toggle="modal" data-target="#modalDokumentasi"><button
-                                                class="btn btn-outline-primary"><i class="fa fa-eye"></i></button></a>
-                                    </td>
-                                </tr>
-                                {{-- @endforeach --}}
+                                @foreach ($kinerja as $item)
+                                    <tr>
+                                        <td class="text-center">{{ $loop->iteration }}</td>
+                                        <td class="text-center">{{ $item->tanggal }}</td>
+                                        <td class="text-center">{{ $item->anggota->name ?? '-' }}</td>
+                                        <td class="text-center">Pulau {{ $item->formasi_tim->area->pulau->name }}</td>
+                                        <td class="text-center">{{ $item->koordinator->name ?? '-' }}</td>
+                                        <td class="text-center">{{ $item->formasi_tim->struktur->tim->name }}</td>
+                                        <td class="text-center">{{ $item->kategori->name ?? $item->kegiatan }}</td>
+                                        <td class="text-center">{{ $item->deskripsi ?? '-' }}</td>
+                                        <td class="text-center">{{ $item->lokasi ?? '-' }}</td>
+                                        <td class="text-center">
+                                            <a href="#" data-toggle="modal" data-target="#modalDokumentasi"
+                                                data-photo='{{ $item->photo }}'><button class="btn btn-outline-primary"><i
+                                                        class="fa fa-eye"></i></button></a>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -145,22 +148,19 @@
                 <div class="modal-header">
                     <h4 class="modal-title" id="modalAdminTitle">Dokumentasi Pekerjaan</h4>
                 </div>
-                <form action="" method="POST">
-                    <div class="modal-body">
-                        <div class="mb-4 text-center align-middle">
-                            <div class="border mx-auto" style="width: 70%">
-                                <p class="fw-bolder mb-0">Dokumentasi Pekerjaan</p>
-                                <img src="" id="" class="img-thumbnail"
-                                    alt="Tidak ada dokumentasi pekerjaan masuk">
-                            </div>
+                <div class="modal-body">
+                    <div class="mb-4 text-center align-middle">
+                        <div class="border mx-auto" style="width: 70%">
+                            <p class="fw-bolder mb-0">Dokumentasi Pekerjaan</p>
+                            <div id="photo_modal" class="container"></div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-primary" data-dismiss="modal">
-                            Tutup
-                        </button>
-                    </div>
-                </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">
+                        Tutup
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -198,6 +198,20 @@
 
         $(document).ready(function() {
             startTime();
+
+            $('#modalDokumentasi').on('show.bs.modal', function(e) {
+                var photoArray = $(e.relatedTarget).data('photo');
+                var photoHTML = '';
+
+                photoArray.forEach(function(item) {
+                    var photoPath = "{{ asset('storage/') }}" + '/' + item;
+                    photoHTML +=
+                        '<div class""><img class="img-thumbnail img-fluid" style="width: 400px;" src="' +
+                        photoPath + '" alt="photo"></div>';
+                });
+
+                document.getElementById("photo_modal").innerHTML = photoHTML;
+            });
         });
     </script>
 @endsection

@@ -17,9 +17,6 @@
 @section('content')
     <div class="row gutters d-flex justify-content-center align-item-center">
         <div class="col-xl-8 col-lg-12 col-md-12 col-sm-12 col-12">
-            <div class="d-flex justify content-center">
-                <a href="{{ route('dashboard.index') }}" class="btn btn-primary">DUMMY BACK TO DASHBOARD</a>
-            </div>
             <div class="card">
                 <div class="card-body">
                     <div class="row mt-3">
@@ -28,7 +25,7 @@
                                 <div class="launch-box h-180">
                                     <h3>Absensi Saya</h3>
                                     <i class="fa fa-id-card"></i>
-                                    <p>Hari ini, 28 Maret 2024</p>
+                                    <p>{{ $tanggal }}</p>
                                     <h3 class="jam"></h3>
                                 </div>
                             </a>
@@ -38,7 +35,7 @@
                                 <div class="launch-box h-180">
                                     <h3>Kinerja Saya</h3>
                                     <i class="fa fa-suitcase"></i>
-                                    <p>Januari, 2024</p>
+                                    <p>{{ $tanggal }}</p>
                                     <h3>10 Laporan</h3>
                                 </div>
                             </a>
@@ -48,7 +45,7 @@
                                 <div class="launch-box h-180">
                                     <h3>Cuti Saya</h3>
                                     <i class="fa fa-calendar-times"></i>
-                                    <p>Januari, 2024</p>
+                                    <p>{{ $tanggal }}</p>
                                     <h3>Sisa Cuti : 12</h3>
                                 </div>
                             </a>
@@ -58,7 +55,7 @@
                                 <div class="launch-box-2 h-180">
                                     <h3>Absensi Tim Saya</h3>
                                     <i class="fa fa-users"></i>
-                                    <p>Hari ini, 28 Maret 2024</p>
+                                    <p>{{ $tanggal }}</p>
                                     <h3>Lihat Daftar</h3>
                                 </div>
                             </a>
@@ -68,7 +65,7 @@
                                 <div class="launch-box-2 h-180">
                                     <h3>Kinerja Tim Saya</h3>
                                     <i class="fa fa-line-chart"></i>
-                                    <p>Hari ini, 28 Maret 2024</p>
+                                    <p>{{ $tanggal }}</p>
                                     <h3>Lihat Daftar</h3>
                                 </div>
                             </a>
@@ -78,7 +75,7 @@
                                 <div class="launch-box-2 h-180">
                                     <h3>Cuti Tim Saya</h3>
                                     <i class="fa fa-calendar-minus"></i>
-                                    <p>Januari, 2024</p>
+                                    <p>{{ $tanggal }}</p>
                                     <h3>Lihat Daftar</h3>
                                 </div>
                             </a>
@@ -114,7 +111,7 @@
             s = checkTime(s);
 
             document.querySelectorAll('.jam').forEach(function(element) {
-                element.innerHTML = h + ":" + m + ":" + s;
+                element.innerHTML = h + ":" + m + ":" + s + " WIB";
             });
 
             setTimeout(startTime, 1000);

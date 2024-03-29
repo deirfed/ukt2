@@ -27,7 +27,7 @@
                             Cuti Saya</a>
                     </div>
                     <h4 class="text-center">Form Pengajuan Cuti</h4>
-                    <form action="{{ route('cuti.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('simoja.cuti.pjlp.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('post')
                         <div class="row">
@@ -36,9 +36,9 @@
                                     <label for="jenis_pengajuan">Jenis Pengajuan</label>
                                     <select class="form-control" id="jenis_cuti_id" name="jenis_cuti_id" required>
                                         <option value="" selected disabled>- pilih jenis cuti -</option>
-                                        {{-- @foreach ($jenis_cuti as $item)
+                                        @foreach ($jenis_cuti as $item)
                                             <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                        @endforeach --}}
+                                        @endforeach
                                     </select>
                                     <p id="alert" class="text-danger" style="display: none">*Izin Sakit wajib
                                         menyertakan Surat Keterangan Dokter</p>
@@ -79,7 +79,8 @@
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" id="total_cuti_tahunan">
                                 <div class="form-group">
                                     <label for="nama">Cuti Tahunan Tersedia</label>
-                                    <input type="text" class="form-control" value="# hari" disabled>
+                                    <input type="text" class="form-control"
+                                        value="{{ $konfigurasi_cuti->jumlah ?? '#' }} hari" disabled>
                                 </div>
                             </div>
                         </div>

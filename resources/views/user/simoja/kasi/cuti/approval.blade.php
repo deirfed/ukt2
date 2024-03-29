@@ -2,7 +2,7 @@
 
 @section('title-head')
     <title>
-        Cuti | Data Pengajuan Cuti / Izin
+        Cuti | Daftar Pengajuan Cuti
     </title>
 @endsection
 
@@ -10,30 +10,25 @@
     <div class="page-header">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">Cuti</li>
-            <li class="breadcrumb-item active">Data Cuti Saya</li>
+            <li class="breadcrumb-item active">Daftar Pengajuan Seksi {{ auth()->user()->struktur->seksi->name }}</li>
         </ol>
     </div>
 @endsection
 
 @section('content')
     <div class="row gutters">
-        <div class="col-xl-12 col-lg-7 col-md-12 col-sm-12 col-12">
-            <div class="card h-250">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="card">
                 <div class="card-body">
-                    <h4 class="d-flex justify-content-center mb-3 text-center" style="text-decoration: underline">Pengajuan
-                        Cuti Saya
-                    </h4>
+                    <h4 class="d-flex justify-content-center mb-3 text-center" style="text-decoration: underline">Daftar
+                        Approval
+                        Pengajuan Cuti Seksi {{ auth()->user()->struktur->seksi->name }}</h4>
                     <div class="row d-flex justify-content-between align-items-center">
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-3 text-left">
                             <div class="d-flex justify-content-start align-items-center flex-wrap">
-                                <a href="{{ route('simoja.pjlp.index') }}"
+                                <a href="{{ route('simoja.kasi.index') }}"
                                     class="btn btn-outline-primary mr-2 mb-2 mb-sm-0"><i class="fa fa-arrow-left"></i>
                                     Kembali</a>
-                                <a href="{{ route('simoja.pjlp.cuti-create') }}"
-                                    class="btn btn-primary mr-2 mb-2 mb-sm-0">Tambah
-                                    Data</a>
-                                <a href="" class="btn btn-primary mb-2 mb-sm-0" data-toggle="modal"
-                                    data-target="#modalFilter"><i class="fa fa-filter"></i></a>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -43,65 +38,48 @@
                                 <button class="btn btn-dark my-2 my-sm-0" type="submit">Pencarian</button>
                             </form>
                         </div>
-                        <div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-12 mb-2 ml-2">
-                            <span class="btn btn-outline-primary">Sisa Cuti Tahunan:
-                                <strong>{{ $konfigurasi_cuti->jumlah ?? '#' }} hari</strong></span>
-                        </div>
                     </div>
                     <div class="projectLog">
                         <div class="logs-container">
                             <div class="table-responsive mt-2">
-                                <table class="table table-bordered table-striped" id="dataTable">
+                                <table class="table table-bordered table-striped" id="dataTable-2">
                                     <thead>
                                         <tr>
                                             <th class="text-center">No.</th>
                                             <th class="text-center text-wrap">Nama</th>
-                                            <th class="text-center text-wrap">Tanggal Pengajuan </th>
-                                            <th class="text-center text-wrap">Jenis Izin</th>
+                                            <th class="text-center text-wrap">Jabatan</th>
+                                            <th class="text-center text-wrap">Tanggal Pengajuan</th>
                                             <th class="text-center text-wrap">Jumlah Hari</th>
-                                            <th class="text-center text-wrap">Diketahui</th>
-                                            <th class="text-center text-wrap">Disetujui</th>
-                                            <th class="text-center text-wrap">Status</th>
+                                            <th class="text-center text-wrap">Jenis Pengajuan</th>
                                             <th class="text-center text-wrap">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($cuti as $item)
+                                        @foreach ($approval_cuti as $item)
                                             <tr>
                                                 <td class="text-center">{{ $loop->iteration }}</td>
                                                 <td class="text-center">{{ $item->user->name }}</td>
+                                                <td class="text-center">{{ $item->user->jabatan->name }}</td>
                                                 <td class="text-center text-wrap">
-                                                    {{ $item->tanggal_awal }} s/d {{ $item->tanggal_akhir }}
-                                                </td>
-                                                <td class="text-center">{{ $item->jenis_cuti->name }}</td>
-                                                <td class="text-center">{{ $item->jumlah }} hari</td>
-                                                <td class="text-center">
-                                                    {{ $item->known_by->name }} <br>
-                                                    ({{ $item->known_by->jabatan->name }})
-                                                </td>
-                                                <td class="text-center">
-                                                    @if ($item->status == 'Diterima')
-                                                        {{ $item->approved_by->name }} <br>
-                                                        ({{ $item->approved_by->jabatan->name }})
+                                                    @if ($item->tanggal_awal == $item->tanggal_akhir)
+                                                        {{ $item->tanggal_awal }}
                                                     @else
-                                                        -
+                                                        {{ $item->tanggal_awal }} s/d {{ $item->tanggal_akhir }}
                                                     @endif
                                                 </td>
+                                                <td class="text-center">{{ $item->jumlah }} hari</td>
+                                                <td class="text-center">{{ $item->jenis_cuti->name }}</td>
                                                 <td class="text-center">
-                                                    <span
-                                                        class="btn @if ($item->status == 'Diproses') btn-warning @elseif ($item->status == 'Ditolak') btn-secondary @else btn-primary @endif">
-                                                        {{ $item->status }}
-                                                    </span>
-                                                </td>
-                                                <td class="text-center">
-                                                    @if ($item->status == 'Diterima')
-                                                        <a href="javascript:;" class="btn btn-outline-primary"
-                                                            title="Print" title="Download PDF" data-toggle="modal"
-                                                            data-target="#modalDownloadPDF"
-                                                            data-href="{{ route('cuti.pdf', $item->uuid) }}">
-                                                            <i class="fa fa-print"></i>
-                                                        </a>
-                                                    @endif
+                                                    <a href="javascript:;" class="btn btn-outline-primary" title="Terima"
+                                                        data-toggle="modal" data-target="#approveModal"
+                                                        data-id="{{ $item->id }}">
+                                                        <i class="fa fa-check"></i>
+                                                    </a>
+                                                    <a href="javascript:;" class="btn btn-outline-secondary" title="Tolak"
+                                                        data-toggle="modal" data-target="#rejectModal"
+                                                        data-id="{{ $item->id }}">
+                                                        <i class="fa fa-times"></i>
+                                                    </a>
                                                     <a href="javascript:;" class="btn btn-outline-primary"
                                                         title="Lihat lampiran" data-toggle="modal"
                                                         data-target="#modalDetailPengajuan"
@@ -119,19 +97,12 @@
                                                             <h5>*Pengajuan Cuti Sudah <span style='color: green'>Disetujui</span> pada Tanggal {{ $item->updated_at }}</h5> @endif">
                                                         <i class="fa fa-eye"></i>
                                                     </a>
-                                                    @if ($item->status == 'Diproses' or $item->status == 'Ditolak')
-                                                        <a href="javascript:;" class="btn btn-outline-secondary"
-                                                            title="Hapus" data-toggle="modal" data-target="#deleteModal"
-                                                            data-id="{{ $item->id }}">
-                                                            <i class="fa fa-trash"></i>
-                                                        </a>
-                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach
-                                        @if ($cuti->count() == 0)
+                                        @if ($approval_cuti->count() == 0)
                                             <tr>
-                                                <td class="text-center" colspan="9">
+                                                <td class="text-center" colspan="7">
                                                     Tidak ada data.
                                                 </td>
                                             </tr>
@@ -146,67 +117,69 @@
         </div>
     </div>
 
-    {{-- START : Modal Filter --}}
+    {{-- START: FILTER ABSENSI --}}
     <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="modalFilter" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Filter Data Cuti</h5>
+                    <h5 class="modal-title">Filter Data Absensi</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="formFilter" action="{{ route('cuti.filter') }}" method="GET">
-                        @csrf
-                        @method('GET')
-                        <div class="form-row gutters">
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label for="status">Status Cuti</label>
-                                    <select name="status" id="status" class="form-control">
-                                        <option value="" selected disabled>-
-                                            Pilih Status -</option>
-                                        <option value="Diproses" @if ($status ?? '' == 'Diproses') selected @endif>
-                                            Diproses</option>
-                                        <option value="Diterima" @if ($status ?? '' == 'Diterima') selected @endif>
-                                            Diterima</option>
-                                        <option value="Ditolak" @if ($status ?? '' == 'Ditolak') selected @endif>
-                                            Ditolak
-                                        </option>
-                                    </select>
-                                </div>
+                    <div class="form-row gutters">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="">Personel</label>
+                                <select name="personel" class="form-control" required>
+                                    <option value="" selected disabled>- Pilih Personel -</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Pulau</label>
+                                <select name="pulau" class="form-control" required>
+                                    <option value="" selected disabled>- Pilih Pulau -</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Tim</label>
+                                <select name="tim" class="form-control" required>
+                                    <option value="" selected disabled>- Pilih Tim -</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Status</label>
+                                <select name="tim" class="form-control" required>
+                                    <option value="" selected disabled>- Pilih Status -</option>
+                                </select>
                             </div>
                         </div>
-                        <label for="periode">Periode</label>
-                        <div class="form-row gutters">
-                            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <input type="text" onfocus="(this.type='date')" onblur="(this.type='text')"
-                                        name="start_date" value="{{ $start_date ?? '' }}" class="form-control"
-                                        id="start" placeholder="start">
-                                </div>
-                            </div>
-                            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <input type="text" onfocus="(this.type='date')" onblur="(this.type='text')"
-                                        class="form-control" value="{{ $end_date ?? '' }}" name="end_date"
-                                        id="end" placeholder="end">
-                                </div>
+                    </div>
+                    <label for="periode">Periode</label>
+                    <div class="form-row gutters">
+                        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="form-group">
+                                <input type="date" class="form-control" id="start" placeholder="start">
                             </div>
                         </div>
-                    </form>
+                        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="form-group">
+                                <input type="date" class="form-control" id="end" placeholder="end">
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
-                    <button type="submit" form="formFilter" class="btn btn-primary">Filter Data</button>
+                    <button type="button" class="btn btn-primary">Filter Data</button>
                 </div>
             </div>
         </div>
     </div>
-    {{-- END: Modal Filter --}}
+    {{-- END: FILTER ABSENSI --}}
 
-    {{-- START: Modal Detail Pengajuan --}}
+    {{-- START: Modal Detail --}}
     <div class="modal fade" id="modalDetailPengajuan" tabindex="-1" role="dialog"
         aria-labelledby="modalDetailPengajuan" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -263,10 +236,6 @@
                     </div>
                     <div class="row-modal-user gutters">
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" id="status">
-                            {{-- <h5>*Pengajuan Cuti masih Dalam Proses persetujuan</h5>
-                            <h5>*Pengajuan Cuti Sudah <span style="color: green">Disetujui</span> pada Tanggal 29/01/2024
-                            </h5>
-                            <h5>*Pengajuan Cuti <span style="color: red">Ditolak</span> --}}
                         </div>
                     </div>
                 </div>
@@ -276,7 +245,8 @@
             </div>
         </div>
     </div>
-    {{-- END: Modal Detail Pengajuan --}}
+    {{-- END Modal Detail --}}
+
 
     <!-- BEGIN: konfirmasi hapus modal -->
     <div id="deleteModal" class="modal" tabindex="-1" aria-hidden="true">
@@ -287,11 +257,10 @@
                         <div class="mt-2 fw-bolder">Apakah anda yakin?</div>
                         <div class="text-slate-500 mt-2">
                             <p>
-                                Data pengajuan cuti akan dibatalkan & dihapus secara
-                                <b>Permanen</b>!
+                                Data pengajuan ini akan dihapus secara <b>Permanen</b>!
                             </p>
                         </div>
-                        <form id="deleteForm" action="{{ route('simoja.cuti.pjlp.destroy') }}" method="POST" hidden>
+                        <form id="deleteForm" action="{{ route('cuti.destroy') }}" method="POST" hidden>
                             @csrf
                             @method('delete')
                             <input type="text" name="id" id="id">
@@ -307,8 +276,8 @@
     </div>
     <!-- END:  konfirmasi hapus Modal -->
 
-    {{-- BEGIN: Konfirmasi PDF --}}
-    <div id="modalDownloadPDF" class="modal" tabindex="-1" aria-hidden="true">
+    <!-- BEGIN: konfirmasi approve modal -->
+    <div id="approveModal" class="modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body p-2">
@@ -316,20 +285,58 @@
                         <div class="mt-2 fw-bolder">Apakah anda yakin?</div>
                         <div class="text-slate-500 mt-2">
                             <p>
-                                Data ini akan di-generate dalam format PDF!
+                                Status pengajuan izin ini akan diubah jadi <b>"Diterima"</b>!
                             </p>
                         </div>
+                        <form id="approveForm" class="form mt-5" action="{{ route('simoja.kasi.cuti.approve') }}"
+                            method="POST">
+                            @csrf
+                            @method('put')
+                            <input type="text" name="id" id="approve_id" hidden>
+                            <div class="form-group">
+                                <label for="jenis_pengajuan">Masukan Nomor Surat</label>
+                                <input type="text" class="form-control" name="no_surat"
+                                    placeholder="input nomor surat" required>
+                            </div>
+                        </form>
                     </div>
                     <div class="px-5 pb-8 text-center mt-3">
-                        <a id="downloadPDF" href="#" target="_blank"
-                            class="btn btn-primary w-24 mr-1 me-2">Download</a>
+                        <button type="submit" form="approveForm" class="btn btn-primary w-24 mr-1 me-2">Submit</button>
                         <button type="button" data-dismiss="modal" class="btn btn-dark w-24 mr-1 me-2">Tutup</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    {{-- END: Konfirmasi PDF --}}
+    <!-- END:  konfirmasi approve Modal -->
+
+    <!-- BEGIN: konfirmasi reject modal -->
+    <div id="rejectModal" class="modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body p-2">
+                    <div class="p-2 text-center">
+                        <div class="mt-2 fw-bolder">Apakah anda yakin?</div>
+                        <div class="text-slate-500 mt-2">
+                            <p>
+                                Status pengajuan izin ini akan diubah jadi <b>"Ditolak"</b>!
+                            </p>
+                        </div>
+                        <form id="rejectForm" action="{{ route('simoja.kasi.cuti.reject') }}" method="POST" hidden>
+                            @csrf
+                            @method('put')
+                            <input type="text" name="id" id="reject_id">
+                        </form>
+                    </div>
+                    <div class="px-5 pb-8 text-center mt-3">
+                        <button type="submit" form="rejectForm" class="btn btn-primary w-24 mr-1 me-2">Submit</button>
+                        <button type="button" data-dismiss="modal" class="btn btn-dark w-24 mr-1 me-2">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END:  konfirmasi reject Modal -->
 @endsection
 
 @section('javascript')
@@ -360,10 +367,14 @@
                 document.getElementById("status").innerHTML = status;
             });
 
-            $('#modalDownloadPDF').on('show.bs.modal', function(e) {
-                var href = $(e.relatedTarget).data('href');
-                console.log(href);
-                document.getElementById("downloadPDF").href = href;
+            $('#approveModal').on('show.bs.modal', function(e) {
+                var id = $(e.relatedTarget).data('id');
+                document.getElementById("approve_id").value = id;
+            });
+
+            $('#rejectModal').on('show.bs.modal', function(e) {
+                var id = $(e.relatedTarget).data('id');
+                document.getElementById("reject_id").value = id;
             });
         });
     </script>

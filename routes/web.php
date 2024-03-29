@@ -401,6 +401,7 @@ Route::group(['middleware' => 'auth'], function () {
         // PJLP
         Route::get('/simoja-pjlp-absensi', 'my_index_pjlp')->name('simoja.pjlp.my-absensi');
         Route::get('/simoja-pjlp-absensi-create', 'create_pjlp')->name('simoja.pjlp.absensi-create');
+        Route::post('/simoja-pjlp-absensi', 'store_pjlp')->name('simoja.pjlp.absensi.store');
 
     });
 
@@ -417,6 +418,7 @@ Route::group(['middleware' => 'auth'], function () {
         // PJLP
         Route::get('/simoja-pjlp-kinerja', 'my_index_pjlp')->name('simoja.pjlp.my-kinerja');
         Route::get('/simoja-pjlp-kinerja-create', 'create_pjlp')->name('simoja.pjlp.kinerja-create');
+        Route::post('/simoja-pjlp-kinerja', 'store_pjlp')->name('simoja.kinerja.pjlp.store');
 
     });
 
@@ -424,15 +426,20 @@ Route::group(['middleware' => 'auth'], function () {
     Route::controller(SimojaCutiController::class)->group(function () {
         // KASI
         Route::get('/simoja-kasi-cuti', 'index')->name('simoja.kasi.cuti');
+        Route::get('/simoja-kasi-cuti/approval', 'approval')->name('simoja.kasi.cuti.approval');
+        Route::put('/simoja-kasi-cuti/approve', 'approve')->name('simoja.kasi.cuti.approve');
+        Route::put('/simoja-kasi-cuti/reject', 'reject')->name('simoja.kasi.cuti.reject');
 
         // KOORDINATOR
         Route::get('/simoja-koordinator-cuti', 'my_index_koordinator')->name('simoja.koordinator.my-cuti');
         Route::get('/simoja-koordinator-cuti-create', 'create_koordinator')->name('simoja.koordinator.cuti-create');
         Route::get('/simoja-koordinator-cuti-tim', 'tim_index_koordinator')->name('simoja.koordinator.cuti.tim');
 
-            // PJLP
+        // PJLP
         Route::get('/simoja-pjlp-cuti', 'my_index_pjlp')->name('simoja.pjlp.my-cuti');
         Route::get('/simoja-pjlp-cuti-create', 'create_pjlp')->name('simoja.pjlp.cuti-create');
+        Route::post('/simoja-pjlp-cuti', 'store_pjlp')->name('simoja.cuti.pjlp.store');
+        Route::delete('/simoja-pjlp-cuti', 'destroy_pjlp')->name('simoja.cuti.pjlp.destroy');
 
     });
     // END SIMOJA ----------------------------------------------------------------------

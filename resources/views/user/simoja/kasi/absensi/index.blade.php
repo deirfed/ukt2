@@ -24,17 +24,15 @@
                         Absensi Seksi Pertamanan</h4>
                     <div class="row d-flex justify-content-between align-items-center">
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-3 text-left">
-                            {{-- @if ($absensi->count() > 0) --}}
                             <div class="d-flex justify-content-start align-items-center flex-wrap">
                                 <a href="{{ route('simoja.kasi.index') }}"
-                                    class="btn btn-outline-primary mr-2 mb-2 mb-sm-0"><i
-                                        class="fa fa-arrow-left"></i>Kembali</a>
+                                    class="btn btn-outline-primary mr-2 mb-2 mb-sm-0"><i class="fa fa-arrow-left"></i>
+                                    Kembali</a>
                                 <button class="btn btn-primary mr-2 mb-2 mb-sm-0">Export to Excel</button>
                                 <button class="btn btn-primary mr-2 mb-2 mb-sm-0">Export to PDF</button>
                                 <a href="" class="btn btn-primary mb-2 mb-sm-0" data-toggle="modal"
                                     data-target="#modalFilter"><i class="fa fa-filter"></i></a>
                             </div>
-                            {{-- @endif --}}
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <form class="form-inline mb-2 d-flex justify-content-end">
@@ -51,29 +49,35 @@
                                     <th class="text-center">No.</th>
                                     <th class="text-center">Tanggal</th>
                                     <th class="text-center">Nama</th>
+                                    <th class="text-center">Jabatan</th>
                                     <th class="text-center">Pulau</th>
-                                    <th class="text-center">Koordinator / Tim</th>
+                                    <th class="text-center">Tim</th>
                                     <th class="text-center">Jam Masuk</th>
                                     <th class="text-center">Jam Pulang</th>
+                                    <th class="text-center">Status</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- @foreach ($absensi as $item) --}}
-                                <tr>
-                                    <td class="text-center">1</td>
-                                    <td class="text-center">12/12/2023</td>
-                                    <td class="text-center">Dede</td>
-                                    <td class="text-center">Pulau Untung Jawa</td>
-                                    <td class="text-center">Tio Muhamad <br> (Tim Pertamanan 1)</td>
-                                    <td class="text-center">07:59</td>
-                                    <td class="text-center">17:06</td>
-                                    <td class="text-center">
-                                        <a href="#" data-toggle="modal" data-target="#modalDokumentasi"><button
-                                                class="btn btn-outline-primary"><i class="fa fa-eye"></i></button></a>
-                                    </td>
-                                </tr>
-                                {{-- @endforeach --}}
+                                @foreach ($absensi as $item)
+                                    <tr>
+                                        <td class="text-center">{{ $loop->iteration }}</td>
+                                        <td class="text-center">{{ $item->tanggal }}</td>
+                                        <td class="text-center">{{ $item->user->name }}</td>
+                                        <td class="text-center">{{ $item->user->jabatan->name }}</td>
+                                        <td class="text-center">Pulau {{ $item->user->area->pulau->name }}</td>
+                                        <td class="text-center">{{ $item->user->struktur->tim->name }}</td>
+                                        <td class="text-center">{{ $item->jam_masuk ?? '#' }} WIB</td>
+                                        <td class="text-center">{{ $item->jam_pulang ?? '#' }} WIB</td>
+                                        <td class="text-center">{{ $item->status }}</td>
+                                        <td class="text-center">
+                                            <a href="#" data-toggle="modal" data-target="#modalDokumentasi"
+                                                data-photo_masuk='{{ asset('storage/' . $item->photo_masuk) }}'
+                                                data-photo_pulang='{{ asset('storage/' . $item->photo_pulang) }}'><button
+                                                    class="btn btn-outline-primary"><i class="fa fa-eye"></i></button></a>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -150,14 +154,14 @@
                         <div class="mb-4 text-center align-middle">
                             <div class="border mx-auto" style="width: 70%">
                                 <p class="fw-bolder mb-0">Dokumentasi Masuk</p>
-                                <img src="" id="" class="img-thumbnail"
+                                <img src="#" id="photo_masuk_modal" class="img-thumbnail"
                                     alt="Tidak ada dokumentasi absen masuk">
                             </div>
                         </div>
                         <div class="mb-4 text-center align-middle">
                             <div class="border mx-auto" style="width: 70%">
                                 <p class="fw-bolder mb-0">Dokumentasi Pulang</p>
-                                <img src="" id="" class="img-thumbnail"
+                                <img src="#" id="photo_pulang_modal" class="img-thumbnail"
                                     alt="Belum ada dokumentasi absen pulang">
                             </div>
                         </div>
@@ -181,30 +185,14 @@
             $('#id').val(id);
         }
 
-        function startTime() {
-            const today = new Date();
-            let h = today.getHours();
-            let m = today.getMinutes();
-            let s = today.getSeconds();
-            m = checkTime(m);
-            s = checkTime(s);
-
-            document.querySelectorAll('.jam').forEach(function(element) {
-                element.innerHTML = h + ":" + m + ":" + s;
-            });
-
-            setTimeout(startTime, 1000);
-        }
-
-        function checkTime(i) {
-            if (i < 10) {
-                i = "0" + i
-            };
-            return i;
-        }
-
         $(document).ready(function() {
-            startTime();
+            $('#modalDokumentasi').on('show.bs.modal', function(e) {
+                var photoMasuk = $(e.relatedTarget).data('photo_masuk');
+                var photoPulang = $(e.relatedTarget).data('photo_pulang');
+
+                document.getElementById("photo_masuk_modal").src = photoMasuk;
+                document.getElementById("photo_pulang_modal").src = photoPulang;
+            });
         });
     </script>
 @endsection

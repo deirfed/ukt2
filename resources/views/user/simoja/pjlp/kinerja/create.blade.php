@@ -18,7 +18,7 @@
 @section('content')
     <div class="row gutters justify-content-center">
         <div class="col-xl-4 col-lg-4 col-md-5 col-sm-6 col-12">
-            <form action="{{ route('kinerja.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('simoja.kinerja.pjlp.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('post')
                 <div class="card m-0">
@@ -33,6 +33,8 @@
                         </div>
                         <h4 class="text-center">Form Input Kinerja</h4>
                         <div class="form-group">
+                            <input type="text" name="formasi_tim_id" value="{{ $formasi_tim->id }}" hidden>
+                            <input type="text" name="anggota_id" value="{{ auth()->user()->id }}" hidden>
                             <label>Data Lengkap</label>
                             <table>
                                 <tr>
@@ -53,22 +55,22 @@
                                 <tr>
                                     <td>Koordinator</td>
                                     <td>:</td>
-                                    <td>#</td>
+                                    <td>{{ $formasi_tim->koordinator->name ?? '#' }}</td>
                                 </tr>
                                 <tr>
                                     <td>Tim</td>
                                     <td>:</td>
-                                    <td>#</td>
+                                    <td>{{ $formasi_tim->struktur->tim->name }}</td>
                                 </tr>
                                 <tr>
                                     <td>Seksi</td>
                                     <td>:</td>
-                                    <td>#</td>
+                                    <td>{{ $formasi_tim->struktur->seksi->name }}</td>
                                 </tr>
                                 <tr>
                                     <td>Pulau</td>
                                     <td>:</td>
-                                    <td> #</td>
+                                    <td>{{ $formasi_tim->area->pulau->name }}</td>
                                 </tr>
                             </table>
                         </div>
@@ -77,9 +79,9 @@
                             <label>Nama Kegiatan</label>
                             <select id="kategori_id" name="kategori_id" class="form-control" required>
                                 <option value="" selected disabled>- pilih nama kegiatan -</option>
-                                {{-- @foreach ($kategori as $item)
+                                @foreach ($kategori as $item)
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                @endforeach --}}
+                                @endforeach
                                 <option value="">Lainnya</option>
                             </select>
                         </div>
@@ -100,7 +102,7 @@
                                 autocomplete="off">
                         </div>
                         <div class="form-group">
-                            <label for="">Photo Kegiatan</label>
+                            <label for="">Photo Kegiatan <span class="text-secondary">(Max: 3 photo)</span></label>
                             <input type="file" class="form-control image-input" name="photo[]" multiple accept="image/*"
                                 required>
                             @error('photo')

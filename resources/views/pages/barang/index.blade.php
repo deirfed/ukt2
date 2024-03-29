@@ -46,7 +46,9 @@
                         </div>
                     </div>
                     <div class="row container">
-                        <p>Note: Untuk bisa memilih barang, wajib mengupload photo barang terlebih dahulu.</p>
+                        <p>Note: Untuk bisa memilih barang, wajib mengupload photo barang terlebih dahulu dan juga ketika
+                            stock
+                            aktual barang tersedia.</p>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-bordered table-striped" id="dataTable">
@@ -77,7 +79,10 @@
                                             <td class="text-center">{{ $loop->iteration }}</td>
                                             <td class="text-center checkbox">
                                                 @if ($item->photo != null)
-                                                    <input type="checkbox" name="barang_id[]" value="{{ $item->id }}">
+                                                    @if ($item->stock_aktual > 0)
+                                                        <input type="checkbox" name="barang_id[]"
+                                                            value="{{ $item->id }}">
+                                                    @endif
                                                 @endif
                                             </td>
                                             <td class="text-center">{{ $item->kontrak->tanggal }}</td>
