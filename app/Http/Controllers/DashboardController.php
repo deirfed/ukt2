@@ -133,4 +133,9 @@ class DashboardController extends Controller
     {
         return view('pages.home.simoja_pjlp');
     }
+
+    public function landingpage()
+    {
+        return view('landingpage.index');
+    }
 }

@@ -34,6 +34,11 @@ use App\Http\Controllers\pages\KinerjaController;
 use App\Http\Controllers\pages\CutiController;
 use App\Http\Controllers\pages\PengirimanBarangController;
 use App\Http\Controllers\pages\TransaksiBarangPulauController;
+use App\Http\Controllers\user\aset\DashboardController as AsetDashboardController;
+use App\Http\Controllers\user\simoja\AbsensiController as SimojaAbsensiController;
+use App\Http\Controllers\user\simoja\CutiController as SimojaCutiController;
+use App\Http\Controllers\user\simoja\DashboardController as SimojaDashboardController;
+use App\Http\Controllers\user\simoja\KinerjaController as SimojaKinerjaController;
 
 // Route::controller(LoginController::class)->group(function () {
 //     Route::get('/', 'login')->name('login.index');
@@ -61,18 +66,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/data_assets', 'data_assets')->name('data_assets.index');
         // Data Relasi
         Route::get('/data_relasi', 'data_relasi')->name('data_relasi.index');
-
-        // DUMMY ROUTE KEPERLUAN VIEW
-        Route::get('/aset-kasie', 'aset_kasie')->name('aset-kasie.index');
-        Route::get('/aset-koordinator', 'aset_koordinator')->name('aset-koordinator.index');
-        Route::get('/aset-pjlp', 'aset_pjlp')->name('aset-pjlp.index');
-        Route::get('/simoja-kasie', 'simoja_kasie')->name('simoja-kasie.index');
-        Route::get('/simoja-koordinator', 'simoja_koordinator')->name('simoja-koordinator.index');
-        Route::get('/simoja-pjlp', 'simoja_pjlp')->name('simoja-pjlp.index');
+        // Landing Page
+        Route::get('/landingpage', 'landingpage')->name('landingpage');
 
 
     });
-
     // ---------------------MASTERDATA ESSENTIALS----------------------------
 
     Route::controller(UserController::class)->group(function () {
@@ -296,7 +294,6 @@ Route::group(['middleware' => 'auth'], function () {
     //     Route::delete('/konfigurasi-gudang', 'destroy')->name('konfigurasi_gudang.destroy');
     // });
 
-
     // KINERJA
     Route::controller(KinerjaController::class)->group(function () {
         Route::get('/kinerja', 'index')->name('kinerja.index');
@@ -379,5 +376,73 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/transaksi-barang/create', 'create')->name('transaksi.barang.create');
         Route::post('/transaksi-barang', 'store')->name('transaksi.barang.store');
         Route::get('/transaksi-barang/export-excel', 'excel')->name('transaksi.barang.excel');
+    });
+
+
+    // ----------------------------------USER-----------------------------------
+
+    // START SIMOJA-------------------------------------------------------------------
+    Route::controller(SimojaDashboardController::class)->group(function () {
+        Route::get('/simoja-kasi-index', 'kasi_index')->name('simoja.kasi.index');
+        Route::get('/simoja-koordinator-index', 'koordinator_index')->name('simoja.koordinator.index');
+        Route::get('/simoja-pjlp-index', 'pjlp_index')->name('simoja.pjlp.index');
+    });
+
+    // ABSENSI
+    Route::controller(SimojaAbsensiController::class)->group(function () {
+        // KASI
+        Route::get('/simoja-kasi-absensi', 'index_kasi')->name('simoja.kasi.absensi');
+
+        // KOORDINATOR
+        Route::get('/simoja-koordinator-absensi', 'my_index_koordinator')->name('simoja.koordinator.my-absensi');
+        Route::get('/simoja-koordinator-absensi-create', 'create_koordinator')->name('simoja.koordinator.absensi-create');
+        Route::get('/simoja-koordinator-absensi-tim', 'tim_index_koordinator')->name('simoja.koordinator.absensi.tim');
+
+        // PJLP
+        Route::get('/simoja-pjlp-absensi', 'my_index_pjlp')->name('simoja.pjlp.my-absensi');
+        Route::get('/simoja-pjlp-absensi-create', 'create_pjlp')->name('simoja.pjlp.absensi-create');
+
+    });
+
+    // KINERJA
+    Route::controller(SimojaKinerjaController::class)->group(function () {
+        // KASI
+        Route::get('/simoja-kasi-kinerja', 'index')->name('simoja.kasi.kinerja');
+
+        // KOORDINATOR
+        Route::get('/simoja-koordinator-kinerja', 'my_index_koordinator')->name('simoja.koordinator.my-kinerja');
+        Route::get('/simoja-koordinator-kinerja-create', 'create_koordinator')->name('simoja.koordinator.kinerja-create');
+        Route::get('/simoja-koordinator-kinerja-tim', 'tim_index_koordinator')->name('simoja.koordinator.kinerja.tim');
+
+        // PJLP
+        Route::get('/simoja-pjlp-kinerja', 'my_index_pjlp')->name('simoja.pjlp.my-kinerja');
+        Route::get('/simoja-pjlp-kinerja-create', 'create_pjlp')->name('simoja.pjlp.kinerja-create');
+
+    });
+
+    // CUTI
+    Route::controller(SimojaCutiController::class)->group(function () {
+        // KASI
+        Route::get('/simoja-kasi-cuti', 'index')->name('simoja.kasi.cuti');
+
+        // KOORDINATOR
+        Route::get('/simoja-koordinator-cuti', 'my_index_koordinator')->name('simoja.koordinator.my-cuti');
+        Route::get('/simoja-koordinator-cuti-create', 'create_koordinator')->name('simoja.koordinator.cuti-create');
+        Route::get('/simoja-koordinator-cuti-tim', 'tim_index_koordinator')->name('simoja.koordinator.cuti.tim');
+
+            // PJLP
+        Route::get('/simoja-pjlp-cuti', 'my_index_pjlp')->name('simoja.pjlp.my-cuti');
+        Route::get('/simoja-pjlp-cuti-create', 'create_pjlp')->name('simoja.pjlp.cuti-create');
+
+    });
+    // END SIMOJA ----------------------------------------------------------------------
+
+
+
+    // ASET
+    Route::controller(AsetDashboardController::class)->group(function () {
+        Route::get('/aset-kasi-index', 'kasi_index')->name('aset.kasi.index');
+        Route::get('/aset-koordinator-index', 'koordinator_index')->name('aset.koordinator.index');
+        Route::post('/aset-pjlp-index', 'pjlp_index')->name('aset.pjlp.index');
     });
 });

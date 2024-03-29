@@ -115,18 +115,18 @@
     </a>
     <ul class="dropdown-menu" aria-labelledby="dashboardsDropdown">
         <li>
-            <a class="dropdown-item" href="{{ route('simoja-kasie.index') }}">Kepala Seksi</a>
+            <a class="dropdown-item" href="{{ route('simoja.kasi.index') }}">Kepala Seksi</a>
         </li>
         <li>
-            <a class="dropdown-item" href="{{ route('simoja-koordinator.index') }}">Koordinator</a>
+            <a class="dropdown-item" href="{{ route('simoja.koordinator.index') }}">Koordinator</a>
         </li>
         <li>
-            <a class="dropdown-item" href="{{ route('simoja-pjlp.index') }}">PJLP</a>
+            <a class="dropdown-item" href="{{ route('simoja.pjlp.index') }}">PJLP</a>
         </li>
     </ul>
 </li>
 
-<li class="nav-item dropdown">
+{{-- <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="appsDropdown" role="button" data-toggle="dropdown"
         aria-haspopup="true" aria-expanded="false">
         <i class="icon-truck nav-icon"></i>
@@ -134,13 +134,13 @@
     </a>
     <ul class="dropdown-menu" aria-labelledby="dashboardsDropdown">
         <li>
-            <a class="dropdown-item" href="{{ route('aset-kasie.index') }}">Kepala Seksi</a>
+            <a class="dropdown-item" href="{{ route('aset.kasi.index') }}">Kepala Seksi</a>
         </li>
         <li>
-            <a class="dropdown-item" href="{{ route('aset-koordinator.index') }}">Koordinator</a>
+            <a class="dropdown-item" href="{{ route('aset.koordinator.index') }}">Koordinator</a>
         </li>
         <li>
-            <a class="dropdown-item" href="{{ route('aset-pjlp.index') }}">PJLP</a>
+            <a class="dropdown-item" href="{{ route('aset.pjlp.index') }}">PJLP</a>
         </li>
     </ul>
-</li>
+</li> --}}

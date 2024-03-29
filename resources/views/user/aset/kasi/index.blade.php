@@ -1,15 +1,15 @@
-@extends('layout.baseuser')
+@extends('layout.base_user')
 
 @section('title-head')
     <title>
-        Dashboard Aset | PJLP
+        Dashboard Aset | Kasi
     </title>
 @endsection
 
 @section('path')
     <div class="page-header">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item active">Dashboard Aset PJLP</li>
+            <li class="breadcrumb-item active">Dashboard Aset Kepala Seksi</li>
     </div>
 @endsection
 
@@ -23,20 +23,28 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row mt-3">
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12">
                             <div class="launch-box h-180">
-                                <h3>Transaksi Barang</h3>
-                                <i class="fa fa-building"></i>
-                                <p>Daftar Barang di Gudang Saya</p>
+                                <h3>Kontrak</h3>
+                                <i class="fa fa-file-archive"></i>
+                                <p>Daftar Kontrak Pengadaan</p>
                                 <h3>Lihat Daftar</h3>
                             </div>
                         </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12">
                             <div class="launch-box h-180">
-                                <h3>Histori Transaksi</h3>
-                                <i class="fa fa-list-ol"></i>
-                                <p>Lihat Transaski Barang Saya</p>
-                                <h3>Lihat Daftar</h3>
+                                <h3>Gudang Utama</h3>
+                                <i class="fa fa-building"></i>
+                                <p>Jenis Aset</p>
+                                <h3>23003 Aset</h3>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="launch-box h-180">
+                                <h3>Pengiriman</h3>
+                                <i class="fa fa-truck"></i>
+                                <p>Januari, 2024</p>
+                                <h3>10 Laporan</h3>
                             </div>
                         </div>
                     </div>
@@ -46,7 +54,7 @@
     </div>
 
     <style>
-        @media (max-width: 576px) {
+        @media (max-width: 1100px) {
             h3 {
                 font-size: 15px;
             }
@@ -68,9 +76,14 @@
             let s = today.getSeconds();
             m = checkTime(m);
             s = checkTime(s);
-            document.getElementById('jam').innerHTML = h + ":" + m + ":" + s;
+
+            document.querySelectorAll('.jam').forEach(function(element) {
+                element.innerHTML = h + ":" + m + ":" + s;
+            });
+
             setTimeout(startTime, 1000);
         }
+
 
         function checkTime(i) {
             if (i < 10) {
