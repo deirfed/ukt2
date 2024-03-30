@@ -9,7 +9,7 @@
 @section('path')
     <div class="page-header">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item">Kinerja</li>
+            <li class="breadcrumb-item">Kinerja PJLP</li>
             <li class="breadcrumb-item active">Daftar Kinerja Saya</li>
     </div>
 @endsection
@@ -51,7 +51,8 @@
                                     <th class="text-center">Tanggal</th>
                                     <th class="text-center">Nama</th>
                                     <th class="text-center">Pulau</th>
-                                    <th class="text-center">Koordinator / Tim</th>
+                                    <th class="text-center">Koordinator</th>
+                                    <th class="text-center">Tim</th>
                                     <th class="text-center">Giat</th>
                                     <th class="text-center">Deskripsi</th>
                                     <th class="text-center">Lokasi</th>
@@ -65,9 +66,8 @@
                                         <td class="text-center">{{ $item->tanggal }}</td>
                                         <td class="text-center">{{ $item->anggota->name ?? '-' }}</td>
                                         <td class="text-center">Pulau {{ $item->formasi_tim->area->pulau->name }}</td>
-                                        <td class="text-center">{{ $item->koordinator->name ?? '-' }} <br>
-                                            ({{ $item->formasi_tim->struktur->tim->name }})
-                                        </td>
+                                        <td class="text-center">{{ $item->koordinator->name ?? '-' }}</td>
+                                        <td class="text-center">{{ $item->formasi_tim->struktur->tim->name }}</td>
                                         <td class="text-center">{{ $item->kategori->name ?? $item->kegiatan }}</td>
                                         <td class="text-center">{{ $item->deskripsi ?? '-' }}</td>
                                         <td class="text-center">{{ $item->lokasi ?? '-' }}</td>
@@ -78,6 +78,13 @@
                                         </td>
                                     </tr>
                                 @endforeach
+                                @if ($kinerja->count() == 0)
+                                    <tr>
+                                        <td class="text-center" colspan="10">
+                                            Tidak ada data.
+                                        </td>
+                                    </tr>
+                                @endif
                             </tbody>
                         </table>
                     </div>
@@ -151,35 +158,7 @@
 
 @section('javascript')
     <script type="text/javascript">
-        function toggleModal(id) {
-            $('#id').val(id);
-        }
-
-        function startTime() {
-            const today = new Date();
-            let h = today.getHours();
-            let m = today.getMinutes();
-            let s = today.getSeconds();
-            m = checkTime(m);
-            s = checkTime(s);
-
-            document.querySelectorAll('.jam').forEach(function(element) {
-                element.innerHTML = h + ":" + m + ":" + s;
-            });
-
-            setTimeout(startTime, 1000);
-        }
-
-        function checkTime(i) {
-            if (i < 10) {
-                i = "0" + i
-            };
-            return i;
-        }
-
         $(document).ready(function() {
-            startTime();
-
             $('#modalDokumentasi').on('show.bs.modal', function(e) {
                 var photoArray = $(e.relatedTarget).data('photo');
                 var photoHTML = '';

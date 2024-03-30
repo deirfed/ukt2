@@ -9,7 +9,7 @@
 @section('path')
     <div class="page-header">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item">Cuti</li>
+            <li class="breadcrumb-item">Cuti PJLP</li>
             <li class="breadcrumb-item active">Permohonan Cuti / Izin</li>
         </ol>
     </div>
@@ -26,7 +26,7 @@
                             style="border-radius: 6px">Lihat Pengajuan
                             Cuti Saya</a>
                     </div>
-                    <h4 class="text-center">Form Pengajuan Cuti</h4>
+                    <h4 class="text-center mb-3"><u>Form Pengajuan Cuti</u></h4>
                     <form action="{{ route('simoja.cuti.pjlp.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('post')
@@ -108,7 +108,7 @@
                         <div class="row">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-2 justify-content-center d-flex">
                                 <div class="row">
-                                    <a href="{{ route('simoja.pjlp.index') }}" class="btn btn-dark mx-2">Batal</a>
+                                    <a href="{{ route('dashboard.index') }}" class="btn btn-dark mx-2">Batal</a>
                                     <button type="submit" class="btn btn-primary mx-2">Ajukan</button>
                                 </div>
                             </div>

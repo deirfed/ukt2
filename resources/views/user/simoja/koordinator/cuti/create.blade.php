@@ -9,7 +9,7 @@
 @section('path')
     <div class="page-header">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item">Cuti</li>
+            <li class="breadcrumb-item">Cuti Koordinator</li>
             <li class="breadcrumb-item active">Permohonan Cuti / Izin</li>
         </ol>
     </div>
@@ -26,8 +26,9 @@
                             style="border-radius: 6px">Lihat Pengajuan
                             Cuti Saya</a>
                     </div>
-                    <h4 class="text-center">Form Pengajuan Cuti</h4>
-                    <form action="{{ route('cuti.store') }}" method="POST" enctype="multipart/form-data">
+                    <h4 class="text-center mb-3"><u>Form Pengajuan Cuti</u></h4>
+                    <form action="{{ route('simoja.cuti.koordinator.store') }}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
                         @method('post')
                         <div class="row">
@@ -36,9 +37,9 @@
                                     <label for="jenis_pengajuan">Jenis Pengajuan</label>
                                     <select class="form-control" id="jenis_cuti_id" name="jenis_cuti_id" required>
                                         <option value="" selected disabled>- pilih jenis cuti -</option>
-                                        {{-- @foreach ($jenis_cuti as $item)
+                                        @foreach ($jenis_cuti as $item)
                                             <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                        @endforeach --}}
+                                        @endforeach
                                     </select>
                                     <p id="alert" class="text-danger" style="display: none">*Izin Sakit wajib
                                         menyertakan Surat Keterangan Dokter</p>
@@ -79,7 +80,8 @@
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" id="total_cuti_tahunan">
                                 <div class="form-group">
                                     <label for="nama">Cuti Tahunan Tersedia</label>
-                                    <input type="text" class="form-control" value="# hari" disabled>
+                                    <input type="text" class="form-control"
+                                        value="{{ $konfigurasi_cuti->jumlah ?? '#' }} hari" disabled>
                                 </div>
                             </div>
                         </div>
@@ -107,7 +109,7 @@
                         <div class="row">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-2 justify-content-center d-flex">
                                 <div class="row">
-                                    <a href="{{ route('simoja.koordinator.index') }}" class="btn btn-dark mx-2">Batal</a>
+                                    <a href="{{ route('dashboard.index') }}" class="btn btn-dark mx-2">Batal</a>
                                     <button type="submit" class="btn btn-primary mx-2">Ajukan</button>
                                 </div>
                             </div>

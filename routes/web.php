@@ -383,63 +383,81 @@ Route::group(['middleware' => 'auth'], function () {
 
     // START SIMOJA-------------------------------------------------------------------
     Route::controller(SimojaDashboardController::class)->group(function () {
-        Route::get('/simoja-kasi-index', 'kasi_index')->name('simoja.kasi.index');
-        Route::get('/simoja-koordinator-index', 'koordinator_index')->name('simoja.koordinator.index');
-        Route::get('/simoja-pjlp-index', 'pjlp_index')->name('simoja.pjlp.index');
+        Route::get('/simoja-kasi-index', 'kasi_index')->name('simoja.kasi.index')->middleware('KepalaSeksi');
+        Route::get('/simoja-koordinator-index', 'koordinator_index')->name('simoja.koordinator.index')->middleware('Koordinator');
+        Route::get('/simoja-pjlp-index', 'pjlp_index')->name('simoja.pjlp.index')->middleware('PJLP');
     });
 
     // ABSENSI
     Route::controller(SimojaAbsensiController::class)->group(function () {
         // KASI
-        Route::get('/simoja-kasi-absensi', 'index_kasi')->name('simoja.kasi.absensi');
+        Route::get('/simoja-kasi-absensi', 'index_kasi')->name('simoja.kasi.absensi')->middleware('KepalaSeksi');
 
         // KOORDINATOR
-        Route::get('/simoja-koordinator-absensi', 'my_index_koordinator')->name('simoja.koordinator.my-absensi');
-        Route::get('/simoja-koordinator-absensi-create', 'create_koordinator')->name('simoja.koordinator.absensi-create');
-        Route::get('/simoja-koordinator-absensi-tim', 'tim_index_koordinator')->name('simoja.koordinator.absensi.tim');
+        Route::middleware('Koordinator')->group(function () {
+            Route::get('/simoja-koordinator-absensi', 'my_index_koordinator')->name('simoja.koordinator.my-absensi');
+            Route::get('/simoja-koordinator-absensi-create', 'create_koordinator')->name('simoja.koordinator.absensi-create');
+            Route::post('/simoja-koordinator-absensi', 'store_koordinator')->name('simoja.koordinator.absensi.store');
+            Route::get('/simoja-koordinator-absensi-tim', 'tim_index_koordinator')->name('simoja.koordinator.absensi.tim');
+        });
 
         // PJLP
-        Route::get('/simoja-pjlp-absensi', 'my_index_pjlp')->name('simoja.pjlp.my-absensi');
-        Route::get('/simoja-pjlp-absensi-create', 'create_pjlp')->name('simoja.pjlp.absensi-create');
-        Route::post('/simoja-pjlp-absensi', 'store_pjlp')->name('simoja.pjlp.absensi.store');
+        Route::middleware('PJLP')->group(function () {
+            Route::get('/simoja-pjlp-absensi', 'my_index_pjlp')->name('simoja.pjlp.my-absensi');
+            Route::get('/simoja-pjlp-absensi-create', 'create_pjlp')->name('simoja.pjlp.absensi-create');
+            Route::post('/simoja-pjlp-absensi', 'store_pjlp')->name('simoja.pjlp.absensi.store');
+        });
 
     });
 
     // KINERJA
     Route::controller(SimojaKinerjaController::class)->group(function () {
         // KASI
-        Route::get('/simoja-kasi-kinerja', 'index')->name('simoja.kasi.kinerja');
+        Route::get('/simoja-kasi-kinerja', 'index')->name('simoja.kasi.kinerja')->middleware('KepalaSeksi');
 
         // KOORDINATOR
-        Route::get('/simoja-koordinator-kinerja', 'my_index_koordinator')->name('simoja.koordinator.my-kinerja');
-        Route::get('/simoja-koordinator-kinerja-create', 'create_koordinator')->name('simoja.koordinator.kinerja-create');
-        Route::get('/simoja-koordinator-kinerja-tim', 'tim_index_koordinator')->name('simoja.koordinator.kinerja.tim');
+        Route::middleware('Koordinator')->group(function () {
+            Route::get('/simoja-koordinator-kinerja', 'my_index_koordinator')->name('simoja.koordinator.my-kinerja');
+            Route::get('/simoja-koordinator-kinerja-create', 'create_koordinator')->name('simoja.koordinator.kinerja-create');
+            Route::post('/simoja-koordinator-kinerja', 'store_koordinator')->name('simoja.kinerja.koordinator.store');
+            Route::get('/simoja-koordinator-kinerja-tim', 'tim_index_koordinator')->name('simoja.koordinator.kinerja.tim');
+        });
 
         // PJLP
-        Route::get('/simoja-pjlp-kinerja', 'my_index_pjlp')->name('simoja.pjlp.my-kinerja');
-        Route::get('/simoja-pjlp-kinerja-create', 'create_pjlp')->name('simoja.pjlp.kinerja-create');
-        Route::post('/simoja-pjlp-kinerja', 'store_pjlp')->name('simoja.kinerja.pjlp.store');
+        Route::middleware('PJLP')->group(function () {
+            Route::get('/simoja-pjlp-kinerja', 'my_index_pjlp')->name('simoja.pjlp.my-kinerja');
+            Route::get('/simoja-pjlp-kinerja-create', 'create_pjlp')->name('simoja.pjlp.kinerja-create');
+            Route::post('/simoja-pjlp-kinerja', 'store_pjlp')->name('simoja.kinerja.pjlp.store');
+        });
 
     });
 
     // CUTI
     Route::controller(SimojaCutiController::class)->group(function () {
         // KASI
-        Route::get('/simoja-kasi-cuti', 'index')->name('simoja.kasi.cuti');
-        Route::get('/simoja-kasi-cuti/approval', 'approval')->name('simoja.kasi.cuti.approval');
-        Route::put('/simoja-kasi-cuti/approve', 'approve')->name('simoja.kasi.cuti.approve');
-        Route::put('/simoja-kasi-cuti/reject', 'reject')->name('simoja.kasi.cuti.reject');
+        Route::middleware('KepalaSeksi')->group(function () {
+            Route::get('/simoja-kasi-cuti', 'index')->name('simoja.kasi.cuti');
+            Route::get('/simoja-kasi-cuti/approval', 'approval')->name('simoja.kasi.cuti.approval');
+            Route::put('/simoja-kasi-cuti/approve', 'approve')->name('simoja.kasi.cuti.approve');
+            Route::put('/simoja-kasi-cuti/reject', 'reject')->name('simoja.kasi.cuti.reject');
+        });
 
         // KOORDINATOR
-        Route::get('/simoja-koordinator-cuti', 'my_index_koordinator')->name('simoja.koordinator.my-cuti');
-        Route::get('/simoja-koordinator-cuti-create', 'create_koordinator')->name('simoja.koordinator.cuti-create');
-        Route::get('/simoja-koordinator-cuti-tim', 'tim_index_koordinator')->name('simoja.koordinator.cuti.tim');
+        Route::middleware('Koordinator')->group(function () {
+            Route::get('/simoja-koordinator-cuti', 'my_index_koordinator')->name('simoja.koordinator.my-cuti');
+            Route::get('/simoja-koordinator-cuti-create', 'create_koordinator')->name('simoja.koordinator.cuti-create');
+            Route::post('/simoja-koordinator-cuti', 'store_koordinator')->name('simoja.cuti.koordinator.store');
+            Route::delete('/simoja-koordinator-cuti', 'destroy_koordinator')->name('simoja.cuti.koordinator.destroy');
+            Route::get('/simoja-koordinator-cuti-tim', 'tim_index_koordinator')->name('simoja.koordinator.cuti.tim');
+        });
 
         // PJLP
-        Route::get('/simoja-pjlp-cuti', 'my_index_pjlp')->name('simoja.pjlp.my-cuti');
-        Route::get('/simoja-pjlp-cuti-create', 'create_pjlp')->name('simoja.pjlp.cuti-create');
-        Route::post('/simoja-pjlp-cuti', 'store_pjlp')->name('simoja.cuti.pjlp.store');
-        Route::delete('/simoja-pjlp-cuti', 'destroy_pjlp')->name('simoja.cuti.pjlp.destroy');
+        Route::middleware('PJLP')->group(function () {
+            Route::get('/simoja-pjlp-cuti', 'my_index_pjlp')->name('simoja.pjlp.my-cuti');
+            Route::get('/simoja-pjlp-cuti-create', 'create_pjlp')->name('simoja.pjlp.cuti-create');
+            Route::post('/simoja-pjlp-cuti', 'store_pjlp')->name('simoja.cuti.pjlp.store');
+            Route::delete('/simoja-pjlp-cuti', 'destroy_pjlp')->name('simoja.cuti.pjlp.destroy');
+        });
 
     });
     // END SIMOJA ----------------------------------------------------------------------
