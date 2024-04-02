@@ -22,11 +22,11 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="d-flex justify-content-center mb-3 text-center" style="text-decoration: underline">Data
-                        Transaksi Penggunaan Barang - Seksi Pertamanan</h4>
+                        Transaksi Penggunaan Barang - Seksi {{ auth()->user()->struktur->seksi->name ?? '-' }}</h4>
                     <div class="row d-flex justify-content-between align-items-center">
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-3 text-left">
                             <div class="d-flex justify-content-start align-items-center flex-wrap">
-                                <a href="{{ route('aset.kasi.index') }}"
+                                <a href="{{ route('aset.gudang-pulau') }}"
                                     class="btn btn-outline-primary mr-2 mb-2 mb-sm-0"><i class="fa fa-arrow-left"></i>
                                     Kembali</a>
                                 <button class="btn btn-primary mr-2 mb-2 mb-sm-0">Export to Excel</button>
@@ -49,9 +49,9 @@
                                 <tr>
                                     <th class="text-center">No.</th>
                                     <th class="text-center">Gudang</th>
-                                    <th class="text-center">Personel</th>
-                                    <th class="text-center">Koordinator</th>
-                                    <th class="text-center">Nama Barang <br> (Jenis Barang)</th>
+                                    <th class="text-center">PIC</th>
+                                    <th class="text-center">Nama Barang</th>
+                                    <th class="text-center">Jenis Barang</th>
                                     <th class="text-center">Tanggal Pengambilan</th>
                                     <th class="text-center">Jumlah</th>
                                     <th class="text-center">Kegiatan</th>
@@ -60,34 +60,18 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class="text-center">1</td>
-                                    <td class="text-center">Gudang Pertamanan Tidung</td>
-                                    <td class="text-center">Dede</td>
-                                    <td class="text-center">Tio Muhamad</td>
-                                    <td class="text-center">Sapu <br> (consumable)</td>
-                                    <td class="text-center">12/12/2024</td>
-                                    <td class="text-center">12 (pcs)</td>
-                                    <td class="text-center">Sapu-sapu di depan Masjid Al Karomah</td>
-                                    <td class="text-center">Sapu diambil jam 10 Pagi</td>
-                                    <td class="text-center">
-                                        <a href="#" class="btn btn-outline-primary" title="Lihat Photo"
-                                            data-toggle="modal" data-target="#modalLampiran" data-photo="#"><i
-                                                class="fa fa-eye"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                                {{-- @foreach ($transaksi as $item)
+                                @foreach ($transaksi as $item)
                                     <tr>
                                         <td class="text-center">{{ $loop->iteration }}</td>
-                                        <td class="text-center">{{ $item->user->name }}</td>
                                         <td class="text-center">{{ $item->barang_pulau->gudang->name }}</td>
+                                        <td class="text-center">{{ $item->user->name }}</td>
                                         <td class="text-center font-weight-bold">{{ $item->barang_pulau->barang->name }}
                                         </td>
-                                        <td class="text-center">{{ $item->barang_pulau->barang->jenis }}</td>
+                                        <td class="text-center">{{ $item->barang_pulau->barang->jenis }}
+                                        </td>
                                         <td class="text-center">{{ $item->tanggal }}</td>
-                                        <td class="text-center">{{ $item->qty }}</td>
-                                        <td class="text-center">{{ $item->barang_pulau->barang->satuan }}</td>
+                                        <td class="text-center">{{ $item->qty }}
+                                            {{ $item->barang_pulau->barang->satuan }}</td>
                                         <td class="text-center text-wrap">{{ $item->kegiatan ?? '-' }}</td>
                                         <td class="text-center text-wrap">{{ $item->catatan ?? '-' }}</td>
                                         <td class="text-center">
@@ -102,11 +86,10 @@
                                 @if ($transaksi->count() == 0)
                                     <tr>
                                         <td class="text-center" colspan="11">
-                                            Data transaksi barang atas nama <span
-                                                class="font-weight-bold">{{ auth()->user()->name }}</span> tidak ditemukan.
+                                            Data tidak ditemukan.
                                         </td>
                                     </tr>
-                                @endif --}}
+                                @endif
                             </tbody>
                         </table>
                     </div>

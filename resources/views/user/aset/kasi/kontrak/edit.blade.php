@@ -23,7 +23,7 @@
                 @method('put')
                 <div class="card m-0">
                     <div class="card-header">
-                        <div class="card-title">Form Ubah Data No. Kontrak</div>
+                        <div class="card-title">Form Ubah Data Kontrak</div>
                     </div>
                     <div class="card-body">
                         <div class="form-group">

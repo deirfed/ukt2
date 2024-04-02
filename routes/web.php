@@ -474,62 +474,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/aset-pjlp-index', 'pjlp_index')->name('aset.pjlp.index');
     });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     Route::controller(AsetKontrakController::class)->group(function () {
         // KASI
         Route::get('/aset-kasi-kontrak', 'index')->name('aset.kasi.kontrak-index');
@@ -544,7 +488,9 @@ Route::group(['middleware' => 'auth'], function () {
         // KASI
         Route::get('/aset-gudang-utama', 'kasi_index')->name('aset.gudang-utama');
         Route::get('/aset-gudang-utama-create', 'kasi_create')->name('aset.gudang-utama.create');
-        Route::get('/aset-gudang-utama-store', 'kasi_store')->name('aset.gudang-utama.store');
+        Route::post('/aset-gudang-utama-store', 'kasi_store')->name('aset.gudang-utama.store');
+        Route::get('/aset-gudang-utama/{uuid}/edit', 'kasi_edit')->name('aset.gudang-utama.edit');
+        Route::put('/aset-gudang-utama/{uuid}/update', 'kasi_update')->name('aset.gudang-utama.update');
         Route::get('/aset-gudang-pulau', 'kasi_gudang_pulau')->name('aset.gudang-pulau');
         Route::get('/aset-gudang-pulau-trans', 'kasi_gudang_pulau_trans')->name('aset.gudang-pulau-trans');
 
@@ -564,10 +510,13 @@ Route::group(['middleware' => 'auth'], function () {
         // KASI
         Route::get('/aset-pengiriman', 'index_pengiriman')->name('aset.pengiriman.index');
         Route::get('/aset-pengiriman-create', 'create_pengiriman')->name('aset.pengiriman.create');
+        Route::post('/aset-pengiriman', 'store_pengiriman')->name('aset.pengiriman.store');
         Route::get('/aset-pengiriman/{no_resi}/detail', 'show_pengiriman')->name('aset.pengiriman.show');
 
         // KOORDINATOR
         Route::get('/aset-penerimaan', 'index_penerimaan')->name('aset.penerimaan.index');
+        Route::put('/aset-penerimaan/terima', 'terima_barang')->name('aset.penerimaan.terima');
+        Route::get('/aset-penerimaan/generate-BAST', 'generateBAST')->name('aset.penerimaan.BAST');
         Route::get('/aset-penerimaan/{no_resi}/detail', 'show_penerimaan')->name('aset.penerimaan.show');
     });
 });

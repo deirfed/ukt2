@@ -18,7 +18,7 @@
 @section('content')
     <div class="row gutters justify-content-center">
         <div class="col-xl-6 col-lg-6 col-md-7 col-sm-8 col-12">
-            <form action="{{ route('barang.kirim.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('aset.pengiriman.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('post')
                 <div class="card m-0">

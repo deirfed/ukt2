@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\PengirimanBarang;
 use App\Http\Controllers\Controller;
+use App\Models\BarangPulau;
+use App\Models\FormasiTim;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Carbon;
@@ -18,6 +20,7 @@ class ShippingController extends Controller
     // KASI
     public function index_pengiriman()
     {
+        $seksi_id = auth()->user()->struktur->seksi->id;
         $pengiriman_barang = PengirimanBarang::select(
                             'no_resi',
                             'submitter_id',
@@ -27,6 +30,7 @@ class ShippingController extends Controller
                             'tanggal_terima',
                             'catatan',
                             'status')
+                            ->whereRelation('barang.kontrak', 'seksi_id', '=', $seksi_id)
                             ->distinct()
                             ->orderBy('tanggal_kirim', 'DESC')
                             ->get();
@@ -123,7 +127,7 @@ class ShippingController extends Controller
 
         $no_resi = $request->no_resi;
         $pengirimanBarang = PengirimanBarang::where('no_resi', $no_resi)->get();
-        $dataPengiriman = PengirimanBarang::where('no_resi', $no_resi)->first();
+        $dataPengiriman = PengirimanBarang::where('no_resi', $no_resi)->firstOrFail();
         $hari = Carbon::parse($dataPengiriman->tanggal_terima)->isoFormat('dddd');
         $tanggal = Carbon::parse($dataPengiriman->tanggal_terima)->isoFormat('D');
         $bulan = Carbon::parse($dataPengiriman->tanggal_terima)->isoFormat('MMMM');
@@ -151,21 +155,29 @@ class ShippingController extends Controller
         return $no_resi;
     }
 
+
+
+
     // KOORDINATOR
     public function index_penerimaan()
     {
+        $this_year = Carbon::now()->format('Y');
+        $pulau_id = auth()->user()->area->pulau->id;
+        $seksi_id = auth()->user()->struktur->seksi->id;
         $penerimaan_barang = PengirimanBarang::select(
-            'no_resi',
-            'submitter_id',
-            'receiver_id',
-            'gudang_id',
-            'tanggal_kirim',
-            'tanggal_terima',
-            'catatan',
-            'status')
-            ->distinct()
-            ->orderBy('tanggal_kirim', 'DESC')
-            ->get();
+                            'no_resi',
+                            'submitter_id',
+                            'receiver_id',
+                            'gudang_id',
+                            'tanggal_kirim',
+                            'tanggal_terima',
+                            'catatan',
+                            'status')
+                            ->whereRelation('barang.kontrak.seksi', 'id', '=', $seksi_id)
+                            ->whereRelation('gudang.pulau', 'id', '=', $pulau_id)
+                            ->distinct()
+                            ->orderBy('tanggal_kirim', 'DESC')
+                            ->get();
 
             return view('user.aset.koordinator.penerimaan.index', compact(['penerimaan_barang']));
     }
@@ -176,5 +188,38 @@ class ShippingController extends Controller
         $validasiBAST = PengirimanBarang::where('no_resi', $no_resi)->where('status', 'Dikirim')->count();
         $nomor_resi = $no_resi;
         return view('user.aset.koordinator.penerimaan.detail_penerimaan', compact(['pengiriman_barang', 'validasiBAST', 'nomor_resi']));
+    }
+
+    public function terima_barang(Request $request)
+    {
+        $request->validate([
+            'ids.*' => 'required',
+        ]);
+
+        $ids = $request->ids;
+        $tanggal_terima = Carbon::now();
+        $gudang = '';
+
+        foreach ($ids as $key => $id) {
+            $pengiriman_barang = PengirimanBarang::findOrFail($id);
+
+            $pengiriman_barang->update([
+                'receiver_id' => auth()->user()->id,
+                'tanggal_terima' => $tanggal_terima,
+                'status' => 'Diterima',
+            ]);
+
+            BarangPulau::create([
+                'barang_id' => $pengiriman_barang->barang->id,
+                'gudang_id' => $pengiriman_barang->gudang->id,
+                'stock_awal' => $pengiriman_barang->qty,
+                'stock_aktual' => $pengiriman_barang->qty,
+                'tanggal_terima' => $tanggal_terima,
+                'no_resi' => $pengiriman_barang->no_resi,
+            ]);
+            $gudang = $pengiriman_barang->gudang->name;
+        }
+
+        return back()->withNotify('Data pengiriman barang berhasil diterima di ' . $gudang);
     }
 }

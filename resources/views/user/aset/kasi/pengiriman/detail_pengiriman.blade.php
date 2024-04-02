@@ -22,7 +22,7 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="d-flex justify-content-center mb-3 text-center" style="text-decoration: underline">Detail Data
-                        Pengiriman Barang</h4>
+                        Pengiriman Barang - (No. Resi: {{ $nomor_resi }})</h4>
                     <div class="row d-flex justify-content-between align-items-center">
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-3 text-left">
                             <div class="d-flex justify-content-start align-items-center flex-wrap">
@@ -81,31 +81,29 @@
                                                 {{ $item->tanggal_kirim ?? '-' }}
                                             </td>
                                             <td class="text-center">
-                                                <img src="{{ asset('storage/' . $item->photo_kirim) }}" style="height: 70px"
-                                                    alt="photo_kirim">
+                                                <img src="{{ asset('storage/' . $item->photo_kirim) }}"
+                                                    style="height: 70px" alt="photo_kirim">
                                             </td>
                                             <td class="text-center text-wrap">{{ $item->receiver->name ?? '-' }}</td>
                                             <td class="text-center">
                                                 {{ $item->tanggal_terima ?? '-' }}
                                             </td>
                                             <td class="text-center">
-                                                {{ $item->status }}
+                                                <span
+                                                    class="btn @if ($item->status == 'Dikirim') btn-warning @else btn-primary @endif">
+                                                    {{ $item->status }}
+                                                </span>
                                             </td>
                                             <td class="text-center">
-                                                {{-- <a href="javascript:;"
-                                                    data-url="{{ route('pengiriman.barang.photo.terima', $item->id) }}"
-                                                    data-toggle="modal" data-target="#modalPhotoTerima"
-                                                    class="btn btn-outline-primary" title="Upload Photo"><i
-                                                        class="fa fa-edit"></i>
-                                                </a> --}}
-                                                {{-- @if ($item->photo_terima != null) --}}
+                                                @if ($item->photo_terima != null)
                                                     <a href="javascript:;" class="btn btn-outline-primary"
                                                         title="Lihat Photo" data-toggle="modal" data-target="#modalLampiran"
-                                                        data-photo="
-                                                        {{-- {{ $item->photo_terima }} --}}
-                                                        "><i class="fa fa-eye"></i>
+                                                        data-photo="{{ $item->photo_terima }}">
+                                                        <i class="fa fa-eye"></i>
                                                     </a>
-                                                {{-- @endif --}}
+                                                @else
+                                                    -
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach
@@ -136,13 +134,12 @@
                         <div class="text-slate-500 mt-2">BAST akan dibuat berdasarkan data yang ditampilkan!</div>
                     </div>
                     <div class="px-5 pb-8 text-center mt-3">
-                        <form action="{{ route('pengiriman.barang.generate.BAST') }}" method="GET">
+                        <form action="{{ route('aset.penerimaan.BAST') }}" method="GET">
                             @csrf
                             @method('GET')
                             <input type="text" name="no_resi" value="{{ $nomor_resi }}" id="no_resi" hidden>
-                            <button type="button" data-dismiss="modal"
-                                class="btn btn-dark w-24 mr-1 me-2">Batal</button>
-                            <button type="submit" class="btn btn-primary w-24">Buat</button>
+                            <button type="button" data-dismiss="modal" class="btn btn-dark w-24 mr-1 me-2">Batal</button>
+                            <button type="submit" class="btn btn-primary w-24" formtarget="_blank">Buat</button>
                         </form>
                     </div>
                 </div>
@@ -264,25 +261,25 @@
             });
         });
 
-        // $('#modalLampiran').on('show.bs.modal', function(e) {
-        //     var photoArray = $(e.relatedTarget).data('photo');
-        //     var photoHTML = '';
+        $('#modalLampiran').on('show.bs.modal', function(e) {
+            var photoArray = $(e.relatedTarget).data('photo');
+            var photoHTML = '';
 
-        //     photoArray.forEach(function(item) {
-        //         var photoPath = "{{ asset('storage/') }}" + '/' + item;
-        //         photoHTML +=
-        //             '<div class""><img class="img-thumbnail img-fluid" style="width: 400px;" src="' +
-        //             photoPath + '" alt="photo"></div>';
-        //     });
+            photoArray.forEach(function(item) {
+                var photoPath = "{{ asset('storage/') }}" + '/' + item;
+                photoHTML +=
+                    '<div class""><img class="img-thumbnail img-fluid" style="width: 400px;" src="' +
+                    photoPath + '" alt="photo"></div>';
+            });
 
-        //     document.getElementById("photo_modal").innerHTML = photoHTML;
-        // });
+            document.getElementById("photo_modal").innerHTML = photoHTML;
+        });
 
-        // $('#modalPhotoTerima').on('show.bs.modal', function(e) {
-        //     var url = $(e.relatedTarget).data('url');
+        $('#modalPhotoTerima').on('show.bs.modal', function(e) {
+            var url = $(e.relatedTarget).data('url');
 
-        //     document.getElementById("formPhotoTerima").action = url;
-        // });
+            document.getElementById("formPhotoTerima").action = url;
+        });
 
 
         $('input[type="checkbox"]').change(function() {

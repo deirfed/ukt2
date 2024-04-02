@@ -21,7 +21,7 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="d-flex justify-content-center mb-3 text-center" style="text-decoration: underline">List Barang
-                        Gudang Pulau</h4>
+                        Gudang Pulau - Seksi {{ auth()->user()->struktur->seksi->name ?? '-' }}</h4>
                     <div class="row d-flex justify-content-between align-items-center">
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-3 text-left">
                             <div class="d-flex justify-content-start align-items-center flex-wrap">
@@ -57,91 +57,38 @@
                                     <th class="text-center">Stock Awal</th>
                                     <th class="text-center">Stock Aktual</th>
                                     <th class="text-center">Ketersediaan</th>
-                                    <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <form id="form-kirim" action="{{ route('aset.pengiriman.create') }}" method="GET">
-                                    @csrf
-                                    @method('GET')
+                                @foreach ($barang_pulau as $item)
                                     <tr>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">SDKI/1010</td>
-                                        <td class="text-center">Pertamanan</td>
-                                        <td class="text-center">Pulau Untung Jawa</td>
-                                        <td class="text-center">Sapu Lidi</td>
-                                        <td class="text-center">Sapu Premium</td>
-                                        <td class="text-center">consumable</td>
-                                        <td class="text-center">100</td>
-                                        <td class="text-center">100</td>
+                                        <td class="text-center">{{ $loop->iteration }}</td>
+                                        <td class="text-center">{{ $item->barang->kontrak->no_kontrak ?? '-' }}</td>
+                                        <td class="text-center">{{ $item->barang->kontrak->seksi->name }}</td>
+                                        <td class="text-center">Pulau {{ $item->gudang->pulau->name ?? '-' }}</td>
+                                        <td class="text-center font-weight-bold">{{ $item->barang->name }}</td>
+                                        <td class="text-center">{{ $item->barang->merk ?? '-' }}</td>
+                                        <td class="text-center">{{ $item->barang->jenis ?? '-' }}</td>
+                                        <td class="text-center">{{ $item->stock_awal }} {{ $item->barang->satuan }}</td>
+                                        <td class="text-center">{{ $item->stock_aktual }} {{ $item->barang->satuan }}</td>
                                         <td class="text-center">
-                                            <span class="btn btn-primary">Ada</span>
+                                            @if ($item->stock_aktual == 0)
+                                                <span class="btn btn-danger">Habis</span>
+                                            @else
+                                                <span class="btn btn-primary">Ada</span>
+                                            @endif
                                         </td>
-                                        <td class="text-center">Aksi</td>
                                     </tr>
+                                @endforeach
+                                @if ($barang_pulau->count() == 0)
                                     <tr>
-                                        <td class="text-center">2</td>
-                                        <td class="text-center">SDKI/1010</td>
-                                        <td class="text-center">Pertamanan</td>
-                                        <td class="text-center">Pulau Karya</td>
-                                        <td class="text-center">Cat</td>
-                                        <td class="text-center">Cat</td>
-                                        <td class="text-center">consumable</td>
-                                        <td class="text-center">20</td>
-                                        <td class="text-center">0</td>
-                                        <td class="text-center">
-                                            <span class="btn btn-danger">Habis</span>
+                                        <td class="text-center" colspan="10">
+                                            Data barang tidak ditemukan, kemungkinan stock barang sudah habis silahkan
+                                            hubungi
+                                            PIC terkait.
                                         </td>
-                                        <td class="text-center">Aksi</td>
                                     </tr>
-                                    {{-- @foreach ($barang as $item)
-                                        <tr>
-                                            <td class="text-center">{{ $loop->iteration }}</td>
-                                            <td class="text-center checkbox">
-                                                @if ($item->photo != null)
-                                                    @if ($item->stock_aktual > 0)
-                                                        <input type="checkbox" name="barang_id[]"
-                                                            value="{{ $item->id }}">
-                                                    @endif
-                                                @endif
-                                            </td>
-                                            <td class="text-center">{{ $item->kontrak->tanggal }}</td>
-                                            <td class="text-center">{{ $item->kontrak->no_kontrak }}</td>
-                                            <td class="text-center">{{ $item->kontrak->seksi->name }}</td>
-                                            <td class="text-center font-weight-bolder">{{ $item->name }}</td>
-                                            <td class="text-center">{{ $item->merk }}</td>
-                                            <td class="text-center">{{ $item->jenis }}</td>
-                                            <td class="text-center">{{ $item->stock_awal }} {{ $item->satuan }}</td>
-                                            <td class="text-center">{{ $item->stock_aktual }} {{ $item->satuan }}</td>
-                                            <td class="text-center">{{ $item->spesifikasi }}</td>
-                                            <td class="text-center">
-                                                <a href="{{ route('barang.edit', $item->uuid) }}"
-                                                    class="btn btn-outline-primary" title="Edit"><i
-                                                        class="fa fa-edit"></i>
-                                                </a>
-                                                @if ($item->photo != null)
-                                                    <a href="#" class="btn btn-outline-primary" title="Lihat Photo"
-                                                        data-toggle="modal" data-target="#modalLampiran"
-                                                        data-photo="{{ $item->photo }}"><i class="fa fa-eye"></i>
-                                                    </a>
-                                                @endif
-                                                <a href="#" href="javascript:;" title="Hapus" data-toggle="modal"
-                                                    data-target="#delete-confirmation-modal"
-                                                    onclick="toggleModal('{{ $item->id }}')"
-                                                    class="btn btn-outline-danger"><i class="fa fa-trash"></i></a>
-                                            </td>
-                                        </tr>
-                                    @endforeach --}}
-                                    {{-- @if ($barang->count() == 0)
-                                        <tr>
-                                            <td class="text-center" colspan="12">
-                                                Data barang tidak ditemukan, kemungkinan stock barang sudah habis silahkan
-                                                hubungi
-                                                PIC terkait.
-                                            </td>
-                                        </tr>
-                                    @endif --}}
-                                </form>
+                                @endif
                             </tbody>
                         </table>
                     </div>
@@ -178,8 +125,7 @@
 
 
     {{-- BEGIN: Filter Modal --}}
-    <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="modalFilter"
-        aria-hidden="true">
+    <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="modalFilter" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <form action="{{ route('barang.filter') }}" method="GET">
                 @csrf
@@ -252,7 +198,6 @@
         </div>
     </div>
     {{-- END: Filter Modal --}}
-
 @endsection
 
 

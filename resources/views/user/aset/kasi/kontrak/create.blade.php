@@ -27,24 +27,21 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <select name="seksi_id" class="form-control" required>
-                                <option value="" selected disabled>- pilih seksi -</option>
-                                @foreach ($seksi as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                @endforeach
-                            </select>
+                            <input type="text" name="seksi_id" value="{{ auth()->user()->struktur->seksi->id }}" hidden>
+                            <input type="text" class="form-control" value="{{ auth()->user()->struktur->seksi->name }}"
+                                disabled>
                         </div>
                         <div class="form-group">
                             <input type="text" class="form-control" id="no_kontrak" name="no_kontrak"
-                                placeholder="No. Kontrak" required>
+                                placeholder="No. Kontrak" required autocomplete="off">
                         </div>
                         <div class="form-group">
                             <input type="text" class="form-control" id="name" name="name"
-                                placeholder="Nama Kontrak" required>
+                                placeholder="Nama Kontrak" required autocomplete="off">
                         </div>
                         <div class="form-group">
                             <input type="text" class="form-control" name="nilai_kontrak"
-                                placeholder="Nilai Kontrak (Rp.)" required>
+                                placeholder="Nilai Kontrak (Rp.)" required autocomplete="off">
                         </div>
                         <div class="form-group">
                             <input type="text" placeholder="Tanggal Kontrak" onblur="(this.type='text')"

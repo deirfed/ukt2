@@ -20,7 +20,8 @@
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="d-flex justify-content-center mb-3 text-center" style="text-decoration: underline">Daftar Data Pengiriman Barang</h4>
+                    <h4 class="d-flex justify-content-center mb-3 text-center" style="text-decoration: underline">Daftar Data
+                        Pengiriman Barang - Seksi {{ auth()->user()->struktur->seksi->name ?? '-' }}</h4>
                     <div class="row d-flex justify-content-between align-items-center">
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-3 text-left">
                             <div class="d-flex justify-content-start align-items-center flex-wrap">
@@ -82,7 +83,8 @@
                                             {{ $item->catatan }}
                                         </td>
                                         <td class="text-center">
-                                            <span class="btn btn-primary">
+                                            <span
+                                                class="btn @if ($item->status == 'Dikirim') btn-warning @else btn-primary @endif">
                                                 {{ $item->status }}
                                             </span>
                                         </td>
@@ -116,8 +118,7 @@
                             @csrf
                             @method('delete')
                             <input type="text" name="id" id="id" hidden>
-                            <button type="button" data-dismiss="modal"
-                                class="btn btn-dark w-24 mr-1 me-2">Batal</button>
+                            <button type="button" data-dismiss="modal" class="btn btn-dark w-24 mr-1 me-2">Batal</button>
                             <button type="submit" class="btn btn-primary w-24">Buat BAST</button>
                         </form>
                     </div>
@@ -128,8 +129,7 @@
     {{-- END: BAST Moal --}}
 
     {{-- BEGIN: Filter Modal --}}
-    <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="modalFilter"
-        aria-hidden="true">
+    <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="modalFilter" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">

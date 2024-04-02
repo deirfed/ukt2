@@ -22,7 +22,7 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="d-flex justify-content-center mb-3 text-center" style="text-decoration: underline">Data Kontrak
-                        UKT 2</h4>
+                        UKT 2 Seksi {{ $seksi ?? '-' }}</h4>
                     <div class="row d-flex justify-content-between align-items-center">
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-3 text-left">
                             <div class="d-flex justify-content-start align-items-center flex-wrap">
@@ -87,6 +87,13 @@
                                             </td>
                                         </tr>
                                     @endforeach
+                                    @if ($kontrak->count() == 0)
+                                        <tr>
+                                            <td class="text-center" colspan="8">
+                                                Tidak ada data.
+                                            </td>
+                                        </tr>
+                                    @endif
                                 </tbody>
                             </table>
                         </div>

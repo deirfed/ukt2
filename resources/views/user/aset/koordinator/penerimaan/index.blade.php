@@ -20,8 +20,10 @@
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="d-flex justify-content-center mb-3 text-center" style="text-decoration: underline">Detail Data
-                        Penerimaan Barang</h4>
+                    <h4 class="d-flex justify-content-center mb-3 text-center" style="text-decoration: underline">Data
+                        Penerimaan Barang - Seksi {{ auth()->user()->struktur->seksi->name ?? '-' }} - Pulau
+                        {{ auth()->user()->area->pulau->name ?? '-' }}
+                    </h4>
                     <div class="row d-flex justify-content-between align-items-center">
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-3 text-left">
                             <div class="d-flex justify-content-start align-items-center flex-wrap">
@@ -78,7 +80,8 @@
                                                 {{ $item->catatan }}
                                             </td>
                                             <td class="text-center">
-                                                <span class="btn btn-primary">
+                                                <span
+                                                    class="btn @if ($item->status == 'Dikirim') btn-warning @else btn-primary @endif">
                                                     {{ $item->status }}
                                                 </span>
                                             </td>
@@ -90,6 +93,13 @@
                                             </td>
                                         </tr>
                                     @endforeach
+                                    @if ($penerimaan_barang->count() == 0)
+                                        <tr>
+                                            <td class="text-center" colspan="11">
+                                                Tidak ada data.
+                                            </td>
+                                        </tr>
+                                    @endif
                                 </form>
                             </tbody>
                         </table>

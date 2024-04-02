@@ -7,26 +7,30 @@ use App\Models\Seksi;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class KontrakController extends Controller
 {
     public function index()
     {
-        $kontrak = Kontrak::orderBy('name')->get();
+        $seksi = auth()->user()->struktur->seksi->name;
+        $seksi_id = auth()->user()->struktur->seksi->id;
+        $kontrak = Kontrak::where('seksi_id', $seksi_id)->orderBy('tanggal', 'DESC')->get();
 
-        return view('user.aset.kasi.kontrak.index', compact(['kontrak']));
+        return view('user.aset.kasi.kontrak.index', compact([
+            'kontrak',
+            'seksi'
+        ]));
     }
 
     public function create()
     {
-        $this_year = Carbon::now()->format('Y');
-        $seksi = Seksi::all();
-        return view('user.aset.kasi.kontrak.create', compact(['this_year', 'seksi']));
+        return view('user.aset.kasi.kontrak.create');
     }
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate(
+        $request->validate(
             [
                 'name' => 'required',
                 'no_kontrak' => 'required',
@@ -85,8 +89,8 @@ class KontrakController extends Controller
         $id = $request->id;
         $kontrak = Kontrak::findOrFail($id);
 
-        if (!$kontrak) {
-            return redirect()->back();
+        if($kontrak->lampiran != null){
+            Storage::delete($kontrak->lampiran);
         }
         $kontrak->delete();
 

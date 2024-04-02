@@ -30,8 +30,8 @@
                                     Kembali</a>
                                 <a href="{{ route('aset.gudang-utama.create') }}"
                                     class="btn btn-primary mr-2 mb-2 mb-sm-0">Tambah Barang</a>
-                                <button type="submit" form="form-kirim" id="kirimBarangButton" class="btn btn-warning mr-2 mb-2 mb-sm-0"
-                                    style="display: none;">
+                                <button type="submit" form="form-kirim" id="kirimBarangButton"
+                                    class="btn btn-warning mr-2 mb-2 mb-sm-0" style="display: none;">
                                     <i class="fa fa-paper-plane"></i>
                                     Kirim Barang
                                 </button>
@@ -101,7 +101,7 @@
                                             {{-- <td class="text-center">Rp.{{ $item->harga }}</td> --}}
                                             <td class="text-center">{{ $item->spesifikasi }}</td>
                                             <td class="text-center">
-                                                <a href="{{ route('barang.edit', $item->uuid) }}"
+                                                <a href="{{ route('aset.gudang-utama.edit', $item->uuid) }}"
                                                     class="btn btn-outline-primary" title="Edit"><i
                                                         class="fa fa-edit"></i>
                                                 </a>
