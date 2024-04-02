@@ -24,17 +24,15 @@
                     </h4>
                     <div class="row d-flex justify-content-between align-items-center">
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-3 text-left">
-                            {{-- @if ($absensi->count() > 0) --}}
                             <div class="d-flex justify-content-start align-items-center flex-wrap">
                                 <a href="{{ route('simoja.koordinator.index') }}"
-                                    class="btn btn-outline-primary mr-2 mb-2 mb-sm-0"><i
-                                        class="fa fa-arrow-left"></i>Kembali</a>
+                                    class="btn btn-outline-primary mr-2 mb-2 mb-sm-0"><i class="fa fa-arrow-left"></i>
+                                    Kembali</a>
                                 <button class="btn btn-primary mr-2 mb-2 mb-sm-0">Export to Excel</button>
                                 <button class="btn btn-primary mr-2 mb-2 mb-sm-0">Export to PDF</button>
                                 <a href="" class="btn btn-primary mb-2 mb-sm-0" data-toggle="modal"
                                     data-target="#modalFilter"><i class="fa fa-filter"></i></a>
                             </div>
-                            {{-- @endif --}}
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <form class="form-inline mb-2 d-flex justify-content-end">
@@ -52,49 +50,33 @@
                                         <tr>
                                             <th class="text-center">No.</th>
                                             <th class="text-center text-wrap">Nama</th>
-                                            <th class="text-center text-wrap">Pulau</th>
-                                            <th class="text-center text-wrap">Koordinator / Tim</th>
-                                            <th class="text-center text-wrap">Tanggal Pengajuan</th>
+                                            <th class="text-center text-wrap">Tanggal Pengajuan </th>
                                             <th class="text-center text-wrap">Jenis Izin</th>
+                                            <th class="text-center text-wrap">Jumlah Hari</th>
+                                            <th class="text-center text-wrap">Diketahui</th>
+                                            <th class="text-center text-wrap">Disetujui</th>
                                             <th class="text-center text-wrap">Status</th>
                                             <th class="text-center text-wrap">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td class="text-center">1</td>
-                                            <td class="text-center text-wrap">Ahmad Putra</td>
-                                            <td class="text-center text-wrap">Pulau Untung Jawa</td>
-                                            <td class="text-center text-wrap">Tio Muhamad / Tim Pertamanan 1</td>
-                                            <td class="text-center text-wrap">12/10/2022 - 14/10/2022 <br> (2 Hari) </td>
-                                            <td class="text-center text-wrap">Cuti Tahunan</td>
-                                            <td class="text-center text-wrap">
-                                                <span class="btn btn-primary">Disetujui</span>
-                                            </td>
-                                            <td class="text-center text-wrap">
-                                                <a href="" class="btn btn-outline-primary" data-toggle="modal"
-                                                    data-target="#modalLampiran"><i class="fa fa-eye"></i></a>
-                                            </td>
-                                        </tr>
-                                        {{-- @foreach ($cuti as $item)
+                                        @foreach ($cuti as $item)
                                             <tr>
                                                 <td class="text-center">{{ $loop->iteration }}</td>
                                                 <td class="text-center">{{ $item->user->name }}</td>
-                                                <td class="text-center">{{ $item->user->jabatan->name }}</td>
-                                                <td class="text-center">{{ $item->user->area->pulau->name }}</td>
-                                                <td class="text-center">{{ $item->user->struktur->seksi->name }}</td>
-                                                <td class="text-center">{{ $item->user->struktur->tim->name }}</td>
                                                 <td class="text-center text-wrap">
-                                                    {{ $item->tanggal_awal == $item->tanggal_akhir ? $item->tanggal_awal : $item->tanggal_awal . ' - ' . $item->tanggal_akhir }}
+                                                    {{ $item->tanggal_awal }} s/d {{ $item->tanggal_akhir }}
                                                 </td>
                                                 <td class="text-center">{{ $item->jenis_cuti->name }}</td>
                                                 <td class="text-center">{{ $item->jumlah }} hari</td>
                                                 <td class="text-center">
-                                                    {{ $item->known_by->name }}
+                                                    {{ $item->known_by->name }} <br>
+                                                    ({{ $item->known_by->jabatan->name }})
                                                 </td>
                                                 <td class="text-center">
                                                     @if ($item->status == 'Diterima')
-                                                        {{ $item->approved_by->name }}
+                                                        {{ $item->approved_by->name }} <br>
+                                                        ({{ $item->approved_by->jabatan->name }})
                                                     @else
                                                         -
                                                     @endif
@@ -116,20 +98,38 @@
                                                     @endif
                                                     <a href="javascript:;" class="btn btn-outline-primary"
                                                         title="Lihat lampiran" data-toggle="modal"
-                                                        data-target="#modalLampiran"
-                                                        data-lampiran="{{ $item->lampiran != null ? asset('storage/' . $item->lampiran) : 'https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg' }}">
+                                                        data-target="#modalDetailPengajuan"
+                                                        data-lampiran="{{ $item->lampiran != null ? asset('storage/' . $item->lampiran) : 'https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg' }}"
+                                                        data-nama="{{ $item->user->name }}"
+                                                        data-jenis_cuti="{{ $item->jenis_cuti->name }} ({{ $item->jumlah }} hari)"
+                                                        data-koordinator="{{ $item->known_by->name }}"
+                                                        data-periode="{{ $item->tanggal_awal }} s/d {{ $item->tanggal_akhir }}"
+                                                        data-tim="{{ $item->user->struktur->tim->name }} (Pulau {{ $item->user->area->pulau->name }})"
+                                                        data-catatan="{{ $item->catatan }}"
+                                                        data-status="@if ($item->status == 'Diproses') <h5>*Pengajuan Cuti masih Dalam Proses persetujuan</h5>
+                                                        @elseif($item->status == 'Ditolak')
+                                                            <h5>*Pengajuan Cuti <span style='color: red'>Ditolak</span>
+                                                        @else
+                                                            <h5>*Pengajuan Cuti Sudah <span style='color: green'>Disetujui</span> pada Tanggal {{ $item->updated_at }}</h5> @endif">
                                                         <i class="fa fa-eye"></i>
                                                     </a>
+                                                    @if ($item->status == 'Diproses' or $item->status == 'Ditolak')
+                                                        <a href="javascript:;" class="btn btn-outline-secondary"
+                                                            title="Hapus" data-toggle="modal" data-target="#deleteModal"
+                                                            data-id="{{ $item->id }}">
+                                                            <i class="fa fa-trash"></i>
+                                                        </a>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach
                                         @if ($cuti->count() == 0)
                                             <tr>
-                                                <td class="text-center" colspan="13">
+                                                <td class="text-center" colspan="9">
                                                     Tidak ada data.
                                                 </td>
                                             </tr>
-                                        @endif --}}
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>
@@ -209,13 +209,13 @@
     </div>
     {{-- END: Filter Modal --}}
 
-    {{-- BEGIN: Detail Pengajuan Cuti --}}
-    <div class="modal fade" id="modalLampiran" tabindex="-1" role="dialog" aria-labelledby="detailPersonel"
-        aria-hidden="true">
+    {{-- START: Modal Detail Pengajuan --}}
+    <div class="modal fade" id="modalDetailPengajuan" tabindex="-1" role="dialog"
+        aria-labelledby="modalDetailPengajuan" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Data Lampiran</h5>
+                    <h5 class="modal-title">Detail Pengajuan Cuti</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -228,6 +228,50 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-row gutters">
+                        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="nama">Nama Pemohon Cuti</label>
+                                <input type="text" class="form-control" id="nama" placeholder="Nama"
+                                    value="" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="koordinator">Koordinator</label>
+                                <input type="text" class="form-control" id="koordinator" placeholder="Koordinator"
+                                    value="" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="tim">Tim</label>
+                                <input type="text" class="form-control" id="tim" placeholder="Tim"
+                                    value="" disabled>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="seksi">Jenis Pengajuan</label>
+                                <input type="text" class="form-control" id="jenis_cuti" placeholder="Seksi"
+                                    value="" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="periode">Periode Permohonan Cuti</label>
+                                <input type="text" class="form-control" id="periode" placeholder="periode"
+                                    value="" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="ciTy">Deskripsi</label>
+                                <input type="text" class="form-control" id="catatan" placeholder="Deskripsi"
+                                    value="" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row-modal-user gutters">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" id="status">
+                            {{-- <h5>*Pengajuan Cuti masih Dalam Proses persetujuan</h5>
+                            <h5>*Pengajuan Cuti Sudah <span style="color: green">Disetujui</span> pada Tanggal 29/01/2024
+                            </h5>
+                            <h5>*Pengajuan Cuti <span style="color: red">Ditolak</span> --}}
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-dismiss="modal">Tutup</button>
@@ -235,7 +279,7 @@
             </div>
         </div>
     </div>
-    {{-- END: Pengajuan Cuti --}}
+    {{-- END: Modal Detail Pengajuan --}}
 
     {{-- BEGIN: Konfirmasi PDF --}}
     <div id="modalDownloadPDF" class="modal" tabindex="-1" aria-hidden="true">
@@ -309,9 +353,29 @@
 @section('javascript')
     <script>
         $(document).ready(function() {
-            $('#modalLampiran').on('show.bs.modal', function(e) {
+            $('#deleteModal').on('show.bs.modal', function(e) {
+                var id = $(e.relatedTarget).data('id');
+                document.getElementById("id").value = id;
+            });
+
+            $('#modalDetailPengajuan').on('show.bs.modal', function(e) {
                 var lampiran = $(e.relatedTarget).data('lampiran');
+                var nama = $(e.relatedTarget).data('nama');
+                var jenis_cuti = $(e.relatedTarget).data('jenis_cuti');
+                var koordinator = $(e.relatedTarget).data('koordinator');
+                var periode = $(e.relatedTarget).data('periode');
+                var tim = $(e.relatedTarget).data('tim');
+                var catatan = $(e.relatedTarget).data('catatan');
+                var status = $(e.relatedTarget).data('status');
+
                 document.getElementById("photoLampiran").src = lampiran;
+                document.getElementById("nama").value = nama;
+                document.getElementById("jenis_cuti").value = jenis_cuti;
+                document.getElementById("koordinator").value = koordinator;
+                document.getElementById("periode").value = periode;
+                document.getElementById("tim").value = tim;
+                document.getElementById("catatan").value = catatan;
+                document.getElementById("status").innerHTML = status;
             });
 
             $('#modalDownloadPDF').on('show.bs.modal', function(e) {

@@ -68,8 +68,8 @@
                                         <td class="text-center">Pulau {{ $item->user->area->pulau->name }}</td>
                                         <td class="text-center">{{ $item->user->jabatan->name }}</td>
                                         <td class="text-center">{{ $item->user->struktur->tim->name }}</td>
-                                        <td class="text-center">{{ $item->jam_masuk ?? '#' }} WIB</td>
-                                        <td class="text-center">{{ $item->jam_pulang ?? '#' }} WIB</td>
+                                        <td class="text-center">{{ $item->jam_masuk ?? '-' }}</td>
+                                        <td class="text-center">{{ $item->jam_pulang ?? '-' }}</td>
                                         <td class="text-center">{{ $item->status }}</td>
                                         <td class="text-center">
                                             <a href="#" data-toggle="modal" data-target="#modalDokumentasi"
@@ -79,6 +79,13 @@
                                         </td>
                                     </tr>
                                 @endforeach
+                                @if ($absensi->count() == 0)
+                                    <tr>
+                                        <td class="text-center" colspan="10">
+                                            Tidak ada data.
+                                        </td>
+                                    </tr>
+                                @endif
                             </tbody>
                         </table>
                     </div>
@@ -160,10 +167,6 @@
 
 @section('javascript')
     <script type="text/javascript">
-        function toggleModal(id) {
-            $('#id').val(id);
-        }
-
         $(document).ready(function() {
             $('#modalDokumentasi').on('show.bs.modal', function(e) {
                 var photoMasuk = $(e.relatedTarget).data('photo_masuk');

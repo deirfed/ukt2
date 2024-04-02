@@ -119,7 +119,7 @@
                         </div>
                         <div class="btn group-button">
                             <button type="submit" class="btn btn-primary float-right ml-3">Submit</button>
-                            <a href="{{ route('simoja.pjlp.index') }}" class="btn btn-dark">Batal</a>
+                            <a href="{{ route('dashboard.index') }}" class="btn btn-dark">Batal</a>
                         </div>
                     </div>
                 </div>

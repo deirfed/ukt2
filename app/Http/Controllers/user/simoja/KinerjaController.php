@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\FormasiTim;
 use App\Models\Kategori;
 use App\Models\Kinerja;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 
@@ -21,27 +22,129 @@ class KinerjaController extends Controller
         ]));
     }
 
+
+
+
+
     // KOORDINATOR
     public function tim_index_koordinator()
     {
-        return view('user.simoja.koordinator.kinerja.tim_index');
+        $user_id = auth()->user()->id;
+        $this_year = Carbon::now()->year;
+        $anggota_id = FormasiTim::where('periode', $this_year)
+                                ->where('koordinator_id', $user_id)
+                                ->pluck('anggota_id')
+                                ->toArray();
+        $anggota_id[] = $user_id;
+
+        $kinerja = Kinerja::whereIn('anggota_id', $anggota_id)
+                        ->orderBy('tanggal', 'DESC')
+                        ->get();
+
+        return view('user.simoja.koordinator.kinerja.tim_index', compact([
+            'kinerja'
+        ]));
     }
 
     public function my_index_koordinator()
     {
-        return view('user.simoja.koordinator.kinerja.my_index');
+        $user_id = auth()->user()->id;
+        $kinerja = Kinerja::where('anggota_id', $user_id)
+                        ->orderBy('tanggal', 'DESC')
+                        ->get();
+        return view('user.simoja.koordinator.kinerja.my_index', compact([
+            'kinerja'
+        ]));
     }
 
     public function create_koordinator()
     {
-        return view('user.simoja.koordinator.kinerja.create');
+        $user_id = auth()->user()->id;
+        $formasi_tim = FormasiTim::where('koordinator_id', $user_id)
+                                ->orWhere('anggota_id', $user_id)
+                                ->firstOrFail();
+        $kategori = Kategori::where('seksi_id', $formasi_tim->struktur->seksi->id)->get();
+
+        return view('user.simoja.koordinator.kinerja.create', compact([
+            'formasi_tim',
+            'kategori'
+        ]));
     }
+
+    public function store_koordinator(Request $request)
+    {
+        $request->validate([
+            'photo.*' => 'required|file|image',
+            'photo' => 'max:3',
+        ], [
+            'photo.max' => '*Photo yang dilampirkan maksimal 3.'
+        ]);
+
+        $anggota_id = $request->anggota_id;
+        $formasi_tim_id = $request->formasi_tim_id;
+        $kategori_id = $request->kategori_id;
+        $kegiatan = $request->kegiatan;
+        $tanggal = $request->tanggal;
+        $lokasi = $request->lokasi;
+        $deskripsi = $request->deskripsi;
+
+        $formasi_tim = FormasiTim::findOrFail($formasi_tim_id);
+
+        $kinerja = Kinerja::create([
+            'formasi_tim_id' => $formasi_tim->id,
+            'unitkerja_id' => $formasi_tim->struktur->unitkerja->id,
+            'seksi_id' => $formasi_tim->struktur->seksi->id,
+            'tim_id' => $formasi_tim->struktur->tim->id,
+            'pulau_id' => $formasi_tim->area->pulau->id,
+            'koordinator_id' => $formasi_tim->koordinator->id,
+            'anggota_id' => $anggota_id,
+            'kategori_id' => $kategori_id,
+            'kegiatan' => $kegiatan,
+            'tanggal' => $tanggal,
+            'lokasi' => $lokasi,
+            'deskripsi' => $deskripsi,
+        ]);
+
+        if ($request->hasFile('photo')) {
+            $kinerja = Kinerja::findOrFail($kinerja->id);
+
+            $lampiranPaths = [];
+            $detailPath = 'kinerja/kegiatan/';
+            foreach ($request->file('photo') as $file) {
+                $image = Image::make($file);
+
+                $imageName = time().'-'.$file->getClientOriginalName();
+                $destinationPath = public_path('storage/'. $detailPath);
+
+                $image->resize(null, 500, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+
+                $image->save($destinationPath.$imageName);
+                $lampiranPaths[] = $detailPath . $imageName;
+            }
+
+            $kinerja->photo = json_encode($lampiranPaths);
+            $kinerja->save();
+        }
+
+        return redirect()->route('simoja.koordinator.my-kinerja')->withNotify('Data Laporan Kinerja berhasil ditambahkan!');
+    }
+
+
+
+
+
+
+
 
     // PJLP
     public function my_index_pjlp()
     {
         $user_id = auth()->user()->id;
-        $kinerja = Kinerja::where('anggota_id', $user_id)->get();
+        $kinerja = Kinerja::where('anggota_id', $user_id)
+                        ->orderBy('tanggal', 'DESC')
+                        ->get();
         return view('user.simoja.pjlp.kinerja.my_index', compact(['kinerja']));
     }
 

@@ -2,7 +2,7 @@
 
 @section('title-head')
     <title>
-        Dashboard Simoja | PJLP
+        Dashboard Simoja | Koordinator
     </title>
 @endsection
 

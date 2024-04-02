@@ -19,7 +19,6 @@
 @section('content')
     <div class="row gutters justify-content-center">
         <div class="col-xl-4 col-lg-4 col-md-5 col-sm-6 col-12">
-
             <form action="{{ route('simoja.pjlp.absensi.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('post')
@@ -31,11 +30,21 @@
                                 style="border-radius: 6px">Lihat Daftar
                                 Absensi Saya</a>
                         </div>
-                        <h4 class="text-center">Form Absensi</h4>
+                        <h4 class="text-center"><u>Form Absensi</u></h4>
                         <div class="form-group">
                             <label for="">Nama</label>
                             <input type="text" class="form-control" autocomplete="off" value="{{ auth()->user()->name }}"
                                 disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Jabatan</label>
+                            <input type="text" class="form-control" autocomplete="off"
+                                value="{{ auth()->user()->jabatan->name }}" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Tim</label>
+                            <input type="text" class="form-control" autocomplete="off"
+                                value="{{ auth()->user()->struktur->tim->name }}" disabled>
                         </div>
                         <div class="form-group">
                             <label for="">Tipe Absensi</label>
@@ -82,6 +91,7 @@
         </div>
     </div>
 @endsection
+
 @section('javascript')
     <script>
         Webcam.set({

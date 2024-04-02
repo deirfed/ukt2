@@ -2,7 +2,7 @@
 
 @section('title-head')
     <title>
-        Dashboard | Kasi
+        Dashboard | Kepala Seksi
     </title>
 @endsection
 

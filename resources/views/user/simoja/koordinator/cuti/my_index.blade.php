@@ -9,7 +9,7 @@
 @section('path')
     <div class="page-header">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item">Cuti</li>
+            <li class="breadcrumb-item">Cuti Koordinator</li>
             <li class="breadcrumb-item active">Data Cuti Saya</li>
         </ol>
     </div>
@@ -25,11 +25,10 @@
                     </h4>
                     <div class="row d-flex justify-content-between align-items-center">
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-3 text-left">
-                            {{-- @if ($absensi->count() > 0) --}}
                             <div class="d-flex justify-content-start align-items-center flex-wrap">
                                 <a href="{{ route('simoja.koordinator.index') }}"
-                                    class="btn btn-outline-primary mr-2 mb-2 mb-sm-0"><i
-                                        class="fa fa-arrow-left"></i>Kembali</a>
+                                    class="btn btn-outline-primary mr-2 mb-2 mb-sm-0"><i class="fa fa-arrow-left"></i>
+                                    Kembali</a>
                                 <a href="{{ route('simoja.koordinator.cuti-create') }}"
                                     class="btn btn-primary mr-2 mb-2 mb-sm-0">Tambah
                                     Data</a>
@@ -39,7 +38,6 @@
                                 <a href="" class="btn btn-primary mb-2 mb-sm-0" data-toggle="modal"
                                     data-target="#modalFilter"><i class="fa fa-filter"></i></a>
                             </div>
-                            {{-- @endif --}}
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <form class="form-inline mb-2 d-flex justify-content-end">
@@ -49,8 +47,8 @@
                             </form>
                         </div>
                         <div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-12 mb-2 ml-2">
-                            <span class="btn btn-outline-primary">Notes: Sisa Cuti
-                                <strong># hari</strong></span>
+                            <span class="btn btn-outline-primary">Sisa Cuti Tahunan:
+                                <strong>{{ $konfigurasi_cuti->jumlah ?? '#' }} hari</strong></span>
                         </div>
                     </div>
                     <div class="projectLog">
@@ -61,50 +59,17 @@
                                         <tr>
                                             <th class="text-center">No.</th>
                                             <th class="text-center text-wrap">Nama</th>
-                                            <th class="text-center text-wrap">Pulau</th>
-                                            <th class="text-center text-wrap">Tim</th>
                                             <th class="text-center text-wrap">Tanggal Pengajuan </th>
                                             <th class="text-center text-wrap">Jenis Izin</th>
+                                            <th class="text-center text-wrap">Jumlah Hari</th>
+                                            <th class="text-center text-wrap">Diketahui</th>
+                                            <th class="text-center text-wrap">Disetujui</th>
                                             <th class="text-center text-wrap">Status</th>
                                             <th class="text-center text-wrap">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td class="text-center">1</td>
-                                            <td class="text-center text-wrap">Tio Muhamad</td>
-                                            <td class="text-center text-wrap">Pulau Untung Jawa</td>
-                                            <td class="text-center text-wrap">Tim Pertamanan 1</td>
-                                            <td class="text-center text-wrap">12/10/2022 - 14/10/2022 <br> (2 Hari) </td>
-                                            <td class="text-center text-wrap">Cuti Tahunan</td>
-                                            <td class="text-center text-wrap">
-                                                <span class="btn btn-primary">Disetujui</span>
-                                            </td>
-                                            <td class="text-center text-wrap">
-                                                <a href="" class="btn btn-outline-primary" data-toggle="modal"
-                                                    data-target="#modalDownloadPengajuanPDF"><i class="fa fa-print"></i></a>
-                                                <a href="" class="btn btn-outline-primary" data-toggle="modal"
-                                                    data-target="#modalDetailPengajuan"><i class="fa fa-eye"></i></a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">1</td>
-                                            <td class="text-center text-wrap">Tio Muhamad</td>
-                                            <td class="text-center text-wrap">Pulau Untung Jawa</td>
-                                            <td class="text-center text-wrap">Tim Pertamanan 1</td>
-                                            <td class="text-center text-wrap">12/10/2022 - 14/10/2022 <br> (2 Hari) </td>
-                                            <td class="text-center text-wrap">Cuti Tahunan</td>
-                                            <td class="text-center text-wrap">
-                                                <span class="btn btn-warning">Diproses</span>
-                                            </td>
-                                            <td class="text-center text-wrap">
-                                                <a href="" class="btn btn-outline-secondary" data-toggle="modal"
-                                                    data-target="#deleteModal"><i class="fa fa-times"></i></a>
-                                                <a href="" class="btn btn-outline-primary" data-toggle="modal"
-                                                    data-target="#modalDetailPengajuan"><i class="fa fa-eye"></i></a>
-                                            </td>
-                                        </tr>
-                                        {{-- @foreach ($cuti as $item)
+                                        @foreach ($cuti as $item)
                                             <tr>
                                                 <td class="text-center">{{ $loop->iteration }}</td>
                                                 <td class="text-center">{{ $item->user->name }}</td>
@@ -114,11 +79,13 @@
                                                 <td class="text-center">{{ $item->jenis_cuti->name }}</td>
                                                 <td class="text-center">{{ $item->jumlah }} hari</td>
                                                 <td class="text-center">
-                                                    {{ $item->known_by->name }}
+                                                    {{ $item->known_by->name }} <br>
+                                                    ({{ $item->known_by->jabatan->name }})
                                                 </td>
                                                 <td class="text-center">
                                                     @if ($item->status == 'Diterima')
-                                                        {{ $item->approved_by->name }}
+                                                        {{ $item->approved_by->name }} <br>
+                                                        ({{ $item->approved_by->jabatan->name }})
                                                     @else
                                                         -
                                                     @endif
@@ -164,14 +131,14 @@
                                                     @endif
                                                 </td>
                                             </tr>
-                                        @endforeach --}}
-                                        {{-- @if ($cuti->count() == 0)
+                                        @endforeach
+                                        @if ($cuti->count() == 0)
                                             <tr>
                                                 <td class="text-center" colspan="9">
                                                     Tidak ada data.
                                                 </td>
                                             </tr>
-                                        @endif --}}
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>
@@ -324,7 +291,8 @@
                                 Data pengajuan cuti akan dibatalkan & dihapus secara <b>Permanen</b>!
                             </p>
                         </div>
-                        <form id="deleteForm" action="{{ route('cuti.destroy') }}" method="POST" hidden>
+                        <form id="deleteForm" action="{{ route('simoja.cuti.koordinator.destroy') }}" method="POST"
+                            hidden>
                             @csrf
                             @method('delete')
                             <input type="text" name="id" id="id">
