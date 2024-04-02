@@ -17,35 +17,48 @@
 @section('content')
     <div class="row gutters d-flex justify-content-center align-item-center">
         <div class="col-xl-8 col-lg-12 col-md-12 col-sm-12 col-12">
-            {{-- <div class="d-flex justify content-center">
-                <a href="{{ route('dashboard.index') }}" class="btn btn-primary">DUMMY BACK TO DASHBOARD</a>
-            </div> --}}
             <div class="card">
                 <div class="card-body">
                     <div class="row mt-3">
-                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <div class="launch-box h-180">
-                                <h3>Kontrak</h3>
-                                <i class="fa fa-file-archive"></i>
-                                <p>Daftar Kontrak Pengadaan</p>
-                                <h3>Lihat Daftar</h3>
-                            </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                            <a href="{{ route('aset.kasi.kontrak-index') }}">
+                                <div class="launch-box h-180">
+                                    <h3>Kontrak</h3>
+                                    <i class="fa fa-file-archive"></i>
+                                    <p>Daftar Kontrak Pengadaan</p>
+                                    <h3>Lihat Daftar</h3>
+                                </div>
+                            </a>
                         </div>
-                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <div class="launch-box h-180">
-                                <h3>Gudang Utama</h3>
-                                <i class="fa fa-building"></i>
-                                <p>Jenis Aset</p>
-                                <h3>23003 Aset</h3>
-                            </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                            <a href="{{ route('aset.gudang-utama') }}">
+                                <div class="launch-box h-180">
+                                    <h3>Gudang Utama</h3>
+                                    <i class="fa fa-building"></i>
+                                    <p>Jenis Aset</p>
+                                    <h3>23003 Aset</h3>
+                                </div>
+                            </a>
                         </div>
-                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <div class="launch-box h-180">
-                                <h3>Pengiriman</h3>
-                                <i class="fa fa-truck"></i>
-                                <p>Januari, 2024</p>
-                                <h3>10 Laporan</h3>
-                            </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                            <a href="{{ route('aset.pengiriman.index') }}">
+                                <div class="launch-box h-180">
+                                    <h3>Pengiriman</h3>
+                                    <i class="fa fa-truck"></i>
+                                    <p>Januari, 2024</p>
+                                    <h3>10 Pengiriman</h3>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                            <a href="{{ route('aset.gudang-pulau') }}">
+                                <div class="launch-box h-180">
+                                    <h3>Monitoring Stock</h3>
+                                    <i class="fa fa-line-chart"></i>
+                                    <p>Monitoring Stock Barang Gudang Pulau</p>
+                                    <h3>4 Gudang</h3>
+                                </div>
+                            </a>
                         </div>
                     </div>
                 </div>

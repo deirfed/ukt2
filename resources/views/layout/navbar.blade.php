@@ -126,7 +126,7 @@
     </ul>
 </li>
 
-{{-- <li class="nav-item dropdown">
+<li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="appsDropdown" role="button" data-toggle="dropdown"
         aria-haspopup="true" aria-expanded="false">
         <i class="icon-truck nav-icon"></i>
@@ -143,4 +143,4 @@
             <a class="dropdown-item" href="{{ route('aset.pjlp.index') }}">PJLP</a>
         </li>
     </ul>
-</li> --}}
+</li>

@@ -19,7 +19,6 @@
 @section('content')
     <div class="row gutters justify-content-center">
         <div class="col-xl-4 col-lg-4 col-md-5 col-sm-6 col-12">
-
             <form action="{{ route('absensi.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('post')
@@ -76,6 +75,7 @@
                             </div>
                         </div>
                     </div>
+                </div>
             </form>
         </div>
     </div>

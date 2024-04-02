@@ -24,20 +24,24 @@
                 <div class="card-body">
                     <div class="row mt-3">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <div class="launch-box h-180">
-                                <h3>Transaksi Barang</h3>
-                                <i class="fa fa-building"></i>
-                                <p>Daftar Barang di Gudang Saya</p>
-                                <h3>Lihat Daftar</h3>
-                            </div>
+                            <a href="{{ route('aset.pjlp.my-gudang') }}">
+                                <div class="launch-box h-180">
+                                    <h3>Gudang Barang</h3>
+                                    <i class="fa fa-building"></i>
+                                    <p>Daftar Barang di Gudang Saya</p>
+                                    <h3>Lihat Daftar</h3>
+                                </div>
+                            </a>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <div class="launch-box h-180">
-                                <h3>Histori Transaksi</h3>
-                                <i class="fa fa-list-ol"></i>
-                                <p>Lihat Transaski Barang Saya</p>
-                                <h3>Lihat Daftar</h3>
-                            </div>
+                            <a href="{{ route('aset.pjlp.my-transaction') }}">
+                                <div class="launch-box h-180">
+                                    <h3>Histori Transaksi</h3>
+                                    <i class="fa fa-list-ol"></i>
+                                    <p>Lihat Transaski Barang Saya</p>
+                                    <h3>Lihat Daftar</h3>
+                                </div>
+                            </a>
                         </div>
                     </div>
                 </div>
