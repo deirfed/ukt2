@@ -45,7 +45,7 @@
                                 Semua User
                             </a>
                             <a href="{{ route('user.index') }}?employee_type_id=1" class="btn btn-primary mb-2 ml-3">
-                                Daftar PNS
+                                Daftar Kepala Seksi
                             </a>
                             <a href="{{ route('user.index') }}?employee_type_id=2" class="btn btn-primary mb-2 ml-3">
                                 Daftar Koordinator
