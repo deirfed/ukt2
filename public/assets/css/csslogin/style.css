@@ -46,47 +46,6 @@ body {
 	clip-path: inset(0 0 0 0);
 }
 
-.screen__background__shape {
-	transform: rotate(45deg);
-	position: absolute;
-}
-
-.screen__background__shape1 {
-	height: 520px;
-	width: 520px;
-	background: #FFF;
-	top: -50px;
-	right: 120px;
-	border-radius: 0 72px 0 0;
-}
-
-.screen__background__shape2 {
-	height: 220px;
-	width: 220px;
-	background: #ffdd00;
-	top: -172px;
-	right: 0;
-	border-radius: 32px;
-}
-
-.screen__background__shape3 {
-	height: 540px;
-	width: 190px;
-	background: linear-gradient(270deg, #0db14b, #0db14b);
-	top: -24px;
-	right: 0;
-	border-radius: 32px;
-}
-
-.screen__background__shape4 {
-	height: 400px;
-	width: 200px;
-	background: #ffdd00;
-	top: 420px;
-	right: 50px;
-	border-radius: 60px;
-}
-
 .login {
 	width: 320px;
 	padding: 30px;
@@ -94,7 +53,7 @@ body {
 }
 
 .login__field {
-	padding: 20px 0px;
+	padding: 15px 0px;
 	position: relative;
 }
 
@@ -105,6 +64,7 @@ body {
 }
 
 .login__input {
+    color: black;
 	border: none;
 	border-bottom: 2px solid #D1D1D4;
 	background: none;
@@ -143,7 +103,7 @@ body {
 .login__submit:active,
 .login__submit:focus,
 .login__submit:hover {
-	border-color: #ffdd00;
+	border-color: #034ea2;
 	outline: none;
 }
 
@@ -156,12 +116,50 @@ body {
 .title{
 	display: flex;
 	justify-content: center;
-	margin-top: 100px;
+	margin-top: 30px;
+}
+
+.title h1 {
+    margin-top: 10px;
 }
 
 .login-logo{
     max-height: 800px;
     max-width: 200px;
+}
+
+.img-back {
+    background-image: url('/assets/img/loginbg.png');
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.text-head {
+    position: relative;
+    margin-top: 30px;
+}
+
+.text-head h1 {
+    color: #75C7FB;
+    font-weight: 900;
+    font-size: 3.2rem;
+    font-style: italic;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    background-color: transparent;
+    color: #ffffff;
 }
 
 @media only screen and (min-width: 450px) {
@@ -228,7 +226,7 @@ body {
     }
 
     .login {
-        width: 500px;
+        width: 600px;
     }
 
     .login__input {
