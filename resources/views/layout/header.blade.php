@@ -6,7 +6,7 @@
     </div>
     <div class="header-items">
         <ul class="header-actions">
-            <li class="dropdown mt-4">
+            {{-- <li class="dropdown mt-4">
                 <a href="#" id="notifications" data-toggle="dropdown" aria-haspopup="true">
                     <i class="icon-bell"></i>
                     <span class="count-label">1</span>
@@ -31,7 +31,7 @@
                         </li>
                     </ul>
                 </div>
-            </li>
+            </li> --}}
             <li class="dropdown mt-4">
                 <a href="#" id="userSettings" class="user-settings" data-toggle="dropdown" aria-haspopup="true">
                     <span class="text-white fw-bolder p-1">{{ auth()->user()->name }}</span>

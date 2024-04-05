@@ -61,6 +61,9 @@
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                             <a href="{{ route('simoja.kasi.cuti.approval') }}">
                                 <div class="launch-box h-180">
+                                    @if ($jumlah_pengajuan_cuti > 0)
+                                        <span class="circle pulse badge-notif"></span>
+                                    @endif
                                     <h3>Daftar Persetujuan Cuti</h3>
                                     <i class="fa fa-calendar-days"></i>
                                     <p>{{ $tanggal }}</p>
@@ -72,10 +75,14 @@
                                 </div>
                             </a>
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
+        <style>
+
+        </style>
     </div>
 
     <style>
