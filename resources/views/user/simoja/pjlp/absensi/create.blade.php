@@ -44,7 +44,7 @@
                         <div class="form-group">
                             <label for="">Seksi</label>
                             <input type="text" class="form-control" autocomplete="off"
-                                value="{{ auth()->user()->struktur->seksi->name }}" disabled>
+                                value="{{ auth()->user()->struktur->seksi->name }} (Pulau {{ auth()->user()->area->pulau->name }})" disabled>
                         </div>
                         <div class="form-group">
                             <label for="">Tipe Absensi</label>

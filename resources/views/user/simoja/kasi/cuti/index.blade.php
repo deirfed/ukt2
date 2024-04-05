@@ -53,7 +53,7 @@
                                             <th class="text-center text-wrap">Jabatan</th>
                                             <th class="text-center text-wrap">Pulau</th>
                                             <th class="text-center text-wrap">Seksi</th>
-                                            <th class="text-center text-wrap">Tim</th>
+                                            {{-- <th class="text-center text-wrap">Tim</th> --}}
                                             <th class="text-center text-wrap">Tanggal Pengajuan</th>
                                             <th class="text-center text-wrap">Jenis Izin</th>
                                             <th class="text-center text-wrap">Jumlah Hari</th>
@@ -72,7 +72,7 @@
                                                 <td class="text-center">{{ $item->user->jabatan->name }}</td>
                                                 <td class="text-center">{{ $item->user->area->pulau->name }}</td>
                                                 <td class="text-center">{{ $item->user->struktur->seksi->name }}</td>
-                                                <td class="text-center">{{ $item->user->struktur->tim->name }}</td>
+                                                {{-- <td class="text-center">{{ $item->user->struktur->tim->name }}</td> --}}
                                                 <td class="text-center text-wrap">
                                                     {{ $item->tanggal_awal == $item->tanggal_akhir ? $item->tanggal_awal : $item->tanggal_awal . ' - ' . $item->tanggal_akhir }}
                                                 </td>

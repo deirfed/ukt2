@@ -52,7 +52,7 @@
                                     <th class="text-center">Nama</th>
                                     <th class="text-center">Pulau</th>
                                     <th class="text-center">Koordinator</th>
-                                    <th class="text-center">Tim</th>
+                                    {{-- <th class="text-center">Tim</th> --}}
                                     <th class="text-center">Giat</th>
                                     <th class="text-center">Deskripsi</th>
                                     <th class="text-center">Lokasi</th>
@@ -67,7 +67,7 @@
                                         <td class="text-center">{{ $item->anggota->name ?? '-' }}</td>
                                         <td class="text-center">Pulau {{ $item->formasi_tim->area->pulau->name }}</td>
                                         <td class="text-center">{{ $item->koordinator->name ?? '-' }}</td>
-                                        <td class="text-center">{{ $item->formasi_tim->struktur->tim->name }}</td>
+                                        {{-- <td class="text-center">{{ $item->formasi_tim->struktur->tim->name }}</td> --}}
                                         <td class="text-center">{{ $item->kategori->name ?? $item->kegiatan }}</td>
                                         <td class="text-center">{{ $item->deskripsi ?? '-' }}</td>
                                         <td class="text-center">{{ $item->lokasi ?? '-' }}</td>

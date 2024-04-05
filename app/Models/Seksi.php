@@ -25,4 +25,8 @@ class Seksi extends Model
         });
     }
 
+    public function tim()
+    {
+        return $this->belongsTo(Tim::class);
+    }
 }

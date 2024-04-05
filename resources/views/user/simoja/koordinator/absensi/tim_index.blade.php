@@ -53,7 +53,7 @@
                                     <th class="text-center">Nama</th>
                                     <th class="text-center">Pulau</th>
                                     <th class="text-center">Jabatan</th>
-                                    <th class="text-center">Tim</th>
+                                    {{-- <th class="text-center">Tim</th> --}}
                                     <th class="text-center">Jam Masuk</th>
                                     <th class="text-center">Jam Pulang</th>
                                     <th class="text-center">Status</th>
@@ -68,7 +68,7 @@
                                         <td class="text-center">{{ $item->user->name }}</td>
                                         <td class="text-center">Pulau {{ $item->user->area->pulau->name }}</td>
                                         <td class="text-center">{{ $item->user->jabatan->name }}</td>
-                                        <td class="text-center">{{ $item->user->struktur->tim->name }}</td>
+                                        {{-- <td class="text-center">{{ $item->user->struktur->tim->name }}</td> --}}
                                         <td class="text-center">{{ $item->jam_masuk ?? '-' }}</td>
                                         <td class="text-center">{{ $item->jam_pulang ?? '-' }}</td>
                                         <td class="text-center">{{ $item->status }}</td>

@@ -42,9 +42,9 @@
                                 value="{{ auth()->user()->jabatan->name }}" disabled>
                         </div>
                         <div class="form-group">
-                            <label for="">Tim</label>
+                            <label for="">Seksi</label>
                             <input type="text" class="form-control" autocomplete="off"
-                                value="{{ auth()->user()->struktur->tim->name }}" disabled>
+                                value="{{ auth()->user()->struktur->seksi->name }} (Pulau {{ auth()->user()->area->pulau->name }})" disabled>
                         </div>
                         <div class="form-group">
                             <label for="">Tipe Absensi</label>

@@ -11,6 +11,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('simoja.koordinator.index') }}">Cuti</a></li>
             <li class="breadcrumb-item active">Daftar Cuti Tim Saya</li>
+
     </div>
 @endsection
 @section('content')
