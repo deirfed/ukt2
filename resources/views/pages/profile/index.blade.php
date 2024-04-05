@@ -29,7 +29,7 @@
                 <h5>{{ auth()->user()->nip }}</h5>
                 <br>
                 <h5>Seksi {{ auth()->user()->struktur->seksi->name }}</h5>
-                <h5>{{ auth()->user()->struktur->tim->name }}</h5>
+                {{-- <h5>{{ auth()->user()->struktur->tim->name }}</h5> --}}
                 <p>Pulau {{ auth()->user()->area->pulau->name }}</p>
             </div>
         </div>
@@ -87,7 +87,7 @@
         </div>
     </div>
     <div class="row gutters">
-        <div class="col-xl-6 col-lg-3 col-md-6 col-sm-6 col-12">
+        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-12">
             <div class="info-stats4">
                 <div class="info-icon">
                     <i class="fa fa-calendar"></i>
@@ -98,7 +98,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-6 col-lg-3 col-md-6 col-sm-6 col-12">
+        {{-- <div class="col-xl-6 col-lg-3 col-md-6 col-sm-6 col-12">
             <div class="info-stats4">
                 <div class="info-icon">
                     <i class="icon-activity"></i>
@@ -112,7 +112,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
     </div>
 
     {{-- BEGIN: Update Photo Profil --}}
