@@ -9,7 +9,7 @@
 @section('path')
     <div class="page-header">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item">Cuti PJLP</li>
+            <li class="breadcrumb-item"><a href="{{ route('simoja.pjlp.index') }}">Cuti PJLP</a></li>
             <li class="breadcrumb-item active">Permohonan Cuti / Izin</li>
         </ol>
     </div>

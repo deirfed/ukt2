@@ -9,7 +9,7 @@
 @section('path')
     <div class="page-header">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item">Kinerja</li>
+            <li class="breadcrumb-item"><a href="{{ route('simoja.koordinator.index') }}">Kinerja</a></li>
             <li class="breadcrumb-item active">Laporan Kinerja</li>
         </ol>
     </div>
@@ -43,7 +43,7 @@
                                     <td class="font-weight-bolder">{{ auth()->user()->name }}</td>
                                 </tr>
                                 <tr>
-                                    <td>NIP</td>
+                                    <td>NIP/ID</td>
                                     <td>:</td>
                                     <td>{{ auth()->user()->nip }}</td>
                                 </tr>

@@ -9,8 +9,9 @@
 @section('path')
     <div class="page-header">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item">Absensi</li>
+            <li class="breadcrumb-item"><a href="{{ route('simoja.kasi.index') }}">Absensi</a></li>
             <li class="breadcrumb-item active">Daftar Absensi Seksi Pertamanan</li>
+        </ol>
     </div>
 @endsection
 

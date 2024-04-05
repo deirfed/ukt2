@@ -9,8 +9,9 @@
 @section('path')
     <div class="page-header">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item">Kinerja</li>
+            <li class="breadcrumb-item"><a href="{{ route('simoja.koordinator.index') }}">Kinerja</a></li>
             <li class="breadcrumb-item active">Daftar Kinerja Tim Saya</li>
+        </ol>
     </div>
 @endsection
 

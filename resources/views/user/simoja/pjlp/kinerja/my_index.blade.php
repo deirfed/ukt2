@@ -9,7 +9,7 @@
 @section('path')
     <div class="page-header">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item">Kinerja PJLP</li>
+            <li class="breadcrumb-item"><a href="{{ route('simoja.pjlp.index') }}">Kinerja PJLP</a></li>
             <li class="breadcrumb-item active">Daftar Kinerja Saya</li>
     </div>
 @endsection
