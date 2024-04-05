@@ -42,9 +42,9 @@
                                 value="{{ auth()->user()->jabatan->name }}" disabled>
                         </div>
                         <div class="form-group">
-                            <label for="">Tim</label>
+                            <label for="">Seksi</label>
                             <input type="text" class="form-control" autocomplete="off"
-                                value="{{ auth()->user()->struktur->tim->name }}" disabled>
+                                value="{{ auth()->user()->struktur->seksi->name }}" disabled>
                         </div>
                         <div class="form-group">
                             <label for="">Tipe Absensi</label>
@@ -82,7 +82,7 @@
                             </div>
                             <div class="btn group-button mt-2">
                                 <button type="submit" id="submit" name="submit"
-                                    class="btn btn-primary float-right ml-3" style="display: none">Submit</button>
+                                    class="btn btn-primary float-right ml-3" style="display: none">Kirim</button>
                                 <a href="{{ route('simoja.pjlp.index') }}" class="btn btn-dark">Batal</a>
                             </div>
                         </div>

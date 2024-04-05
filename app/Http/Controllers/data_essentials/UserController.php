@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\data_essentials;
 
-use App\Http\Controllers\Controller;
 use App\Models\Area;
-use App\Models\EmployeeType;
-use App\Models\Jabatan;
 use App\Models\Role;
+use App\Models\User;
+use App\Models\Jabatan;
 use App\Models\RoleUser;
 use App\Models\Struktur;
-use App\Models\User;
+use App\Models\EmployeeType;
 use Illuminate\Http\Request;
+use App\Models\KonfigurasiCuti;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -155,7 +156,14 @@ class UserController extends Controller
 
     public function user_profile()
     {
-        return view('pages.profile.index');
+        $jumlah_cuti = KonfigurasiCuti::where('user_id', auth()->id())->first();
+
+        if ($jumlah_cuti) {
+            $sisa_cuti = $jumlah_cuti->jumlah;
+        } else {
+            $sisa_cuti = 0;
+        }
+        return view('pages.profile.index', compact(['sisa_cuti']));
     }
 
     public function update_photo(Request $request)

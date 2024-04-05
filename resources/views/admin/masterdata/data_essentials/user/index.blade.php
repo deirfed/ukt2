@@ -55,7 +55,7 @@
                             </a>
                         </div>
                         <div class="table-responsive mt-2">
-                            <table class="table table-bordered table-primary" id="dataTable" name="pns">
+                            <table class="table table-bordered table-striped" id="dataTable" name="pns">
                                 <thead>
                                     <tr>
                                         <th class="text-center">No.</th>

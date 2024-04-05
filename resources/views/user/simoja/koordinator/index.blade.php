@@ -26,7 +26,7 @@
                                     <h3>Absensi Saya</h3>
                                     <i class="fa fa-id-card"></i>
                                     <p>{{ $tanggal }}</p>
-                                    <h3 class="jam"></h3>
+                                    <h5 class="jam"></h5>
                                 </div>
                             </a>
                         </div>
@@ -36,7 +36,7 @@
                                     <h3>Kinerja Saya</h3>
                                     <i class="fa fa-suitcase"></i>
                                     <p>{{ $tanggal }}</p>
-                                    <h3>10 Laporan</h3>
+                                    <h5>Lihat Daftar</h5>
                                 </div>
                             </a>
                         </div>
@@ -46,7 +46,11 @@
                                     <h3>Cuti Saya</h3>
                                     <i class="fa fa-calendar-times"></i>
                                     <p>{{ $tanggal }}</p>
-                                    <h3>Sisa Cuti : 12</h3>
+                                    @if ($jumlah_cuti > 0)
+                                        <h5>Sisa Cuti: {{ $jumlah_cuti }}</h5>
+                                    @else
+                                        <h5>Kuota Cuti Habis</h5>
+                                    @endif
                                 </div>
                             </a>
                         </div>
@@ -56,7 +60,7 @@
                                     <h3>Absensi Tim Saya</h3>
                                     <i class="fa fa-users"></i>
                                     <p>{{ $tanggal }}</p>
-                                    <h3>Lihat Daftar</h3>
+                                    <h5>Lihat Daftar</h5>
                                 </div>
                             </a>
                         </div>
@@ -66,7 +70,7 @@
                                     <h3>Kinerja Tim Saya</h3>
                                     <i class="fa fa-line-chart"></i>
                                     <p>{{ $tanggal }}</p>
-                                    <h3>Lihat Daftar</h3>
+                                    <h5>Lihat Daftar</h5>
                                 </div>
                             </a>
                         </div>
@@ -76,7 +80,7 @@
                                     <h3>Cuti Tim Saya</h3>
                                     <i class="fa fa-calendar-minus"></i>
                                     <p>{{ $tanggal }}</p>
-                                    <h3>Lihat Daftar</h3>
+                                    <h5>Lihat Daftar</h5>
                                 </div>
                             </a>
                         </div>

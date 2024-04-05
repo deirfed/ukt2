@@ -29,6 +29,7 @@ class CutiController extends Controller
         $seksi  = Seksi::all();
         $koordinator  = User::whereRelation('jabatan', 'id', '=', 4)->get();
         $tim = Tim::orderBy('name', 'ASC')->get();
+        $konfigurasi_cuti = KonfigurasiCuti::all();
 
         $pulau_id = '';
         $seksi_id = '';
@@ -51,6 +52,7 @@ class CutiController extends Controller
             'status',
             'start_date',
             'end_date',
+            'konfigurasi_cuti'
         ]));
     }
 

@@ -118,7 +118,7 @@
                             <textarea class="form-control" name="deskripsi" rows="3"></textarea>
                         </div>
                         <div class="btn group-button">
-                            <button type="submit" class="btn btn-primary float-right ml-3">Submit</button>
+                            <button type="submit" class="btn btn-primary float-right ml-3">Kirim</button>
                             <a href="{{ route('dashboard.index') }}" class="btn btn-dark">Batal</a>
                         </div>
                     </div>

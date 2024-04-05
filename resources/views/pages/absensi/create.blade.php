@@ -50,7 +50,7 @@
                         </div>
                         <div class="form-group">
                             <label for="">Jam</label>
-                            <input type="text" placeholder="Jam Masuk" onfocus="(this.type='time')"
+                            <input type="text" placeholder="Jam Datang" onfocus="(this.type='time')"
                                 onblur="(this.type='text')" class="form-control" name="jam" autocomplete="off" required>
                         </div>
                         <div class="form-group">
@@ -61,7 +61,7 @@
                                 <div class="img-thumbnail mt-2 text-center" id="my_camera"></div>
                                 <input type="button" class="btn btn-primary" value="Ambil Foto" onClick="take_snapshot()">
                                 <div class="mt-3 text-center">
-                                    <div id="result">Your captured image will appear here...</div>
+                                    <div id="result">Foto Anda akan tampil Disini....</div>
                                 </div>
                             </div>
                             <div class="btn group-button">

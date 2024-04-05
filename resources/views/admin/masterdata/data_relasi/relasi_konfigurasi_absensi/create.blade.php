@@ -40,7 +40,7 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="">Jam Masuk</label>
+                            <label for="">Jam Datang</label>
                             <input type="time" name="jam_masuk" class="form-control" required>
                         </div>
                         <div class="form-group">
@@ -48,7 +48,7 @@
                             <input type="time" name="jam_pulang" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label for="">Toleransi Masuk (Menit)</label>
+                            <label for="">Toleransi Datang (Menit)</label>
                             <input type="number" name="toleransi_masuk" class="form-control" required min="0">
                         </div>
                         <div class="form-group">

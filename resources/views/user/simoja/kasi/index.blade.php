@@ -20,43 +20,55 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row mt-3">
-                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                             <a href="{{ route('simoja.kasi.absensi') }}">
                                 <div class="launch-box h-180">
                                     <h3>Lihat Daftar Absensi</h3>
                                     <i class="fa fa-id-card"></i>
                                     <p>{{ $tanggal }}</p>
-                                    <h3 class="jam"></h3>
+                                    <h5 class="jam"></h5>
                                 </div>
                             </a>
                         </div>
-                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                             <a href="{{ route('simoja.kasi.kinerja') }}">
                                 <div class="launch-box h-180">
                                     <h3>Lihat Daftar Kinerja</h3>
                                     <i class="fa fa-suitcase"></i>
                                     <p>{{ $tanggal }}</p>
-                                    <h3>10 Laporan</h3>
+                                    @if ($jumlah_kinerja > 0)
+                                        <h5>{{ $jumlah_kinerja }} Data Kinerja</h5>
+                                    @else
+                                        <h5>Tidak ada Data Kinerja</h5>
+                                    @endif
                                 </div>
                             </a>
                         </div>
-                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                             <a href="{{ route('simoja.kasi.cuti') }}">
                                 <div class="launch-box h-180">
-                                    <h3>Lihat Daftar Cuti</h3>
+                                    <h3>Lihat Data Cuti</h3>
                                     <i class="fa fa-calendar-times"></i>
                                     <p>{{ $tanggal }}</p>
-                                    <h3>1 Pengajuan</h3>
+                                    @if ($data_cuti > 0)
+                                        <h5>{{ $data_cuti }} Data Cuti</h5>
+                                    @else
+                                        <h5>Tidak ada Data Cuti</h5>
+                                    @endif
                                 </div>
                             </a>
                         </div>
-                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                             <a href="{{ route('simoja.kasi.cuti.approval') }}">
                                 <div class="launch-box h-180">
-                                    <h3>Lihat Daftar Approval Cuti</h3>
-                                    <i class="fa fa-calendar-times"></i>
+                                    <h3>Daftar Persetujuan Cuti</h3>
+                                    <i class="fa fa-calendar-days"></i>
                                     <p>{{ $tanggal }}</p>
-                                    <h3>1 Pengajuan</h3>
+                                    @if ($jumlah_pengajuan_cuti > 0)
+                                        <h5>{{ $jumlah_pengajuan_cuti }} Pengajuan</h5>
+                                    @else
+                                        <h5>Tidak ada Pengajuan Cuti</h5>
+                                    @endif
                                 </div>
                             </a>
                         </div>

@@ -26,7 +26,7 @@
                                     <h3>Absensi Saya</h3>
                                     <i class="fa fa-id-card"></i>
                                     <p>{{ $tanggal }}</p>
-                                    <h3 id="jam"></h3>
+                                    <h5 id="jam"></h5>
                                 </div>
                             </a>
                         </div>
@@ -36,7 +36,7 @@
                                     <h3>Kinerja</h3>
                                     <i class="fa fa-suitcase"></i>
                                     <p>{{ $tanggal }}</p>
-                                    <h3>10 Laporan</h3>
+                                    <h5>Lihat Data Kinerja</h5>
                                 </div>
                             </a>
                         </div>
@@ -46,7 +46,11 @@
                                     <h3>Cuti Saya</h3>
                                     <i class="fa fa-calendar-times"></i>
                                     <p>{{ $tanggal }}</p>
-                                    <h3>Sisa Cuti : 12</h3>
+                                    @if ($sisa_cuti > 0)
+                                        <h5>Sisa Cuti: {{ $sisa_cuti }}</h5>
+                                    @else
+                                        <h5>Kuota Cuti Habis</h5>
+                                    @endif
                                 </div>
                             </a>
                         </div>

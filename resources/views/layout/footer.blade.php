@@ -1,2 +1,3 @@
-<footer class="main-footer">© <a class="text-white fw-bolder" href="https://tideupindustries.com" target="_blank">UKT2.ORG Development Team</a>
-    {{ date('Y') }}</footer>
+<footer class="main-footer">© {{ date('Y') }} <a class="text-white fw-bolder" href="https://ukt2.org/"
+        target="_blank">SIMOJA. All Right Reserved.</a>
+</footer>

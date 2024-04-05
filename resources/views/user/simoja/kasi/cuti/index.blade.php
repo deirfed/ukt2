@@ -22,30 +22,24 @@
                 <div class="card-body">
                     <h4 class="d-flex justify-content-center mb-3 text-center" style="text-decoration: underline">Daftar
                         Pengajuan Cuti Seksi {{ auth()->user()->struktur->seksi->name }}</h4>
-                    <div class="row">
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <form class="form-inline mb-2">
-                                <input class="form-control mr-sm-2" type="search" placeholder="Cari sesuatu di sini..."
-                                    aria-label="Search" id="search-bar">
-                                <button class="btn btn-dark my-2 my-sm-0" type="submit">Pencarian</button>
-                            </form>
-                        </div>
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3 text-left">
+                    <div class="row d-flex justify-content-between align-items-center">
+                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-3 text-left">
                             <div class="d-flex justify-content-start align-items-center flex-wrap">
                                 <a href="{{ route('simoja.kasi.index') }}"
                                     class="btn btn-outline-primary mr-2 mb-2 mb-sm-0"><i class="fa fa-arrow-left"></i>
                                     Kembali</a>
-                                <button data-toggle="modal" data-target="#modalDownloadExcel" title="Export Excel"
-                                    class="btn btn-primary mr-2">
-                                    <i class="fa fa-file-excel"></i>
-                                    Export to Excel
-                                </button>
-                                <a href="javascript:;" title="Filter" class="btn btn-primary mr-2" data-toggle="modal"
-                                    data-target="#modalFilter"><i class="fa fa-filter"></i> Filter</a>
-                                <a href="{{ route('cuti.index') }}" class="btn btn-primary" title="Reset Filter">
-                                    <i class="fa fa-refresh"></i>
-                                </a>
+                                <button class="btn btn-primary mr-2 mb-2 mb-sm-0">Export to Excel</button>
+                                <button class="btn btn-primary mr-2 mb-2 mb-sm-0">Export to PDF</button>
+                                <a href="" class="btn btn-primary mb-2 mb-sm-0" data-toggle="modal"
+                                    data-target="#modalFilter"><i class="fa fa-filter"></i></a>
                             </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <form class="form-inline mb-2 d-flex justify-content-end">
+                                <input class="form-control mr-sm-2" type="search" placeholder="Cari sesuatu di sini..."
+                                    aria-label="Search" id="search-bar">
+                                <button class="btn btn-dark my-2 my-sm-0" type="submit">Pencarian</button>
+                            </form>
                         </div>
                     </div>
                     <div class="projectLog">
@@ -63,6 +57,7 @@
                                             <th class="text-center text-wrap">Tanggal Pengajuan</th>
                                             <th class="text-center text-wrap">Jenis Izin</th>
                                             <th class="text-center text-wrap">Jumlah Hari</th>
+                                            <th class="text-center text-wrap">Sisa Cuti</th>
                                             <th class="text-center text-wrap">Koordinator</th>
                                             <th class="text-center text-wrap">Disetujui</th>
                                             <th class="text-center text-wrap">Status</th>
@@ -83,6 +78,7 @@
                                                 </td>
                                                 <td class="text-center">{{ $item->jenis_cuti->name }}</td>
                                                 <td class="text-center">{{ $item->jumlah }} hari</td>
+                                                <td class="text-center">{{ $item->user->konfigurasi_cuti->jumlah }} hari</td>
                                                 <td class="text-center">
                                                     {{ $item->known_by->name }}
                                                 </td>

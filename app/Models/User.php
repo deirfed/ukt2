@@ -82,4 +82,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(EmployeeType::class);
     }
+
+    public function konfigurasi_cuti()
+    {
+        return $this->hasOne(KonfigurasiCuti::class);
+    }
 }

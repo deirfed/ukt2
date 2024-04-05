@@ -45,9 +45,9 @@
                                 <tr>
                                     <th class="text-center">No.</th>
                                     <th class="text-center">Jenis Absensi</th>
-                                    <th class="text-center">Jam Masuk</th>
+                                    <th class="text-center">Jam Datang</th>
                                     <th class="text-center">Jam Pulang</th>
-                                    <th class="text-center">Toleransi Masuk</th>
+                                    <th class="text-center">Toleransi Datang</th>
                                     <th class="text-center">Toleransi Pulang</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>

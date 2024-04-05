@@ -1,4 +1,4 @@
-@extends('layout.base')
+@extends('layout.base_user')
 
 @section('title-head')
     <title>
@@ -65,20 +65,19 @@
                                     value="{{ auth()->user()->struktur->seksi->name }}" disabled>
                             </div>
                             <div class="form-group">
-                                <label for="ciTy">Koordinator</label>
+                                <label for="ciTy">Jabatan</label>
                                 <input type="koordinator" class="form-control" id="pulau" placeholder="Koordinator"
-                                    value="" disabled>
+                                    value="{{ auth()->user()->jabatan->name }}" disabled>
                             </div>
                             <div class="form-group">
-                                <label for="pulau">Pulau Okupansi/Tempat Bertugas</label>
+                                <label for="pulau">Tempat Bertugas</label>
                                 <input type="text" class="form-control" id="pulau" placeholder="Pulau"
                                     value="Pulau {{ auth()->user()->area->pulau->name }}" disabled>
                             </div>
                         </div>
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="text-right">
-                                <button type="button" id="submit" name="submit" class="btn btn-dark">Batal</button>
-                                <button type="button" id="submit" name="submit" class="btn btn-success">Submit
+                                <button type="button" id="submit" name="submit" class="btn btn-primary">Kirim
                                     Perubahan</button>
                             </div>
                         </div>
@@ -88,29 +87,18 @@
         </div>
     </div>
     <div class="row gutters">
-        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
+        <div class="col-xl-6 col-lg-3 col-md-6 col-sm-6 col-12">
             <div class="info-stats4">
                 <div class="info-icon">
                     <i class="fa fa-calendar"></i>
                 </div>
                 <div class="sale-num">
-                    <h4>12/12</h4>
+                    <h4>{{ $sisa_cuti }}</h4>
                     <p>Sisa Cuti Tahun Ini</p>
                 </div>
             </div>
         </div>
-        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
-            <div class="info-stats4">
-                <div class="info-icon">
-                    <i class="fa fa-check"></i>
-                </div>
-                <div class="sale-num">
-                    <h4>250</h4>
-                    <p>Daftar Laporan Kinerja Saya</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
+        <div class="col-xl-6 col-lg-3 col-md-6 col-sm-6 col-12">
             <div class="info-stats4">
                 <div class="info-icon">
                     <i class="icon-activity"></i>
@@ -122,17 +110,6 @@
                     <p>Lihat Tanda Tangan Saya</p>
                         </a>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
-            <div class="info-stats4">
-                <div class="info-icon">
-                    <i class="icon-activity"></i>
-                </div>
-                <div class="sale-num">
-                    <h4>XX</h4>
-                    <p>Dev Proccess</p>
                 </div>
             </div>
         </div>

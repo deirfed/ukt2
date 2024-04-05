@@ -104,13 +104,14 @@
             </div>
         </div>
         <!-- END: Delete Confirmation Modal -->
-    @endsection
+    </div>
+@endsection
 
 
-    @section('javascript')
-        <script type="text/javascript">
-            function toggleModal(id) {
-                $('#id').val(id);
-            }
-        </script>
-    @endsection
+@section('javascript')
+    <script type="text/javascript">
+        function toggleModal(id) {
+            $('#id').val(id);
+        }
+    </script>
+@endsection

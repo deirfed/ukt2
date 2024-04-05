@@ -82,7 +82,7 @@
                             </div>
                             <div class="btn group-button mt-2">
                                 <button type="submit" id="submit" name="submit"
-                                    class="btn btn-primary float-right ml-3">Submit</button>
+                                    class="btn btn-primary float-right ml-3">Kirim</button>
                                 <a href="{{ route('simoja.koordinator.index') }}" class="btn btn-dark">Batal</a>
                             </div>
                         </div>

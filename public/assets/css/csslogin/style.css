@@ -8,7 +8,8 @@
 }
 
 body {
-	background: linear-gradient(90deg, #1872d8, #034ea2);
+	background-image: url('/assets/img/bgfoto.png');
+    background-repeat: no-repeat;
 }
 
 .container {
@@ -129,7 +130,7 @@ body {
 }
 
 .img-back {
-    background-image: url('/assets/img/loginbg.png');
+    color: #034ea2;
     background-size: cover;
     background-position: center;
     width: 100%;
@@ -152,6 +153,11 @@ body {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
+input::placeholder{
+    color: black;
+    opacity: .8;
+}
+
 footer {
     position: absolute;
     bottom: 0;
@@ -159,10 +165,14 @@ footer {
     text-align: center;
     padding: 10px;
     background-color: transparent;
-    color: #ffffff;
+    color: black;
+    font-weight: 900;
 }
 
 @media only screen and (min-width: 450px) {
+    body{
+        background-size: cover;
+    }
     .screen {
         width: 400px;
         height: 550px;
@@ -196,6 +206,9 @@ footer {
 }
 
 @media only screen and (min-width: 992px) {
+    body{
+        background-size: cover;
+    }
     .screen {
         width: 800px;
         height: 900px;
