@@ -51,7 +51,8 @@
                             <h5 class="text-center">{{ auth()->user()->name }}</h5>
                             <p>{{ auth()->user()->email }}</p>
                         </div>
-                        <a href="{{ route('user.profile') }}"><i class="icon-user1"></i> My Profile</a>
+                        <a href="{{ route('user.profile') }}"><i class="icon-user1"></i> Profile Saya</a>
+                        <a href="{{ route('user.profile.edit.password') }}"><i class="icon-lock"></i> Ubah Password</a>
                         <a href="javascript;"
                             onclick="event.preventDefault();
                             document.getElementById('logout-form').submit();">

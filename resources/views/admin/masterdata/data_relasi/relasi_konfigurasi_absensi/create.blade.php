@@ -47,6 +47,24 @@
                             <label for="">Jam Pulang</label>
                             <input type="time" name="jam_pulang" class="form-control" required>
                         </div>
+                        <hr class="my-4">
+                        <div class="form-group">
+                            <label for="">Mulai Absen Datang</label>
+                            <input type="time" name="mulai_absen_masuk" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Selesai Absen Datang</label>
+                            <input type="time" name="selesai_absen_masuk" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Mulai Absen Pulang</label>
+                            <input type="time" name="mulai_absen_pulang" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Selesai Absen Pulang</label>
+                            <input type="time" name="selesai_absen_pulang" class="form-control" required>
+                        </div>
+                        <hr class="my-4">
                         <div class="form-group">
                             <label for="">Toleransi Datang (Menit)</label>
                             <input type="number" name="toleransi_masuk" class="form-control" required min="0">

@@ -14,6 +14,10 @@ return new class extends Migration
             $table->bigInteger('jenis_absensi_id')->unsigned()->nullable();
             $table->time('jam_masuk')->nullable();
             $table->time('jam_pulang')->nullable();
+            $table->time('mulai_absen_masuk')->nullable();
+            $table->time('selesai_absen_masuk')->nullable();
+            $table->time('mulai_absen_pulang')->nullable();
+            $table->time('selesai_absen_pulang')->nullable();
             $table->string('toleransi_masuk')->nullable();
             $table->string('toleransi_pulang')->nullable();
             $table->softDeletes();

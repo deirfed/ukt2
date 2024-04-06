@@ -124,6 +124,11 @@ class CutiController extends Controller
 
     public function my_index_koordinator()
     {
+        $isPNS = auth()->user()->employee_type->id;
+        if($isPNS == 1) {
+            return back()->withError('Anda PNS, Fitur ini hanya untuk Koordinator PJLP & PJLP!');
+        }
+
         $user_id = auth()->user()->id;
         $cuti = Cuti::where('user_id', $user_id)
                     ->orderBy('tanggal_awal', 'DESC')
@@ -143,6 +148,11 @@ class CutiController extends Controller
 
     public function create_koordinator()
     {
+        $isPNS = auth()->user()->employee_type->id;
+        if($isPNS == 1) {
+            return back()->withError('Anda PNS, Fitur ini hanya untuk Koordinator PJLP & PJLP!');
+        }
+
         $this_year = Carbon::now()->format('Y');
         $user_id = auth()->user()->id;
 

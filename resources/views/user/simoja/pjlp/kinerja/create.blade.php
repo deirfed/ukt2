@@ -57,11 +57,6 @@
                                     <td>:</td>
                                     <td>{{ $formasi_tim->koordinator->name ?? '#' }}</td>
                                 </tr>
-                                {{-- <tr>
-                                    <td>Tim</td>
-                                    <td>:</td>
-                                    <td>{{ $formasi_tim->struktur->tim->name }}</td>
-                                </tr> --}}
                                 <tr>
                                     <td>Seksi</td>
                                     <td>:</td>

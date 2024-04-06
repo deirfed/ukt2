@@ -10,7 +10,7 @@
     <div class="page-header">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('simoja.kasi.index') }}">Cuti</a></li>
-            <li class="breadcrumb-item active">Daftar Pengajuan Seksi {{ auth()->user()->struktur->seksi->name }}</li>
+            <li class="breadcrumb-item active">Daftar Pengajuan Cuti Seksi {{ auth()->user()->struktur->seksi->name }}</li>
         </ol>
     </div>
 @endsection
@@ -20,8 +20,8 @@
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="card h-250">
                 <div class="card-body">
-                    <h4 class="d-flex justify-content-center mb-3 text-center" style="text-decoration: underline">Daftar
-                        Pengajuan Cuti Seksi {{ auth()->user()->struktur->seksi->name }}</h4>
+                    <h4 class="d-flex justify-content-center mb-3 text-center" style="text-decoration: underline">Rekap
+                        Pengajuan Cuti - Seksi {{ auth()->user()->struktur->seksi->name }}</h4>
                     <div class="row d-flex justify-content-between align-items-center">
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-3 text-left">
                             <div class="d-flex justify-content-start align-items-center flex-wrap">
@@ -74,11 +74,12 @@
                                                 <td class="text-center">{{ $item->user->struktur->seksi->name }}</td>
                                                 {{-- <td class="text-center">{{ $item->user->struktur->tim->name }}</td> --}}
                                                 <td class="text-center text-wrap">
-                                                    {{ $item->tanggal_awal == $item->tanggal_akhir ? $item->tanggal_awal : $item->tanggal_awal . ' - ' . $item->tanggal_akhir }}
+                                                    {{ $item->tanggal_awal == $item->tanggal_akhir ? date('d-m-Y', strtotime($item->tanggal_awal)) : date('d-m-Y', strtotime($item->tanggal_awal)) . ' - ' . date('d-m-Y', strtotime($item->tanggal_akhir)) }}
                                                 </td>
                                                 <td class="text-center">{{ $item->jenis_cuti->name }}</td>
                                                 <td class="text-center">{{ $item->jumlah }} hari</td>
-                                                <td class="text-center">{{ $item->user->konfigurasi_cuti->jumlah }} hari</td>
+                                                <td class="text-center">{{ $item->user->konfigurasi_cuti->jumlah }} hari
+                                                </td>
                                                 <td class="text-center">
                                                     {{ $item->known_by->name }}
                                                 </td>

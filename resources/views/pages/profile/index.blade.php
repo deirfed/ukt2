@@ -79,6 +79,9 @@
                             <div class="text-right">
                                 <button type="button" id="submit" name="submit" class="btn btn-primary">Kirim
                                     Perubahan</button>
+                                <a href="{{ route('user.profile.edit.password') }}" class="btn btn-warning">Ubah
+                                    Password</a>
+                                <a href="{{ route('dashboard.index') }}" class="btn btn-danger">Kembali</a>
                             </div>
                         </div>
                     </div>

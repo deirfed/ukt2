@@ -64,7 +64,7 @@
                                 @foreach ($kinerja as $item)
                                     <tr>
                                         <td class="text-center">{{ $loop->iteration }}</td>
-                                        <td class="text-center">{{ $item->tanggal }}</td>
+                                        <td class="text-center">{{ date('d-m-Y', strtotime($item->tanggal)) }}</td>
                                         <td class="text-center">{{ $item->anggota->name ?? '-' }}</td>
                                         <td class="text-center">Pulau {{ $item->formasi_tim->area->pulau->name }}</td>
                                         <td class="text-center">{{ $item->koordinator->name ?? '-' }}</td>

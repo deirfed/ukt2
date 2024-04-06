@@ -48,6 +48,11 @@ class KinerjaController extends Controller
 
     public function my_index_koordinator()
     {
+        $isPNS = auth()->user()->employee_type->id;
+        if($isPNS == 1) {
+            return back()->withError('Anda PNS, Fitur ini hanya untuk Koordinator PJLP & PJLP!');
+        }
+
         $user_id = auth()->user()->id;
         $kinerja = Kinerja::where('anggota_id', $user_id)
                         ->orderBy('tanggal', 'DESC')
@@ -59,6 +64,10 @@ class KinerjaController extends Controller
 
     public function create_koordinator()
     {
+        $isPNS = auth()->user()->employee_type->id;
+        if($isPNS == 1) {
+            return back()->withError('Anda PNS, Fitur ini hanya untuk Koordinator PJLP & PJLP!');
+        }
         $user_id = auth()->user()->id;
         $formasi_tim = FormasiTim::where('koordinator_id', $user_id)
                                 ->orWhere('anggota_id', $user_id)

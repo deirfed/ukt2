@@ -31,6 +31,10 @@ class KonfigurasiAbsensiController extends Controller
             'jenis_absensi_id' => $request->jenis_absensi_id,
             'jam_masuk' => $request->jam_masuk,
             'jam_pulang' => $request->jam_pulang,
+            'mulai_absen_masuk' => $request->mulai_absen_masuk,
+            'selesai_absen_masuk' => $request->selesai_absen_masuk,
+            'mulai_absen_pulang' => $request->mulai_absen_pulang,
+            'selesai_absen_pulang' => $request->selesai_absen_pulang,
             'toleransi_masuk' => $request->toleransi_masuk,
             'toleransi_pulang' => $request->toleransi_pulang,
         ]);
@@ -57,6 +61,10 @@ class KonfigurasiAbsensiController extends Controller
             'jenis_absensi_id' => $request->jenis_absensi_id,
             'jam_masuk' => $request->jam_masuk,
             'jam_pulang' => $request->jam_pulang,
+            'mulai_absen_masuk' => $request->mulai_absen_masuk,
+            'selesai_absen_masuk' => $request->selesai_absen_masuk,
+            'mulai_absen_pulang' => $request->mulai_absen_pulang,
+            'selesai_absen_pulang' => $request->selesai_absen_pulang,
             'toleransi_masuk' => $request->toleransi_masuk,
             'toleransi_pulang' => $request->toleransi_pulang,
         ]);

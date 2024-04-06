@@ -32,23 +32,43 @@
                         </div>
                         <h4 class="text-center"><u>Form Absensi</u></h4>
                         <div class="form-group">
-                            <label for="">Nama</label>
-                            <input type="text" class="form-control" autocomplete="off" value="{{ auth()->user()->name }}"
-                                disabled>
+                            <label>Data Lengkap</label>
+                            <table>
+                                <tr>
+                                    <td style="width: 90px">Nama</td>
+                                    <td style="width: 15px">:</td>
+                                    <td class="font-weight-bolder">{{ auth()->user()->name }}</td>
+                                </tr>
+                                <tr>
+                                    <td>NIP/ID</td>
+                                    <td>:</td>
+                                    <td>{{ auth()->user()->nip }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Jabatan</td>
+                                    <td>:</td>
+                                    <td>{{ auth()->user()->jabatan->name }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Koordinator</td>
+                                    <td>:</td>
+                                    <td>{{ $formasi_tim->koordinator->name ?? 'N/A' }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Seksi</td>
+                                    <td>:</td>
+                                    <td>{{ $formasi_tim->struktur->seksi->name }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Pulau</td>
+                                    <td>:</td>
+                                    <td>{{ $formasi_tim->area->pulau->name }}</td>
+                                </tr>
+                            </table>
                         </div>
                         <div class="form-group">
-                            <label for="">Jabatan</label>
-                            <input type="text" class="form-control" autocomplete="off"
-                                value="{{ auth()->user()->jabatan->name }}" disabled>
-                        </div>
-                        <div class="form-group">
-                            <label for="">Seksi</label>
-                            <input type="text" class="form-control" autocomplete="off"
-                                value="{{ auth()->user()->struktur->seksi->name }} (Pulau {{ auth()->user()->area->pulau->name }})" disabled>
-                        </div>
-                        <div class="form-group">
-                            <label for="">Tipe Absensi</label>
-                            <input type="text" class="form-control" value="{{ $jenis_absensi->name }}" disabled>
+                            <label for="">Jenis Absensi</label>
+                            <input type="text" class="form-control" value="{{ $mode ?? '-' }}" disabled>
                             <input type="text" class="form-control" value="{{ $jenis_absensi->id }}"
                                 name="jenis_absensi_id" hidden>
                         </div>
@@ -69,22 +89,30 @@
                             <div class="container">
                                 <div class="mt-2 mx-auto" id="my_camera"></div>
                                 <div class="mb-3 text-center">
-                                    <div id="result">Silahkan ambil photo absen terlebih dahulu...</div>
+                                    <div id="result">Silahkan ambil foto absen terlebih dahulu...</div>
                                 </div>
                                 <div class="text-center">
                                     <div class="btn-group">
-                                        <input id="takeButton" type="button" class="btn btn-warning" value="Ambil Foto"
+                                        <button id="takeButton" type="button" class="btn btn-warning"
                                             onClick="take_snapshot()">
-                                        <input id="retakeButton" style="display: none" type="button"
-                                            class="btn btn-secondary" value="Ambil Ulang" onClick="retake()">
+                                            <i class="fa fa-camera" aria-hidden="true"></i> Ambil Foto
+                                        </button>
+                                        <button id="retakeButton" style="display: none" type="button"
+                                            class="btn btn-danger" onClick="retake()">
+                                            <i class="fa fa-times" aria-hidden="true"></i> Ambil Ulang Foto
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="btn group-button mt-2">
-                                <button type="submit" id="submit" name="submit"
-                                    class="btn btn-primary float-right ml-3" style="display: none">Kirim</button>
-                                <a href="{{ route('simoja.pjlp.index') }}" class="btn btn-dark">Batal</a>
-                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="catatan">Catatan <span class="text-primary">(Opsional)</span></label>
+                            <textarea id="catatan" class="form-control" name="catatan" rows="3"></textarea>
+                        </div>
+                        <div class="btn group-button mt-2">
+                            <button type="submit" id="submit" name="submit" class="btn btn-primary float-right ml-3"
+                                style="display: none">Kirim</button>
+                            <a href="{{ route('simoja.pjlp.index') }}" class="btn btn-dark">Batal</a>
                         </div>
                     </div>
             </form>

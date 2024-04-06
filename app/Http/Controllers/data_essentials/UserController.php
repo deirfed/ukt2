@@ -12,6 +12,7 @@ use App\Models\EmployeeType;
 use Illuminate\Http\Request;
 use App\Models\KonfigurasiCuti;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
@@ -115,11 +116,6 @@ class UserController extends Controller
         ]));
     }
 
-    public function edit(string $id)
-    {
-        //
-    }
-
     public function update(Request $request, string $id)
     {
         $user = User::findOrFail($id);
@@ -164,6 +160,43 @@ class UserController extends Controller
             $sisa_cuti = 0;
         }
         return view('pages.profile.index', compact(['sisa_cuti']));
+    }
+
+    public function edit_password()
+    {
+        return view('pages.profile.update_password');
+    }
+
+    public function update_password(Request $request)
+    {
+        $request->validate([
+            'old_password' => 'required',
+            'new_password' => 'required',
+            'confirm_new_password' => 'required',
+        ]);
+
+        $user_id = auth()->user()->id;
+
+        $old_password = $request->old_password;
+        $new_password = $request->new_password;
+        $confirm_new_password = $request->confirm_new_password;
+
+        if($new_password != $confirm_new_password) {
+            return back()->withError('Password Baru & Konfirmasi Password Baru tidak sesuai!');
+        } else {
+            $user = User::findOrFail($user_id);
+            $cek = Hash::check($old_password, $user->password);
+            if(!$cek){
+                return back()->withError('Password Lama yang anda masukan tidak sesuai!');
+            }
+
+            $user->update([
+                'password' => Hash::make($new_password),
+            ]);
+
+            Auth::logout();
+            return redirect()->route('dashboard.index');
+        }
     }
 
     public function update_photo(Request $request)

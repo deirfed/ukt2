@@ -64,7 +64,7 @@
                                 @foreach ($absensi as $item)
                                     <tr>
                                         <td class="text-center">{{ $loop->iteration }}</td>
-                                        <td class="text-center">{{ $item->tanggal }}</td>
+                                        <td class="text-center">{{ date('d-m-Y', strtotime($item->tanggal)) }}</td>
                                         <td class="text-center">{{ $item->user->name }}</td>
                                         <td class="text-center">Pulau {{ $item->user->area->pulau->name }}</td>
                                         <td class="text-center">{{ $item->user->jabatan->name }}</td>

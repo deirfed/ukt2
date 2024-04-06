@@ -86,6 +86,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/user/photo-ttd', 'update_ttd')->name('user.update_ttd');
         Route::delete('/users', 'destroy')->name('user.destroy');
         Route::get('/user-profile', 'user_profile')->name('user.profile');
+        Route::get('/user-profile/ubah-password', 'edit_password')->name('user.profile.edit.password');
+        Route::put('/user-profile/ubah-password', 'update_password')->name('user.profile.update.password');
     });
 
     Route::controller(ProvinsiController::class)->group(function () {

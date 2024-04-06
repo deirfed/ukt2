@@ -22,7 +22,7 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="d-flex justify-content-center mb-3 text-center" style="text-decoration: underline">Rekap
-                        Kinerja Seksi {{ auth()->user()->struktur->seksi->name }}</h4>
+                        Kinerja - Seksi {{ auth()->user()->struktur->seksi->name }}</h4>
                     <div class="row d-flex justify-content-between align-items-center">
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-3 text-left">
                             <div class="d-flex justify-content-start align-items-center flex-wrap">
@@ -63,7 +63,7 @@
                                 @foreach ($kinerja as $item)
                                     <tr>
                                         <td class="text-center">{{ $loop->iteration }}</td>
-                                        <td class="text-center">{{ $item->tanggal }}</td>
+                                        <td class="text-center">{{ date('d-m-Y', strtotime($item->tanggal)) }}</td>
                                         <td class="text-center">{{ $item->anggota->name ?? '-' }}</td>
                                         <td class="text-center">Pulau {{ $item->formasi_tim->area->pulau->name }}</td>
                                         <td class="text-center">{{ $item->koordinator->name ?? '-' }}</td>

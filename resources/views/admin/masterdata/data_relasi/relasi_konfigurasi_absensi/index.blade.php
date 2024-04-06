@@ -47,6 +47,8 @@
                                     <th class="text-center">Jenis Absensi</th>
                                     <th class="text-center">Jam Datang</th>
                                     <th class="text-center">Jam Pulang</th>
+                                    <th class="text-center">Waktu Absen Datang</th>
+                                    <th class="text-center">Waktu Absen Pulang</th>
                                     <th class="text-center">Toleransi Datang</th>
                                     <th class="text-center">Toleransi Pulang</th>
                                     <th class="text-center">Aksi</th>
@@ -57,8 +59,16 @@
                                     <tr>
                                         <td class="text-center">{{ $loop->iteration }}</td>
                                         <td class="text-center">{{ $item->jenis_absensi->name ?? '-' }}</td>
-                                        <td class="text-center">{{ $item->jam_masuk ?? '-' }} WIB</td>
-                                        <td class="text-center">{{ $item->jam_pulang ?? '-' }} WIB</td>
+                                        <td class="text-center">{{ $item->jam_masuk ?? '-' }}</td>
+                                        <td class="text-center">{{ $item->jam_pulang ?? '-' }}</td>
+                                        <td class="text-center">
+                                            {{ $item->mulai_absen_masuk ?? '' }} -
+                                            {{ $item->selesai_absen_masuk ?? '' }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ $item->mulai_absen_pulang ?? '' }} -
+                                            {{ $item->selesai_absen_pulang ?? '' }}
+                                        </td>
                                         <td class="text-center">{{ $item->toleransi_masuk ?? '-' }} menit</td>
                                         <td class="text-center">{{ $item->toleransi_pulang ?? '-' }} menit</td>
                                         <td class="text-center">

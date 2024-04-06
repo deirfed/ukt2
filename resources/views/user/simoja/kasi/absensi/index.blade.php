@@ -10,7 +10,7 @@
     <div class="page-header">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('simoja.kasi.index') }}">Absensi</a></li>
-            <li class="breadcrumb-item active">Daftar Absensi Seksi Pertamanan</li>
+            <li class="breadcrumb-item active">Daftar Absensi Seksi {{ auth()->user()->struktur->seksi->name }}</li>
         </ol>
     </div>
 @endsection
@@ -22,7 +22,7 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="d-flex justify-content-center mb-3 text-center" style="text-decoration: underline">Rekap
-                        Absensi Seksi Pertamanan</h4>
+                        Absensi - Seksi {{ auth()->user()->struktur->seksi->name }}</h4>
                     <div class="row d-flex justify-content-between align-items-center">
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-3 text-left">
                             <div class="d-flex justify-content-start align-items-center flex-wrap">
@@ -52,10 +52,12 @@
                                     <th class="text-center">Nama</th>
                                     <th class="text-center">Jabatan</th>
                                     <th class="text-center">Pulau</th>
-                                    {{-- <th class="text-center">Tim</th> --}}
-                                    <th class="text-center">Jam Masuk</th>
+                                    <th class="text-center">Jam Datang</th>
+                                    <th class="text-center">Status Datang</th>
                                     <th class="text-center">Jam Pulang</th>
+                                    <th class="text-center">Status Pulang</th>
                                     <th class="text-center">Status</th>
+                                    <th class="text-center">Catatan</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
@@ -63,14 +65,22 @@
                                 @foreach ($absensi as $item)
                                     <tr>
                                         <td class="text-center">{{ $loop->iteration }}</td>
-                                        <td class="text-center">{{ $item->tanggal }}</td>
+                                        <td class="text-center">{{ date('d-m-Y', strtotime($item->tanggal)) }}</td>
                                         <td class="text-center">{{ $item->user->name }}</td>
                                         <td class="text-center">{{ $item->user->jabatan->name }}</td>
                                         <td class="text-center">Pulau {{ $item->user->area->pulau->name }}</td>
-                                        {{-- <td class="text-center">{{ $item->user->struktur->tim->name }}</td> --}}
-                                        <td class="text-center">{{ $item->jam_masuk ?? '#' }} WIB</td>
-                                        <td class="text-center">{{ $item->jam_pulang ?? '#' }} WIB</td>
+                                        <td class="text-center">{{ $item->jam_masuk ?? '-' }}</td>
+                                        <td class="text-center">
+                                            {{ $item->status_masuk ?? '-' }} <br>
+                                            {{ $item->status_masuk ? $item->telat_masuk . ' menit' : '' }}
+                                        </td>
+                                        <td class="text-center">{{ $item->jam_pulang ?? '-' }}</td>
+                                        <td class="text-center">
+                                            {{ $item->status_pulang ?? '-' }} <br>
+                                            {{ $item->status_pulang and ($item->cepat_pulang > 0 ? $item->cepat_pulang . ' menit' : '') }}
+                                        </td>
                                         <td class="text-center">{{ $item->status }}</td>
+                                        <td class="text-center">{{ $item->catatan ?? '-' }}</td>
                                         <td class="text-center">
                                             <a href="#" data-toggle="modal" data-target="#modalDokumentasi"
                                                 data-photo_masuk='{{ asset('storage/' . $item->photo_masuk) }}'

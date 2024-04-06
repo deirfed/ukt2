@@ -71,7 +71,7 @@
                                                 <td class="text-center">{{ $loop->iteration }}</td>
                                                 <td class="text-center">{{ $item->user->name }}</td>
                                                 <td class="text-center text-wrap">
-                                                    {{ $item->tanggal_awal }} s/d {{ $item->tanggal_akhir }}
+                                                    {{ $item->tanggal_awal == $item->tanggal_akhir ? date('d-m-Y', strtotime($item->tanggal_awal)) : date('d-m-Y', strtotime($item->tanggal_awal)) . ' - ' . date('d-m-Y', strtotime($item->tanggal_akhir)) }}
                                                 </td>
                                                 <td class="text-center">{{ $item->jenis_cuti->name }}</td>
                                                 <td class="text-center">{{ $item->jumlah }} hari</td>

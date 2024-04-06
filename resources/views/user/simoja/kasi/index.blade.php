@@ -23,7 +23,7 @@
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                             <a href="{{ route('simoja.kasi.absensi') }}">
                                 <div class="launch-box h-180">
-                                    <h3>Lihat Daftar Absensi</h3>
+                                    <h3>Rekap Data Absensi</h3>
                                     <i class="fa fa-id-card"></i>
                                     <p>{{ $tanggal }}</p>
                                     <h5 class="jam"></h5>
@@ -33,7 +33,7 @@
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                             <a href="{{ route('simoja.kasi.kinerja') }}">
                                 <div class="launch-box h-180">
-                                    <h3>Lihat Daftar Kinerja</h3>
+                                    <h3>Rekap Data Kinerja</h3>
                                     <i class="fa fa-suitcase"></i>
                                     <p>{{ $tanggal }}</p>
                                     @if ($jumlah_kinerja > 0)
@@ -47,7 +47,7 @@
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                             <a href="{{ route('simoja.kasi.cuti') }}">
                                 <div class="launch-box h-180">
-                                    <h3>Lihat Data Cuti</h3>
+                                    <h3>Rekap Data Cuti</h3>
                                     <i class="fa fa-calendar-times"></i>
                                     <p>{{ $tanggal }}</p>
                                     @if ($data_cuti > 0)

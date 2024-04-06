@@ -20,7 +20,8 @@
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="d-flex justify-content-center mb-3 text-center" style="text-decoration: underline">Absensi Saya
+                    <h4 class="d-flex justify-content-center mb-3 text-center" style="text-decoration: underline">Absensi
+                        Saya
                     </h4>
                     <div class="row d-flex justify-content-between align-items-center">
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-3 text-left">
@@ -53,7 +54,7 @@
                                     <th class="text-center">Pulau</th>
                                     <th class="text-center">Jabatan</th>
                                     {{-- <th class="text-center">Tim</th> --}}
-                                    <th class="text-center">Jam Masuk</th>
+                                    <th class="text-center">Jam Datang</th>
                                     <th class="text-center">Jam Pulang</th>
                                     <th class="text-center">Status</th>
                                     <th class="text-center">Aksi</th>
@@ -63,7 +64,7 @@
                                 @foreach ($absensi as $item)
                                     <tr>
                                         <td class="text-center">{{ $loop->iteration }}</td>
-                                        <td class="text-center">{{ $item->tanggal }}</td>
+                                        <td class="text-center">{{ date('d-m-Y', strtotime($item->tanggal)) }}</td>
                                         <td class="text-center">{{ $item->user->name }}</td>
                                         <td class="text-center">Pulau {{ $item->user->area->pulau->name }}</td>
                                         <td class="text-center">{{ $item->user->jabatan->name }}</td>
@@ -139,9 +140,9 @@
                     <div class="modal-body">
                         <div class="mb-4 text-center align-middle">
                             <div class="border mx-auto" style="width: 70%">
-                                <p class="fw-bolder mb-0">Dokumentasi Masuk</p>
+                                <p class="fw-bolder mb-0">Dokumentasi Datang</p>
                                 <img src="#" id="photo_masuk_modal" class="img-thumbnail"
-                                    alt="Tidak ada dokumentasi absen masuk">
+                                    alt="Tidak ada dokumentasi absen datang">
                             </div>
                         </div>
                         <div class="mb-4 text-center align-middle">
