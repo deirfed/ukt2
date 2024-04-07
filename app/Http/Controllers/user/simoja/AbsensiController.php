@@ -296,9 +296,9 @@ class AbsensiController extends Controller
         }
 
         $formasi = FormasiTim::where('periode', Carbon::now()->year)->where('koordinator_id', $user_id)->orWhere('anggota_id', $user_id)->first();
-        $nama = strtoupper($formasi->anggota->name);
-        $date = Carbon::parse($waktu)->isoFormat('dddd, D MMMM Y');
+        $nama = strtoupper($formasi->anggota->name) . ' - ' . $formasi->anggota->nip;
         $jam = Carbon::parse($waktu)->format('H:i:s') . ' WIB';
+        $date = Carbon::parse($waktu)->isoFormat('dddd, D MMMM Y') . ' - ' . $jam;
         $seksi = 'Seksi ' . $formasi->struktur->seksi->name;
         $pulau = 'Pulau ' . $formasi->area->pulau->name;
 
@@ -413,37 +413,45 @@ class AbsensiController extends Controller
             ]);
 
             $path = public_path('storage/'. $absen->photo_pulang);
+            $pathWatermark = public_path('assets/img/watermark.png');
             $imageName = basename($path);
             $image = Image::make($path);
-            $image->text($nama, 5, 195, function($font) {
+
+            $image->insert($pathWatermark, 'bottom-center', 0, 0);
+            $image->text($nama, 150, 245, function($font) {
                 $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
-                $font->color('#ffb300');
-                $font->size(20);
+                $font->color('#000000');
+                $font->align('center');
+                $font->valign('bottom');
+                $font->size(13);
             });
-            $image->text($mode, 5, 215, function($font) {
+            $image->text($mode, 150, 260, function($font) {
                 $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
-                $font->color('#ffb300');
-                $font->size(20);
+                $font->color('#000000');
+                $font->align('center');
+                $font->valign('bottom');
+                $font->size(10);
             });
-            $image->text($date, 5, 235, function($font) {
+            $image->text($date, 150, 270, function($font) {
                 $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
-                $font->color('#ffb300');
-                $font->size(20);
+                $font->color('#000000');
+                $font->align('center');
+                $font->valign('bottom');
+                $font->size(10);
             });
-            $image->text($jam, 5, 255, function($font) {
+            $image->text($seksi, 150, 280, function($font) {
                 $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
-                $font->color('#ffb300');
-                $font->size(20);
+                $font->color('#000000');
+                $font->align('center');
+                $font->valign('bottom');
+                $font->size(10);
             });
-            $image->text($seksi, 5, 275, function($font) {
+            $image->text($pulau, 150, 290, function($font) {
                 $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
-                $font->color('#ffb300');
-                $font->size(20);
-            });
-            $image->text($pulau, 5, 295, function($font) {
-                $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
-                $font->color('#ffb300');
-                $font->size(20);
+                $font->color('#000000');
+                $font->align('center');
+                $font->valign('bottom');
+                $font->size(10);
             });
 
             $destinationPath = public_path('storage/'. $folderPath);
@@ -457,37 +465,45 @@ class AbsensiController extends Controller
             ]);
 
             $path = public_path('storage/'. $absen->photo_masuk);
+            $pathWatermark = public_path('assets/img/watermark.png');
             $imageName = basename($path);
             $image = Image::make($path);
-            $image->text($nama, 5, 195, function($font) {
+
+            $image->insert($pathWatermark, 'bottom-center', 0, 0);
+            $image->text($nama, 150, 245, function($font) {
                 $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
-                $font->color('#ffb300');
-                $font->size(20);
+                $font->color('#000000');
+                $font->align('center');
+                $font->valign('bottom');
+                $font->size(13);
             });
-            $image->text($mode, 5, 215, function($font) {
+            $image->text($mode, 150, 260, function($font) {
                 $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
-                $font->color('#ffb300');
-                $font->size(20);
+                $font->color('#000000');
+                $font->align('center');
+                $font->valign('bottom');
+                $font->size(10);
             });
-            $image->text($date, 5, 235, function($font) {
+            $image->text($date, 150, 270, function($font) {
                 $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
-                $font->color('#ffb300');
-                $font->size(20);
+                $font->color('#000000');
+                $font->align('center');
+                $font->valign('bottom');
+                $font->size(10);
             });
-            $image->text($jam, 5, 255, function($font) {
+            $image->text($seksi, 150, 280, function($font) {
                 $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
-                $font->color('#ffb300');
-                $font->size(20);
+                $font->color('#000000');
+                $font->align('center');
+                $font->valign('bottom');
+                $font->size(10);
             });
-            $image->text($seksi, 5, 275, function($font) {
+            $image->text($pulau, 150, 290, function($font) {
                 $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
-                $font->color('#ffb300');
-                $font->size(20);
-            });
-            $image->text($pulau, 5, 295, function($font) {
-                $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
-                $font->color('#ffb300');
-                $font->size(20);
+                $font->color('#000000');
+                $font->align('center');
+                $font->valign('bottom');
+                $font->size(10);
             });
 
             $destinationPath = public_path('storage/'. $folderPath);
