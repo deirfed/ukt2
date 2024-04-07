@@ -348,7 +348,7 @@ class AbsensiController extends Controller
                 'longitude_masuk' => $longitude,
                 'status_masuk' => $status_absensi,
                 'status' => $mode,
-                'catatan' => $catatan,
+                'catatan_masuk' => $catatan,
             ]);
         } else {
             $validasi = Absensi::where('user_id', $user_id)
@@ -374,6 +374,7 @@ class AbsensiController extends Controller
                     'longitude_pulang' => $longitude,
                     'status_pulang' => $status_absensi,
                     'status'=> $mode,
+                    'catatan_pulang' => $catatan,
                 ]);
             } else {
                 $absensi = Absensi::create([
@@ -386,6 +387,7 @@ class AbsensiController extends Controller
                     'longitude_pulang' => $longitude,
                     'status_pulang' => $status_absensi,
                     'status'=> 'Tidak Absen Datang',
+                    'catatan_pulang' => $catatan,
                 ]);
             }
         }

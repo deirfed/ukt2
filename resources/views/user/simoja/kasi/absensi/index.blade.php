@@ -66,21 +66,37 @@
                                     <tr>
                                         <td class="text-center">{{ $loop->iteration }}</td>
                                         <td class="text-center">{{ date('d-m-Y', strtotime($item->tanggal)) }}</td>
-                                        <td class="text-center">{{ $item->user->name }}</td>
+                                        <td class="text-center font-weight-bold">{{ $item->user->name }}</td>
                                         <td class="text-center">{{ $item->user->jabatan->name }}</td>
                                         <td class="text-center">Pulau {{ $item->user->area->pulau->name }}</td>
                                         <td class="text-center">{{ $item->jam_masuk ?? '-' }}</td>
                                         <td class="text-center">
-                                            {{ $item->status_masuk ?? '-' }} <br>
-                                            {{ $item->status_masuk ? $item->telat_masuk . ' menit' : '' }}
+                                            <div
+                                                class="@if ($item->telat_masuk > 0) badge badge-pill badge-warning @else @endif">
+                                                {{ $item->status_masuk ?? '-' }} <br>
+                                                {{ $item->telat_masuk > 0 ? $item->telat_masuk . ' menit' : '' }}
+                                            </div>
                                         </td>
                                         <td class="text-center">{{ $item->jam_pulang ?? '-' }}</td>
                                         <td class="text-center">
-                                            {{ $item->status_pulang ?? '-' }} <br>
-                                            {{ $item->status_pulang and ($item->cepat_pulang > 0 ? $item->cepat_pulang . ' menit' : '') }}
+                                            <div
+                                                class="@if ($item->cepat_pulang > 0) badge badge-pill badge-warning @else @endif">
+                                                {{ $item->status_pulang ?? '-' }} <br>
+                                                {{ $item->cepat_pulang > 0 ? $item->cepat_pulang . ' menit' : '' }}
+                                            </div>
                                         </td>
-                                        <td class="text-center">{{ $item->status }}</td>
-                                        <td class="text-center">{{ $item->catatan ?? '-' }}</td>
+                                        <td class="text-center">
+                                            <div
+                                                class="@if ($item->status == 'Tidak Absen Datang') badge badge-pill badge-danger @else badge badge-pill badge-primary @endif">
+                                                {{ $item->status }}
+                                            </div>
+                                        </td>
+                                        <td class="text-left">
+                                            <span class="font-weight-bold">Datang: </span>{{ $item->catatan_masuk ?? '-' }}
+                                            <br>
+                                            <span class="font-weight-bold">Pulang:
+                                            </span>{{ $item->catatan_pulang ?? '-' }}
+                                        </td>
                                         <td class="text-center">
                                             <a href="#" data-toggle="modal" data-target="#modalDokumentasi"
                                                 data-photo_masuk='{{ asset('storage/' . $item->photo_masuk) }}'
