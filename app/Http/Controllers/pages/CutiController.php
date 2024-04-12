@@ -4,9 +4,11 @@ namespace App\Http\Controllers\pages;
 
 use App\Exports\cuti\CutiExport;
 use App\Http\Controllers\Controller;
+use App\Models\Absensi;
 use App\Models\Cuti;
 use App\Models\FormasiTim;
 use App\Models\JenisCuti;
+use App\Models\KonfigurasiAbsensi;
 use App\Models\KonfigurasiCuti;
 use App\Models\Pulau;
 use App\Models\Seksi;

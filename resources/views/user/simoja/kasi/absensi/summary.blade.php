@@ -2,7 +2,7 @@
 
 @section('title-head')
     <title>
-        Absensi | Daftar Absensi
+        Absensi | Ringkasan Absensi
     </title>
 @endsection
 
@@ -26,18 +26,14 @@
                     <div class="row d-flex justify-content-between align-items-center">
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-3 text-left">
                             <div class="d-flex justify-content-start align-items-center flex-wrap">
-                                <a href="{{ route('simoja.kasi.index') }}"
+                                <a href="{{ route('simoja.kasi.absensi') }}"
                                     class="btn btn-outline-primary mr-2 mb-2 mb-sm-0"><i class="fa fa-arrow-left"></i>
                                     Kembali</a>
                                 <a href="javascript:;" class="btn btn-primary mr-2 mb-2 mb-sm-0" data-toggle="modal"
                                     data-target="#modalFilter" title="Filter"><i class="fa fa-filter"></i></a>
-                                <a href="{{ route('simoja.kasi.absensi') }}" class="btn btn-primary mr-2 mb-2 mb-sm-0"
-                                    title="Reset Filter">
-                                    <i class="fa fa-refresh"></i>
-                                </a>
                                 <a href="{{ route('simoja.kasi.absensi.ringkasan') }}"
-                                    class="btn btn-primary mr-2 mb-2 mb-sm-0" title="Ringkasan">
-                                    <i class="fa fa-file"></i> Ringkasan
+                                    class="btn btn-primary mr-2 mb-2 mb-sm-0" title="Reset Filter">
+                                    <i class="fa fa-refresh"></i>
                                 </a>
                                 <div class="mr-2 mb-2 mb-sm-0 nav-item dropdown">
                                     <button class="btn btn-primary mr-2 mb-2 mb-sm-0 nav-link text-white" href="#"
@@ -75,24 +71,37 @@
                             <thead>
                                 <tr>
                                     <th class="text-center">No.</th>
-                                    <th class="text-center">Tanggal</th>
                                     <th class="text-center">Nama</th>
+                                    <th class="text-center">NIP</th>
                                     <th class="text-center">Jabatan</th>
                                     <th class="text-center">Pulau</th>
-                                    <th class="text-center">Jam Datang</th>
-                                    <th class="text-center">Status Datang</th>
-                                    <th class="text-center">Jam Pulang</th>
-                                    <th class="text-center">Status Pulang</th>
-                                    <th class="text-center">Status</th>
-                                    <th class="text-center">Catatan</th>
-                                    <th class="text-center">Aksi</th>
+                                    <th class="text-center">Jumlah Hari Kerja</th>
+                                    <th class="text-center">Jumlah Hadir</th>
+                                    <th class="text-center">Jumlah Izin</th>
+                                    <th class="text-center">Jumlah Mangkir</th>
+                                    <th class="text-center">Total Jam Kerja</th>
+                                    <th class="text-center">Persentase Kehadiran</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($absensi as $item)
                                     <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $item->user->name }}</td>
+                                        <td>{{ $item->user->nip }}</td>
+                                        <td>{{ $item->user->jabatan->name }}</td>
+                                        <td>{{ $item->user->area->pulau->name }}</td>
+                                        <td></td>
+                                        <td>{{ $item->total_hari_absen }}</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                @endforeach
+                                {{-- @foreach ($absensi as $item)
+                                    <tr>
                                         <td class="text-center">{{ $loop->iteration }}</td>
-                                        <td class="text-center">{{ date('d-m-Y', strtotime($item->tanggal)) }}</td>
                                         <td class="text-center font-weight-bold">{{ $item->user->name }}</td>
                                         <td class="text-center">{{ $item->user->jabatan->name }}</td>
                                         <td class="text-center">Pulau {{ $item->user->area->pulau->name }}</td>
@@ -136,7 +145,7 @@
                                     <td class="text-center" colspan="12">
                                         Tidak ada data.
                                     </td>
-                                @endif
+                                @endif --}}
                             </tbody>
                         </table>
                     </div>
@@ -146,8 +155,7 @@
     </div>
 
     {{-- START: FILTER ABSENSI --}}
-    <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="modalFilter"
-        aria-hidden="true">
+    <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="modalFilter" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -160,45 +168,16 @@
                     <form id="formFilter" action="{{ route('simoja.kasi.absensi.filter') }}" method="GET">
                         @csrf
                         @method('GET')
-                        <div class="form-row gutters">
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label for="">Personel</label>
-                                    <select name="user_id" class="form-control">
-                                        <option value="" selected disabled>- Pilih Personel -</option>
-                                        @foreach ($user as $item)
-                                            <option value="{{ $item->id }}"
-                                                @if ($item->id == $user_id) selected @endif>{{ $item->name }} -
-                                                {{ $item->nip ?? '-' }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="">Pulau</label>
-                                    <select name="pulau_id" class="form-control">
-                                        <option value="" selected disabled>- Pilih Pulau -</option>
-                                        @foreach ($pulau as $item)
-                                            <option value="{{ $item->id }}"
-                                                @if ($item->id == $pulau_id) selected @endif>Pulau {{ $item->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
                         <label for="periode">Periode</label>
                         <div class="form-row gutters">
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <input type="date" class="form-control" value="{{ $start_date }}"
-                                        name="start_date">
+                                    <input type="date" class="form-control" value="" name="start_date">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <input type="date" class="form-control" value="{{ $end_date }}"
-                                        name="end_date">
+                                    <input type="date" class="form-control" value="" name="end_date">
                                 </div>
                             </div>
                         </div>
@@ -207,10 +186,10 @@
                                 <div class="form-group">
                                     <label for="">Urutan</label>
                                     <select name="sort" class="form-control">
-                                        <option value="ASC" @if ($sort == 'ASC') selected @endif>A to Z
+                                        {{-- <option value="ASC" @if ($sort == 'ASC') selected @endif>A to Z
                                         </option>
                                         <option value="DESC" @if ($sort == 'DESC') selected @endif>Z to A
-                                        </option>
+                                        </option> --}}
                                     </select>
                                 </div>
                             </div>
@@ -282,11 +261,11 @@
                             hidden>
                             @csrf
                             @method('GET')
-                            <input type="text" name="user_id" value="{{ $user_id ?? '' }}">
+                            {{-- <input type="text" name="user_id" value="{{ $user_id ?? '' }}">
                             <input type="text" name="pulau_id" value="{{ $pulau_id ?? '' }}">
                             <input type="text" name="start_date" value="{{ $start_date ?? '' }}">
                             <input type="text" name="end_date" value="{{ $end_date ?? '' }}">
-                            <input type="text" name="sort" value="{{ $sort ?? 'ASC' }}">
+                            <input type="text" name="sort" value="{{ $sort ?? 'ASC' }}"> --}}
                         </form>
                     </div>
                 </div>
@@ -307,34 +286,17 @@
                     <form id="formPDF" action="{{ route('simoja.kasi.absensi.export.pdf') }}" method="GET">
                         @csrf
                         @method('GET')
-                        <div class="form-row gutters">
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label for="">Personel</label>
-                                    <select name="user_id" class="form-control" required>
-                                        <option value="" selected disabled>- Pilih Personel -</option>
-                                        @foreach ($user as $item)
-                                            <option value="{{ $item->id }}"
-                                                @if ($item->id == $user_id) selected @endif>{{ $item->name }} -
-                                                {{ $item->nip ?? '-' }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
                         <label for="periode">Periode</label>
                         <div class="form-row gutters">
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <input type="date" class="form-control" value="{{ $start_date }}"
-                                        name="start_date" required>
+                                    <input type="date" class="form-control" value="" name="start_date"
+                                        required>
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <input type="date" class="form-control" value="{{ $end_date }}"
-                                        name="end_date" required>
+                                    <input type="date" class="form-control" value="" name="end_date" required>
                                 </div>
                             </div>
                         </div>

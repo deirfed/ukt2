@@ -396,7 +396,13 @@ Route::group(['middleware' => 'auth'], function () {
     // ABSENSI
     Route::controller(SimojaAbsensiController::class)->group(function () {
         // KASI
-        Route::get('/simoja-kasi-absensi', 'index_kasi')->name('simoja.kasi.absensi')->middleware('KepalaSeksi');
+        Route::middleware('KepalaSeksi')->group(function () {
+            Route::get('/simoja-kasi-absensi', 'index_kasi')->name('simoja.kasi.absensi');
+            Route::get('/simoja-kasi-absensi/filter', 'filter_kasi')->name('simoja.kasi.absensi.filter');
+            Route::get('/simoja-kasi-absensi/export/excel', 'export_excel_kasi')->name('simoja.kasi.absensi.export.excel');
+            Route::get('/simoja-kasi-absensi/export/pdf', 'export_pdf_kasi')->name('simoja.kasi.absensi.export.pdf');
+            Route::get('/simoja-kasi-absensi/ringkasan', 'ringkasan_kasi')->name('simoja.kasi.absensi.ringkasan');
+        });
 
         // KOORDINATOR
         Route::middleware('Koordinator')->group(function () {

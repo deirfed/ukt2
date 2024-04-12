@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers\user\simoja;
 
+use App\Exports\absensi\AbsensiExport;
 use App\Http\Controllers\Controller;
 use App\Models\Absensi;
 use App\Models\FormasiTim;
 use App\Models\JenisAbsensi;
 use App\Models\KonfigurasiAbsensi;
+use App\Models\Pulau;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AbsensiController extends Controller
 {
@@ -18,15 +23,185 @@ class AbsensiController extends Controller
     public function index_kasi()
     {
         $seksi_id = auth()->user()->struktur->seksi->id;
+
+        $user = User::whereRelation('struktur.seksi', 'id', '=', $seksi_id)->where('employee_type_id', 3)->orderBy('name', 'ASC')->get();
+        $pulau = Pulau::orderBy('name', 'ASC')->get();
+
+        $user_id = '';
+        $pulau_id = '';
+        $start_date = '';
+        $end_date = '';
+        $sort = 'DESC';
+
         $absensi = Absensi::whereRelation('user.struktur.seksi', 'id', '=', $seksi_id)
-                            ->orderBy('tanggal', 'DESC')
-                            ->orderBy('jam_masuk', 'DESC')
-                            ->orderBy('jam_pulang', 'DESC')
-                            ->get();
-        return view('user.simoja.kasi.absensi.index', compact([
+                    ->orderBy('tanggal', $sort)
+                    ->orderBy('jam_masuk', $sort)
+                    ->orderBy('jam_pulang', $sort)
+                    ->get();
+
+        return view('user.simoja.kasi.absensi.index', [
+            'absensi' => $absensi,
+            'user' => $user,
+            'pulau' => $pulau,
+            'user_id' => $user_id,
+            'pulau_id' => $pulau_id,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'sort' => $sort,
+        ]);
+    }
+
+    public function filter_kasi(Request $request)
+    {
+        $seksi_id = auth()->user()->struktur->seksi->id;
+        $user_id = $request->user_id;
+        $pulau_id = $request->pulau_id;
+        $start_date = $request->start_date;
+        $end_date = $request->end_date ?? $start_date;
+        $sort = $request->sort;
+
+        $absensi = Absensi::query();
+
+        $absensi->whereRelation('user.struktur.seksi', 'id', '=', $seksi_id);
+
+        // Filter by user_id
+        $absensi->when($user_id, function ($query) use ($request) {
+            return $query->where('user_id', $request->user_id);
+        });
+
+        // Filter by pulau_id
+        $absensi->when($pulau_id, function ($query) use ($request) {
+            $user_id[] = FormasiTim::whereRelation('area.pulau', 'id', '=', $request->pulau_id)->pluck('anggota_id')->toArray();
+            $user_id[] = FormasiTim::whereRelation('area.pulau', 'id', '=', $request->pulau_id)->pluck('koordinator_id')->toArray();
+            $user_id = array_merge(...$user_id);
+            return $query->whereIn('user_id', $user_id);
+        });
+
+        // Filter by tanggal
+        if ($start_date != null and $end_date != null) {
+            $absensi->when($start_date, function ($query) use ($start_date) {
+                return $query->whereDate('tanggal', '>=', $start_date);
+            });
+            $absensi->when($end_date, function ($query) use ($end_date) {
+                return $query->whereDate('tanggal', '<=', $end_date);
+            });
+        }
+
+        // Order By
+        $absensi = $absensi->orderBy('tanggal', $sort)->orderBy('jam_masuk', $sort)->orderBy('jam_pulang', $sort)->get();
+
+        $user = User::whereRelation('struktur.seksi', 'id', '=', $seksi_id)->where('employee_type_id', 3)->orderBy('name', 'ASC')->get();
+        $pulau = Pulau::orderBy('name', 'ASC')->get();
+
+        return view('user.simoja.kasi.absensi.index', [
+            'absensi' => $absensi,
+            'user' => $user,
+            'pulau' => $pulau,
+            'user_id' => $user_id,
+            'pulau_id' => $pulau_id,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'sort' => $sort,
+        ]);
+    }
+
+    public function export_excel_kasi(Request $request)
+    {
+        $seksi_id = auth()->user()->struktur->seksi->id;
+        $user_id = $request->user_id;
+        $pulau_id = $request->pulau_id;
+        $start_date = $request->start_date;
+        $end_date = $request->end_date ?? $start_date;
+        $sort = $request->sort;
+
+        $waktu = Carbon::now()->format('Ymd');
+
+        return Excel::download(new AbsensiExport($seksi_id, $user_id, $pulau_id, $start_date, $end_date, $sort), $waktu . '_data absensi.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+    }
+
+    public function export_pdf_kasi(Request $request)
+    {
+        $user_id = $request->user_id;
+        $start_date = Carbon::parse($request->start_date);
+        $end_date = Carbon::parse($request->end_date) ?? $start_date;
+
+        $user = FormasiTim::where('periode', Carbon::now()->year)->where('koordinator_id', $user_id)->orWhere('anggota_id', $user_id)->first();
+        $absensi = Absensi::where('user_id', $user_id)
+                            ->whereBetween('tanggal', [$start_date, $end_date])
+                            ->get()
+                            ->pluck('tanggal');
+
+        $datesInRange = [];
+        for ($date = $start_date->copy(); $date->lte($end_date); $date->addDay()) {
+            $absen = Absensi::where('user_id', $user_id)
+                        ->whereDate('tanggal', $date)
+                        ->first();
+
+            if($absen){
+                if($absen->jam_masuk == null or $absen->jam_pulang == null){
+                    $bg = 'bg-warning';
+                } else {
+                    $bg = '';
+                }
+            } else {
+                $bg = 'bg-danger';
+            }
+
+
+            $datesInRange[] = [
+                'hari' => $date->isoFormat('dddd'),
+                'tanggal' => $date->copy(),
+                'jam_masuk' => $absen->jam_masuk ?? '',
+                'jam_pulang' => $absen->jam_pulang ?? '',
+                'status' => $absen->status ?? 'Tidak Absen',
+                'bg' => $bg,
+                'url_photo_masuk' => $absen && $absen->photo_masuk ? public_path('storage/' . $absen->photo_masuk) : '',
+                'url_photo_pulang' => $absen && $absen->photo_pulang ? public_path('storage/' . $absen->photo_pulang) : '',
+            ];
+        }
+
+        $pdf = Pdf::loadView('user.simoja.kasi.absensi.export.pdf', [
+            'user' => $user,
+            'datesInRange' => $datesInRange,
+            'absensi' => $absensi,
+            'start_date' => $start_date->isoFormat('D MMMM Y'),
+            'end_date' => $end_date->isoFormat('D MMMM Y'),
+        ]);
+
+        return $pdf->stream(Carbon::now()->format('Ymd_') . 'Data Absensi_' . $user->name . '_' . $user->nip . '_Seksi ' . $user->struktur->seksi->name . '_Pulau ' . $user->area->pulau->name . '.pdf');
+    }
+
+    public function ringkasan_kasi(Request $request)
+    {
+        $seksi_id = auth()->user()->struktur->seksi->id;
+        $koordinator_id = FormasiTim::where('periode', Carbon::now()->year)
+                                ->whereRelation('struktur.seksi', 'id', '=', $seksi_id)
+                                ->distinct()
+                                ->pluck('koordinator_id')
+                                ->toArray();
+        $anggota_id = FormasiTim::where('periode', Carbon::now()->year)
+                                ->whereRelation('struktur.seksi', 'id', '=', $seksi_id)
+                                ->distinct()
+                                ->pluck('anggota_id')
+                                ->toArray();
+
+        $user_id = array_merge($koordinator_id, $anggota_id);
+
+        $absensi = Absensi::whereIn('user_id', $user_id)
+            ->select('user_id', Absensi::raw('COUNT(DISTINCT tanggal) as total_hari_absen'))
+            ->groupBy('user_id')
+            ->orderByDesc('total_hari_absen')
+            ->get();
+
+        return view('user.simoja.kasi.absensi.summary', compact([
             'absensi',
         ]));
     }
+
+
+
+
+
 
     // KOORDINATOR
     public function tim_index_koordinator()
@@ -273,8 +448,10 @@ class AbsensiController extends Controller
         $tanggal = Carbon::parse($now)->format('Y-m-d');
         $waktu = Carbon::parse($now);
         $konfigurasi_absensi = KonfigurasiAbsensi::where('jenis_absensi_id', 1)->first();
-        $jam_masuk = Carbon::parse($konfigurasi_absensi->jam_masuk);
-        $jam_pulang = Carbon::parse($konfigurasi_absensi->jam_pulang);
+        $toleransi_masuk = $konfigurasi_absensi->toleransi_masuk;
+        $toleransi_pulang = $konfigurasi_absensi->toleransi_pulang;
+        $jam_masuk = Carbon::parse($konfigurasi_absensi->jam_masuk)->addMinutes($toleransi_masuk);
+        $jam_pulang = Carbon::parse($konfigurasi_absensi->jam_pulang)->subMinutes($toleransi_pulang);
 
         $user_id = auth()->user()->id;
         $latitude = 'xxx';
@@ -291,8 +468,8 @@ class AbsensiController extends Controller
 
         $hari = Carbon::parse($waktu)->isoFormat('dddd');
         if($hari == 'Jumat'){
-            $jam_pulang = Carbon::parse('16:30:00');
-            $batas_mulai_absen_pulang = Carbon::parse('16:30:00');
+            $jam_pulang = $jam_pulang->addMinutes(30);
+            $batas_mulai_absen_pulang = $batas_mulai_absen_pulang->addMinutes(30);
         }
 
         $formasi = FormasiTim::where('periode', Carbon::now()->year)->where('koordinator_id', $user_id)->orWhere('anggota_id', $user_id)->first();

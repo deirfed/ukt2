@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\user\simoja;
 
 use App\Http\Controllers\Controller;
+use App\Models\Absensi;
 use App\Models\Cuti;
 use App\Models\FormasiTim;
 use App\Models\JenisCuti;
+use App\Models\KonfigurasiAbsensi;
 use App\Models\KonfigurasiCuti;
 use App\Models\Pulau;
 use App\Models\Seksi;
@@ -81,6 +83,23 @@ class CutiController extends Controller
         if($cuti->jenis_cuti->id == 1){
             $konfigurasi_cuti->jumlah = $konfigurasi_cuti->jumlah - $cuti->jumlah;
             $konfigurasi_cuti->save();
+        }
+
+
+        for ($date = Carbon::parse($cuti->tanggal_awal); $date->lte(Carbon::parse($cuti->tanggal_akhir)); $date->addDay()) {
+            $konfigurasi_absensi = KonfigurasiAbsensi::where('jenis_absensi_id', 1)->first();
+            Absensi::create([
+                'user_id' => $cuti->user_id,
+                'jenis_absensi_id' => 1,
+                'tanggal' => $date->copy(),
+                'jam_masuk' => $konfigurasi_absensi->jam_masuk,
+                'status_masuk' => 'Datang tepat waktu',
+                'telat_masuk' => 0,
+                'jam_pulang' => $konfigurasi_absensi->jam_pulang,
+                'status_pulang' => 'Pulang tepat waktu',
+                'cepat_pulang' => 0,
+                'status' => $cuti->jenis_cuti->name,
+            ]);
         }
 
         return redirect()->route('simoja.kasi.cuti.approval')->withNotify('Data berhasil diterima!');
@@ -372,7 +391,7 @@ class CutiController extends Controller
         }
 
         if($jenis_cuti_id == 1){
-            $jumlahSisaCuti = KonfigurasiCuti::where('jenis_cuti_id', 1)->where('user_id', $user_id)->firstOrFail()->jumlah;
+            $jumlahSisaCuti = KonfigurasiCuti::where('periode', Carbon::now()->year)->where('jenis_cuti_id', 1)->where('user_id', $user_id)->firstOrFail()->jumlah;
             if ($jumlahHariCuti > $jumlahSisaCuti){
                 return back()->withError('Jumlah hari Cuti yang anda ajukan melebihi sisa Cuti yang anda miliki.');
             }
