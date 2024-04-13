@@ -23,39 +23,116 @@ class CutiController extends Controller
     // KASI
     public function index()
     {
-        $cuti = Cuti::whereRelation('user.struktur.seksi', 'id', '=', auth()->user()->struktur->seksi->id)
-                ->orderBy('created_at', 'DESC')
-                ->get();
+        $seksi_id = auth()->user()->struktur->seksi->id;
 
+        $user = User::whereRelation('struktur.seksi', 'id', '=', $seksi_id)->where('employee_type_id', 3)->orderBy('name', 'ASC')->get();
         $pulau = Pulau::orderBy('name', 'ASC')->get();
-        $seksi  = Seksi::all();
-        $koordinator  = User::whereRelation('jabatan', 'id', '=', 4)->get();
-        $tim = Tim::orderBy('name', 'ASC')->get();
-        $konfigurasi_cuti = KonfigurasiCuti::all();
+        $jenis_cuti = JenisCuti::all();
 
+        $user_id = '';
         $pulau_id = '';
-        $seksi_id = '';
-        $koordinator_id = '';
-        $tim_id = '';
-        $status = '';
         $start_date = '';
         $end_date = '';
+        $sort = 'DESC';
+        $status = '';
+        $jenis_cuti_id = '';
 
-        return view('user.simoja.kasi.cuti.index', compact([
-            'cuti',
-            'pulau',
-            'seksi',
-            'koordinator',
-            'tim',
-            'pulau_id',
-            'seksi_id',
-            'koordinator_id',
-            'tim_id',
-            'status',
-            'start_date',
-            'end_date',
-            'konfigurasi_cuti'
-        ]));
+        $cuti = Cuti::whereRelation('user.struktur.seksi', 'id', '=', $seksi_id)
+                ->orderBy('tanggal_awal', $sort)
+                ->orderBy('tanggal_akhir', $sort)
+                ->get();
+
+        return view('user.simoja.kasi.cuti.index', [
+            'cuti' => $cuti,
+            'user' => $user,
+            'pulau' => $pulau,
+            'jenis_cuti' => $jenis_cuti,
+            'jenis_cuti_id' => $jenis_cuti_id,
+            'user_id' => $user_id,
+            'pulau_id' => $pulau_id,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'sort' => $sort,
+            'status' => $status,
+        ]);
+    }
+
+    public function filter_kasi(Request $request)
+    {
+        $seksi_id = auth()->user()->struktur->seksi->id;
+        $user_id = $request->user_id;
+        $pulau_id = $request->pulau_id;
+        $start_date = $request->start_date;
+        $end_date = $request->end_date ?? $start_date;
+        $sort = $request->sort;
+        $status = $request->status;
+        $jenis_cuti_id = $request->jenis_cuti_id;
+
+        $user = User::whereRelation('struktur.seksi', 'id', '=', $seksi_id)->where('employee_type_id', 3)->orderBy('name', 'ASC')->get();
+        $pulau = Pulau::orderBy('name', 'ASC')->get();
+        $jenis_cuti = JenisCuti::all();
+
+        $cuti = Cuti::query();
+
+        $cuti->whereRelation('user.struktur.seksi', 'id', '=', $seksi_id);
+
+        // Filter by user_id
+        $cuti->when($user_id, function ($query) use ($request) {
+            return $query->where('user_id', $request->user_id);
+        });
+
+        // Filter by pulau_id
+        $cuti->when($pulau_id, function ($query) use ($request) {
+            $anggota_id = FormasiTim::where('periode', Carbon::now()->year)->whereRelation('area.pulau', 'id', '=', $request->pulau_id)->pluck('anggota_id')->toArray();
+            $koordinator_id = FormasiTim::where('periode', Carbon::now()->year)->whereRelation('area.pulau', 'id', '=', $request->pulau_id)->pluck('koordinator_id')->toArray();
+            $user_id = array_unique(array_merge($anggota_id, $koordinator_id));
+
+            return $query->where(function($query) use ($user_id) {
+                $query->whereIn('user_id', $user_id);
+            });
+        });
+
+        // Filter by tanggal
+        if ($start_date != null and $end_date != null) {
+            $cuti->when($start_date, function ($query) use ($start_date) {
+                return $query->whereDate('tanggal', '>=', $start_date);
+            });
+            $cuti->when($end_date, function ($query) use ($end_date) {
+                return $query->whereDate('tanggal', '<=', $end_date);
+            });
+        }
+
+        // Filter by jenis_cuti_id
+        $cuti->when($jenis_cuti_id, function ($query) use ($request) {
+            return $query->where('jenis_cuti_id', $request->jenis_cuti_id);
+        });
+
+        // Filter by status
+        $cuti->when($status, function ($query) use ($request) {
+            return $query->where('status', $request->status);
+        });
+
+        // Order By
+        $cuti = $cuti->orderBy('tanggal_awal', $sort)->orderBy('tanggal_akhir', $sort)->get();
+
+        return view('user.simoja.kasi.cuti.index', [
+            'cuti' => $cuti,
+            'user' => $user,
+            'pulau' => $pulau,
+            'jenis_cuti' => $jenis_cuti,
+            'jenis_cuti_id' => $jenis_cuti_id,
+            'user_id' => $user_id,
+            'pulau_id' => $pulau_id,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'sort' => $sort,
+            'status' => $status,
+        ]);
+    }
+
+    public function export_excel_kasi(Request $request)
+    {
+        return back()->withError('Fitur ini masih dalam tahap pengembangan');
     }
 
     public function approval()

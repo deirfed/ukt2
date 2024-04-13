@@ -71,8 +71,8 @@ class AbsensiController extends Controller
 
         // Filter by pulau_id
         $absensi->when($pulau_id, function ($query) use ($request) {
-            $user_id[] = FormasiTim::whereRelation('area.pulau', 'id', '=', $request->pulau_id)->pluck('anggota_id')->toArray();
-            $user_id[] = FormasiTim::whereRelation('area.pulau', 'id', '=', $request->pulau_id)->pluck('koordinator_id')->toArray();
+            $user_id[] = FormasiTim::where('periode', Carbon::now()->year)->whereRelation('area.pulau', 'id', '=', $request->pulau_id)->pluck('anggota_id')->toArray();
+            $user_id[] = FormasiTim::where('periode', Carbon::now()->year)->whereRelation('area.pulau', 'id', '=', $request->pulau_id)->pluck('koordinator_id')->toArray();
             $user_id = array_merge(...$user_id);
             return $query->whereIn('user_id', $user_id);
         });

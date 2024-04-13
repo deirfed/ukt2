@@ -14,28 +14,13 @@ class DashboardController extends Controller
     public function kasi_index()
     {
         $today = Carbon::now();
+        $seksi_id = auth()->user()->struktur->seksi->id;
         $tanggal = Carbon::parse($today)->isoFormat('dddd, D MMMM Y');
-        $jumlah_kinerja = Kinerja::where('seksi_id', auth()->user()->struktur->seksi_id)->count();
+        $jumlah_kinerja = Kinerja::where('seksi_id', $seksi_id)->count();
 
-        // $jumlah_pengajuan_cuti = Cuti::join('users', 'cuti.user_id', '=', 'users.id')
-        //                         ->join('struktur', 'users.struktur_id', '=', 'struktur.id')
-        //                         ->where('struktur_id', auth()->user()->struktur_id)
-        //                         ->where('cuti.status', 'Diproses')
-        //                         ->count();
+        $jumlah_pengajuan_cuti = Cuti::whereRelation('user.struktur.seksi', 'id', '=', $seksi_id)->where('status', 'Diproses')->count();
 
-        $jumlah_pengajuan_cuti = Cuti::whereRelation('user.struktur', function ($query) {
-                                $query->where('struktur_id', auth()->user()->struktur_id);})
-                                ->where('status', 'Diproses')
-                                ->count();
-
-       // $data_cuti = Cuti::join('users', 'cuti.user_id', '=', 'users.id')
-        //                     ->join('struktur', 'users.struktur_id', '=', 'struktur.id')
-        //                     ->where('struktur_id', auth()->user()->struktur_id)
-        //                     ->count();
-
-        $data_cuti = Cuti::whereRelation('user.struktur', function ($query) {
-                    $query->where('struktur_id', auth()->user()->struktur_id);})
-                    ->count();
+        $data_cuti = Cuti::whereRelation('user.struktur.seksi', 'id', '=', $seksi_id)->count();
 
         return view('user.simoja.kasi.index', compact([
             'tanggal',
@@ -61,7 +46,8 @@ class DashboardController extends Controller
     {
         $today = Carbon::now();
         $tanggal = Carbon::parse($today)->isoFormat('dddd, D MMMM Y');
-        $jumlah_cuti = KonfigurasiCuti::where('user_id', auth()->id())->first();
+        $user_id = auth()->user()->id;
+        $jumlah_cuti = KonfigurasiCuti::where('periode', $today->year)->where('user_id', $user_id)->first();
 
         if ($jumlah_cuti) {
             $sisa_cuti = $jumlah_cuti->jumlah;

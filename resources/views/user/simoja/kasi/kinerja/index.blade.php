@@ -29,10 +29,33 @@
                                 <a href="{{ route('simoja.kasi.index') }}"
                                     class="btn btn-outline-primary mr-2 mb-2 mb-sm-0"><i class="fa fa-arrow-left"></i>
                                     Kembali</a>
-                                <button class="btn btn-primary mr-2 mb-2 mb-sm-0">Export to Excel</button>
-                                <button class="btn btn-primary mr-2 mb-2 mb-sm-0">Export to PDF</button>
-                                <a href="" class="btn btn-primary mb-2 mb-sm-0" data-toggle="modal"
-                                    data-target="#modalFilter"><i class="fa fa-filter"></i></a>
+                                <a href="javascript:;" class="btn btn-primary mr-2 mb-2 mb-sm-0" data-toggle="modal"
+                                    data-target="#modalFilter" title="Filter"><i class="fa fa-filter"></i></a>
+                                <a href="{{ route('simoja.kasi.kinerja') }}" class="btn btn-primary mr-2 mb-2 mb-sm-0"
+                                    title="Reset Filter">
+                                    <i class="fa fa-refresh"></i>
+                                </a>
+                                <div class="mr-2 mb-2 mb-sm-0 nav-item dropdown">
+                                    <button class="btn btn-primary mr-2 mb-2 mb-sm-0 nav-link text-white" href="#"
+                                        id="appsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false" title="Export">
+                                        <i class="fa fa-paper-plane"></i> Export
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dashboardsDropdown">
+                                        <li>
+                                            <a class="dropdown-item" href="javascript:;" data-toggle="modal"
+                                                data-target="#modalDownloadExcel" title="Filter">
+                                                <i class="fa fa-file-excel text-primary"></i> Export Excel
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="javascript:;" data-toggle="modal"
+                                                data-target="#modalDownloadPDF">
+                                                <i class="fa fa-file-pdf text-danger"></i> Export PDF
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -52,7 +75,6 @@
                                     <th class="text-center">Nama</th>
                                     <th class="text-center">Pulau</th>
                                     <th class="text-center">Koordinator</th>
-                                    {{-- <th class="text-center">Tim</th> --}}
                                     <th class="text-center">Giat</th>
                                     <th class="text-center">Deskripsi</th>
                                     <th class="text-center">Lokasi</th>
@@ -64,10 +86,9 @@
                                     <tr>
                                         <td class="text-center">{{ $loop->iteration }}</td>
                                         <td class="text-center">{{ date('d-m-Y', strtotime($item->tanggal)) }}</td>
-                                        <td class="text-center">{{ $item->anggota->name ?? '-' }}</td>
+                                        <td class="text-center font-weight-bold">{{ $item->anggota->name ?? '-' }}</td>
                                         <td class="text-center">Pulau {{ $item->formasi_tim->area->pulau->name }}</td>
                                         <td class="text-center">{{ $item->koordinator->name ?? '-' }}</td>
-                                        {{-- <td class="text-center">{{ $item->formasi_tim->struktur->tim->name }}</td> --}}
                                         <td class="text-center">{{ $item->kategori->name ?? $item->kegiatan }}</td>
                                         <td class="text-center">{{ $item->deskripsi ?? '-' }}</td>
                                         <td class="text-center">{{ $item->lokasi ?? '-' }}</td>
@@ -78,6 +99,13 @@
                                         </td>
                                     </tr>
                                 @endforeach
+                                @if ($kinerja->count() == 0)
+                                    <tr>
+                                        <td class="text-center" colspan="9">
+                                            Tidak ada data.
+                                        </td>
+                                    </tr>
+                                @endif
                             </tbody>
                         </table>
                     </div>
@@ -86,61 +114,85 @@
         </div>
     </div>
 
-    {{-- START: FILTER ABSENSI --}}
+    {{-- START: FILTER KINERJA --}}
     <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="modalFilter" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Filter Data Kinerja Personel</h5>
+                    <h5 class="modal-title">Filter Data Kinerja</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-row gutters">
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="form-group">
-                                <label for="">Personel</label>
-                                <select name="personel" class="form-control" required>
-                                    <option value="" selected disabled>- Pilih Personel -</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="">Pulau</label>
-                                <select name="pulau" class="form-control" required>
-                                    <option value="" selected disabled>- Pilih Pulau -</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="">Tim</label>
-                                <select name="tim" class="form-control" required>
-                                    <option value="" selected disabled>- Pilih Tim -</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <label for="periode">Periode</label>
-                    <div class="form-row gutters">
-                        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="form-group">
-                                <input type="date" class="form-control" id="start" placeholder="start">
-                            </div>
-                        </div>
-                        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="form-group">
-                                <input type="date" class="form-control" id="end" placeholder="end">
+                    <form id="formFilter" action="{{ route('simoja.kasi.kinerja.filter') }}" method="GET">
+                        @csrf
+                        @method('GET')
+                        <div class="form-row gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="">Personel</label>
+                                    <select name="user_id" class="form-control">
+                                        <option value="" selected disabled>- Pilih Personel -</option>
+                                        @foreach ($user as $item)
+                                            <option value="{{ $item->id }}"
+                                                @if ($item->id == $user_id) selected @endif>{{ $item->name }} -
+                                                {{ $item->nip ?? '-' }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Pulau</label>
+                                    <select name="pulau_id" class="form-control">
+                                        <option value="" selected disabled>- Pilih Pulau -</option>
+                                        @foreach ($pulau as $item)
+                                            <option value="{{ $item->id }}"
+                                                @if ($item->id == $pulau_id) selected @endif>Pulau {{ $item->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                        <label for="periode">Periode</label>
+                        <div class="form-row gutters">
+                            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <input type="date" class="form-control" value="{{ $start_date }}"
+                                        name="start_date">
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <input type="date" class="form-control" value="{{ $end_date }}"
+                                        name="end_date">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="">Urutan</label>
+                                    <select name="sort" class="form-control">
+                                        <option value="ASC" @if ($sort == 'ASC') selected @endif>A to Z
+                                        </option>
+                                        <option value="DESC" @if ($sort == 'DESC') selected @endif>Z to A
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
-                    <button type="button" class="btn btn-primary">Filter Data</button>
+                    <button type="submit" form="formFilter" class="btn btn-primary">Filter Data</button>
                 </div>
             </div>
         </div>
     </div>
-    {{-- END: FILTER ABSENSI --}}
+    {{-- END: FILTER KINERJA --}}
 
     {{-- START: MODAL DOKUMENTASI --}}
     <div class="modal fade" id="modalDokumentasi" tabindex="-1" aria-hidden="true">
@@ -166,6 +218,97 @@
         </div>
     </div>
     {{-- END: MODAL DOKUMENTASI --}}
+
+    {{-- BEGIN: Konfirmasi Excel --}}
+    <div id="modalDownloadExcel" class="modal fade" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body p-2">
+                    <div class="p-2 text-center">
+                        <div class="mt-2 fw-bolder">Apakah anda yakin?</div>
+                        <div class="mt-2">
+                            <img style="height: 100px;"
+                                src="https://i.pinimg.com/originals/1b/db/8a/1bdb8ac897512116cbac58ffe7560d82.png"
+                                alt="PDF">
+                        </div>
+                        <div class="text-slate-500 mt-2">
+                            <p>
+                                Data ini akan di-generate dalam format Excel!
+                            </p>
+                        </div>
+                        <form id="exportExcel" action="{{ route('simoja.kasi.kinerja.export.excel') }}" method="GET"
+                            hidden>
+                            @csrf
+                            @method('GET')
+                            <input type="text" name="user_id" value="{{ $user_id ?? '' }}">
+                            <input type="text" name="pulau_id" value="{{ $pulau_id ?? '' }}">
+                            <input type="text" name="start_date" value="{{ $start_date ?? '' }}">
+                            <input type="text" name="end_date" value="{{ $end_date ?? '' }}">
+                            <input type="text" name="sort" value="{{ $sort ?? 'ASC' }}">
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
+                    <button type="submit" form="exportExcel" formtarget="_blank" class="btn btn-primary">Unduh</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- END: Konfirmasi Excel --}}
+
+    {{-- BEGIN: Konfirmasi PDF --}}
+    <div id="modalDownloadPDF" class="modal fade" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form id="formPDF" action="{{ route('simoja.kasi.kinerja.export.pdf') }}" method="GET">
+                        @csrf
+                        @method('GET')
+                        <div class="form-row gutters">
+                            {{-- <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="">Personel</label>
+                                    <select name="user_id" class="form-control" required>
+                                        <option value="" selected disabled>- Pilih Personel -</option>
+                                        @foreach ($user as $item)
+                                            <option value="{{ $item->id }}"
+                                                @if ($item->id == $user_id) selected @endif>{{ $item->name }} -
+                                                {{ $item->nip ?? '-' }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div> --}}
+                            <div class="container text-center my-5">
+                                <h4>Fitur ini masih dalam tahap pengembangan</h4>
+                            </div>
+                        </div>
+                        {{-- <label for="periode">Periode</label>
+                        <div class="form-row gutters">
+                            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <input type="date" class="form-control" value="{{ $start_date }}"
+                                        name="start_date" required>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <input type="date" class="form-control" value="{{ $end_date }}"
+                                        name="end_date" required>
+                                </div>
+                            </div>
+                        </div> --}}
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
+                    {{-- <button type="submit" form="formPDF" formtarget="_blank" class="btn btn-primary">Buat</button> --}}
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- END: Konfirmasi PDF --}}
 @endsection
 
 

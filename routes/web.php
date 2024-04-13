@@ -424,7 +424,12 @@ Route::group(['middleware' => 'auth'], function () {
     // KINERJA
     Route::controller(SimojaKinerjaController::class)->group(function () {
         // KASI
-        Route::get('/simoja-kasi-kinerja', 'index')->name('simoja.kasi.kinerja')->middleware('KepalaSeksi');
+        Route::middleware('KepalaSeksi')->group(function () {
+            Route::get('/simoja-kasi-kinerja', 'index')->name('simoja.kasi.kinerja');
+            Route::get('/simoja-kasi-kinerja/filter', 'filter_kasi')->name('simoja.kasi.kinerja.filter');
+            Route::get('/simoja-kasi-kinerja/export/excel', 'export_excel_kasi')->name('simoja.kasi.kinerja.export.excel');
+            Route::get('/simoja-kasi-kinerja/export/pdf', 'export_pdf_kasi')->name('simoja.kasi.kinerja.export.pdf');
+        });
 
         // KOORDINATOR
         Route::middleware('Koordinator')->group(function () {
@@ -451,6 +456,9 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/simoja-kasi-cuti/approval', 'approval')->name('simoja.kasi.cuti.approval');
             Route::put('/simoja-kasi-cuti/approve', 'approve')->name('simoja.kasi.cuti.approve');
             Route::put('/simoja-kasi-cuti/reject', 'reject')->name('simoja.kasi.cuti.reject');
+
+            Route::get('/simoja-kasi-cuti/filter', 'filter_kasi')->name('simoja.kasi.cuti.filter');
+            Route::get('/simoja-kasi-cuti/export/excel', 'export_excel_kasi')->name('simoja.kasi.cuti.export.excel');
         });
 
         // KOORDINATOR

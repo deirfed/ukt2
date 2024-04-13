@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers\user\simoja;
 
+use App\Exports\kinerja\user\KinerjaExport;
 use App\Http\Controllers\Controller;
 use App\Models\FormasiTim;
 use App\Models\Kategori;
 use App\Models\Kinerja;
+use App\Models\Pulau;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class KinerjaController extends Controller
 {
@@ -16,10 +21,101 @@ class KinerjaController extends Controller
     public function index()
     {
         $seksi_id = auth()->user()->struktur->seksi->id;
-        $kinerja = Kinerja::where('seksi_id', $seksi_id)->orderBy('tanggal', 'DESC')->get();
-        return view('user.simoja.kasi.kinerja.index', compact([
-            'kinerja'
-        ]));
+
+        $user = User::whereRelation('struktur.seksi', 'id', '=', $seksi_id)->where('employee_type_id', 3)->orderBy('name', 'ASC')->get();
+        $pulau = Pulau::orderBy('name', 'ASC')->get();
+
+        $user_id = '';
+        $pulau_id = '';
+        $start_date = '';
+        $end_date = '';
+        $sort = 'DESC';
+
+        $kinerja = Kinerja::where('seksi_id', $seksi_id)->orderBy('tanggal', $sort)->get();
+
+        return view('user.simoja.kasi.kinerja.index', [
+            'kinerja' => $kinerja,
+            'user' => $user,
+            'pulau' => $pulau,
+            'user_id' => $user_id,
+            'pulau_id' => $pulau_id,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'sort' => $sort,
+        ]);
+    }
+
+    public function filter_kasi(Request $request)
+    {
+        $seksi_id = auth()->user()->struktur->seksi->id;
+        $user_id = $request->user_id;
+        $pulau_id = $request->pulau_id;
+        $start_date = $request->start_date;
+        $end_date = $request->end_date ?? $start_date;
+        $sort = $request->sort;
+
+        $kinerja = Kinerja::query();
+
+        $kinerja->where('seksi_id', $seksi_id);
+
+        // Filter by user_id
+        $kinerja->when($user_id, function ($query) use ($request) {
+            return $query->where('anggota_id', $request->user_id)->orWhere('koordinator_id', $request->user_id);
+        });
+
+        // Filter by pulau_id
+        $kinerja->when($pulau_id, function ($query) use ($request) {
+            $anggota_id = FormasiTim::where('periode', Carbon::now()->year)->whereRelation('area.pulau', 'id', '=', $request->pulau_id)->pluck('anggota_id')->toArray();
+            $koordinator_id = FormasiTim::where('periode', Carbon::now()->year)->whereRelation('area.pulau', 'id', '=', $request->pulau_id)->pluck('koordinator_id')->toArray();
+            $user_id = array_unique(array_merge($anggota_id, $koordinator_id));
+
+            return $query->where(function($query) use ($user_id) {
+                $query->whereIn('anggota_id', $user_id)
+                        ->orWhereIn('koordinator_id', $user_id);
+            });
+        });
+
+        // Filter by tanggal
+        if ($start_date != null and $end_date != null) {
+            $kinerja->when($start_date, function ($query) use ($start_date) {
+                return $query->whereDate('tanggal', '>=', $start_date);
+            });
+            $kinerja->when($end_date, function ($query) use ($end_date) {
+                return $query->whereDate('tanggal', '<=', $end_date);
+            });
+        }
+
+        // Order By
+        $kinerja = $kinerja->orderBy('tanggal', $sort)->orderBy('created_at', $sort)->get();
+
+        $user = User::whereRelation('struktur.seksi', 'id', '=', $seksi_id)->where('employee_type_id', 3)->orderBy('name', 'ASC')->get();
+        $pulau = Pulau::orderBy('name', 'ASC')->get();
+
+        return view('user.simoja.kasi.kinerja.index', [
+            'kinerja' => $kinerja,
+            'user' => $user,
+            'pulau' => $pulau,
+            'user_id' => $user_id,
+            'pulau_id' => $pulau_id,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'sort' => $sort,
+        ]);
+    }
+
+    public function export_excel_kasi(Request $request)
+    {
+        $seksi_id = auth()->user()->struktur->seksi->id;
+        $user_id = $request->user_id;
+        $pulau_id = $request->pulau_id;
+        $start_date = $request->start_date;
+        $end_date = $request->end_date ?? $start_date;
+        $sort = $request->sort;
+
+        $waktu = Carbon::now()->format('Ymd');
+        $nama_file = $waktu . '_data kinerja.xlsx';
+
+        return Excel::download(new KinerjaExport($seksi_id, $user_id, $pulau_id, $start_date, $end_date, $sort), $nama_file, \Maatwebsite\Excel\Excel::XLSX);
     }
 
 

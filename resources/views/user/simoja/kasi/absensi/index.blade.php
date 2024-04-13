@@ -35,10 +35,10 @@
                                     title="Reset Filter">
                                     <i class="fa fa-refresh"></i>
                                 </a>
-                                <a href="{{ route('simoja.kasi.absensi.ringkasan') }}"
+                                {{-- <a href="{{ route('simoja.kasi.absensi.ringkasan') }}"
                                     class="btn btn-primary mr-2 mb-2 mb-sm-0" title="Ringkasan">
                                     <i class="fa fa-file"></i> Ringkasan
-                                </a>
+                                </a> --}}
                                 <div class="mr-2 mb-2 mb-sm-0 nav-item dropdown">
                                     <button class="btn btn-primary mr-2 mb-2 mb-sm-0 nav-link text-white" href="#"
                                         id="appsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"

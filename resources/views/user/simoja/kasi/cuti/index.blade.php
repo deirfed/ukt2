@@ -28,10 +28,27 @@
                                 <a href="{{ route('simoja.kasi.index') }}"
                                     class="btn btn-outline-primary mr-2 mb-2 mb-sm-0"><i class="fa fa-arrow-left"></i>
                                     Kembali</a>
-                                <button class="btn btn-primary mr-2 mb-2 mb-sm-0">Export to Excel</button>
-                                <button class="btn btn-primary mr-2 mb-2 mb-sm-0">Export to PDF</button>
-                                <a href="" class="btn btn-primary mb-2 mb-sm-0" data-toggle="modal"
-                                    data-target="#modalFilter"><i class="fa fa-filter"></i></a>
+                                <a href="javascript:;" class="btn btn-primary mr-2 mb-2 mb-sm-0" data-toggle="modal"
+                                    data-target="#modalFilter" title="Filter"><i class="fa fa-filter"></i></a>
+                                <a href="{{ route('simoja.kasi.cuti') }}" class="btn btn-primary mr-2 mb-2 mb-sm-0"
+                                    title="Reset Filter">
+                                    <i class="fa fa-refresh"></i>
+                                </a>
+                                <div class="mr-2 mb-2 mb-sm-0 nav-item dropdown">
+                                    <button class="btn btn-primary mr-2 mb-2 mb-sm-0 nav-link text-white" href="#"
+                                        id="appsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false" title="Export">
+                                        <i class="fa fa-paper-plane"></i> Export
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dashboardsDropdown">
+                                        <li>
+                                            <a class="dropdown-item" href="javascript:;" data-toggle="modal"
+                                                data-target="#modalDownloadExcel" title="Filter">
+                                                <i class="fa fa-file-excel text-primary"></i> Export Excel
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -53,7 +70,6 @@
                                             <th class="text-center text-wrap">Jabatan</th>
                                             <th class="text-center text-wrap">Pulau</th>
                                             <th class="text-center text-wrap">Seksi</th>
-                                            {{-- <th class="text-center text-wrap">Tim</th> --}}
                                             <th class="text-center text-wrap">Tanggal Pengajuan</th>
                                             <th class="text-center text-wrap">Jenis Izin</th>
                                             <th class="text-center text-wrap">Jumlah Hari</th>
@@ -68,11 +84,10 @@
                                         @foreach ($cuti as $item)
                                             <tr>
                                                 <td class="text-center">{{ $loop->iteration }}</td>
-                                                <td class="text-center">{{ $item->user->name }}</td>
+                                                <td class="text-center font-weight-bold">{{ $item->user->name }}</td>
                                                 <td class="text-center">{{ $item->user->jabatan->name }}</td>
-                                                <td class="text-center">{{ $item->user->area->pulau->name }}</td>
+                                                <td class="text-center">Pulau {{ $item->user->area->pulau->name }}</td>
                                                 <td class="text-center">{{ $item->user->struktur->seksi->name }}</td>
-                                                {{-- <td class="text-center">{{ $item->user->struktur->tim->name }}</td> --}}
                                                 <td class="text-center text-wrap">
                                                     {{ $item->tanggal_awal == $item->tanggal_akhir ? date('d-m-Y', strtotime($item->tanggal_awal)) : date('d-m-Y', strtotime($item->tanggal_awal)) . ' - ' . date('d-m-Y', strtotime($item->tanggal_akhir)) }}
                                                 </td>
@@ -131,8 +146,9 @@
         </div>
     </div>
 
-    {{-- BEGIN: Filter Modal --}}
-    <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="modalFilter" aria-hidden="true">
+    {{-- START: FILTER CUTI --}}
+    <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="modalFilter"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -142,65 +158,32 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="formFilter" action="{{ route('cuti.filter') }}" method="GET">
+                    <form id="formFilter" action="{{ route('simoja.kasi.cuti.filter') }}" method="GET">
                         @csrf
                         @method('GET')
                         <div class="form-row gutters">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <label for="pulau_id">Pulau</label>
-                                    <select name="pulau_id" id="pulau_id" class="form-control">
-                                        <option value="" selected disabled>- pilih pulau -</option>
+                                    <label for="">Personel</label>
+                                    <select name="user_id" class="form-control">
+                                        <option value="" selected disabled>- Pilih Personel -</option>
+                                        @foreach ($user as $item)
+                                            <option value="{{ $item->id }}"
+                                                @if ($item->id == $user_id) selected @endif>{{ $item->name }} -
+                                                {{ $item->nip ?? '-' }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Pulau</label>
+                                    <select name="pulau_id" class="form-control">
+                                        <option value="" selected disabled>- Pilih Pulau -</option>
                                         @foreach ($pulau as $item)
                                             <option value="{{ $item->id }}"
-                                                @if ($item->id == $pulau_id ?? '') selected @endif>Pulau {{ $item->name }}
+                                                @if ($item->id == $pulau_id) selected @endif>Pulau {{ $item->name }}
                                             </option>
                                         @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="seksi_id">Seksi</label>
-                                    <select name="seksi_id" id="seksi_id" class="form-control">
-                                        <option value="" selected disabled>- pilih seksi -</option>
-                                        @foreach ($seksi as $item)
-                                            <option value="{{ $item->id }}"
-                                                @if ($item->id == $seksi_id ?? '') selected @endif>{{ $item->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="koordinator_id">Koordinator</label>
-                                    <select name="koordinator_id" id="koordinator_id" class="form-control">
-                                        <option value="" selected disabled>- pilih koordinator -</option>
-                                        @foreach ($koordinator as $item)
-                                            <option value="{{ $item->id }}"
-                                                @if ($item->id == $koordinator_id ?? '') selected @endif>{{ $item->name }} (NIP.
-                                                {{ $item->nip }})</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="tim_id">Tim</label>
-                                    <select name="tim_id" id="tim_id" class="form-control">
-                                        <option value="" selected disabled>- pilih tim -</option>
-                                        @foreach ($tim as $item)
-                                            <option value="{{ $item->id }}"
-                                                @if ($item->id == $tim_id ?? '') selected @endif>{{ $item->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="status">Status Cuti</label>
-                                    <select name="status" id="status" class="form-control">
-                                        <option value="" selected disabled>- pilih status -</option>
-                                        <option value="Diproses" @if ($status ?? '' == 'Diproses') selected @endif>
-                                            Diproses</option>
-                                        <option value="Diterima" @if ($status ?? '' == 'Diterima') selected @endif>
-                                            Diterima</option>
-                                        <option value="Ditolak" @if ($status ?? '' == 'Ditolak') selected @endif>Ditolak
-                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -209,16 +192,59 @@
                         <div class="form-row gutters">
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <input type="text" onfocus="(this.type='date')" onblur="(this.type='text')"
-                                        name="start_date" value="{{ $start_date ?? '' }}" class="form-control"
-                                        id="start" placeholder="start">
+                                    <input type="date" class="form-control" value="{{ $start_date }}"
+                                        name="start_date">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <input type="text" onfocus="(this.type='date')" onblur="(this.type='text')"
-                                        class="form-control" value="{{ $end_date ?? '' }}" name="end_date"
-                                        id="end" placeholder="end">
+                                    <input type="date" class="form-control" value="{{ $end_date }}"
+                                        name="end_date">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="">Jenis Cuti</label>
+                                    <select name="jenis_cuti_id" class="form-control">
+                                        <option value="" selected disabled>- Pilih Jenis Cuti -</option>
+                                        @foreach ($jenis_cuti as $item)
+                                            <option value="{{ $item->id }}"
+                                                @if ($jenis_cuti_id == $item->id) selected @endif>{{ $item->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="">Status</label>
+                                    <select name="status" class="form-control">
+                                        <option value="" selected disabled>- Pilih Status -</option>
+                                        <option value="Diproses" @if ($status == 'Diproses') selected @endif>Diproses
+                                        </option>
+                                        <option value="Diterima" @if ($status == 'Diterima') selected @endif>
+                                            Diterima
+                                        </option>
+                                        <option value="Ditolak" @if ($status == 'Ditolak') selected @endif>Ditolak
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="">Urutan</label>
+                                    <select name="sort" class="form-control">
+                                        <option value="ASC" @if ($sort == 'ASC') selected @endif>A to Z
+                                        </option>
+                                        <option value="DESC" @if ($sort == 'DESC') selected @endif>Z to A
+                                        </option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -231,7 +257,7 @@
             </div>
         </div>
     </div>
-    {{-- END: Filter Modal --}}
+    {{-- END: FILTER CUTI --}}
 
     {{-- BEGIN: Detail Pengajuan Cuti --}}
     <div class="modal fade" id="modalLampiran" tabindex="-1" role="dialog" aria-labelledby="detailPersonel"
@@ -290,7 +316,7 @@
     {{-- END: Konfirmasi PDF --}}
 
     {{-- BEGIN: Konfirmasi Excel --}}
-    <div id="modalDownloadExcel" class="modal" tabindex="-1" aria-hidden="true">
+    <div id="modalDownloadExcel" class="modal fade" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body p-2">
@@ -306,23 +332,23 @@
                                 Data ini akan di-generate dalam format Excel!
                             </p>
                         </div>
-                        <form id="exportExcel" action="{{ route('cuti.excel') }}" method="GET" hidden>
+                        <form id="exportExcel" action="{{ route('simoja.kasi.cuti.export.excel') }}" method="GET"
+                            hidden>
                             @csrf
                             @method('GET')
+                            <input type="text" name="user_id" value="{{ $user_id ?? '' }}">
                             <input type="text" name="pulau_id" value="{{ $pulau_id ?? '' }}">
-                            <input type="text" name="seksi_id" value="{{ $seksi_id ?? '' }}">
-                            <input type="text" name="koordinator_id" value="{{ $koordinator_id ?? '' }}">
-                            <input type="text" name="tim_id" value="{{ $tim_id ?? '' }}">
-                            <input type="text" name="status" value="{{ $status ?? '' }}">
                             <input type="text" name="start_date" value="{{ $start_date ?? '' }}">
                             <input type="text" name="end_date" value="{{ $end_date ?? '' }}">
+                            <input type="text" name="sort" value="{{ $sort ?? 'ASC' }}">
+                            <input type="text" name="status" value="{{ $status ?? '' }}">
+                            <input type="text" name="jenis_cuti_id" value="{{ $jenis_cuti_id ?? '' }}">
                         </form>
                     </div>
-                    <div class="px-5 pb-8 text-center mt-3">
-                        <button type="submit" form="exportExcel" formtarget="_blank"
-                            class="btn btn-primary w-24 mr-1 me-2">Download</button>
-                        <button type="button" data-dismiss="modal" class="btn btn-dark w-24 mr-1 me-2">Tutup</button>
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
+                    <button type="submit" form="exportExcel" formtarget="_blank" class="btn btn-primary">Unduh</button>
                 </div>
             </div>
         </div>
