@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\user\simoja;
 
+use App\Exports\cuti\user\CutiExport;
 use App\Http\Controllers\Controller;
 use App\Models\Absensi;
 use App\Models\Cuti;
@@ -17,6 +18,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class CutiController extends Controller
 {
@@ -132,7 +135,19 @@ class CutiController extends Controller
 
     public function export_excel_kasi(Request $request)
     {
-        return back()->withError('Fitur ini masih dalam tahap pengembangan');
+        $seksi_id = auth()->user()->struktur->seksi->id;
+        $user_id = $request->user_id;
+        $pulau_id = $request->pulau_id;
+        $start_date = $request->start_date;
+        $end_date = $request->end_date ?? $start_date;
+        $sort = $request->sort;
+        $status = $request->status;
+        $jenis_cuti_id = $request->jenis_cuti_id;
+
+        $waktu = Carbon::now()->format('Ymd');
+        $nama_file = $waktu . '_data cuti.xlsx';
+
+        return Excel::download(new CutiExport($seksi_id, $user_id, $pulau_id, $start_date, $end_date, $sort, $status, $jenis_cuti_id), $nama_file, \Maatwebsite\Excel\Excel::XLSX);
     }
 
     public function approval()
@@ -383,20 +398,34 @@ class CutiController extends Controller
     public function my_index_pjlp()
     {
         $user_id = auth()->user()->id;
+
+        $jenis_cuti = JenisCuti::all();
+        $jenis_cuti_id = null;
+        $start_date = null;
+        $end_date = null;
+        $sort = 'DESC';
+        $status = null;
+
         $cuti = Cuti::where('user_id', $user_id)
-                    ->orderBy('tanggal_awal', 'DESC')
-                    ->orderBy('tanggal_akhir', 'DESC')
+                    ->orderBy('tanggal_awal', $sort)
+                    ->orderBy('tanggal_akhir', $sort)
                     ->get();
 
-        $konfigurasi_cuti = KonfigurasiCuti::where('jenis_cuti_id', 1)
-                    ->where('user_id',auth()->user()->id)
-                    ->orWhere('user_id',auth()->user()->id)
+        $konfigurasi_cuti = KonfigurasiCuti::where('periode', Carbon::now()->year)
+                    ->where('jenis_cuti_id', 1)
+                    ->where('user_id', $user_id)
                     ->firstOrFail();
 
-        return view('user.simoja.pjlp.cuti.my_index', compact([
-            'cuti',
-            'konfigurasi_cuti',
-        ]));
+        return view('user.simoja.pjlp.cuti.my_index', [
+            'cuti' => $cuti,
+            'konfigurasi_cuti' => $konfigurasi_cuti,
+            'jenis_cuti' => $jenis_cuti,
+            'jenis_cuti_id' => $jenis_cuti_id,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'sort' => $sort,
+            'status' => $status,
+        ]);
     }
 
     public function create_pjlp()
@@ -523,5 +552,75 @@ class CutiController extends Controller
         $cuti->forceDelete();
 
         return redirect()->route('simoja.pjlp.my-cuti')->withNotify('Data berhasil dihapus secara permanen!');
+    }
+
+    public function filter_pjlp(Request $request)
+    {
+        $user_id = auth()->user()->id;
+        $pulau_id = null;
+        $start_date = $request->start_date;
+        $end_date = $request->end_date ?? $start_date;
+        $sort = $request->sort;
+        $status = $request->status;
+        $jenis_cuti_id = $request->jenis_cuti_id;
+
+        $jenis_cuti = JenisCuti::all();
+
+        $cuti = Cuti::query();
+
+        // Filter by user_id
+        $cuti->when($user_id, function ($query) use ($user_id) {
+            return $query->where('user_id', $user_id);
+        });
+
+        // Filter by pulau_id
+        $cuti->when($pulau_id, function ($query) use ($request) {
+            $anggota_id = FormasiTim::where('periode', Carbon::now()->year)->whereRelation('area.pulau', 'id', '=', $request->pulau_id)->pluck('anggota_id')->toArray();
+            $koordinator_id = FormasiTim::where('periode', Carbon::now()->year)->whereRelation('area.pulau', 'id', '=', $request->pulau_id)->pluck('koordinator_id')->toArray();
+            $user_id = array_unique(array_merge($anggota_id, $koordinator_id));
+
+            return $query->where(function($query) use ($user_id) {
+                $query->whereIn('user_id', $user_id);
+            });
+        });
+
+        // Filter by tanggal
+        if ($start_date != null and $end_date != null) {
+            $cuti->when($start_date, function ($query) use ($start_date) {
+                return $query->whereDate('tanggal_awal', '>=', $start_date);
+            });
+            $cuti->when($end_date, function ($query) use ($end_date) {
+                return $query->whereDate('tanggal_awal', '<=', $end_date);
+            });
+        }
+
+        // Filter by jenis_cuti_id
+        $cuti->when($jenis_cuti_id, function ($query) use ($request) {
+            return $query->where('jenis_cuti_id', $request->jenis_cuti_id);
+        });
+
+        // Filter by status
+        $cuti->when($status, function ($query) use ($request) {
+            return $query->where('status', $request->status);
+        });
+
+        // Order By
+        $cuti = $cuti->orderBy('tanggal_awal', $sort)->orderBy('tanggal_akhir', $sort)->get();
+
+        $konfigurasi_cuti = KonfigurasiCuti::where('periode', Carbon::now()->year)
+                            ->where('jenis_cuti_id', 1)
+                            ->where('user_id', $user_id)
+                            ->firstOrFail();
+
+        return view('user.simoja.pjlp.cuti.my_index', [
+            'cuti' => $cuti,
+            'konfigurasi_cuti' => $konfigurasi_cuti,
+            'jenis_cuti' => $jenis_cuti,
+            'jenis_cuti_id' => $jenis_cuti_id,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'sort' => $sort,
+            'status' => $status,
+        ]);
     }
 }

@@ -392,14 +392,23 @@ class AbsensiController extends Controller
     public function my_index_pjlp()
     {
         $user_id = auth()->user()->id;
+
+        $start_date = '';
+        $end_date = '';
+        $sort = 'DESC';
+
         $absensi = Absensi::where('user_id', $user_id)
                         ->orderBy('tanggal', 'DESC')
                         ->orderBy('jam_masuk', 'DESC')
                         ->orderBy('jam_pulang', 'DESC')
                         ->get();
-        return view('user.simoja.pjlp.absensi.my_index', compact([
-            'absensi',
-        ]));
+
+        return view('user.simoja.pjlp.absensi.my_index', [
+            'absensi' => $absensi,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'sort' => $sort,
+        ]);
     }
 
     public function create_pjlp()
@@ -693,5 +702,50 @@ class AbsensiController extends Controller
         }
 
         return redirect()->route('simoja.pjlp.my-absensi')->withNotify($message);
+    }
+
+    public function filter_pjlp(Request $request)
+    {
+        $user_id = auth()->user()->id;
+        $pulau_id = null;
+        $start_date = $request->start_date;
+        $end_date = $request->end_date ?? $start_date;
+        $sort = $request->sort;
+
+        $absensi = Absensi::query();
+
+
+        // Filter by user_id
+        $absensi->when($user_id, function ($query) use ($user_id) {
+            return $query->where('user_id', $user_id);
+        });
+
+        // Filter by pulau_id
+        $absensi->when($pulau_id, function ($query) use ($request) {
+            $user_id[] = FormasiTim::where('periode', Carbon::now()->year)->whereRelation('area.pulau', 'id', '=', $request->pulau_id)->pluck('anggota_id')->toArray();
+            $user_id[] = FormasiTim::where('periode', Carbon::now()->year)->whereRelation('area.pulau', 'id', '=', $request->pulau_id)->pluck('koordinator_id')->toArray();
+            $user_id = array_merge(...$user_id);
+            return $query->whereIn('user_id', $user_id);
+        });
+
+        // Filter by tanggal
+        if ($start_date != null and $end_date != null) {
+            $absensi->when($start_date, function ($query) use ($start_date) {
+                return $query->whereDate('tanggal', '>=', $start_date);
+            });
+            $absensi->when($end_date, function ($query) use ($end_date) {
+                return $query->whereDate('tanggal', '<=', $end_date);
+            });
+        }
+
+        // Order By
+        $absensi = $absensi->orderBy('tanggal', $sort)->orderBy('jam_masuk', $sort)->orderBy('jam_pulang', $sort)->get();
+
+        return view('user.simoja.pjlp.absensi.my_index', [
+            'absensi' => $absensi,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'sort' => $sort,
+        ]);
     }
 }

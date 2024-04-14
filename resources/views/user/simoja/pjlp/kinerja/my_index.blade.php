@@ -21,7 +21,7 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="d-flex justify-content-center mb-3 text-center" style="text-decoration: underline">Kinerja
-                        Saya
+                        Saya - {{ auth()->user()->name }}
                     </h4>
                     <div class="row d-flex justify-content-between align-items-center">
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-3 text-left">
@@ -32,8 +32,12 @@
                                 <a href="{{ route('simoja.pjlp.kinerja-create') }}"
                                     class="btn btn-primary mr-2 mb-2 mb-sm-0">Tambah
                                     Data</a>
-                                <a href="" class="btn btn-primary mb-2 mb-sm-0" data-toggle="modal"
-                                    data-target="#modalFilter"><i class="fa fa-filter"></i></a>
+                                <a href="javascript" class="btn btn-primary mb-2 mr-2 mb-sm-0" data-toggle="modal"
+                                    data-target="#modalFilter" title="Filter"><i class="fa fa-filter"></i></a>
+                                <a href="{{ route('simoja.pjlp.my-kinerja') }}" class="btn btn-primary mr-2 mb-2 mb-sm-0"
+                                    title="Reset Filter">
+                                    <i class="fa fa-refresh"></i>
+                                </a>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -53,7 +57,6 @@
                                     <th class="text-center">Nama</th>
                                     <th class="text-center">Pulau</th>
                                     <th class="text-center">Koordinator</th>
-                                    {{-- <th class="text-center">Tim</th> --}}
                                     <th class="text-center">Giat</th>
                                     <th class="text-center">Deskripsi</th>
                                     <th class="text-center">Lokasi</th>
@@ -65,10 +68,9 @@
                                     <tr>
                                         <td class="text-center">{{ $loop->iteration }}</td>
                                         <td class="text-center">{{ date('d-m-Y', strtotime($item->tanggal)) }}</td>
-                                        <td class="text-center">{{ $item->anggota->name ?? '-' }}</td>
+                                        <td class="text-center font-weight-bold">{{ $item->anggota->name ?? '-' }}</td>
                                         <td class="text-center">Pulau {{ $item->formasi_tim->area->pulau->name }}</td>
                                         <td class="text-center">{{ $item->koordinator->name ?? '-' }}</td>
-                                        {{-- <td class="text-center">{{ $item->formasi_tim->struktur->tim->name }}</td> --}}
                                         <td class="text-center">{{ $item->kategori->name ?? $item->kegiatan }}</td>
                                         <td class="text-center">{{ $item->deskripsi ?? '-' }}</td>
                                         <td class="text-center">{{ $item->lokasi ?? '-' }}</td>
@@ -105,23 +107,50 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <label for="periode">Periode</label>
-                    <div class="form-row gutters">
-                        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="form-group">
-                                <input type="date" class="form-control" id="start" placeholder="start">
+                    <form id="formFilter" action="{{ route('simoja.kinerja.pjlp.filter') }}" method="GET">
+                        @csrf
+                        @method('GET')
+                        <div class="form-row gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="">Personel</label>
+                                    <input type="text" class="form-control" value="{{ auth()->user()->name }}" disabled>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="form-group">
-                                <input type="date" class="form-control" id="end" placeholder="end">
+                        <label for="periode">Periode</label>
+                        <div class="form-row gutters">
+                            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <input type="date" class="form-control" value="{{ $start_date ?? '' }}"
+                                        name="start_date">
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <input type="date" class="form-control" value="{{ $end_date ?? '' }}"
+                                        name="end_date">
+                                </div>
                             </div>
                         </div>
-                    </div>
+                        <div class="form-row gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="">Urutan</label>
+                                    <select name="sort" class="form-control">
+                                        <option value="ASC" @if ($sort == 'ASC') selected @endif>A to Z
+                                        </option>
+                                        <option value="DESC" @if ($sort == 'DESC') selected @endif>Z to A
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
-                    <button type="button" class="btn btn-primary">Filter Data</button>
+                    <button type="submit" form="formFilter" class="btn btn-primary">Filter Data</button>
                 </div>
             </div>
         </div>

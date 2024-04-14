@@ -417,6 +417,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/simoja-pjlp-absensi', 'my_index_pjlp')->name('simoja.pjlp.my-absensi');
             Route::get('/simoja-pjlp-absensi-create', 'create_pjlp')->name('simoja.pjlp.absensi-create');
             Route::post('/simoja-pjlp-absensi', 'store_pjlp')->name('simoja.pjlp.absensi.store');
+            Route::get('/simoja-pjlp-absensi/filter', 'filter_pjlp')->name('simoja.pjlp.absensi.filter');
         });
 
     });
@@ -444,6 +445,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/simoja-pjlp-kinerja', 'my_index_pjlp')->name('simoja.pjlp.my-kinerja');
             Route::get('/simoja-pjlp-kinerja-create', 'create_pjlp')->name('simoja.pjlp.kinerja-create');
             Route::post('/simoja-pjlp-kinerja', 'store_pjlp')->name('simoja.kinerja.pjlp.store');
+            Route::get('/simoja-pjlp-kinerja/filter', 'filter_pjlp')->name('simoja.kinerja.pjlp.filter');
         });
 
     });
@@ -476,6 +478,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/simoja-pjlp-cuti-create', 'create_pjlp')->name('simoja.pjlp.cuti-create');
             Route::post('/simoja-pjlp-cuti', 'store_pjlp')->name('simoja.cuti.pjlp.store');
             Route::delete('/simoja-pjlp-cuti', 'destroy_pjlp')->name('simoja.cuti.pjlp.destroy');
+
+            Route::get('/simoja-pjlp-cuti/filter', 'filter_pjlp')->name('simoja.pjlp.cuti.filter');
         });
 
     });

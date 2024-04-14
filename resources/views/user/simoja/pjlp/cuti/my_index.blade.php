@@ -21,7 +21,7 @@
             <div class="card h-250">
                 <div class="card-body">
                     <h4 class="d-flex justify-content-center mb-3 text-center" style="text-decoration: underline">Pengajuan
-                        Cuti Saya
+                        Cuti Saya - {{ auth()->user()->name }}
                     </h4>
                     <div class="row d-flex justify-content-between align-items-center">
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-3 text-left">
@@ -32,8 +32,12 @@
                                 <a href="{{ route('simoja.pjlp.cuti-create') }}"
                                     class="btn btn-primary mr-2 mb-2 mb-sm-0">Tambah
                                     Data</a>
-                                <a href="" class="btn btn-primary mb-2 mb-sm-0" data-toggle="modal"
+                                <a href="" class="btn btn-primary mb-2 mr-2 mb-sm-0" data-toggle="modal"
                                     data-target="#modalFilter"><i class="fa fa-filter"></i></a>
+                                <a href="{{ route('simoja.pjlp.my-cuti') }}" class="btn btn-primary mr-2 mb-2 mb-sm-0"
+                                    title="Reset Filter">
+                                    <i class="fa fa-refresh"></i>
+                                </a>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -69,7 +73,7 @@
                                         @foreach ($cuti as $item)
                                             <tr>
                                                 <td class="text-center">{{ $loop->iteration }}</td>
-                                                <td class="text-center">{{ $item->user->name }}</td>
+                                                <td class="text-center font-weight-bold">{{ $item->user->name }}</td>
                                                 <td class="text-center text-wrap">
                                                     {{ $item->tanggal_awal == $item->tanggal_akhir ? date('d-m-Y', strtotime($item->tanggal_awal)) : date('d-m-Y', strtotime($item->tanggal_awal)) . ' - ' . date('d-m-Y', strtotime($item->tanggal_akhir)) }}
                                                 </td>
@@ -146,7 +150,7 @@
         </div>
     </div>
 
-    {{-- START : Modal Filter --}}
+    {{-- START: FILTER CUTI --}}
     <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="modalFilter" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -157,24 +161,15 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="formFilter" action="{{ route('cuti.filter') }}" method="GET">
+                    <form id="formFilter" action="{{ route('simoja.pjlp.cuti.filter') }}" method="GET">
                         @csrf
                         @method('GET')
                         <div class="form-row gutters">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <label for="status">Status Cuti</label>
-                                    <select name="status" id="status" class="form-control">
-                                        <option value="" selected disabled>-
-                                            Pilih Status -</option>
-                                        <option value="Diproses" @if ($status ?? '' == 'Diproses') selected @endif>
-                                            Diproses</option>
-                                        <option value="Diterima" @if ($status ?? '' == 'Diterima') selected @endif>
-                                            Diterima</option>
-                                        <option value="Ditolak" @if ($status ?? '' == 'Ditolak') selected @endif>
-                                            Ditolak
-                                        </option>
-                                    </select>
+                                    <label for="">Personel</label>
+                                    <input type="text" class="form-control" value="{{ auth()->user()->name }}"
+                                        disabled>
                                 </div>
                             </div>
                         </div>
@@ -182,16 +177,59 @@
                         <div class="form-row gutters">
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <input type="text" onfocus="(this.type='date')" onblur="(this.type='text')"
-                                        name="start_date" value="{{ $start_date ?? '' }}" class="form-control"
-                                        id="start" placeholder="start">
+                                    <input type="date" class="form-control" value="{{ $start_date ?? '' }}"
+                                        name="start_date">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <input type="text" onfocus="(this.type='date')" onblur="(this.type='text')"
-                                        class="form-control" value="{{ $end_date ?? '' }}" name="end_date"
-                                        id="end" placeholder="end">
+                                    <input type="date" class="form-control" value="{{ $end_date ?? '' }}"
+                                        name="end_date">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="">Jenis Cuti</label>
+                                    <select name="jenis_cuti_id" class="form-control">
+                                        <option value="" selected disabled>- Pilih Jenis Cuti -</option>
+                                        @foreach ($jenis_cuti as $item)
+                                            <option value="{{ $item->id }}"
+                                                @if ($jenis_cuti_id == $item->id) selected @endif>{{ $item->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="">Status</label>
+                                    <select name="status" class="form-control">
+                                        <option value="" selected disabled>- Pilih Status -</option>
+                                        <option value="Diproses" @if ($status == 'Diproses') selected @endif>Diproses
+                                        </option>
+                                        <option value="Diterima" @if ($status == 'Diterima') selected @endif>
+                                            Diterima
+                                        </option>
+                                        <option value="Ditolak" @if ($status == 'Ditolak') selected @endif>Ditolak
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="">Urutan</label>
+                                    <select name="sort" class="form-control">
+                                        <option value="ASC" @if ($sort == 'ASC') selected @endif>A to Z
+                                        </option>
+                                        <option value="DESC" @if ($sort == 'DESC') selected @endif>Z to A
+                                        </option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -204,7 +242,7 @@
             </div>
         </div>
     </div>
-    {{-- END: Modal Filter --}}
+    {{-- END: FILTER CUTI --}}
 
     {{-- START: Modal Detail Pengajuan --}}
     <div class="modal fade" id="modalDetailPengajuan" tabindex="-1" role="dialog"
