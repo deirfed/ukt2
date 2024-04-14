@@ -11,6 +11,7 @@ use App\Imports\BarangImport;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
 use App\Models\BarangPulau;
+use App\Models\FormasiTim;
 use App\Models\TransaksiBarangPulau;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
@@ -171,22 +172,123 @@ class GudangBarangController extends Controller
     // KOORDINATOR
     public function koordinator_index()
     {
-        return view('user.aset.koordinator.gudang.my_gudang');
+        $user_id = auth()->user()->id;
+        $formasi_tim = FormasiTim::where('periode', Carbon::now()->year)
+                                ->where('anggota_id', $user_id)
+                                ->orWhere('koordinator_id', $user_id)
+                                ->firstOrFail();
+
+        $pulau_id = $formasi_tim->area->pulau->id;
+        $seksi_id = $formasi_tim->struktur->seksi->id;
+
+        $barang_pulau = BarangPulau::where('stock_aktual', '>', 0)
+                        ->whereRelation('gudang.pulau', 'id', '=', $pulau_id)
+                        ->whereRelation('barang.kontrak.seksi', 'id', '=', $seksi_id)
+                        ->get();
+
+        return view('user.aset.koordinator.gudang.my_gudang', compact([
+            'formasi_tim',
+            'barang_pulau',
+        ]));
     }
 
-    public function koordinator_form_pemakaian()
+    public function koordinator_form_pemakaian(Request $request)
     {
-        return view('user.aset.koordinator.gudang.form_pemakaian');
+        $barang_pulau_id = $request->barang_pulau_id;
+
+        $barang_pulau = BarangPulau::whereIn('id', $barang_pulau_id)->get();
+
+        return view('user.aset.koordinator.gudang.form_pemakaian', compact([
+            'barang_pulau',
+        ]));
+    }
+
+    public function koordinator_store(Request $request)
+    {
+        $request->validate([
+            'photo.*' => 'required|image',
+            'tanggal' => 'required',
+            'barang_pulau_id.*' => 'required',
+            'kegiatan' => 'required',
+            'qty.*' => 'required|numeric',
+        ]);
+
+        $user_id = auth()->user()->id;
+        $tanggal = $request->tanggal;
+        $barang_pulau_ids = $request->barang_pulau_id;
+        $qty = $request->qty;
+        $photo = $request->file('photo');
+        $kegiatan = $request->kegiatan;
+        $catatan = $request->catatan;
+
+        foreach ($barang_pulau_ids as $key => $barang_pulau_id) {
+            $image = Image::make($photo[$key]);
+
+            $imageName = time() . '-' . $photo[$key]->getClientOriginalName();
+            $detailPath = 'asset/photo_transaksi/';
+            $destinationPath = public_path('storage/'. $detailPath);
+
+            $image->resize(null, 500, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+
+            $image->save($destinationPath.$imageName);
+            $photo_transaksi = $detailPath.$imageName;
+
+            TransaksiBarangPulau::create([
+                'user_id' => $user_id,
+                'barang_pulau_id' => $barang_pulau_id,
+                'qty' => $qty[$key],
+                'photo' => $photo_transaksi,
+                'tanggal' => $tanggal,
+                'kegiatan' => $kegiatan,
+                'catatan' => $catatan,
+            ]);
+
+            $barang_pulau = BarangPulau::findOrFail($barang_pulau_id);
+            $barang_pulau->update([
+                'stock_aktual' => $barang_pulau->stock_aktual - $qty[$key],
+            ]);
+        }
+
+        return redirect()->route('aset.koordinator.my-gudang')->withNotify('Data transaksi berhasil disimpan!');
     }
 
     public function koordinator_histori_transaksi()
     {
-        return view('user.aset.koordinator.gudang.my_transaksi');
+        $user_id = auth()->user()->id;
+        $sort = 'DESC';
+        $transaksi = TransaksiBarangPulau::where('user_id', $user_id)
+                    ->orderBy('tanggal', $sort)
+                    ->get();
+
+        return view('user.aset.koordinator.gudang.my_transaksi', compact([
+            'transaksi',
+            'sort',
+        ]));
     }
 
     public function koordinator_histori_transaksi_tim()
     {
-        return view('user.aset.koordinator.gudang.tim_transaksi');
+        $user_id = auth()->user()->id;
+        $anggota_id = FormasiTim::where('periode', Carbon::now()->year)
+                                ->where('anggota_id', $user_id)
+                                ->pluck('anggota_id')
+                                ->toArray();
+        $koordinator_id = FormasiTim::where('periode', Carbon::now()->year)
+                                ->where('koordinator_id', $user_id)
+                                ->pluck('koordinator_id')
+                                ->toArray();
+        $user_ids = array_unique(array_merge($anggota_id, $koordinator_id));
+
+        $sort = 'DESC';
+        $transaksi = TransaksiBarangPulau::whereIn('user_id', $user_ids)
+                    ->orderBy('tanggal', $sort)
+                    ->get();
+
+        return view('user.aset.koordinator.gudang.tim_transaksi', compact([
+            'transaksi',
+        ]));
     }
 
 
@@ -198,16 +300,98 @@ class GudangBarangController extends Controller
     // PJLP
     public function pjlp_index()
     {
-        return view('user.aset.pjlp.gudang.my_gudang');
+        $user_id = auth()->user()->id;
+        $formasi_tim = FormasiTim::where('periode', Carbon::now()->year)
+                                ->where('anggota_id', $user_id)
+                                ->orWhere('koordinator_id', $user_id)
+                                ->firstOrFail();
+
+        $pulau_id = $formasi_tim->area->pulau->id;
+        $seksi_id = $formasi_tim->struktur->seksi->id;
+
+        $barang_pulau = BarangPulau::where('stock_aktual', '>', 0)
+                        ->whereRelation('gudang.pulau', 'id', '=', $pulau_id)
+                        ->whereRelation('barang.kontrak.seksi', 'id', '=', $seksi_id)
+                        ->get();
+
+        return view('user.aset.pjlp.gudang.my_gudang', compact([
+            'barang_pulau',
+            'formasi_tim',
+        ]));
     }
 
-    public function pjlp_form_pemakaian()
+    public function pjlp_form_pemakaian(Request $request)
     {
-        return view('user.aset.pjlp.gudang.form_pemakaian');
+        $barang_pulau_id = $request->barang_pulau_id;
+        $barang_pulau = BarangPulau::whereIn('id', $barang_pulau_id)->get();
+
+        return view('user.aset.pjlp.gudang.form_pemakaian', compact([
+            'barang_pulau',
+        ]));
+    }
+
+    public function pjlp_store(Request $request)
+    {
+        $request->validate([
+            'photo.*' => 'required|image',
+            'tanggal' => 'required',
+            'barang_pulau_id.*' => 'required',
+            'kegiatan' => 'required',
+            'qty.*' => 'required|numeric',
+        ]);
+
+        $user_id = auth()->user()->id;
+        $tanggal = $request->tanggal;
+        $barang_pulau_ids = $request->barang_pulau_id;
+        $qty = $request->qty;
+        $photo = $request->file('photo');
+        $kegiatan = $request->kegiatan;
+        $catatan = $request->catatan;
+
+        foreach ($barang_pulau_ids as $key => $barang_pulau_id) {
+            $image = Image::make($photo[$key]);
+
+            $imageName = time() . '-' . $photo[$key]->getClientOriginalName();
+            $detailPath = 'asset/photo_transaksi/';
+            $destinationPath = public_path('storage/'. $detailPath);
+
+            $image->resize(null, 500, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+
+            $image->save($destinationPath.$imageName);
+            $photo_transaksi = $detailPath.$imageName;
+
+            TransaksiBarangPulau::create([
+                'user_id' => $user_id,
+                'barang_pulau_id' => $barang_pulau_id,
+                'qty' => $qty[$key],
+                'photo' => $photo_transaksi,
+                'tanggal' => $tanggal,
+                'kegiatan' => $kegiatan,
+                'catatan' => $catatan,
+            ]);
+
+            $barang_pulau = BarangPulau::findOrFail($barang_pulau_id);
+            $barang_pulau->update([
+                'stock_aktual' => $barang_pulau->stock_aktual - $qty[$key],
+            ]);
+        }
+
+        return redirect()->route('aset.pjlp.my-gudang')->withNotify('Data transaksi berhasil disimpan!');
     }
 
     public function pjlp_histori_transaksi()
     {
-        return view('user.aset.pjlp.gudang.my_transaksi');
+        $user_id = auth()->user()->id;
+        $sort = 'DESC';
+        $transaksi = TransaksiBarangPulau::where('user_id', $user_id)
+                    ->orderBy('tanggal', $sort)
+                    ->get();
+
+        return view('user.aset.pjlp.gudang.my_transaksi', compact([
+            'transaksi',
+            'sort',
+        ]));
     }
 }

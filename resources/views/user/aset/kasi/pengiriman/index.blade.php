@@ -28,15 +28,33 @@
                                 <a href="{{ route('aset.kasi.index') }}"
                                     class="btn btn-outline-primary mr-2 mb-2 mb-sm-0"><i class="fa fa-arrow-left"></i>
                                     Kembali</a>
-                                <button type="submit" form="form-kirim" id="kirimBarangButton" class="btn btn-warning "
-                                    style="display: none;">
-                                    <i class="fa fa-paper-plane"></i>
-                                    Kirim Barang
-                                </button>
-                                <button class="btn btn-primary mr-2 mb-2 mb-sm-0">Export to Excel</button>
-                                <button class="btn btn-primary mr-2 mb-2 mb-sm-0">Export to PDF</button>
-                                <a href="" class="btn btn-primary mr-2 mb-2 mb-sm-0" data-toggle="modal"
-                                    data-target="#modalFilter"><i class="fa fa-filter"></i></a>
+                                <a href="javascript:;" class="btn btn-primary mr-2 mb-2 mb-sm-0" data-toggle="modal"
+                                    data-target="#modalFilter" title="Filter"><i class="fa fa-filter"></i></a>
+                                <a href="{{ route('aset.pengiriman.index') }}" class="btn btn-primary mr-2 mb-2 mb-sm-0"
+                                    title="Reset Filter">
+                                    <i class="fa fa-refresh"></i>
+                                </a>
+                                <div class="mr-2 mb-2 mb-sm-0 nav-item dropdown">
+                                    <button class="btn btn-primary mr-2 mb-2 mb-sm-0 nav-link text-white" href="#"
+                                        id="appsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false" title="Export">
+                                        <i class="fa fa-paper-plane"></i> Export
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dashboardsDropdown">
+                                        <li>
+                                            <a class="dropdown-item" href="javascript:;" data-toggle="modal"
+                                                data-target="#modalDownloadExcel" title="Filter">
+                                                <i class="fa fa-file-excel text-primary"></i> Export Excel
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="javascript:;" data-toggle="modal"
+                                                data-target="#modalDownloadPDF">
+                                                <i class="fa fa-file-pdf text-danger"></i> Export PDF
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -71,7 +89,9 @@
                                         <td class="text-center">{{ $item->no_resi }}</td>
                                         <td class="text-center">Gudang Utama</td>
                                         <td class="text-center">{{ $item->gudang->name }}</td>
-                                        <td class="text-center text-wrap">{{ $item->submitter->name }}</td>
+                                        <td class="text-center text-wrap">{{ $item->submitter->name }} <br>
+                                            ({{ $item->submitter->jabatan->name }})
+                                        </td>
                                         <td class="text-center">
                                             {{ $item->tanggal_kirim ?? '-' }}
                                         </td>
@@ -118,7 +138,8 @@
                             @csrf
                             @method('delete')
                             <input type="text" name="id" id="id" hidden>
-                            <button type="button" data-dismiss="modal" class="btn btn-dark w-24 mr-1 me-2">Batal</button>
+                            <button type="button" data-dismiss="modal"
+                                class="btn btn-dark w-24 mr-1 me-2">Batal</button>
                             <button type="submit" class="btn btn-primary w-24">Buat BAST</button>
                         </form>
                     </div>
@@ -129,7 +150,8 @@
     {{-- END: BAST Moal --}}
 
     {{-- BEGIN: Filter Modal --}}
-    <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="modalFilter" aria-hidden="true">
+    <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="modalFilter"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">

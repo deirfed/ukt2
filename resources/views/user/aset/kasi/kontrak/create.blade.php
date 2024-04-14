@@ -60,7 +60,7 @@
                         <div class="btn group-button">
                             <button type="submit" id="submit" name="submit"
                                 class="btn btn-primary float-right ml-3">Submit</button>
-                            <a href="{{ route('aset.kasi.index') }}" class="btn btn-dark">Batal</a>
+                            <a href="{{ route('aset.kasi.kontrak-index') }}" class="btn btn-dark">Batal</a>
                         </div>
                     </div>
                 </div>

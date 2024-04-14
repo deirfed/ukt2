@@ -89,8 +89,8 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="gudang">Catatan</label>
-                            <textarea name="catatan" placeholder="Catatan tambahan (opsional)" class="form-control" rows="3"></textarea>
+                            <label for="gudang">Catatan <span class="text-primary">(opsional)</span></label>
+                            <textarea name="catatan" placeholder="Catatan tambahan" class="form-control" rows="3"></textarea>
                         </div>
                         <div class="btn group-button">
                             <button type="submit" id="submit" name="submit"

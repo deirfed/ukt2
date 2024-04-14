@@ -10,7 +10,7 @@
     <div class="page-header">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">Gudang</li>
-            <li class="breadcrumb-item active">List Barang Gudang Utama</li>
+            <li class="breadcrumb-item active">Daftar Barang Gudang Utama</li>
         </ol>
     </div>
 @endsection
@@ -20,8 +20,9 @@
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="d-flex justify-content-center mb-3 text-center" style="text-decoration: underline">List Barang
-                        Gudang Utama</h4>
+                    <h4 class="d-flex justify-content-center mb-3 text-center" style="text-decoration: underline">Daftar
+                        Barang
+                        Gudang Utama - Seksi {{ auth()->user()->struktur->seksi->name ?? '-' }}</h4>
                     <div class="row d-flex justify-content-between align-items-center">
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-3 text-left">
                             <div class="d-flex justify-content-start align-items-center flex-wrap">
@@ -35,10 +36,33 @@
                                     <i class="fa fa-paper-plane"></i>
                                     Kirim Barang
                                 </button>
-                                <button class="btn btn-primary mr-2 mb-2 mb-sm-0">Export to Excel</button>
-                                <button class="btn btn-primary mr-2 mb-2 mb-sm-0">Export to PDF</button>
-                                <a href="" class="btn btn-primary mr-2 mb-2 mb-sm-0" data-toggle="modal"
-                                    data-target="#modalFilter"><i class="fa fa-filter"></i></a>
+                                <a href="javascript:;" class="btn btn-primary mr-2 mb-2 mb-sm-0" data-toggle="modal"
+                                    data-target="#modalFilter" title="Filter"><i class="fa fa-filter"></i></a>
+                                <a href="{{ route('aset.gudang-utama') }}" class="btn btn-primary mr-2 mb-2 mb-sm-0"
+                                    title="Reset Filter">
+                                    <i class="fa fa-refresh"></i>
+                                </a>
+                                <div class="mr-2 mb-2 mb-sm-0 nav-item dropdown">
+                                    <button class="btn btn-primary mr-2 mb-2 mb-sm-0 nav-link text-white" href="#"
+                                        id="appsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false" title="Export">
+                                        <i class="fa fa-paper-plane"></i> Export
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dashboardsDropdown">
+                                        <li>
+                                            <a class="dropdown-item" href="javascript:;" data-toggle="modal"
+                                                data-target="#modalDownloadExcel" title="Filter">
+                                                <i class="fa fa-file-excel text-primary"></i> Export Excel
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="javascript:;" data-toggle="modal"
+                                                data-target="#modalDownloadPDF">
+                                                <i class="fa fa-file-pdf text-danger"></i> Export PDF
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -111,10 +135,12 @@
                                                         data-photo="{{ $item->photo }}"><i class="fa fa-eye"></i>
                                                     </a>
                                                 @endif
-                                                <a href="#" href="javascript:;" title="Hapus" data-toggle="modal"
-                                                    data-target="#delete-confirmation-modal"
-                                                    onclick="toggleModal('{{ $item->id }}')"
-                                                    class="btn btn-outline-danger"><i class="fa fa-trash"></i></a>
+                                                @if ($item->photo == null)
+                                                    <a href="#" href="javascript:;" title="Hapus"
+                                                        data-toggle="modal" data-target="#delete-confirmation-modal"
+                                                        onclick="toggleModal('{{ $item->id }}')"
+                                                        class="btn btn-outline-danger"><i class="fa fa-trash"></i></a>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach

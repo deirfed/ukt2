@@ -23,9 +23,9 @@
                 <div class="card-body">
                     <h4 class="d-flex justify-content-center mb-3 text-center" style="text-decoration: underline">
                         Gudang Seksi
-                        {{-- {{ $formasi_tim->struktur->seksi->name }}  --}}
+                        {{ $formasi_tim->struktur->seksi->name ?? '-' }}
                         - Pulau
-                        {{-- {{ $formasi_tim->area->pulau->name ?? '-' }} --}}
+                        {{ $formasi_tim->area->pulau->name ?? '-' }}
                     </h4>
                     <div class="row d-flex justify-content-between align-items-center">
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-3 text-left">
@@ -34,8 +34,9 @@
                                     class="btn btn-outline-primary mr-2 mb-2 mb-sm-0"><i class="fa fa-arrow-left"></i>
                                     Kembali</a>
                                 <a href="{{ route('aset.pjlp.form-pemakaian') }}"><button type="submit"
-                                        class="btn btn-warning mr-2 mb-2 mb-sm-0" {{-- form="ambil-barang-form" id="ambilBarangButton"  --}}
-                                        {{-- style="display: none;" --}}> <i class="fa fa-hand"></i> Ambil Barang
+                                        class="btn btn-warning mr-2 mb-2 mb-sm-0" form="ambil-barang-form"
+                                        id="ambilBarangButton" style="display: none;"> <i class="fa fa-hand"></i> Ambil
+                                        Barang
                                     </button></a>
                                 <a href="" class="btn btn-primary mr-2 mb-2 mb-sm-0" data-toggle="modal"
                                     data-target="#modalFilter"><i class="fa fa-filter"></i></a>
@@ -65,37 +66,22 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <form id="ambil-barang-form" action="#" method="GET">
+                                <form id="ambil-barang-form" action="{{ route('aset.pjlp.form-pemakaian') }}"
+                                    method="GET">
                                     @csrf
                                     @method('GET')
-                                    <tr>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">
-                                            <input type="checkbox" name="barang_pulau_id[]" value="check">
-                                        </td>
-                                        <td class="text-center">Sapu Lidi</td>
-                                        <td class="text-center">consumable</td>
-                                        <td class="text-center">2024 <br> (SDKI010)</td>
-                                        <td class="text-center">10</td>
-                                        <td class="text-center">10</td>
-                                        <td class="text-center">pcs</td>
-                                        <td class="text-center">
-                                            <a href="#" class="btn btn-outline-primary" title="Lihat Photo"
-                                                data-toggle="modal" data-target="#modalLampiran" data-photo="#"><i
-                                                    class="fa fa-eye"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    {{-- @foreach ($barang_pulau as $item)
+                                    @foreach ($barang_pulau as $item)
                                         <tr>
                                             <td class="text-center">{{ $loop->iteration }}</td>
                                             <td class="text-center">
                                                 <input type="checkbox" name="barang_pulau_id[]" value="{{ $item->id }}">
                                             </td>
-                                            <td class="text-center">{{ $item->gudang->name }}</td>
                                             <td class="text-center font-weight-bold">{{ $item->barang->name }}</td>
                                             <td class="text-center">{{ $item->barang->jenis }}</td>
-                                            <td class="text-center">{{ $item->barang->kontrak->tanggal }}</td>
+                                            <td class="text-center">
+                                                {{ date('d-m-Y', strtotime($item->barang->kontrak->tanggal)) }} <br>
+                                                ({{ $item->barang->kontrak->no_kontrak }})
+                                            </td>
                                             <td class="text-center">{{ $item->stock_awal }}</td>
                                             <td class="text-center">{{ $item->stock_aktual }}</td>
                                             <td class="text-center">{{ $item->barang->satuan }}</td>
@@ -106,15 +92,15 @@
                                                 </a>
                                             </td>
                                         </tr>
-                                    @endforeach --}}
-                                    {{-- @if ($barang_pulau->count() == 0)
+                                    @endforeach
+                                    @if ($barang_pulau->count() == 0)
                                         <tr>
-                                            <td class="text-center" colspan="10">
+                                            <td class="text-center" colspan="9">
                                                 Data barang tidak ditemukan, kemungkinan barang belum dikirim atau stock
                                                 sudah habis.
                                             </td>
                                         </tr>
-                                    @endif --}}
+                                    @endif
                                 </form>
                             </tbody>
                         </table>

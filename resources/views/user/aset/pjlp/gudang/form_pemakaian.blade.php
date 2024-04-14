@@ -20,7 +20,7 @@
 @section('content')
     <div class="row gutters justify-content-center">
         <div class="col-xl-6 col-lg-6 col-md-7 col-sm-8 col-12">
-            <form action="#" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('aset.pjlp.transaksi.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('post')
                 <div class="card m-0">
@@ -60,7 +60,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {{-- @foreach ($barang_pulau as $item)
+                                        @foreach ($barang_pulau as $item)
                                             <tr>
                                                 <td class="text-center">{{ $loop->iteration }}</td>
                                                 <td class="font-weight-bolder">
@@ -80,14 +80,14 @@
                                                         accept="image/*" required>
                                                 </td>
                                             </tr>
-                                        @endforeach --}}
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="gudang">Catatan</label>
-                            <textarea name="catatan" placeholder="Catatan tambahan (opsional)" class="form-control" rows="3"></textarea>
+                            <label for="gudang">Catatan <span class="text-primary">(opsional)</span></label>
+                            <textarea name="catatan" placeholder="Catatan tambahan" class="form-control" rows="3"></textarea>
                         </div>
                         <div class="btn group-button">
                             <button type="submit" id="submit" name="submit"

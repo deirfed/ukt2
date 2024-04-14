@@ -13,14 +13,19 @@ class KontrakController extends Controller
 {
     public function index()
     {
-        $seksi = auth()->user()->struktur->seksi->name;
         $seksi_id = auth()->user()->struktur->seksi->id;
-        $kontrak = Kontrak::where('seksi_id', $seksi_id)->orderBy('tanggal', 'DESC')->get();
+        $start_date = null;
+        $end_date = null;
+        $sort = 'DESC';
 
-        return view('user.aset.kasi.kontrak.index', compact([
-            'kontrak',
-            'seksi'
-        ]));
+        $kontrak = Kontrak::where('seksi_id', $seksi_id)->orderBy('tanggal', $sort)->get();
+
+        return view('user.aset.kasi.kontrak.index', [
+            'kontrak' => $kontrak,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'sort' => $sort,
+        ]);
     }
 
     public function create()

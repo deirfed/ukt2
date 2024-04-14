@@ -34,6 +34,7 @@ class ShippingController extends Controller
                             ->distinct()
                             ->orderBy('tanggal_kirim', 'DESC')
                             ->get();
+
         return view('user.aset.kasi.pengiriman.index', compact(['pengiriman_barang']));
     }
 

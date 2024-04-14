@@ -517,12 +517,14 @@ Route::group(['middleware' => 'auth'], function () {
         // KOORDINATOR
         Route::get('/aset-koordinator-my-gudang', 'koordinator_index')->name('aset.koordinator.my-gudang');
         Route::get('/aset-koordinator-create-transaction', 'koordinator_form_pemakaian')->name('aset.koordinator.form-pemakaian');
+        Route::post('/aset-koordinator-transaction', 'koordinator_store')->name('aset.koordinator.transaksi.store');
         Route::get('/aset-koordinator-my-transaction', 'koordinator_histori_transaksi')->name('aset.koordinator.my-transaction');
         Route::get('/aset-koordinator-tim-transaction', 'koordinator_histori_transaksi_tim')->name('aset.koordinator.tim-transaction');
 
         // PJLP
         Route::get('/aset-pjlp-my-gudang', 'pjlp_index')->name('aset.pjlp.my-gudang');
         Route::get('/aset-pjlp-create-transaction', 'pjlp_form_pemakaian')->name('aset.pjlp.form-pemakaian');
+        Route::post('/aset-pjlp-transaction', 'pjlp_store')->name('aset.pjlp.transaksi.store');
         Route::get('/aset-pjlp-my-transaction', 'pjlp_histori_transaksi')->name('aset.pjlp.my-transaction');
     });
 

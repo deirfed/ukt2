@@ -5,6 +5,7 @@ namespace App\Http\Controllers\pages;
 use App\Http\Controllers\Controller;
 use App\Models\BarangPulau;
 use App\Models\FormasiTim;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class BarangPulauController extends Controller
@@ -12,9 +13,11 @@ class BarangPulauController extends Controller
     public function index()
     {
         $user_id = auth()->user()->id;
-        $formasi_tim = FormasiTim::where('koordinator_id', $user_id)
+        $formasi_tim = FormasiTim::where('periode', Carbon::now()->year)
+                        ->where('koordinator_id', $user_id)
                         ->orWhere('anggota_id', $user_id)
                         ->first();
+
         $pulau_id = $formasi_tim->area->pulau->id;
         $seksi_id = $formasi_tim->struktur->seksi->id;
 
@@ -23,7 +26,10 @@ class BarangPulauController extends Controller
                         ->whereRelation('barang.kontrak.seksi', 'id', '=', $seksi_id)
                         ->get();
 
-        return view('pages.barang_pulau.index', compact(['barang_pulau', 'formasi_tim']));
+        return view('pages.barang_pulau.index', compact([
+            'barang_pulau',
+            'formasi_tim',
+        ]));
     }
 
     public function create()
