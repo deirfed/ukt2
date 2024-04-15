@@ -154,8 +154,8 @@
             <div class="mt-5">
                 <p class="mb-0 mt-5">Tembusan:</p>
                 <ol class="mt-0">
-                    <li>Bupati Kabupaten Adm. Kep. Seribu</li>
-                    <li>Panitia penerimaan Hasil Pekerjaan Sekretariat Kab. Kep. Seribu</li>
+                    <li>Kepala Unit Kerja Teknis 2 Kabupaten Administrasi Kepulauan Seribu</li>
+                    <li>Pejabat Pembuat Komitmen Unit Kerja Teknis 2 Kabupaten Administrasi Kepulauan Seribu</li>
                 </ol>
             </div>
         </div>
