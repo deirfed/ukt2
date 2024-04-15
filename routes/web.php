@@ -402,6 +402,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/simoja-kasi-absensi/export/excel', 'export_excel_kasi')->name('simoja.kasi.absensi.export.excel');
             Route::get('/simoja-kasi-absensi/export/pdf', 'export_pdf_kasi')->name('simoja.kasi.absensi.export.pdf');
             Route::get('/simoja-kasi-absensi/ringkasan', 'ringkasan_kasi')->name('simoja.kasi.absensi.ringkasan');
+
+            Route::get('/performance-personel', 'performance_personel')->name('performance-personel');
         });
 
         // KOORDINATOR

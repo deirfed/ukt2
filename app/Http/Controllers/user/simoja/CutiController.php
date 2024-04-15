@@ -24,11 +24,15 @@ use Barryvdh\DomPDF\Facade\Pdf;
 class CutiController extends Controller
 {
     // KASI
-    public function index()
+    public function index(Request $request)
     {
         $seksi_id = auth()->user()->struktur->seksi->id;
 
-        $user = User::whereRelation('struktur.seksi', 'id', '=', $seksi_id)->where('employee_type_id', 3)->orderBy('name', 'ASC')->get();
+        $user = User::whereRelation('struktur.seksi', 'id', '=', $seksi_id)
+                ->where('employee_type_id', 3)
+                ->orderBy('name', 'ASC')
+                ->get();
+
         $pulau = Pulau::orderBy('name', 'ASC')->get();
         $jenis_cuti = JenisCuti::all();
 
@@ -40,10 +44,12 @@ class CutiController extends Controller
         $status = '';
         $jenis_cuti_id = '';
 
+        $perHalaman = $request->input('perHalaman', 25);
+
         $cuti = Cuti::whereRelation('user.struktur.seksi', 'id', '=', $seksi_id)
                 ->orderBy('tanggal_awal', $sort)
                 ->orderBy('tanggal_akhir', $sort)
-                ->get();
+                ->paginate($perHalaman);
 
         return view('user.simoja.kasi.cuti.index', [
             'cuti' => $cuti,
@@ -71,7 +77,11 @@ class CutiController extends Controller
         $status = $request->status;
         $jenis_cuti_id = $request->jenis_cuti_id;
 
-        $user = User::whereRelation('struktur.seksi', 'id', '=', $seksi_id)->where('employee_type_id', 3)->orderBy('name', 'ASC')->get();
+        $user = User::whereRelation('struktur.seksi', 'id', '=', $seksi_id)
+                ->where('employee_type_id', 3)
+                ->orderBy('name', 'ASC')
+                ->get();
+
         $pulau = Pulau::orderBy('name', 'ASC')->get();
         $jenis_cuti = JenisCuti::all();
 
@@ -86,8 +96,16 @@ class CutiController extends Controller
 
         // Filter by pulau_id
         $cuti->when($pulau_id, function ($query) use ($request) {
-            $anggota_id = FormasiTim::where('periode', Carbon::now()->year)->whereRelation('area.pulau', 'id', '=', $request->pulau_id)->pluck('anggota_id')->toArray();
-            $koordinator_id = FormasiTim::where('periode', Carbon::now()->year)->whereRelation('area.pulau', 'id', '=', $request->pulau_id)->pluck('koordinator_id')->toArray();
+            $anggota_id = FormasiTim::where('periode', Carbon::now()->year)
+                    ->whereRelation('area.pulau', 'id', '=', $request->pulau_id)
+                    ->pluck('anggota_id')
+                    ->toArray();
+
+            $koordinator_id = FormasiTim::where('periode', Carbon::now()->year)
+                    ->whereRelation('area.pulau', 'id', '=', $request->pulau_id)
+                    ->pluck('koordinator_id')
+                    ->toArray();
+
             $user_id = array_unique(array_merge($anggota_id, $koordinator_id));
 
             return $query->where(function($query) use ($user_id) {
@@ -147,7 +165,17 @@ class CutiController extends Controller
         $waktu = Carbon::now()->format('Ymd');
         $nama_file = $waktu . '_data cuti.xlsx';
 
-        return Excel::download(new CutiExport($seksi_id, $user_id, $pulau_id, $start_date, $end_date, $sort, $status, $jenis_cuti_id), $nama_file, \Maatwebsite\Excel\Excel::XLSX);
+        return Excel::download(new CutiExport(
+            $seksi_id,
+            $user_id,
+            $pulau_id,
+            $start_date,
+            $end_date,
+            $sort,
+            $status,
+            $jenis_cuti_id),
+            $nama_file,
+            \Maatwebsite\Excel\Excel::XLSX);
     }
 
     public function approval()
@@ -215,7 +243,7 @@ class CutiController extends Controller
 
 
     // KOORDINATOR
-    public function tim_index_koordinator()
+    public function tim_index_koordinator(Request $request)
     {
         $user_id = auth()->user()->id;
         $this_year = Carbon::now()->year;
@@ -225,9 +253,11 @@ class CutiController extends Controller
                                 ->toArray();
         $anggota_id[] = $user_id;
 
+        $perHalaman = $request->input('perHalaman', 25);
+
         $cuti = Cuti::whereIn('user_id', $anggota_id)
                         ->orderBy('tanggal_awal', 'DESC')
-                        ->get();
+                        ->paginate($perHalaman);
         return view('user.simoja.koordinator.cuti.tim_index', compact([
             'cuti',
         ]));
@@ -298,7 +328,9 @@ class CutiController extends Controller
         $catatan = $request->catatan;
         $lampiran = $request->lampiran;
         $status = 'Diproses';
-        $seksi_id = FormasiTim::where('koordinator_id', $user_id)->orWhere('anggota_id', $user_id)->firstOrFail()->struktur->seksi->id;
+        $seksi_id = FormasiTim::where('koordinator_id', $user_id)
+                ->orWhere('anggota_id', $user_id)
+                ->firstOrFail()->struktur->seksi->id;
         $approved_by_id = User::where('jabatan_id', 2)
                         ->whereHas('struktur', function($query) use ($seksi_id) {
                             $query->where('seksi_id', $seksi_id);
@@ -331,7 +363,9 @@ class CutiController extends Controller
         }
 
         if($jenis_cuti_id == 1){
-            $jumlahSisaCuti = KonfigurasiCuti::where('jenis_cuti_id', 1)->where('user_id', $user_id)->firstOrFail()->jumlah;
+            $jumlahSisaCuti = KonfigurasiCuti::where('jenis_cuti_id', 1)
+                        ->where('user_id', $user_id)
+                        ->firstOrFail()->jumlah;
             if ($jumlahHariCuti > $jumlahSisaCuti){
                 return back()->withError('Jumlah hari Cuti yang anda ajukan melebihi sisa Cuti yang anda miliki.');
             }

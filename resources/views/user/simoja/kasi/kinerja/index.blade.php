@@ -15,7 +15,6 @@
     </div>
 @endsection
 
-
 @section('content')
     <div class="row gutters d-flex justify-content-center align-item-center">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -31,31 +30,25 @@
                                     Kembali</a>
                                 <a href="javascript:;" class="btn btn-primary mr-2 mb-2 mb-sm-0" data-toggle="modal"
                                     data-target="#modalFilter" title="Filter"><i class="fa fa-filter"></i></a>
-                                <a href="{{ route('simoja.kasi.kinerja') }}" class="btn btn-primary mr-2 mb-2 mb-sm-0"
-                                    title="Reset Filter">
-                                    <i class="fa fa-refresh"></i>
-                                </a>
-                                <div class="mr-2 mb-2 mb-sm-0 nav-item dropdown">
-                                    <button class="btn btn-primary mr-2 mb-2 mb-sm-0 nav-link text-white" href="#"
-                                        id="appsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false" title="Export">
-                                        <i class="fa fa-paper-plane"></i> Export
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="dashboardsDropdown">
-                                        <li>
-                                            <a class="dropdown-item" href="javascript:;" data-toggle="modal"
-                                                data-target="#modalDownloadExcel" title="Filter">
-                                                <i class="fa fa-file-excel text-primary"></i> Export Excel
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" href="javascript:;" data-toggle="modal"
-                                                data-target="#modalDownloadPDF">
-                                                <i class="fa fa-file-pdf text-danger"></i> Export PDF
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
+                                <button class="btn btn-primary mr-2 mb-2 mb-sm-0 text-white" href="#"
+                                    id="appsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false" title="Export">
+                                    <i class="fa fa-paper-plane"></i> Export
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dashboardsDropdown">
+                                    <li>
+                                        <a class="dropdown-item" href="javascript:;" data-toggle="modal"
+                                            data-target="#modalDownloadExcel" title="Filter">
+                                            <i class="fa fa-file-excel text-primary"></i> Export Excel
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="javascript:;" data-toggle="modal"
+                                            data-target="#modalDownloadPDF">
+                                            <i class="fa fa-file-pdf text-danger"></i> Export PDF
+                                        </a>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -64,6 +57,41 @@
                                     aria-label="Search" id="search-bar">
                                 <button class="btn btn-dark my-2 my-sm-0" type="submit">Pencarian</button>
                             </form>
+                        </div>
+                    </div>
+                    <div class="paginate-style">
+                        <div class="d-flex justify-content-center mb-2">
+                            <a href="{{ route('simoja.kasi.kinerja') }}" class="btn btn-primary mr-2 mb-2 mb-sm-0"><i
+                                    class="fa fa-refresh"></i>
+                            </a>
+                            <div class="dropdown mr-2">
+                                <button class="btn btn-primary mr-2 mb-2 mb-sm-0" id="displayDropdown" role="button"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Tampil Data">
+                                    <i class="fa fa-list"></i> Tampil Data
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="displayDropdown">
+                                    <li>
+                                        <a class="dropdown-item" href="#" title="Show 50">
+                                            <i class="fa fa-list text-primary"></i> 50
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="#" title="Show 100">
+                                            <i class="fa fa-list text-primary"></i> 100
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="#" title="Show 200">
+                                            <i class="fa fa-list text-primary"></i> 200
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <nav aria-label="Pagination">
+                                <ul class="pagination">
+                                    {{ $kinerja->links('vendor.pagination.bootstrap-4') }}
+                                </ul>
+                            </nav>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -94,8 +122,8 @@
                                         <td class="text-center">{{ $item->lokasi ?? '-' }}</td>
                                         <td class="text-center">
                                             <a href="#" data-toggle="modal" data-target="#modalDokumentasi"
-                                                data-photo='{{ $item->photo }}'><button class="btn btn-outline-primary"><i
-                                                        class="fa fa-eye"></i></button></a>
+                                                data-photo='{{ $item->photo }}'><button
+                                                    class="btn btn-outline-primary"><i class="fa fa-eye"></i></button></a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -115,7 +143,8 @@
     </div>
 
     {{-- START: FILTER KINERJA --}}
-    <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="modalFilter" aria-hidden="true">
+    <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="modalFilter"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -355,6 +384,31 @@
                 });
 
                 document.getElementById("photo_modal").innerHTML = photoHTML;
+            });
+        });
+
+        var route = "{{ route('simoja.kasi.kinerja') }}";
+
+        var dropdownItems = document.querySelectorAll('.dropdown-item');
+        dropdownItems.forEach(function(item) {
+            item.addEventListener('click', function(event) {
+                event.preventDefault();
+
+                var selectedValue = this.innerText.trim();
+                switch (selectedValue) {
+                    case '50':
+                        window.location.href = route + "?perHalaman=50";
+                        break;
+                    case '100':
+                        window.location.href = route + "?perHalaman=100";
+                        break;
+                    case '200':
+                        window.location.href = route + "?perHalaman=200";
+                        break;
+                    default:
+                        console.log('Invalid selection');
+                        break;
+                }
             });
         });
     </script>

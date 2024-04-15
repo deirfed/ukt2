@@ -872,9 +872,9 @@ ul.header-tasks:last-child {
   -webkit-border-radius: 0px;
   -moz-border-radius: 0px;
   border-radius: 0px;
-  min-height: calc(100vh - 240px); }
+  min-height: calc(100vh - 190px); }
   .content-wrapper.fixed-height {
-    height: calc(100vh - 240px);
+    height: calc(100vh - 200px);
     padding: 0; }
 
 @media (max-width: 767px) {
@@ -6148,7 +6148,7 @@ code {
 
   /* EDITCSS */
 .main-container-scrollable {
-    height: calc(100vh - 240px);
+    height: calc(100vh - 190px);
     overflow-y: auto;
 }
 

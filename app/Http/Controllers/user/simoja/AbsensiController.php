@@ -2,29 +2,34 @@
 
 namespace App\Http\Controllers\user\simoja;
 
-use App\Exports\absensi\AbsensiExport;
-use App\Http\Controllers\Controller;
+use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Pulau;
 use App\Models\Absensi;
+use App\Models\Kinerja;
 use App\Models\FormasiTim;
 use App\Models\JenisAbsensi;
-use App\Models\KonfigurasiAbsensi;
-use App\Models\Pulau;
-use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
-use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\KonfigurasiAbsensi;
+use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
+use Intervention\Image\Facades\Image;
+use App\Exports\absensi\AbsensiExport;
+use Illuminate\Support\Facades\Storage;
 
 class AbsensiController extends Controller
 {
     // KASI
-    public function index_kasi()
+    public function index_kasi(Request $request)
     {
         $seksi_id = auth()->user()->struktur->seksi->id;
 
-        $user = User::whereRelation('struktur.seksi', 'id', '=', $seksi_id)->where('employee_type_id', 3)->orderBy('name', 'ASC')->get();
+        $user = User::whereRelation('struktur.seksi', 'id', '=', $seksi_id)
+                    ->where('employee_type_id', 3)
+                    ->orderBy('name', 'ASC')
+                    ->get();
+
         $pulau = Pulau::orderBy('name', 'ASC')->get();
 
         $user_id = '';
@@ -33,11 +38,13 @@ class AbsensiController extends Controller
         $end_date = '';
         $sort = 'DESC';
 
+        $perHalaman = $request->input('perHalaman', 25);
+
         $absensi = Absensi::whereRelation('user.struktur.seksi', 'id', '=', $seksi_id)
                     ->orderBy('tanggal', $sort)
                     ->orderBy('jam_masuk', $sort)
                     ->orderBy('jam_pulang', $sort)
-                    ->get();
+                    ->paginate($perHalaman);
 
         return view('user.simoja.kasi.absensi.index', [
             'absensi' => $absensi,
@@ -71,8 +78,14 @@ class AbsensiController extends Controller
 
         // Filter by pulau_id
         $absensi->when($pulau_id, function ($query) use ($request) {
-            $user_id[] = FormasiTim::where('periode', Carbon::now()->year)->whereRelation('area.pulau', 'id', '=', $request->pulau_id)->pluck('anggota_id')->toArray();
-            $user_id[] = FormasiTim::where('periode', Carbon::now()->year)->whereRelation('area.pulau', 'id', '=', $request->pulau_id)->pluck('koordinator_id')->toArray();
+            $user_id[] = FormasiTim::where('periode', Carbon::now()->year)
+                    ->whereRelation('area.pulau', 'id', '=', $request->pulau_id)
+                    ->pluck('anggota_id')
+                    ->toArray();
+            $user_id[] = FormasiTim::where('periode', Carbon::now()->year)
+                    ->whereRelation('area.pulau', 'id', '=', $request->pulau_id)
+                    ->pluck('koordinator_id')
+                    ->toArray();
             $user_id = array_merge(...$user_id);
             return $query->whereIn('user_id', $user_id);
         });
@@ -198,13 +211,54 @@ class AbsensiController extends Controller
         ]));
     }
 
+    public function performance_personel()
+    {
+
+        $seksi_id = auth()->user()->struktur->seksi->id;
+
+        $users = User::whereHas('struktur.seksi', function($query) use ($seksi_id) {
+                        $query->where('id', $seksi_id);
+                    })
+                    ->where('employee_type_id', 3)
+                    ->orderBy('name', 'ASC')
+                    ->get();
+
+        $absensi = [];
+        foreach ($users as $user) {
+            $absensi_masuk = Absensi::where('user_id', $user->id)
+                                    ->whereNotNull('jam_masuk')
+                                    ->count();
+
+            $absensi_pulang = Absensi::where('user_id', $user->id)
+                                    ->whereNotNull('jam_pulang')
+                                    ->count();
+
+            $absensi[$user->name] = [
+                'absen_masuk' => $absensi_masuk,
+                'absen_pulang' => $absensi_pulang
+            ];
+        }
+
+        $kinerja = [];
+        foreach ($users as $user) {
+            $jumlahKinerja = Kinerja::where('anggota_id', $user->id)->count();
+
+            $kinerja[$user->name] = [
+                'kinerja' => $jumlahKinerja,
+            ];
+        }
+        return view('user.simoja.kasi.performa', compact('users', 'absensi', 'kinerja'));
+    }
+
+
+
 
 
 
 
 
     // KOORDINATOR
-    public function tim_index_koordinator()
+    public function tim_index_koordinator(Request $request)
     {
         $user_id = auth()->user()->id;
         $this_year = Carbon::now()->year;
@@ -214,11 +268,13 @@ class AbsensiController extends Controller
                                 ->toArray();
         $anggota_id[] = $user_id;
 
+        $perHalaman = $request->input('perHalaman', 25);
+
         $absensi = Absensi::whereIn('user_id', $anggota_id)
                         ->orderBy('tanggal', 'DESC')
                         ->orderBy('jam_masuk', 'DESC')
                         ->orderBy('jam_pulang', 'DESC')
-                        ->get();
+                        ->paginate($perHalaman);
 
         return view('user.simoja.koordinator.absensi.tim_index', compact([
             'absensi'
@@ -722,8 +778,16 @@ class AbsensiController extends Controller
 
         // Filter by pulau_id
         $absensi->when($pulau_id, function ($query) use ($request) {
-            $user_id[] = FormasiTim::where('periode', Carbon::now()->year)->whereRelation('area.pulau', 'id', '=', $request->pulau_id)->pluck('anggota_id')->toArray();
-            $user_id[] = FormasiTim::where('periode', Carbon::now()->year)->whereRelation('area.pulau', 'id', '=', $request->pulau_id)->pluck('koordinator_id')->toArray();
+            $user_id[] = FormasiTim::where('periode', Carbon::now()->year)
+                    ->whereRelation('area.pulau', 'id', '=', $request->pulau_id)
+                    ->pluck('anggota_id')
+                    ->toArray();
+
+            $user_id[] = FormasiTim::where('periode', Carbon::now()->year)
+                    ->whereRelation('area.pulau', 'id', '=', $request->pulau_id)
+                    ->pluck('koordinator_id')
+                    ->toArray();
+
             $user_id = array_merge(...$user_id);
             return $query->whereIn('user_id', $user_id);
         });

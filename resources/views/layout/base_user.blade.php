@@ -72,6 +72,7 @@
     </div>
 
     {{-- SCRIPT --}}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/js/moment.js') }}"></script>
@@ -81,6 +82,7 @@
     <script src="{{ asset('assets/vendor/daterange/custom-daterange.js') }}"></script>
     <script src="{{ asset('assets/js/main.js') }}"></script>
     <script src="{{ asset('Helper/search.js') }}"></script>
+    <script src="{{ asset('Helper/show.js') }}"></script>
 
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>

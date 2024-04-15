@@ -44,7 +44,7 @@
                                 </div>
                             </a>
                         </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                             <a href="{{ route('simoja.kasi.cuti') }}">
                                 <div class="launch-box h-180">
                                     <h3>Rekap Data Cuti</h3>
@@ -58,7 +58,7 @@
                                 </div>
                             </a>
                         </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                             <a href="{{ route('simoja.kasi.cuti.approval') }}">
                                 <div class="launch-box h-180">
                                     @if ($jumlah_pengajuan_cuti > 0)
@@ -75,7 +75,16 @@
                                 </div>
                             </a>
                         </div>
-
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
+                            <a href="{{ route('performance-personel') }}">
+                                <div class="launch-box h-180">
+                                    <h3>Performa Personel </h3>
+                                    <i class="fa fa-line-chart"></i>
+                                    <p>{{ $tanggal }}</p>
+                                    <h5>Lihat Performa Personel</h5>
+                                </div>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -18,11 +18,14 @@ use Barryvdh\DomPDF\Facade\Pdf;
 class KinerjaController extends Controller
 {
     // KASI
-    public function index()
+    public function index(Request $request)
     {
         $seksi_id = auth()->user()->struktur->seksi->id;
 
-        $user = User::whereRelation('struktur.seksi', 'id', '=', $seksi_id)->where('employee_type_id', 3)->orderBy('name', 'ASC')->get();
+        $user = User::whereRelation('struktur.seksi', 'id', '=', $seksi_id)
+                ->where('employee_type_id', 3)
+                ->orderBy('name', 'ASC')
+                ->get();
         $pulau = Pulau::orderBy('name', 'ASC')->get();
 
         $user_id = '';
@@ -31,7 +34,11 @@ class KinerjaController extends Controller
         $end_date = '';
         $sort = 'DESC';
 
-        $kinerja = Kinerja::where('seksi_id', $seksi_id)->orderBy('tanggal', $sort)->get();
+        $perHalaman = $request->input('perHalaman', 25);
+
+        $kinerja = Kinerja::where('seksi_id', $seksi_id)
+                ->orderBy('tanggal', $sort)
+                ->paginate($perHalaman);
 
         return view('user.simoja.kasi.kinerja.index', [
             'kinerja' => $kinerja,
@@ -65,8 +72,15 @@ class KinerjaController extends Controller
 
         // Filter by pulau_id
         $kinerja->when($pulau_id, function ($query) use ($request) {
-            $anggota_id = FormasiTim::where('periode', Carbon::now()->year)->whereRelation('area.pulau', 'id', '=', $request->pulau_id)->pluck('anggota_id')->toArray();
-            $koordinator_id = FormasiTim::where('periode', Carbon::now()->year)->whereRelation('area.pulau', 'id', '=', $request->pulau_id)->pluck('koordinator_id')->toArray();
+            $anggota_id = FormasiTim::where('periode', Carbon::now()->year)
+                        ->whereRelation('area.pulau', 'id', '=', $request->pulau_id)
+                        ->pluck('anggota_id')
+                        ->toArray();
+
+            $koordinator_id = FormasiTim::where('periode', Carbon::now()->year)
+                        ->whereRelation('area.pulau', 'id', '=', $request->pulau_id)
+                        ->pluck('koordinator_id')
+                        ->toArray();
             $user_id = array_unique(array_merge($anggota_id, $koordinator_id));
 
             return $query->where(function($query) use ($user_id) {
@@ -88,7 +102,11 @@ class KinerjaController extends Controller
         // Order By
         $kinerja = $kinerja->orderBy('tanggal', $sort)->orderBy('created_at', $sort)->get();
 
-        $user = User::whereRelation('struktur.seksi', 'id', '=', $seksi_id)->where('employee_type_id', 3)->orderBy('name', 'ASC')->get();
+        $user = User::whereRelation('struktur.seksi', 'id', '=', $seksi_id)
+                ->where('employee_type_id', 3)
+                ->orderBy('name', 'ASC')
+                ->get();
+
         $pulau = Pulau::orderBy('name', 'ASC')->get();
 
         return view('user.simoja.kasi.kinerja.index', [
@@ -115,7 +133,15 @@ class KinerjaController extends Controller
         $waktu = Carbon::now()->format('Ymd');
         $nama_file = $waktu . '_data kinerja.xlsx';
 
-        return Excel::download(new KinerjaExport($seksi_id, $user_id, $pulau_id, $start_date, $end_date, $sort), $nama_file, \Maatwebsite\Excel\Excel::XLSX);
+        return Excel::download(new KinerjaExport(
+            $seksi_id,
+            $user_id,
+            $pulau_id,
+            $start_date,
+            $end_date,
+            $sort),
+            $nama_file,
+            \Maatwebsite\Excel\Excel::XLSX);
     }
 
 
@@ -123,7 +149,7 @@ class KinerjaController extends Controller
 
 
     // KOORDINATOR
-    public function tim_index_koordinator()
+    public function tim_index_koordinator(Request $request)
     {
         $user_id = auth()->user()->id;
         $this_year = Carbon::now()->year;
@@ -133,9 +159,11 @@ class KinerjaController extends Controller
                                 ->toArray();
         $anggota_id[] = $user_id;
 
+        $perHalaman = $request->input('perHalaman', 25);
+
         $kinerja = Kinerja::whereIn('anggota_id', $anggota_id)
                         ->orderBy('tanggal', 'DESC')
-                        ->get();
+                        ->paginate($perHalaman);
 
         return view('user.simoja.koordinator.kinerja.tim_index', compact([
             'kinerja'
@@ -267,7 +295,10 @@ class KinerjaController extends Controller
     public function create_pjlp()
     {
         $user_id = auth()->user()->id;
-        $formasi_tim = FormasiTim::where('koordinator_id', $user_id)->orWhere('anggota_id', $user_id)->firstOrFail();
+        $formasi_tim = FormasiTim::where('koordinator_id', $user_id)
+                    ->orWhere('anggota_id', $user_id)
+                    ->firstOrFail();
+
         $kategori = Kategori::where('seksi_id', $formasi_tim->struktur->seksi->id)->get();
         return view('user.simoja.pjlp.kinerja.create', compact([
             'formasi_tim',
@@ -352,8 +383,15 @@ class KinerjaController extends Controller
 
         // Filter by pulau_id
         $kinerja->when($pulau_id, function ($query) use ($request) {
-            $anggota_id = FormasiTim::where('periode', Carbon::now()->year)->whereRelation('area.pulau', 'id', '=', $request->pulau_id)->pluck('anggota_id')->toArray();
-            $koordinator_id = FormasiTim::where('periode', Carbon::now()->year)->whereRelation('area.pulau', 'id', '=', $request->pulau_id)->pluck('koordinator_id')->toArray();
+            $anggota_id = FormasiTim::where('periode', Carbon::now()->year)
+                        ->whereRelation('area.pulau', 'id', '=', $request->pulau_id)
+                        ->pluck('anggota_id')
+                        ->toArray();
+
+            $koordinator_id = FormasiTim::where('periode', Carbon::now()->year)
+                        ->whereRelation('area.pulau', 'id', '=', $request->pulau_id)
+                        ->pluck('koordinator_id')
+                        ->toArray();
             $user_id = array_unique(array_merge($anggota_id, $koordinator_id));
 
             return $query->where(function($query) use ($user_id) {

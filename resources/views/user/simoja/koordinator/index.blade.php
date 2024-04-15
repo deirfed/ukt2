@@ -49,7 +49,7 @@
                                     @if ($jumlah_cuti > 0)
                                         <h5>Sisa Cuti: {{ $jumlah_cuti }}</h5>
                                     @else
-                                        <h5>Kuota Cuti Habis</h5>
+                                        <h5>Kuota Cuti Tidak Ada</h5>
                                     @endif
                                 </div>
                             </a>
