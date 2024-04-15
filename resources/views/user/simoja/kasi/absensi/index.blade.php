@@ -94,11 +94,11 @@
                                     </li>
                                 </ul>
                             </div>
-                            <nav aria-label="Pagination">
+                            {{-- <nav aria-label="Pagination">
                                 <ul class="pagination">
                                     {{ $absensi->links('vendor.pagination.bootstrap-4') }}
                                 </ul>
-                            </nav>
+                            </nav> --}}
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -122,9 +122,7 @@
                             <tbody>
                                 @foreach ($absensi as $item)
                                     <tr>
-                                        <td class="text-center">
-                                            {{ ($absensi->currentPage() - 1) * $absensi->perPage() + $loop->index + 1 }}
-                                        </td>
+                                        <td class="text-center">{{ $loop->iteration }}</td>
                                         <td class="text-center">{{ date('d-m-Y', strtotime($item->tanggal)) }}</td>
                                         <td class="text-center font-weight-bold">{{ $item->user->name }}</td>
                                         <td class="text-center">{{ $item->user->jabatan->name }}</td>

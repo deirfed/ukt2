@@ -71,11 +71,11 @@
                                     </li>
                                 </ul>
                             </div>
-                            <nav aria-label="Pagination">
+                            {{-- <nav aria-label="Pagination">
                                 <ul class="pagination">
                                     {{ $cuti->links('vendor.pagination.bootstrap-4') }}
                                 </ul>
-                            </nav>
+                            </nav> --}}
                         </div>
                     </div>
                     <div class="projectLog">
