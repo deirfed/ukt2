@@ -87,11 +87,11 @@
                                     </li>
                                 </ul>
                             </div>
-                            <nav aria-label="Pagination">
+                            {{-- <nav aria-label="Pagination">
                                 <ul class="pagination">
                                     {{ $kinerja->links('vendor.pagination.bootstrap-4') }}
                                 </ul>
-                            </nav>
+                            </nav> --}}
                         </div>
                     </div>
                     <div class="table-responsive">
