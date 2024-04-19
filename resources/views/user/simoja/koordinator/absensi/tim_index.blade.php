@@ -30,8 +30,8 @@
                                 <a href="{{ route('simoja.koordinator.index') }}"
                                     class="btn btn-outline-primary mr-2 mb-2 mb-sm-0"><i class="fa fa-arrow-left"></i>
                                     Kembali</a>
-                                <button class="btn btn-primary mr-2 mb-2 mb-sm-0">Export to Excel</button>
-                                <button class="btn btn-primary mr-2 mb-2 mb-sm-0">Export to PDF</button>
+                                {{-- <button class="btn btn-primary mr-2 mb-2 mb-sm-0">Export to Excel</button>
+                                <button class="btn btn-primary mr-2 mb-2 mb-sm-0">Export to PDF</button> --}}
                                 <a href="" class="btn btn-primary mb-2 mb-sm-0" data-toggle="modal"
                                     data-target="#modalFilter"><i class="fa fa-filter"></i></a>
                             </div>
@@ -49,29 +49,6 @@
                             <a href="{{ route('simoja.koordinator.absensi.tim') }}" class="btn btn-primary mr-2 mb-2 mb-sm-0"><i
                                     class="fa fa-refresh"></i>
                             </a>
-                            <div class="dropdown mr-2">
-                                <button class="btn btn-primary mr-2 mb-2 mb-sm-0" id="displayDropdown" role="button"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Tampil Data">
-                                    <i class="fa fa-list"></i> Tampil Data
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="displayDropdown">
-                                    <li>
-                                        <a class="dropdown-item" href="#" title="Show 50">
-                                            <i class="fa fa-list text-primary"></i> 50
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="#" title="Show 100">
-                                            <i class="fa fa-list text-primary"></i> 100
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="#" title="Show 200">
-                                            <i class="fa fa-list text-primary"></i> 200
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
                             {{-- <nav aria-label="Pagination">
                                 <ul class="pagination">
                                     {{ $absensi->links('vendor.pagination.bootstrap-4') }}
@@ -220,31 +197,6 @@
 
                 document.getElementById("photo_masuk_modal").src = photoMasuk;
                 document.getElementById("photo_pulang_modal").src = photoPulang;
-            });
-        });
-
-        var route = "{{ route('simoja.koordinator.absensi.tim') }}";
-
-        var dropdownItems = document.querySelectorAll('.dropdown-item');
-        dropdownItems.forEach(function(item) {
-            item.addEventListener('click', function(event) {
-                event.preventDefault();
-
-                var selectedValue = this.innerText.trim();
-                switch (selectedValue) {
-                    case '50':
-                        window.location.href = route + "?perHalaman=50";
-                        break;
-                    case '100':
-                        window.location.href = route + "?perHalaman=100";
-                        break;
-                    case '200':
-                        window.location.href = route + "?perHalaman=200";
-                        break;
-                    default:
-                        console.log('Invalid selection');
-                        break;
-                }
             });
         });
     </script>

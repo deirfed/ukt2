@@ -16,6 +16,9 @@
 @endsection
 
 @section('content')
+    <div class="row gutters d-flex justify-content-center align-item-center mb-3">
+        <a href="{{ route('simoja.kasi.index') }}" class="btn btn-outline-primary">Kembali Ke Menu Awal</a>
+    </div>
     <div class="row gutters d-flex justify-content-center align-item-center">
         <div class="col-xl-{{ auth()->user()->struktur->seksi->id == 1 ? '12' : '6' }} col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="card">
@@ -28,7 +31,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-{{ auth()->user()->struktur->seksi->id == 1 ? '12' : '6' }} col-lg-12 col-md-12 col-sm-12 col-12">
+        <div
+            class="col-xl-{{ auth()->user()->struktur->seksi->id == 1 ? '12' : '6' }} col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="card">
                 <div class="card-body">
                     <h4 style="text-decoration: underline">Grafik Performance Kinerja</h4>
