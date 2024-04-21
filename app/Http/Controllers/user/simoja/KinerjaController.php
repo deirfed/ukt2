@@ -77,15 +77,8 @@ class KinerjaController extends Controller
                         ->pluck('anggota_id')
                         ->toArray();
 
-            $koordinator_id = FormasiTim::where('periode', Carbon::now()->year)
-                        ->whereRelation('area.pulau', 'id', '=', $request->pulau_id)
-                        ->pluck('koordinator_id')
-                        ->toArray();
-            $user_id = array_unique(array_merge($anggota_id, $koordinator_id));
-
-            return $query->where(function($query) use ($user_id) {
-                $query->whereIn('anggota_id', $user_id)
-                        ->orWhereIn('koordinator_id', $user_id);
+            return $query->where(function($query) use ($anggota_id) {
+                $query->whereIn('anggota_id', $anggota_id);
             });
         });
 
