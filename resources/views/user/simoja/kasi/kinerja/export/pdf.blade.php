@@ -74,7 +74,7 @@
                         <th>Kegiatan</th>
                         <th>Deskripsi</th>
                         <th>Lokasi</th>
-                        <th>Photo</th>
+                        <th>Dokumentasi Kegiatan</th>
                     </tr>
                 </thead>
                 <tbody>

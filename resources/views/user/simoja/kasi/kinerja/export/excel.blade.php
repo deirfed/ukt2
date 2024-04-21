@@ -46,13 +46,13 @@
                     Lokasi
                 </th>
                 <th style="border: 3px; background-color:gray; font-weight:bolder; text-align:center;">
-                    Photo 1
+                    Dokumentasi Kegiatan 1
                 </th>
                 <th style="border: 3px; background-color:gray; font-weight:bolder; text-align:center;">
-                    Photo 2
+                    Dokumentasi Kegiatan 2
                 </th>
                 <th style="border: 3px; background-color:gray; font-weight:bolder; text-align:center;">
-                    Photo 3
+                    Dokumentasi Kegiatan 3
                 </th>
             </tr>
         </thead>
