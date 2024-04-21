@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laporan Absensi - {{ $user->anggota->name }}</title>
+    <title>Laporan Kinerja - {{ $user->anggota->name }}</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         @page {
@@ -21,7 +21,7 @@
     <div>
         <div class="text-center">
             <p class="mt-3 mb-1 text-uppercase font-weight-bold">
-                <u>LAPORAN ABSENSI
+                <u>LAPORAN KINERJA
                 </u>
             </p>
         </div>
@@ -33,7 +33,7 @@
                     <td class="font-weight-bold text-uppercase">{{ $user->anggota->name }}</td>
                 </tr>
                 <tr>
-                    <td>NIP</td>
+                    <td>ID PJLP</td>
                     <td>:</td>
                     <td>{{ $user->anggota->nip }}</td>
                 </tr>
@@ -71,11 +71,10 @@
                         <th>No.</th>
                         <th>Hari</th>
                         <th>Tanggal</th>
-                        <th>Jam Datang</th>
-                        <th>Jam Pulang</th>
-                        <th>Photo Datang</th>
-                        <th>Photo Pulang</th>
-                        <th>Status</th>
+                        <th>Kegiatan</th>
+                        <th>Deskripsi</th>
+                        <th>Lokasi</th>
+                        <th>Photo</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -84,17 +83,48 @@
                             <td class="p-1">{{ $loop->iteration }}</td>
                             <td class="p-1">{{ $item['hari'] }}</td>
                             <td class="p-1">{{ $item['tanggal']->isoFormat('D MMMM Y') }}</td>
-                            <td class="p-1">{{ $item['jam_masuk'] }}</td>
-                            <td class="p-1">{{ $item['jam_pulang'] }}</td>
-                            <td class="p-1">
-                                <img class="img-thumbnail" src="{{ $item['url_photo_masuk'] }}" alt="photo_datang"
-                                    style="height: 70px">
+                            <td class="p-2 text-wrap text-left">
+                                <ol class="p-3">
+                                    @if ($item['kegiatan'] != null)
+                                        @foreach ($item['kegiatan'] as $kegiatan)
+                                            <li>{{ $kegiatan }}</li>
+                                        @endforeach
+                                    @endif
+                                </ol>
                             </td>
-                            <td class="p-1">
-                                <img class="img-thumbnail" src="{{ $item['url_photo_pulang'] }}" alt="photo_pulang"
-                                    style="height: 70px">
+                            <td class="p-2 text-wrap text-left">
+                                <ol class="p-3">
+                                    @if ($item['deskripsi'] != null)
+                                        @foreach ($item['deskripsi'] as $deskripsi)
+                                            <li>{{ $deskripsi }}</li>
+                                        @endforeach
+                                    @endif
+                                </ol>
                             </td>
-                            <td class="{{ $item['bg'] }} p-1">{{ $item['status'] }}</td>
+                            <td class="p-2 text-wrap text-left">
+                                <ol class="p-3">
+                                    @if ($item['lokasi'] != null)
+                                        @foreach ($item['lokasi'] as $lokasi)
+                                            <li>{{ $lokasi }}</li>
+                                        @endforeach
+                                    @endif
+                                </ol>
+                            </td>
+                            <td class="text-left p-2 {{ $item['bg'] }}" style="width: 11cm">
+                                <ol class="p-3">
+                                    @if ($item['photo'] != null)
+                                        @foreach ($item['photo'] as $photos)
+                                            <li>
+                                                @foreach (json_decode($photos) as $photo)
+                                                    <img class="img-thumbnail"
+                                                        src="{{ public_path('storage/' . $photo) }}" alt="photo"
+                                                        style="height: 64px">
+                                                @endforeach
+                                            </li>
+                                        @endforeach
+                                    @endif
+                                </ol>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

@@ -34,6 +34,9 @@
                                 <button class="btn btn-primary mr-2 mb-2 mb-sm-0">Export to PDF</button> --}}
                                 <a href="" class="btn btn-primary mb-2 mb-sm-0" data-toggle="modal"
                                     data-target="#modalFilter"><i class="fa fa-filter"></i></a>
+                                <a href="{{ route('simoja.koordinator.absensi.tim') }}"
+                                    class="btn btn-primary mr-2 mb-2 mb-sm-0"><i class="fa fa-refresh"></i>
+                                </a>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -46,14 +49,11 @@
                     </div>
                     <div class="paginate-style">
                         <div class="d-flex justify-content-center mb-2">
-                            <a href="{{ route('simoja.koordinator.absensi.tim') }}" class="btn btn-primary mr-2 mb-2 mb-sm-0"><i
-                                    class="fa fa-refresh"></i>
-                            </a>
-                            {{-- <nav aria-label="Pagination">
+                            <nav aria-label="Pagination">
                                 <ul class="pagination">
                                     {{ $absensi->links('vendor.pagination.bootstrap-4') }}
                                 </ul>
-                            </nav> --}}
+                            </nav>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -65,7 +65,6 @@
                                     <th class="text-center">Nama</th>
                                     <th class="text-center">Pulau</th>
                                     <th class="text-center">Jabatan</th>
-                                    {{-- <th class="text-center">Tim</th> --}}
                                     <th class="text-center">Jam Masuk</th>
                                     <th class="text-center">Jam Pulang</th>
                                     <th class="text-center">Status</th>
@@ -80,7 +79,6 @@
                                         <td class="text-center">{{ $item->user->name }}</td>
                                         <td class="text-center">Pulau {{ $item->user->area->pulau->name }}</td>
                                         <td class="text-center">{{ $item->user->jabatan->name }}</td>
-                                        {{-- <td class="text-center">{{ $item->user->struktur->tim->name }}</td> --}}
                                         <td class="text-center">{{ $item->jam_masuk ?? '-' }}</td>
                                         <td class="text-center">{{ $item->jam_pulang ?? '-' }}</td>
                                         <td class="text-center">{{ $item->status }}</td>

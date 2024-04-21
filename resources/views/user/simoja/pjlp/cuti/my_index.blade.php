@@ -52,6 +52,15 @@
                                 <strong>{{ $konfigurasi_cuti->jumlah ?? '#' }} hari</strong></span>
                         </div>
                     </div>
+                    <div class="paginate-style">
+                        <div class="d-flex justify-content-center mb-2">
+                            <nav aria-label="Pagination">
+                                <ul class="pagination">
+                                    {{ $cuti->links('vendor.pagination.bootstrap-4') }}
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
                     <div class="projectLog">
                         <div class="logs-container">
                             <div class="table-responsive mt-2">
@@ -72,7 +81,9 @@
                                     <tbody>
                                         @foreach ($cuti as $item)
                                             <tr>
-                                                <td class="text-center">{{ $loop->iteration }}</td>
+                                                <td class="text-center">
+                                                    {{ ($cuti->currentPage() - 1) * $cuti->perPage() + $loop->index + 1 }}
+                                                </td>
                                                 <td class="text-center font-weight-bold">{{ $item->user->name }}</td>
                                                 <td class="text-center text-wrap">
                                                     {{ $item->tanggal_awal == $item->tanggal_akhir ? date('d-m-Y', strtotime($item->tanggal_awal)) : date('d-m-Y', strtotime($item->tanggal_awal)) . ' - ' . date('d-m-Y', strtotime($item->tanggal_akhir)) }}
@@ -151,7 +162,8 @@
     </div>
 
     {{-- START: FILTER CUTI --}}
-    <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="modalFilter" aria-hidden="true">
+    <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="modalFilter"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">

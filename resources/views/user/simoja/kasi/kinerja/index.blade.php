@@ -30,6 +30,9 @@
                                     Kembali</a>
                                 <a href="javascript:;" class="btn btn-primary mr-2 mb-2 mb-sm-0" data-toggle="modal"
                                     data-target="#modalFilter" title="Filter"><i class="fa fa-filter"></i></a>
+                                <a href="{{ route('simoja.kasi.kinerja') }}" class="btn btn-primary mr-2 mb-2 mb-sm-0"><i
+                                        class="fa fa-refresh"></i>
+                                </a>
                                 <button class="btn btn-primary mr-2 mb-2 mb-sm-0 text-white" href="#"
                                     id="appsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false" title="Export">
@@ -61,14 +64,11 @@
                     </div>
                     <div class="paginate-style">
                         <div class="d-flex justify-content-center mb-2">
-                            <a href="{{ route('simoja.kasi.kinerja') }}" class="btn btn-primary mr-2 mb-2 mb-sm-0"><i
-                                    class="fa fa-refresh"></i>
-                            </a>
-                            {{-- <nav aria-label="Pagination">
+                            <nav aria-label="Pagination">
                                 <ul class="pagination">
                                     {{ $kinerja->links('vendor.pagination.bootstrap-4') }}
                                 </ul>
-                            </nav> --}}
+                            </nav>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -89,7 +89,9 @@
                             <tbody>
                                 @foreach ($kinerja as $item)
                                     <tr>
-                                        <td class="text-center">{{ $loop->iteration }}</td>
+                                        <td class="text-center">
+                                            {{ ($kinerja->currentPage() - 1) * $kinerja->perPage() + $loop->index + 1 }}
+                                        </td>
                                         <td class="text-center">{{ date('d-m-Y', strtotime($item->tanggal)) }}</td>
                                         <td class="text-center font-weight-bold">{{ $item->anggota->name ?? '-' }}</td>
                                         <td class="text-center">Pulau {{ $item->formasi_tim->area->pulau->name }}</td>
@@ -99,8 +101,8 @@
                                         <td class="text-center">{{ $item->lokasi ?? '-' }}</td>
                                         <td class="text-center">
                                             <a href="#" data-toggle="modal" data-target="#modalDokumentasi"
-                                                data-photo='{{ $item->photo }}'><button
-                                                    class="btn btn-outline-primary"><i class="fa fa-eye"></i></button></a>
+                                                data-photo='{{ $item->photo }}'><button class="btn btn-outline-primary"><i
+                                                        class="fa fa-eye"></i></button></a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -120,8 +122,7 @@
     </div>
 
     {{-- START: FILTER KINERJA --}}
-    <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="modalFilter"
-        aria-hidden="true">
+    <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="modalFilter" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -272,7 +273,7 @@
                         @csrf
                         @method('GET')
                         <div class="form-row gutters">
-                            {{-- <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Personel</label>
                                     <select name="user_id" class="form-control" required>
@@ -285,12 +286,9 @@
                                         @endforeach
                                     </select>
                                 </div>
-                            </div> --}}
-                            <div class="container text-center my-5">
-                                <h4>Fitur ini masih dalam tahap pengembangan</h4>
                             </div>
                         </div>
-                        {{-- <label for="periode">Periode</label>
+                        <label for="periode">Periode</label>
                         <div class="form-row gutters">
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
@@ -304,12 +302,12 @@
                                         name="end_date" required>
                                 </div>
                             </div>
-                        </div> --}}
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
-                    {{-- <button type="submit" form="formPDF" formtarget="_blank" class="btn btn-primary">Buat</button> --}}
+                    <button type="submit" form="formPDF" formtarget="_blank" class="btn btn-primary">Buat</button>
                 </div>
             </div>
         </div>

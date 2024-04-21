@@ -44,12 +44,12 @@ class CutiController extends Controller
         $status = '';
         $jenis_cuti_id = '';
 
-        $perHalaman = $request->input('perHalaman', 25);
+        $perPage = $request->perPage ?? 50;
 
         $cuti = Cuti::whereRelation('user.struktur.seksi', 'id', '=', $seksi_id)
                 ->orderBy('tanggal_awal', $sort)
                 ->orderBy('tanggal_akhir', $sort)
-                ->paginate($perHalaman);
+                ->paginate($perPage);
 
         return view('user.simoja.kasi.cuti.index', [
             'cuti' => $cuti,
@@ -63,6 +63,7 @@ class CutiController extends Controller
             'end_date' => $end_date,
             'sort' => $sort,
             'status' => $status,
+            'perPage' => $perPage,
         ]);
     }
 
@@ -115,12 +116,7 @@ class CutiController extends Controller
 
         // Filter by tanggal
         if ($start_date != null and $end_date != null) {
-            $cuti->when($start_date, function ($query) use ($start_date) {
-                return $query->whereDate('tanggal', '>=', $start_date);
-            });
-            $cuti->when($end_date, function ($query) use ($end_date) {
-                return $query->whereDate('tanggal', '<=', $end_date);
-            });
+            $cuti->whereBetween('tanggal_awal', [$start_date, $end_date]);
         }
 
         // Filter by jenis_cuti_id
@@ -134,7 +130,9 @@ class CutiController extends Controller
         });
 
         // Order By
-        $cuti = $cuti->orderBy('tanggal_awal', $sort)->orderBy('tanggal_akhir', $sort)->get();
+        $cuti = $cuti->orderBy('tanggal_awal', $sort)
+                    ->orderBy('tanggal_akhir', $sort)
+                    ->paginate();
 
         return view('user.simoja.kasi.cuti.index', [
             'cuti' => $cuti,
@@ -429,7 +427,7 @@ class CutiController extends Controller
 
 
     // PJLP
-    public function my_index_pjlp()
+    public function my_index_pjlp(Request $request)
     {
         $user_id = auth()->user()->id;
 
@@ -440,10 +438,12 @@ class CutiController extends Controller
         $sort = 'DESC';
         $status = null;
 
+        $perPage = $request->perPage ?? 50;
+
         $cuti = Cuti::where('user_id', $user_id)
                     ->orderBy('tanggal_awal', $sort)
                     ->orderBy('tanggal_akhir', $sort)
-                    ->get();
+                    ->paginate($perPage);
 
         $konfigurasi_cuti = KonfigurasiCuti::where('periode', Carbon::now()->year)
                     ->where('jenis_cuti_id', 1)
@@ -620,12 +620,7 @@ class CutiController extends Controller
 
         // Filter by tanggal
         if ($start_date != null and $end_date != null) {
-            $cuti->when($start_date, function ($query) use ($start_date) {
-                return $query->whereDate('tanggal_awal', '>=', $start_date);
-            });
-            $cuti->when($end_date, function ($query) use ($end_date) {
-                return $query->whereDate('tanggal_awal', '<=', $end_date);
-            });
+            $cuti->whereBetween('tanggal_awal', [$start_date, $end_date]);
         }
 
         // Filter by jenis_cuti_id
@@ -639,7 +634,9 @@ class CutiController extends Controller
         });
 
         // Order By
-        $cuti = $cuti->orderBy('tanggal_awal', $sort)->orderBy('tanggal_akhir', $sort)->get();
+        $cuti = $cuti->orderBy('tanggal_awal', $sort)
+                    ->orderBy('tanggal_akhir', $sort)
+                    ->paginate();
 
         $konfigurasi_cuti = KonfigurasiCuti::where('periode', Carbon::now()->year)
                             ->where('jenis_cuti_id', 1)

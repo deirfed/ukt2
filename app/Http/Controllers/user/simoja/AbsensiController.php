@@ -24,6 +24,7 @@ class AbsensiController extends Controller
     public function index_kasi(Request $request)
     {
         $seksi_id = auth()->user()->struktur->seksi->id;
+        $perPage = $request->perPage ?? 50;
 
         $user = User::whereRelation('struktur.seksi', 'id', '=', $seksi_id)
                     ->where('employee_type_id', 3)
@@ -38,13 +39,11 @@ class AbsensiController extends Controller
         $end_date = '';
         $sort = 'DESC';
 
-        $perHalaman = $request->input('perHalaman', 25);
-
         $absensi = Absensi::whereRelation('user.struktur.seksi', 'id', '=', $seksi_id)
                     ->orderBy('tanggal', $sort)
                     ->orderBy('jam_masuk', $sort)
                     ->orderBy('jam_pulang', $sort)
-                    ->paginate($perHalaman);
+                    ->paginate($perPage);
 
         return view('user.simoja.kasi.absensi.index', [
             'absensi' => $absensi,
@@ -92,16 +91,14 @@ class AbsensiController extends Controller
 
         // Filter by tanggal
         if ($start_date != null and $end_date != null) {
-            $absensi->when($start_date, function ($query) use ($start_date) {
-                return $query->whereDate('tanggal', '>=', $start_date);
-            });
-            $absensi->when($end_date, function ($query) use ($end_date) {
-                return $query->whereDate('tanggal', '<=', $end_date);
-            });
+            $absensi->whereBetween('tanggal', [$start_date, $end_date]);
         }
 
         // Order By
-        $absensi = $absensi->orderBy('tanggal', $sort)->orderBy('jam_masuk', $sort)->orderBy('jam_pulang', $sort)->get();
+        $absensi = $absensi->orderBy('tanggal', $sort)
+                        ->orderBy('jam_masuk', $sort)
+                        ->orderBy('jam_pulang', $sort)
+                        ->paginate();
 
         $user = User::whereRelation('struktur.seksi', 'id', '=', $seksi_id)->where('employee_type_id', 3)->orderBy('name', 'ASC')->get();
         $pulau = Pulau::orderBy('name', 'ASC')->get();
@@ -213,7 +210,6 @@ class AbsensiController extends Controller
 
     public function performance_personel()
     {
-
         $seksi_id = auth()->user()->struktur->seksi->id;
 
         $users = User::whereHas('struktur.seksi', function($query) use ($seksi_id) {
@@ -268,34 +264,38 @@ class AbsensiController extends Controller
                                 ->toArray();
         $anggota_id[] = $user_id;
 
-        $perHalaman = $request->input('perHalaman', 25);
+        $perPage = $request->perPage ?? 50;
 
         $absensi = Absensi::whereIn('user_id', $anggota_id)
                         ->orderBy('tanggal', 'DESC')
                         ->orderBy('jam_masuk', 'DESC')
                         ->orderBy('jam_pulang', 'DESC')
-                        ->paginate($perHalaman);
+                        ->paginate($perPage);
 
         return view('user.simoja.koordinator.absensi.tim_index', compact([
-            'absensi'
+            'absensi',
+            'perPage'
         ]));
     }
 
-    public function my_index_koordinator()
+    public function my_index_koordinator(Request $request)
     {
         $isPNS = auth()->user()->employee_type->id;
         if($isPNS == 1) {
             return back()->withError('Anda PNS, Fitur ini hanya untuk Koordinator PJLP & PJLP!');
         }
 
+        $perPage = $request->perPage ?? 50;
         $user_id = auth()->user()->id;
         $absensi = Absensi::where('user_id', $user_id)
                     ->orderBy('tanggal', 'DESC')
                     ->orderBy('jam_masuk', 'DESC')
                     ->orderBy('jam_pulang', 'DESC')
-                    ->get();
+                    ->paginate($perPage);
+
         return view('user.simoja.koordinator.absensi.my_index', compact([
-            'absensi'
+            'absensi',
+            'perPage'
         ]));
     }
 
@@ -445,7 +445,7 @@ class AbsensiController extends Controller
 
 
     // PJLP
-    public function my_index_pjlp()
+    public function my_index_pjlp(Request $request)
     {
         $user_id = auth()->user()->id;
 
@@ -453,17 +453,20 @@ class AbsensiController extends Controller
         $end_date = '';
         $sort = 'DESC';
 
+        $perPage = $request->perPage ?? 50;
+
         $absensi = Absensi::where('user_id', $user_id)
                         ->orderBy('tanggal', 'DESC')
                         ->orderBy('jam_masuk', 'DESC')
                         ->orderBy('jam_pulang', 'DESC')
-                        ->get();
+                        ->paginate($perPage);
 
         return view('user.simoja.pjlp.absensi.my_index', [
             'absensi' => $absensi,
             'start_date' => $start_date,
             'end_date' => $end_date,
             'sort' => $sort,
+            'perPage' => $perPage,
         ]);
     }
 
@@ -794,16 +797,14 @@ class AbsensiController extends Controller
 
         // Filter by tanggal
         if ($start_date != null and $end_date != null) {
-            $absensi->when($start_date, function ($query) use ($start_date) {
-                return $query->whereDate('tanggal', '>=', $start_date);
-            });
-            $absensi->when($end_date, function ($query) use ($end_date) {
-                return $query->whereDate('tanggal', '<=', $end_date);
-            });
+            $absensi->whereBetween('tanggal', [$start_date, $end_date]);
         }
 
         // Order By
-        $absensi = $absensi->orderBy('tanggal', $sort)->orderBy('jam_masuk', $sort)->orderBy('jam_pulang', $sort)->get();
+        $absensi = $absensi->orderBy('tanggal', $sort)
+                        ->orderBy('jam_masuk', $sort)
+                        ->orderBy('jam_pulang', $sort)
+                        ->paginate();
 
         return view('user.simoja.pjlp.absensi.my_index', [
             'absensi' => $absensi,

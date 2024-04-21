@@ -30,6 +30,9 @@
                                     Kembali</a>
                                 <a href="javascript:;" class="btn btn-primary mr-2 mb-2 mb-sm-0" data-toggle="modal"
                                     data-target="#modalFilter" title="Filter"><i class="fa fa-filter"></i></a>
+                                <a href="{{ route('simoja.kasi.cuti') }}" class="btn btn-primary mr-2 mb-2 mb-sm-0"><i
+                                        class="fa fa-refresh"></i>
+                                </a>
                                 <button class="btn btn-primary mr-2 mb-2 mb-sm-0 text-white" href="#"
                                     id="appsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false" title="Export">
@@ -55,14 +58,11 @@
                     </div>
                     <div class="paginate-style">
                         <div class="d-flex justify-content-center mb-2">
-                            <a href="{{ route('simoja.kasi.cuti') }}" class="btn btn-primary mr-2 mb-2 mb-sm-0"><i
-                                    class="fa fa-refresh"></i>
-                            </a>
-                            {{-- <nav aria-label="Pagination">
+                            <nav aria-label="Pagination">
                                 <ul class="pagination">
                                     {{ $cuti->links('vendor.pagination.bootstrap-4') }}
                                 </ul>
-                            </nav> --}}
+                            </nav>
                         </div>
                     </div>
                     <div class="projectLog">
@@ -89,7 +89,9 @@
                                     <tbody>
                                         @foreach ($cuti as $item)
                                             <tr>
-                                                <td class="text-center">{{ $loop->iteration }}</td>
+                                                <td class="text-center">
+                                                    {{ ($cuti->currentPage() - 1) * $cuti->perPage() + $loop->index + 1 }}
+                                                </td>
                                                 <td class="text-center font-weight-bold">{{ $item->user->name }}</td>
                                                 <td class="text-center">{{ $item->user->jabatan->name }}</td>
                                                 <td class="text-center">Pulau {{ $item->user->area->pulau->name }}</td>

@@ -33,7 +33,7 @@
                     <td class="font-weight-bold text-uppercase">{{ $user->anggota->name }}</td>
                 </tr>
                 <tr>
-                    <td>NIP</td>
+                    <td>ID PJLP</td>
                     <td>:</td>
                     <td>{{ $user->anggota->nip }}</td>
                 </tr>

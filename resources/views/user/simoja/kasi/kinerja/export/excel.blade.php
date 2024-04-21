@@ -70,11 +70,13 @@
                     <td>{{ $item->kategori->name ?? $item->kegiatan }}</td>
                     <td>{{ $item->deskripsi }}</td>
                     <td>{{ $item->lokasi }}</td>
-                    @foreach (json_decode($item->photo) as $photo)
-                        <td>
-                            {{ asset('storage/' . $photo) }}
-                        </td>
-                    @endforeach
+                    @if ($item->photo != null)
+                        @foreach (json_decode($item->photo) as $photo)
+                            <td>
+                                {{ asset('storage/' . $photo) }}
+                            </td>
+                        @endforeach
+                    @endif
                 </tr>
             @endforeach
             @if ($kinerja->count() == 0)
