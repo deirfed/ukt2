@@ -59,7 +59,7 @@
                             <td class="p-1">{{ $loop->iteration }}</td>
                             <td class="p-1">{{ $item['hari'] }}</td>
                             <td class="p-1 text-nowrap">{{ $item['tanggal']->isoFormat('D MMMM Y') }}</td>
-                            <td class="p-1 text-nowrap">
+                            <td class="p-1 text-left text-nowrap">
                                 <ol class="p-3">
                                     @if ($item['anggota'] != null)
                                         @foreach ($item['anggota'] as $anggota)
@@ -95,7 +95,7 @@
                                     @endif
                                 </ol>
                             </td>
-                            <td class="text-left p-2 {{ $item['bg'] }}" style="width: 11cm">
+                            <td class="text-left p-2 {{ $item['bg'] }}" style="width: 10cm">
                                 <ol class="p-3">
                                     @if ($item['photo'] != null)
                                         @foreach ($item['photo'] as $photos)
