@@ -105,7 +105,7 @@ class KinerjaController extends Controller
         // Order By
         $kinerja = $kinerja->orderBy('tanggal', $sort)
                         ->orderBy('created_at', $sort)
-                        ->paginate();
+                        ->paginate(10000000);
 
         $user = User::whereRelation('struktur.seksi', 'id', '=', $seksi_id)
                 ->where('employee_type_id', 3)

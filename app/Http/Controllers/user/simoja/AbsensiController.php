@@ -98,7 +98,7 @@ class AbsensiController extends Controller
         $absensi = $absensi->orderBy('tanggal', $sort)
                         ->orderBy('jam_masuk', $sort)
                         ->orderBy('jam_pulang', $sort)
-                        ->paginate();
+                        ->paginate(10000000);
 
         $user = User::whereRelation('struktur.seksi', 'id', '=', $seksi_id)->where('employee_type_id', 3)->orderBy('name', 'ASC')->get();
         $pulau = Pulau::orderBy('name', 'ASC')->get();

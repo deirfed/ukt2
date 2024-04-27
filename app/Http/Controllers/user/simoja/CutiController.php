@@ -132,7 +132,7 @@ class CutiController extends Controller
         // Order By
         $cuti = $cuti->orderBy('tanggal_awal', $sort)
                     ->orderBy('tanggal_akhir', $sort)
-                    ->paginate();
+                    ->paginate(10000000);
 
         return view('user.simoja.kasi.cuti.index', [
             'cuti' => $cuti,
