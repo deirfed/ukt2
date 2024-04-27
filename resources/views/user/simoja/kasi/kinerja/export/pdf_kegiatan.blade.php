@@ -103,7 +103,7 @@
                                                 @foreach (json_decode($photos) as $photo)
                                                     <img class="img-thumbnail"
                                                         src="{{ public_path('storage/' . $photo) }}" alt="photo"
-                                                        style="height: 64px">
+                                                        style="height: 85px">
                                                 @endforeach
                                             </li>
                                         @endforeach
