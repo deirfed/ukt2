@@ -240,7 +240,7 @@ class KinerjaController extends Controller
 
             $bg = $kerja->isNotEmpty() ? '' : 'bg-danger';
 
-            $anggota = '';
+            $anggota = [];
             $kegiatan = [];
             $deskripsi = [];
             $lokasi = [];
@@ -248,7 +248,7 @@ class KinerjaController extends Controller
 
             foreach($kerja as $item)
             {
-                $anggota = $item->anggota->name ?? '-';
+                $anggota[] = $item->anggota->name ?? '-';
                 $kegiatan[] = $item->kategori ? $item->kategori->name : $item->kegiatan;
                 $deskripsi[] = $item->deskripsi ?? '-';
                 $lokasi[] = $item->lokasi ?? '-';
