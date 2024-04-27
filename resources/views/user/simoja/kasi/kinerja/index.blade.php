@@ -42,13 +42,19 @@
                                     <li>
                                         <a class="dropdown-item" href="javascript:;" data-toggle="modal"
                                             data-target="#modalDownloadExcel" title="Filter">
-                                            <i class="fa fa-file-excel text-primary"></i> Export Excel
+                                            <i class="fa fa-file-excel text-primary"></i> Excel
                                         </a>
                                     </li>
                                     <li>
                                         <a class="dropdown-item" href="javascript:;" data-toggle="modal"
                                             data-target="#modalDownloadPDF">
-                                            <i class="fa fa-file-pdf text-danger"></i> Export PDF
+                                            <i class="fa fa-file-pdf text-danger"></i> PDF per Personil
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="javascript:;" data-toggle="modal"
+                                            data-target="#modalDownloadPDFKegiatan">
+                                            <i class="fa fa-file-pdf text-danger"></i> PDF per Kegiatan
                                         </a>
                                     </li>
                                 </ul>
@@ -92,12 +98,13 @@
                                         <td class="text-center">
                                             {{ ($kinerja->currentPage() - 1) * $kinerja->perPage() + $loop->index + 1 }}
                                         </td>
-                                        <td class="text-center">{{ date('d-m-Y', strtotime($item->tanggal)) }}</td>
+                                        <td class="text-center text-nowrap">{{ date('d-m-Y', strtotime($item->tanggal)) }}
+                                        </td>
                                         <td class="text-center font-weight-bold">{{ $item->anggota->name ?? '-' }}</td>
                                         <td class="text-center">Pulau {{ $item->formasi_tim->area->pulau->name }}</td>
                                         <td class="text-center">{{ $item->koordinator->name ?? '-' }}</td>
-                                        <td class="text-center">{{ $item->kategori->name ?? $item->kegiatan }}</td>
-                                        <td class="text-center">{{ $item->deskripsi ?? '-' }}</td>
+                                        <td class="text-left">{{ $item->kategori->name ?? $item->kegiatan }}</td>
+                                        <td class="text-left">{{ $item->deskripsi ?? '-' }}</td>
                                         <td class="text-center">{{ $item->lokasi ?? '-' }}</td>
                                         <td class="text-center">
                                             <a href="#" data-toggle="modal" data-target="#modalDokumentasi"
@@ -122,7 +129,8 @@
     </div>
 
     {{-- START: FILTER KINERJA --}}
-    <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="modalFilter" aria-hidden="true">
+    <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="modalFilter"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -156,6 +164,17 @@
                                         @foreach ($pulau as $item)
                                             <option value="{{ $item->id }}"
                                                 @if ($item->id == $pulau_id) selected @endif>Pulau {{ $item->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Kegiatan</label>
+                                    <select name="kategori_id" class="form-control">
+                                        <option value="" selected disabled>- Pilih Kegiatan -</option>
+                                        @foreach ($kategori as $item)
+                                            <option value="{{ $item->id }}"
+                                                @if ($item->id == $kategori_id) selected @endif>{{ $item->name }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -249,6 +268,7 @@
                             @method('GET')
                             <input type="text" name="user_id" value="{{ $user_id ?? '' }}">
                             <input type="text" name="pulau_id" value="{{ $pulau_id ?? '' }}">
+                            <input type="text" name="kategori_id" value="{{ $kategori_id ?? '' }}">
                             <input type="text" name="start_date" value="{{ $start_date ?? '' }}">
                             <input type="text" name="end_date" value="{{ $end_date ?? '' }}">
                             <input type="text" name="sort" value="{{ $sort ?? 'ASC' }}">
@@ -275,9 +295,9 @@
                         <div class="form-row gutters">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <label for="">Personel</label>
+                                    <label for="">Personil</label>
                                     <select name="user_id" class="form-control" required>
-                                        <option value="" selected disabled>- Pilih Personel -</option>
+                                        <option value="" selected disabled>- Pilih Personil -</option>
                                         @foreach ($user as $item)
                                             <option value="{{ $item->id }}"
                                                 @if ($item->id == $user_id) selected @endif>{{ $item->name }} -
@@ -308,6 +328,57 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
                     <button type="submit" form="formPDF" formtarget="_blank" class="btn btn-primary">Buat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- END: Konfirmasi PDF --}}
+
+    {{-- BEGIN: Konfirmasi PDF --}}
+    <div id="modalDownloadPDFKegiatan" class="modal fade" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form id="formKegiatanPDF" action="{{ route('simoja.kasi.kinerja.export.pdf.kegiatan') }}"
+                        method="GET">
+                        @csrf
+                        @method('GET')
+                        <div class="form-row gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="">Kegiatan</label>
+                                    <select name="kategori_id" class="form-control" required>
+                                        <option value="" selected disabled>- Pilih Kegiatan -</option>
+                                        @foreach ($kategori as $item)
+                                            <option value="{{ $item->id }}"
+                                                @if ($item->id == $kategori_id) selected @endif>{{ $item->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <label for="periode">Periode</label>
+                        <div class="form-row gutters">
+                            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <input type="date" class="form-control" value="{{ $start_date }}"
+                                        name="start_date" required>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <input type="date" class="form-control" value="{{ $end_date }}"
+                                        name="end_date" required>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
+                    <button type="submit" form="formKegiatanPDF" formtarget="_blank"
+                        class="btn btn-primary">Buat</button>
                 </div>
             </div>
         </div>

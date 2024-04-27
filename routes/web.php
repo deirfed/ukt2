@@ -432,6 +432,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/simoja-kasi-kinerja/filter', 'filter_kasi')->name('simoja.kasi.kinerja.filter');
             Route::get('/simoja-kasi-kinerja/export/excel', 'export_excel_kasi')->name('simoja.kasi.kinerja.export.excel');
             Route::get('/simoja-kasi-kinerja/export/pdf', 'export_pdf_kasi')->name('simoja.kasi.kinerja.export.pdf');
+            Route::get('/simoja-kasi-kinerja/export/kegiatan/pdf', 'export_pdf_kegiatan_kasi')->name('simoja.kasi.kinerja.export.pdf.kegiatan');
         });
 
         // KOORDINATOR

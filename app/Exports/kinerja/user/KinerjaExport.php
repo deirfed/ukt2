@@ -14,15 +14,17 @@ class KinerjaExport implements FromView, ShouldAutoSize
     public $seksi_id;
     public $user_id;
     public $pulau_id;
+    public $kategori_id;
     public $start_date;
     public $end_date;
     public $sort;
 
-    public function __construct(?int $seksi_id = null, ?int $user_id = null, ?int $pulau_id = null, ?string $start_date = null, ?string $end_date = null, ?string $sort = null)
+    public function __construct(?int $seksi_id = null, ?int $user_id = null, ?int $pulau_id = null, ?int $kategori_id = null, ?string $start_date = null, ?string $end_date = null, ?string $sort = null)
     {
         $this->seksi_id = $seksi_id;
         $this->user_id = $user_id;
         $this->pulau_id = $pulau_id;
+        $this->kategori_id = $kategori_id;
         $this->start_date = $start_date;
         $this->end_date = $end_date;
         $this->sort = $sort;
@@ -49,6 +51,11 @@ class KinerjaExport implements FromView, ShouldAutoSize
                 $query->whereIn('anggota_id', $user_id)
                         ->orWhereIn('koordinator_id', $user_id);
             });
+        });
+
+        // Filter by kategori_id
+        $kinerja->when($this->kategori_id, function ($query) {
+            return $query->where('kategori_id', $this->kategori_id);
         });
 
         // Filter by tanggal
