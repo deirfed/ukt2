@@ -33,27 +33,42 @@ class AbsensiController extends Controller
 
         $pulau = Pulau::orderBy('name', 'ASC')->get();
 
-        $user_id = '';
-        $pulau_id = '';
-        $start_date = '';
-        $end_date = '';
-        $sort = 'DESC';
+        $search = $request->input('search');
 
-        $absensi = Absensi::whereRelation('user.struktur.seksi', 'id', '=', $seksi_id)
-                    ->orderBy('tanggal', $sort)
-                    ->orderBy('jam_masuk', $sort)
-                    ->orderBy('jam_pulang', $sort)
-                    ->paginate($perPage);
+        $absensiQuery = Absensi::whereRelation('user.struktur.seksi', 'id', '=', $seksi_id);
+
+        if ($search) {
+            $absensiQuery->where(function ($query) use ($search) {
+                $query->whereHas('user', function ($query) use ($search) {
+                    $query->where('name', 'LIKE', "%{$search}%");
+                })
+                ->orWhereHas('user.area.pulau', function ($query) use ($search) {
+                    $query->where('name', 'LIKE', "%{$search}%");
+                })
+                ->orWhere('status_masuk', 'LIKE', "%{$search}%")
+                ->orWhere('status_pulang', 'LIKE', "%{$search}%")
+                ->orWhere('catatan_masuk', 'LIKE', "%{$search}%")
+                ->orWhere('catatan_pulang', 'LIKE', "%{$search}%")
+                ->orWhere('status', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $absensi = $absensiQuery->orderBy('tanggal', 'DESC')
+                                ->orderBy('jam_masuk', 'DESC')
+                                ->orderBy('jam_pulang', 'DESC')
+                                ->paginate($perPage);
+
+        $absensi->appends(['search' => $search]);
 
         return view('user.simoja.kasi.absensi.index', [
             'absensi' => $absensi,
             'user' => $user,
             'pulau' => $pulau,
-            'user_id' => $user_id,
-            'pulau_id' => $pulau_id,
-            'start_date' => $start_date,
-            'end_date' => $end_date,
-            'sort' => $sort,
+            'user_id' => '',
+            'pulau_id' => '',
+            'start_date' => '',
+            'end_date' => '',
+            'sort' => 'DESC',
         ]);
     }
 
@@ -266,11 +281,32 @@ class AbsensiController extends Controller
 
         $perPage = $request->perPage ?? 50;
 
-        $absensi = Absensi::whereIn('user_id', $anggota_id)
+        $search = $request->input('search');
+
+        $absensiQuery = Absensi::whereIn('user_id', $anggota_id)
                         ->orderBy('tanggal', 'DESC')
                         ->orderBy('jam_masuk', 'DESC')
-                        ->orderBy('jam_pulang', 'DESC')
-                        ->paginate($perPage);
+                        ->orderBy('jam_pulang', 'DESC');
+
+        if ($search) {
+            $absensiQuery->where(function ($query) use ($search) {
+                $query->whereHas('user', function ($query) use ($search) {
+                    $query->where('name', 'LIKE', "%{$search}%");
+                })
+                ->orWhereHas('user.area.pulau', function ($query) use ($search) {
+                    $query->where('name', 'LIKE', "%{$search}%");
+                })
+                ->orWhere('status_masuk', 'LIKE', "%{$search}%")
+                ->orWhere('status_pulang', 'LIKE', "%{$search}%")
+                ->orWhere('catatan_masuk', 'LIKE', "%{$search}%")
+                ->orWhere('catatan_pulang', 'LIKE', "%{$search}%")
+                ->orWhere('status', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $absensi = $absensiQuery->paginate($perPage);
+
+        $absensi->appends(['search' => $search]);
 
         return view('user.simoja.koordinator.absensi.tim_index', compact([
             'absensi',
@@ -452,24 +488,27 @@ class AbsensiController extends Controller
         $start_date = '';
         $end_date = '';
         $sort = 'DESC';
-
         $perPage = $request->perPage ?? 50;
 
-        $absensi = Absensi::where('user_id', $user_id)
+        $search = $request->input('search');
+
+        $absensiQuery = Absensi::where('user_id', $user_id)
                         ->orderBy('tanggal', 'DESC')
                         ->orderBy('jam_masuk', 'DESC')
-                        ->orderBy('jam_pulang', 'DESC')
-                        ->paginate($perPage);
+                        ->orderBy('jam_pulang', 'DESC');
 
-        return view('user.simoja.pjlp.absensi.my_index', [
-            'absensi' => $absensi,
-            'start_date' => $start_date,
-            'end_date' => $end_date,
-            'sort' => $sort,
-            'perPage' => $perPage,
-        ]);
+        if ($search) {
+            $absensiQuery->where(function ($query) use ($search) {
+                $query->where('status', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $absensi = $absensiQuery->paginate($perPage);
+
+        $absensi->appends(['search' => $search]);
+
+        return view('user.simoja.pjlp.absensi.my_index', compact('absensi', 'start_date', 'end_date', 'sort', 'perPage'));
     }
-
     public function create_pjlp()
     {
         $tanggal = Carbon::now()->isoFormat('dddd, D MMMM Y');

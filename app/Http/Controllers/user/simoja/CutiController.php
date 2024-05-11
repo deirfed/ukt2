@@ -27,42 +27,59 @@ class CutiController extends Controller
     public function index(Request $request)
     {
         $seksi_id = auth()->user()->struktur->seksi->id;
+        $perPage = $request->perPage ?? 50;
 
         $user = User::whereRelation('struktur.seksi', 'id', '=', $seksi_id)
-                ->where('employee_type_id', 3)
-                ->orderBy('name', 'ASC')
-                ->get();
+            ->where('employee_type_id', 3)
+            ->orderBy('name', 'ASC')
+            ->get();
 
         $pulau = Pulau::orderBy('name', 'ASC')->get();
         $jenis_cuti = JenisCuti::all();
 
-        $user_id = '';
-        $pulau_id = '';
-        $start_date = '';
-        $end_date = '';
-        $sort = 'DESC';
-        $status = '';
-        $jenis_cuti_id = '';
+        $search = $request->input('search');
 
-        $perPage = $request->perPage ?? 50;
+        $cutiQuery = Cuti::whereRelation('user.struktur.seksi', 'id', '=', $seksi_id);
 
-        $cuti = Cuti::whereRelation('user.struktur.seksi', 'id', '=', $seksi_id)
-                ->orderBy('tanggal_awal', $sort)
-                ->orderBy('tanggal_akhir', $sort)
-                ->paginate($perPage);
+        if ($search) {
+            $cutiQuery->where(function ($query) use ($search) {
+                $query->whereHas('user', function ($query) use ($search) {
+                    $query->where('name', 'LIKE', "%{$search}%");
+                })
+                ->orWhereHas('user.area.pulau', function ($query) use ($search) {
+                    $query->where('name', 'LIKE', "%{$search}%");
+                })
+                ->orWhereHas('known_by', function ($query) use ($search) {
+                    $query->where('name', 'LIKE', "%{$search}%");
+                })
+                ->orWhereHas('approved_by', function ($query) use ($search) {
+                    $query->where('name', 'LIKE', "%{$search}%");
+                })
+                ->orWhereHas('jenis_cuti', function ($query) use ($search) {
+                    $query->where('name', 'LIKE', "%{$search}%");
+                })
+                ->orWhere('jumlah', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $cuti = $cutiQuery->orderBy('tanggal_awal', 'DESC')
+            ->orderBy('tanggal_akhir', 'DESC')
+            ->paginate($perPage);
+
+        $cuti->appends(['search' => $search]);
 
         return view('user.simoja.kasi.cuti.index', [
             'cuti' => $cuti,
             'user' => $user,
             'pulau' => $pulau,
             'jenis_cuti' => $jenis_cuti,
-            'jenis_cuti_id' => $jenis_cuti_id,
-            'user_id' => $user_id,
-            'pulau_id' => $pulau_id,
-            'start_date' => $start_date,
-            'end_date' => $end_date,
-            'sort' => $sort,
-            'status' => $status,
+            'jenis_cuti_id' => '',
+            'user_id' => '',
+            'pulau_id' => '',
+            'start_date' => '',
+            'end_date' => '',
+            'sort' => 'DESC',
+            'status' => '',
             'perPage' => $perPage,
         ]);
     }
@@ -251,14 +268,33 @@ class CutiController extends Controller
                                 ->toArray();
         $anggota_id[] = $user_id;
 
-        $perHalaman = $request->input('perHalaman', 25);
+        $perPage = $request->perPage ?? 25;
 
-        $cuti = Cuti::whereIn('user_id', $anggota_id)
-                        ->orderBy('tanggal_awal', 'DESC')
-                        ->paginate($perHalaman);
-        return view('user.simoja.koordinator.cuti.tim_index', compact([
-            'cuti',
-        ]));
+        $search = $request->input('search');
+
+        $cutiQuery = Cuti::whereIn('user_id', $anggota_id)
+                        ->orderBy('tanggal_awal', 'DESC');
+
+        if ($search) {
+            $cutiQuery->where(function ($query) use ($search) {
+                $query->whereHas('user', function ($query) use ($search) {
+                    $query->where('name', 'LIKE', "%{$search}%");
+                })
+                ->orWhereHas('user.area.pulau', function ($query) use ($search) {
+                    $query->where('name', 'LIKE', "%{$search}%");
+                })
+                ->orWhereHas('jenis_cuti', function ($query) use ($search) {
+                    $query->where('name', 'LIKE', "%{$search}%");
+                })
+                ->orWhere('jumlah', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $cuti = $cutiQuery->paginate($perPage);
+
+        $cuti->appends(['search' => $search]);
+
+        return view('user.simoja.koordinator.cuti.tim_index', compact('cuti'));
     }
 
     public function my_index_koordinator()

@@ -32,8 +32,8 @@
                                     Kembali</a>
                                 {{-- <button class="btn btn-primary mr-2 mb-2 mb-sm-0">Export to Excel</button>
                                 <button class="btn btn-primary mr-2 mb-2 mb-sm-0">Export to PDF</button> --}}
-                                <a href="" class="btn btn-primary mb-2 mb-sm-0" data-toggle="modal"
-                                    data-target="#modalFilter"><i class="fa fa-filter"></i></a>
+                                {{-- <a href="" class="btn btn-primary mr-2 mb-2 mb-sm-0" data-toggle="modal"
+                                    data-target="#modalFilter"><i class="fa fa-filter"></i></a> --}}
                                 <a href="{{ route('simoja.koordinator.absensi.tim') }}"
                                     class="btn btn-primary mr-2 mb-2 mb-sm-0"><i class="fa fa-refresh"></i>
                                 </a>
@@ -41,7 +41,7 @@
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <form class="form-inline mb-2 d-flex justify-content-end">
-                                <input class="form-control mr-sm-2" type="search" placeholder="Cari sesuatu di sini..."
+                                <input class="form-control mr-sm-2" type="search" name="search" placeholder="Cari sesuatu di sini..."
                                     aria-label="Search" id="search-bar">
                                 <button class="btn btn-dark my-2 my-sm-0" type="submit">Pencarian</button>
                             </form>

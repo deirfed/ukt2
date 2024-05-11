@@ -24,34 +24,52 @@ class KinerjaController extends Controller
         $perPage = $request->perPage ?? 50;
 
         $user = User::whereRelation('struktur.seksi', 'id', '=', $seksi_id)
-                ->where('employee_type_id', 3)
-                ->orderBy('name', 'ASC')
-                ->get();
+                    ->where('employee_type_id', 3)
+                    ->orderBy('name', 'ASC')
+                    ->get();
+
         $pulau = Pulau::orderBy('name', 'ASC')->get();
         $kategori = Kategori::where('seksi_id', $seksi_id)->get();
 
-        $user_id = '';
-        $pulau_id = '';
-        $kategori_id = '';
-        $start_date = '';
-        $end_date = '';
-        $sort = 'DESC';
+        $search = $request->input('search');
 
-        $kinerja = Kinerja::where('seksi_id', $seksi_id)
-                ->orderBy('tanggal', $sort)
-                ->paginate($perPage);
+        $kinerjaQuery = Kinerja::where('seksi_id', $seksi_id);
+
+        if ($search) {
+            $kinerjaQuery->where(function ($query) use ($search) {
+                $query->whereHas('anggota', function ($query) use ($search) {
+                    $query->where('name', 'LIKE', "%{$search}%");
+                })
+                ->orWhereHas('pulau', function ($query) use ($search) {
+                    $query->where('name', 'LIKE', "%{$search}%");
+                })
+                ->orWhereHas('kategori', function ($query) use ($search) {
+                    $query->where('name', 'LIKE', "%{$search}%");
+                })
+                ->orWhereHas('koordinator', function ($query) use ($search) {
+                    $query->where('name', 'LIKE', "%{$search}%");
+                })
+                ->orWhere('kegiatan', 'LIKE', "%{$search}%")
+                ->orWhere('deskripsi', 'LIKE', "%{$search}%")
+                ->orWhere('lokasi', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $kinerja = $kinerjaQuery->orderBy('tanggal', 'DESC')->paginate($perPage);
+
+        $kinerja->appends(['search' => $search]);
 
         return view('user.simoja.kasi.kinerja.index', [
             'kinerja' => $kinerja,
             'user' => $user,
             'pulau' => $pulau,
             'kategori' => $kategori,
-            'kategori_id' => $kategori_id,
-            'user_id' => $user_id,
-            'pulau_id' => $pulau_id,
-            'start_date' => $start_date,
-            'end_date' => $end_date,
-            'sort' => $sort,
+            'kategori_id' => '',
+            'user_id' => '',
+            'pulau_id' => '',
+            'start_date' => '',
+            'end_date' => '',
+            'sort' => 'DESC',
             'perPage' => $perPage,
         ]);
     }
@@ -295,13 +313,34 @@ class KinerjaController extends Controller
 
         $perHalaman = $request->input('perHalaman', 25);
 
-        $kinerja = Kinerja::whereIn('anggota_id', $anggota_id)
-                        ->orderBy('tanggal', 'DESC')
-                        ->paginate($perHalaman);
+        $search = $request->input('search');
 
-        return view('user.simoja.koordinator.kinerja.tim_index', compact([
-            'kinerja'
-        ]));
+        $kinerjaQuery = Kinerja::whereIn('anggota_id', $anggota_id)
+                        ->orderBy('tanggal', 'DESC');
+
+        if ($search) {
+            $kinerjaQuery->where(function ($query) use ($search) {
+                $query->whereHas('anggota', function ($query) use ($search) {
+                    $query->where('name', 'LIKE', "%{$search}%");
+                })
+                ->orWhereHas('pulau', function ($query) use ($search) {
+                    $query->where('name', 'LIKE', "%{$search}%");
+                })
+                ->orWhereHas('kategori', function ($query) use ($search) {
+                    $query->where('name', 'LIKE', "%{$search}%");
+                })
+                ->orWhere('kegiatan', 'LIKE', "%{$search}%")
+                ->orWhere('deskripsi', 'LIKE', "%{$search}%")
+                ->orWhere('lokasi', 'LIKE', "%{$search}%")
+                ->orWhere('tanggal', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $kinerja = $kinerjaQuery->paginate($perHalaman);
+
+        $kinerja->appends(['search' => $search]);
+
+        return view('user.simoja.koordinator.kinerja.tim_index', compact('kinerja'));
     }
 
     public function my_index_koordinator()
@@ -413,19 +452,29 @@ class KinerjaController extends Controller
         $start_date = '';
         $end_date = '';
         $sort = 'DESC';
-
         $perPage = $request->perPage ?? 50;
 
-        $kinerja = Kinerja::where('anggota_id', $user_id)
-                        ->orderBy('tanggal', $sort)
-                        ->paginate($perPage);
+        $search = $request->input('search');
 
-        return view('user.simoja.pjlp.kinerja.my_index', [
-            'kinerja' => $kinerja,
-            'start_date' => $start_date,
-            'end_date' => $end_date,
-            'sort' => $sort,
-        ]);
+        $kinerjaQuery = Kinerja::where('anggota_id', $user_id)
+                        ->orderBy('tanggal', $sort);
+
+        if ($search) {
+            $kinerjaQuery->where(function ($query) use ($search) {
+                $query->orWhereHas('kategori', function ($query) use ($search) {
+                    $query->where('name', 'LIKE', "%{$search}%");
+                })
+                ->orWhere('kegiatan', 'LIKE', "%{$search}%")
+                ->orWhere('deskripsi', 'LIKE', "%{$search}%")
+                ->orWhere('lokasi', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $kinerja = $kinerjaQuery->paginate($perPage);
+
+        $kinerja->appends(['search' => $search]);
+
+        return view('user.simoja.pjlp.kinerja.my_index', compact('kinerja', 'start_date', 'end_date', 'sort'));
     }
 
     public function create_pjlp()

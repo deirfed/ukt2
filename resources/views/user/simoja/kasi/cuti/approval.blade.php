@@ -22,6 +22,9 @@
                 <div class="card-body">
                     <h4 class="d-flex justify-content-center mb-3 text-center" style="text-decoration: underline">Daftar
                         Persetujuan Pengajuan Cuti - Seksi {{ auth()->user()->struktur->seksi->name }}</h4>
+                    <h5 class="d-flex justify-content-center mb-3 text-center">Nomor
+                        Surat dapat diakses&nbsp;<a href="https://s.id/cutipjlp" target="_blank"
+                            style="text-decoration: underline; color:#034ea2">Disini</a></h5>
                     <div class="row d-flex justify-content-between align-items-center">
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-3 text-left">
                             <div class="d-flex justify-content-start align-items-center flex-wrap">
