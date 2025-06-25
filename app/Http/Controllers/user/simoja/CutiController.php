@@ -4,6 +4,7 @@ namespace App\Http\Controllers\user\simoja;
 
 use App\Exports\cuti\user\CutiExport;
 use App\Http\Controllers\Controller;
+use App\Mail\CutiMail;
 use App\Models\Absensi;
 use App\Models\Cuti;
 use App\Models\FormasiTim;
@@ -20,6 +21,8 @@ use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Mail\Mailer;
+use Illuminate\Support\Facades\Mail;
 
 class CutiController extends Controller
 {
@@ -438,7 +441,10 @@ class CutiController extends Controller
             $cuti->save();
         }
 
-        return redirect()->route('simoja.koordinator.my-cuti')->withNotify('Data berhasil ditambah!');
+        $tanggal = $tanggal_awal . ' s/d ' . $tanggal_akhir;
+        $message = $this->send_email(auth()->user()->name, auth()->user()->jabatan->name ?? '-', auth()->user()->area->pulau->name ?? '-', $jumlahHariCuti, $tanggal, $catatan, route('cuti.approval_page'));
+
+        return redirect()->route('simoja.koordinator.my-cuti')->withNotify('Data pengajuan cuti berhasil ditambah & ' . $message);
     }
 
     public function destroy_koordinator(Request $request)
@@ -606,8 +612,31 @@ class CutiController extends Controller
             $cuti->save();
         }
 
-        return redirect()->route('simoja.pjlp.my-cuti')->withNotify('Data berhasil ditambah!');
+        $tanggal = $tanggal_awal . ' s/d ' . $tanggal_akhir;
+        $message = $this->send_email(auth()->user()->name, auth()->user()->jabatan->name ?? '-', auth()->user()->area->pulau->name ?? '-', $jumlahHariCuti, $tanggal, $catatan, route('cuti.approval_page'));
+
+        return redirect()->route('simoja.pjlp.my-cuti')->withNotify('Data pengajuan cuti berhasil ditambah & ' . $message);
     }
+
+    public function send_email($nama, $jabatan, $lokasi_pulau, $jumlah_hari, $tanggal, $alasan, $url)
+    {
+        $email_tujuan = env('EMAIL_NOTIFICATION');
+
+        $mailData = [
+            'nama' => $nama,
+            'jabatan' => $jabatan,
+            'lokasi_pulau' => $lokasi_pulau,
+            'jumlah_hari' => $jumlah_hari,
+            'tanggal' => $tanggal,
+            'alasan' => $alasan,
+            'url' => $url,
+        ];
+
+        Mail::to($email_tujuan)->send(new CutiMail($mailData));
+
+        return "Email notifikasi berhasil dikirim.";
+    }
+
 
     public function destroy_pjlp(Request $request)
     {

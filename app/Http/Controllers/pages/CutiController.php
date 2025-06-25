@@ -4,6 +4,7 @@ namespace App\Http\Controllers\pages;
 
 use App\Exports\cuti\CutiExport;
 use App\Http\Controllers\Controller;
+use App\Mail\CutiMail;
 use App\Models\Absensi;
 use App\Models\Cuti;
 use App\Models\FormasiTim;
@@ -17,6 +18,7 @@ use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Mail\Mailer;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
@@ -55,6 +57,20 @@ class CutiController extends Controller
             'end_date',
         ]));
     }
+
+    // public function email()
+    // {
+    //     $mailData = [
+    //         'nama' => '$nama',
+    //         'jabatan' => '$jabatan',
+    //         'lokasi_pulau' => '$lokasi_pulau',
+    //         'jumlah_hari' => '$jumlah_hari',
+    //         'tanggal' => '$tanggal',
+    //         'alasan' => '$alasan',
+    //         'url' => '$url',
+    //     ];
+    //     return view('pages.cuti.template.email', compact('mailData'));
+    // }
 
     public function create()
     {
@@ -160,7 +176,7 @@ class CutiController extends Controller
             $cuti->save();
         }
 
-        return redirect()->route('cuti.saya')->withNotify('Data berhasil ditambah!');
+        return redirect()->route('cuti.saya')->withNotify('Data pengajuan cuti berhasil ditambah');
     }
 
     public function destroy(Request $request)

@@ -319,6 +319,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::controller(CutiController::class)->group(function () {
         Route::get('/cuti-setting', 'index')->name('cuti.index');
         Route::get('/cuti-create', 'create')->name('cuti.create');
+        // Route::get('/cuti-email', 'email')->name('cuti.email');
         Route::post('/cuti', 'store')->name('cuti.store');
         Route::get('/cuti/{uuid}/edit', 'edit')->name('cuti.edit');
         Route::put('/cuti/{uuid}/update', 'update')->name('cuti.update');
