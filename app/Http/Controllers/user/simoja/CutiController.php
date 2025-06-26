@@ -441,7 +441,7 @@ class CutiController extends Controller
             $cuti->save();
         }
 
-        $tanggal = $tanggal_awal . ' s/d ' . $tanggal_akhir;
+        $tanggal = Carbon::parse($tanggal_awal)->format('d-m-Y') . ' s/d ' . Carbon::parse($tanggal_akhir)->format('d-m-Y');
         $message = $this->send_email(auth()->user()->name, auth()->user()->jabatan->name ?? '-', auth()->user()->area->pulau->name ?? '-', $jumlahHariCuti, $tanggal, $catatan, route('cuti.approval_page'));
 
         return redirect()->route('simoja.koordinator.my-cuti')->withNotify('Data pengajuan cuti berhasil ditambah & ' . $message);
@@ -612,7 +612,7 @@ class CutiController extends Controller
             $cuti->save();
         }
 
-        $tanggal = $tanggal_awal . ' s/d ' . $tanggal_akhir;
+        $tanggal = Carbon::parse($tanggal_awal)->format('d-m-Y') . ' s/d ' . Carbon::parse($tanggal_akhir)->format('d-m-Y');
         $message = $this->send_email(auth()->user()->name, auth()->user()->jabatan->name ?? '-', auth()->user()->area->pulau->name ?? '-', $jumlahHariCuti, $tanggal, $catatan, route('cuti.approval_page'));
 
         return redirect()->route('simoja.pjlp.my-cuti')->withNotify('Data pengajuan cuti berhasil ditambah & ' . $message);
