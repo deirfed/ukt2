@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\user\simoja;
 
+use App\DataTables\KinerjaDataTable;
 use App\Exports\kinerja\user\KinerjaExport;
 use App\Http\Controllers\Controller;
 use App\Models\FormasiTim;
@@ -18,60 +19,53 @@ use Barryvdh\DomPDF\Facade\Pdf;
 class KinerjaController extends Controller
 {
     // KASI
-    public function index(Request $request)
+    public function index(KinerjaDataTable $dataTable, Request $request)
     {
+        $request->validate([
+            'user_id' => 'nullable|exists:users,id',
+            'pulau_id' => 'nullable|exists:pulau,id',
+            'kategori_id' => 'nullable|exists:kategori,id',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+        ]);
+
+        $user_id = $request->user_id ?? null;
+        $pulau_id = $request->pulau_id ?? null;
+        $kategori_id = $request->kategori_id ?? null;
+
+        $periode = Carbon::now()->format('Y');
+
+        $start_date = $request->start_date ?? Carbon::createFromFormat('Y', $periode)->startOfYear()->toDateString();
+        $end_date = $request->end_date ?? Carbon::createFromFormat('Y', $periode)->endOfYear()->toDateString();
+
+
         $seksi_id = auth()->user()->struktur->seksi->id;
-        $perPage = $request->perPage ?? 50;
 
         $user = User::whereRelation('struktur.seksi', 'id', '=', $seksi_id)
                     ->where('employee_type_id', 3)
+                    ->notBanned()
                     ->orderBy('name', 'ASC')
                     ->get();
 
         $pulau = Pulau::orderBy('name', 'ASC')->get();
         $kategori = Kategori::where('seksi_id', $seksi_id)->get();
 
-        $search = $request->input('search');
-
-        $kinerjaQuery = Kinerja::where('seksi_id', $seksi_id);
-
-        if ($search) {
-            $kinerjaQuery->where(function ($query) use ($search) {
-                $query->whereHas('anggota', function ($query) use ($search) {
-                    $query->where('name', 'LIKE', "%{$search}%");
-                })
-                ->orWhereHas('pulau', function ($query) use ($search) {
-                    $query->where('name', 'LIKE', "%{$search}%");
-                })
-                ->orWhereHas('kategori', function ($query) use ($search) {
-                    $query->where('name', 'LIKE', "%{$search}%");
-                })
-                ->orWhereHas('koordinator', function ($query) use ($search) {
-                    $query->where('name', 'LIKE', "%{$search}%");
-                })
-                ->orWhere('kegiatan', 'LIKE', "%{$search}%")
-                ->orWhere('deskripsi', 'LIKE', "%{$search}%")
-                ->orWhere('lokasi', 'LIKE', "%{$search}%");
-            });
-        }
-
-        $kinerja = $kinerjaQuery->orderBy('tanggal', 'DESC')->paginate($perPage);
-
-        $kinerja->appends(['search' => $search]);
-
-        return view('user.simoja.kasi.kinerja.index', [
-            'kinerja' => $kinerja,
-            'user' => $user,
-            'pulau' => $pulau,
-            'kategori' => $kategori,
-            'kategori_id' => '',
-            'user_id' => '',
-            'pulau_id' => '',
-            'start_date' => '',
-            'end_date' => '',
-            'sort' => 'DESC',
-            'perPage' => $perPage,
-        ]);
+        return $dataTable->with([
+            'user_id' => $user_id,
+            'pulau_id' => $pulau_id,
+            'kategori_id' => $kategori_id,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+        ])->render('user.simoja.kasi.kinerja.index', compact([
+            'user',
+            'pulau',
+            'kategori',
+            'user_id',
+            'pulau_id',
+            'kategori_id',
+            'start_date',
+            'end_date',
+        ]));
     }
 
     public function filter_kasi(Request $request)
@@ -150,15 +144,15 @@ class KinerjaController extends Controller
     public function export_excel_kasi(Request $request)
     {
         $seksi_id = auth()->user()->struktur->seksi->id;
-        $user_id = $request->user_id;
-        $pulau_id = $request->pulau_id;
-        $kategori_id = $request->kategori_id;
-        $start_date = $request->start_date;
+        $user_id = $request->user_id ?? null;
+        $pulau_id = $request->pulau_id ?? null;
+        $kategori_id = $request->kategori_id ?? null;
+        $start_date = $request->start_date ?? null;
         $end_date = $request->end_date ?? $start_date;
-        $sort = $request->sort;
+        $sort = $request->sort ?? 'ASC';
 
         $waktu = Carbon::now()->format('Ymd');
-        $nama_file = $waktu . '_data kinerja.xlsx';
+        $nama_file = $waktu . '_Data Kinerja.xlsx';
 
         return Excel::download(new KinerjaExport(
             $seksi_id,
@@ -177,66 +171,36 @@ class KinerjaController extends Controller
         $request->validate([
             'user_id' => 'required',
             'start_date' => 'date|required',
+            'end_date' => 'date|required|after_or_equal:start_date',
         ]);
 
         $user_id = $request->user_id;
         $start_date = Carbon::parse($request->start_date);
         $end_date = Carbon::parse($request->end_date) ?? $start_date;
 
-        $user = FormasiTim::where('periode', Carbon::now()->year)->where('anggota_id', $user_id)->first();
+        $user = FormasiTim::where('anggota_id', $user_id)->first();
+
         $kinerja = Kinerja::where('anggota_id', $user_id)
                             ->whereBetween('tanggal', [$start_date, $end_date])
-                            ->get()
-                            ->pluck('tanggal');
-
-        $datesInRange = [];
-        for ($date = $start_date->copy(); $date->lte($end_date); $date->addDay()) {
-            $kerja = Kinerja::where('anggota_id', $user_id)
-                            ->whereDate('tanggal', $date)
+                            ->orderBy('tanggal', 'ASC')
                             ->get();
-
-            $bg = $kerja->isNotEmpty() ? '' : 'bg-danger';
-
-            $kegiatan = [];
-            $deskripsi = [];
-            $lokasi = [];
-            $photo = [];
-
-            foreach($kerja as $item)
-            {
-                $kegiatan[] = $item->kategori ? $item->kategori->name : $item->kegiatan;
-                $deskripsi[] = $item->deskripsi ?? '-';
-                $lokasi[] = $item->lokasi ?? '-';
-                $photo[] = $item->photo ?? '-';
-            }
-
-            $datesInRange[] = [
-                'hari' => $date->isoFormat('dddd'),
-                'tanggal' => $date->copy(),
-                'kegiatan' => $kegiatan,
-                'deskripsi' => $deskripsi,
-                'lokasi' => $lokasi,
-                'photo' => $photo,
-                'bg' => $bg,
-            ];
-        }
 
         $pdf = Pdf::loadView('user.simoja.kasi.kinerja.export.pdf', [
             'user' => $user,
-            'datesInRange' => $datesInRange,
             'kinerja' => $kinerja,
             'start_date' => $start_date->isoFormat('D MMMM Y'),
             'end_date' => $end_date->isoFormat('D MMMM Y'),
         ]);
 
-        return $pdf->setPaper('A4', 'landscape')->stream(Carbon::now()->format('Ymd_') . 'Data Kinerja_' . $user->anggota->name . '_' . $user->anggota->nip . '_Seksi ' . $user->struktur->seksi->name . '_Pulau ' . $user->area->pulau->name . '.pdf');
+        return $pdf->setPaper('A4', 'potrait')->stream(Carbon::now()->format('Ymd_') . 'Data Kinerja.pdf');
     }
 
     public function export_pdf_kegiatan_kasi(Request $request)
     {
         $request->validate([
-            'kategori_id' => 'required',
+            'kategori_id' => 'required|exists:kategori,id',
             'start_date' => 'date|required',
+            'end_date' => 'date|required|after_or_equal:start_date',
         ]);
 
         $kategori_id = $request->kategori_id;
@@ -247,53 +211,40 @@ class KinerjaController extends Controller
 
         $kinerja = Kinerja::where('kategori_id', $kategori_id)
                             ->whereBetween('tanggal', [$start_date, $end_date])
-                            ->get()
-                            ->pluck('tanggal');
-
-        $datesInRange = [];
-        for ($date = $start_date->copy(); $date->lte($end_date); $date->addDay()) {
-            $kerja = Kinerja::where('kategori_id', $kategori_id)
-                            ->whereDate('tanggal', $date)
+                            ->orderBy('tanggal', 'ASC')
                             ->get();
-
-            $bg = $kerja->isNotEmpty() ? '' : 'bg-danger';
-
-            $anggota = [];
-            $kegiatan = [];
-            $deskripsi = [];
-            $lokasi = [];
-            $photo = [];
-
-            foreach($kerja as $item)
-            {
-                $anggota[] = $item->anggota->name ?? '-';
-                $kegiatan[] = $item->kategori ? $item->kategori->name : $item->kegiatan;
-                $deskripsi[] = $item->deskripsi ?? '-';
-                $lokasi[] = $item->lokasi ?? '-';
-                $photo[] = $item->photo ?? '-';
-            }
-
-            $datesInRange[] = [
-                'hari' => $date->isoFormat('dddd'),
-                'tanggal' => $date->copy(),
-                'anggota' => $anggota,
-                'kegiatan' => $kegiatan,
-                'deskripsi' => $deskripsi,
-                'lokasi' => $lokasi,
-                'photo' => $photo,
-                'bg' => $bg,
-            ];
-        }
 
         $pdf = Pdf::loadView('user.simoja.kasi.kinerja.export.pdf_kegiatan', [
             'kategori' => $kategori,
-            'datesInRange' => $datesInRange,
             'kinerja' => $kinerja,
             'start_date' => $start_date->isoFormat('D MMMM Y'),
             'end_date' => $end_date->isoFormat('D MMMM Y'),
         ]);
 
-        return $pdf->setPaper('A4', 'landscape')->stream(Carbon::now()->format('Ymd_') . 'Data Kinerja_Kegiatan ' . $kategori->name . '.pdf');
+        return $pdf->setPaper('A4', 'potrait')->stream(Carbon::now()->format('Ymd_') . 'Data Kinerja_Kegiatan ' . $kategori->name . '.pdf');
+    }
+
+    public function export_pdf_all_kasi(Request $request)
+    {
+        $request->validate([
+            'start_date' => 'date|required',
+            'end_date' => 'date|required|after_or_equal:start_date',
+        ]);
+
+        $start_date = Carbon::parse($request->start_date);
+        $end_date = Carbon::parse($request->end_date) ?? $start_date;
+
+        $kinerja = Kinerja::whereBetween('tanggal', [$start_date, $end_date])
+                            ->orderBy('tanggal', 'ASC')
+                            ->get();
+
+        $pdf = Pdf::loadView('user.simoja.kasi.kinerja.export.pdf_all', [
+            'kinerja' => $kinerja,
+            'start_date' => $start_date->isoFormat('D MMMM Y'),
+            'end_date' => $end_date->isoFormat('D MMMM Y'),
+        ]);
+
+        return $pdf->setPaper('A4', 'potrait')->stream(Carbon::now()->format('Ymd_') . 'Data Kinerja.pdf');
     }
 
 

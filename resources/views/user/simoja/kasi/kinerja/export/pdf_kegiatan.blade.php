@@ -21,16 +21,16 @@
     <div>
         <div class="text-center">
             <p class="mt-3 mb-1 text-uppercase font-weight-bold">
-                <u>LAPORAN KINERJA PER KEGIATAN
-                </u>
+                <u>LAPORAN KINERJA PER KEGIATAN</u>
             </p>
         </div>
-        <div class="mt-2">
-            <table class="ml-4 p-0" style="font-size: 14px">
+        <div class="mt-3">
+            <table class="ml-4 p-0" style="font-size: 12px">
                 <tr>
                     <td style="width: 20mm">Kegiatan</td>
                     <td style="width: 5mm">:</td>
-                    <td>{{ $kategori->name }}</td>
+                    <td class="text-wrap">{{ $kategori->name }}</td>
+                    <td style="width: 5mm"></td>
                 </tr>
                 <tr>
                     <td>Periode</td>
@@ -40,75 +40,35 @@
             </table>
         </div>
         <div class="mt-3">
-            <table class="table table-bordered text-center p-1" style="font-size: 12px">
+            <table class="table table-bordered p-1" style="font-size: 10px">
                 <thead>
-                    <tr style="background-color: grey">
+                    <tr class="text-center text-uppercase" style="background-color: grey">
                         <th>No.</th>
                         <th>Hari</th>
                         <th>Tanggal</th>
-                        <th>Personil</th>
+                        <th>Personel</th>
                         <th>Kegiatan</th>
-                        <th>Deskripsi</th>
                         <th>Lokasi</th>
-                        <th>Dokumentasi Kegiatan</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($datesInRange as $item)
+                    @foreach ($kinerja as $item)
                         <tr>
-                            <td class="p-1">{{ $loop->iteration }}</td>
-                            <td class="p-1">{{ $item['hari'] }}</td>
-                            <td class="p-1 text-nowrap">{{ $item['tanggal']->isoFormat('D MMMM Y') }}</td>
-                            <td class="p-1 text-left text-nowrap">
-                                <ol class="p-3">
-                                    @if ($item['anggota'] != null)
-                                        @foreach ($item['anggota'] as $anggota)
-                                            <li>{{ $anggota }}</li>
-                                        @endforeach
-                                    @endif
-                                </ol>
-                            </td>
-                            <td class="p-2 text-wrap text-left">
-                                <ol class="p-3">
-                                    @if ($item['kegiatan'] != null)
-                                        @foreach ($item['kegiatan'] as $kegiatan)
-                                            <li>{{ $kegiatan }}</li>
-                                        @endforeach
-                                    @endif
-                                </ol>
-                            </td>
-                            <td class="p-2 text-wrap text-left">
-                                <ol class="p-3">
-                                    @if ($item['deskripsi'] != null)
-                                        @foreach ($item['deskripsi'] as $deskripsi)
-                                            <li>{{ $deskripsi }}</li>
-                                        @endforeach
-                                    @endif
-                                </ol>
-                            </td>
-                            <td class="p-2 text-wrap text-left">
-                                <ol class="p-3">
-                                    @if ($item['lokasi'] != null)
-                                        @foreach ($item['lokasi'] as $lokasi)
-                                            <li>{{ $lokasi }}</li>
-                                        @endforeach
-                                    @endif
-                                </ol>
-                            </td>
-                            <td class="text-left p-2 {{ $item['bg'] }}" style="width: 10cm">
-                                <ol class="p-3">
-                                    @if ($item['photo'] != null)
-                                        @foreach ($item['photo'] as $photos)
-                                            <li>
-                                                @foreach (json_decode($photos) as $photo)
-                                                    <img class="img-thumbnail"
-                                                        src="{{ public_path('storage/' . $photo) }}" alt="photo"
-                                                        style="height: 85px">
-                                                @endforeach
-                                            </li>
-                                        @endforeach
-                                    @endif
-                                </ol>
+                            <td class="text-center" rowspan="2">{{ $loop->iteration }}</td>
+                            <td class="text-nowrap">{{ $item->hari }}</td>
+                            <td class="text-nowrap">{{ $item->tanggal }}</td>
+                            <td class="text-nowrap font-weight-bold">{{ $item->anggota->name ?? '-' }}</td>
+                            <td class="text-wrap">{{ $item->kategori->name ?? $item->kegiatan }}</td>
+                            <td class="text-wrap">{{ $item->lokasi }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" class="mb-0">
+                                @if($item->photo != null)
+                                    @foreach (json_decode($item->photo, true) as $photo)
+                                        <img class="img-thumbnail" style="height: 80px" src="{{ public_path('storage/' . $photo) }}" alt="Foto Kegiatan">
+                                    @endforeach
+                                @endif
+                                <p class="mb-0">Catatan: {{ $item->deskripsi ?? '-' }}</p>
                             </td>
                         </tr>
                     @endforeach

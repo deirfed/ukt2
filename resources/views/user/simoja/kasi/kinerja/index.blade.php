@@ -47,6 +47,12 @@
                                     </li>
                                     <li>
                                         <a class="dropdown-item" href="javascript:;" data-toggle="modal"
+                                            data-target="#modalDownloadPDFAll">
+                                            <i class="fa fa-file-pdf text-danger"></i> PDF Semua Data
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="javascript:;" data-toggle="modal"
                                             data-target="#modalDownloadPDF">
                                             <i class="fa fa-file-pdf text-danger"></i> PDF per Personil
                                         </a>
@@ -60,68 +66,11 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <form class="form-inline mb-2 d-flex justify-content-end">
-                                <input class="form-control mr-sm-2" type="search" name="search" placeholder="Cari sesuatu di sini..."
-                                    aria-label="Search" id="search-bar">
-                                <button class="btn btn-dark my-2 my-sm-0" type="submit">Pencarian</button>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="paginate-style">
-                        <div class="d-flex justify-content-center mb-2">
-                            <nav aria-label="Pagination">
-                                <ul class="pagination">
-                                    {{ $kinerja->links('vendor.pagination.bootstrap-4') }}
-                                </ul>
-                            </nav>
-                        </div>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-bordered table-striped" id="dataTable">
-                            <thead>
-                                <tr>
-                                    <th class="text-center">No.</th>
-                                    <th class="text-center">Tanggal</th>
-                                    <th class="text-center">Nama</th>
-                                    <th class="text-center">Pulau</th>
-                                    <th class="text-center">Koordinator</th>
-                                    <th class="text-center">Giat</th>
-                                    <th class="text-center">Deskripsi</th>
-                                    <th class="text-center">Lokasi</th>
-                                    <th class="text-center">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($kinerja as $item)
-                                    <tr>
-                                        <td class="text-center">
-                                            {{ ($kinerja->currentPage() - 1) * $kinerja->perPage() + $loop->index + 1 }}
-                                        </td>
-                                        <td class="text-center text-nowrap">{{ date('d-m-Y', strtotime($item->tanggal)) }}
-                                        </td>
-                                        <td class="text-center font-weight-bold">{{ $item->anggota->name ?? '-' }}</td>
-                                        <td class="text-center">Pulau {{ $item->formasi_tim->area->pulau->name }}</td>
-                                        <td class="text-center">{{ $item->koordinator->name ?? '-' }}</td>
-                                        <td class="text-left">{{ $item->kategori->name ?? $item->kegiatan }}</td>
-                                        <td class="text-left">{{ $item->deskripsi ?? '-' }}</td>
-                                        <td class="text-center">{{ $item->lokasi ?? '-' }}</td>
-                                        <td class="text-center">
-                                            <a href="#" data-toggle="modal" data-target="#modalDokumentasi"
-                                                data-photo='{{ $item->photo }}'><button class="btn btn-outline-primary"><i
-                                                        class="fa fa-eye"></i></button></a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                @if ($kinerja->count() == 0)
-                                    <tr>
-                                        <td class="text-center" colspan="9">
-                                            Tidak ada data.
-                                        </td>
-                                    </tr>
-                                @endif
-                            </tbody>
-                        </table>
+                        {{ $dataTable->table([
+                            'class' => 'table table-bordered table-striped',
+                        ]) }}
                     </div>
                 </div>
             </div>
@@ -140,7 +89,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="formFilter" action="{{ route('simoja.kasi.kinerja.filter') }}" method="GET">
+                    <form id="formFilter" action="{{ route('simoja.kasi.kinerja') }}" method="GET">
                         @csrf
                         @method('GET')
                         <div class="form-row gutters">
@@ -193,19 +142,6 @@
                                 <div class="form-group">
                                     <input type="date" class="form-control" value="{{ $end_date }}"
                                         name="end_date">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-row gutters">
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label for="">Urutan</label>
-                                    <select name="sort" class="form-control">
-                                        <option value="ASC" @if ($sort == 'ASC') selected @endif>A to Z
-                                        </option>
-                                        <option value="DESC" @if ($sort == 'DESC') selected @endif>Z to A
-                                        </option>
-                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -271,7 +207,6 @@
                             <input type="text" name="kategori_id" value="{{ $kategori_id ?? '' }}">
                             <input type="text" name="start_date" value="{{ $start_date ?? '' }}">
                             <input type="text" name="end_date" value="{{ $end_date ?? '' }}">
-                            <input type="text" name="sort" value="{{ $sort ?? 'ASC' }}">
                         </form>
                     </div>
                 </div>
@@ -334,7 +269,7 @@
     </div>
     {{-- END: Konfirmasi PDF --}}
 
-    {{-- BEGIN: Konfirmasi PDF --}}
+    {{-- BEGIN: Konfirmasi PDF Kegiatan --}}
     <div id="modalDownloadPDFKegiatan" class="modal fade" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -383,9 +318,48 @@
             </div>
         </div>
     </div>
-    {{-- END: Konfirmasi PDF --}}
+    {{-- END: Konfirmasi PDF Kegiatan --}}
+
+    {{-- BEGIN: Konfirmasi PDF All --}}
+    <div id="modalDownloadPDFAll" class="modal fade" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form id="formKegiatanPDFAll" action="{{ route('simoja.kasi.kinerja.export.pdf.all') }}"
+                        method="GET">
+                        @csrf
+                        @method('GET')
+                        <label for="periode">Periode</label>
+                        <div class="form-row gutters">
+                            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <input type="date" class="form-control" value="{{ $start_date }}"
+                                        name="start_date" required>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <input type="date" class="form-control" value="{{ $end_date }}"
+                                        name="end_date" required>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
+                    <button type="submit" form="formKegiatanPDFAll" formtarget="_blank"
+                        class="btn btn-primary">Buat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- END: Konfirmasi PDF All --}}
 @endsection
 
+@push('scripts')
+    {{ $dataTable->scripts() }}
+@endpush
 
 @section('javascript')
     <script type="text/javascript">

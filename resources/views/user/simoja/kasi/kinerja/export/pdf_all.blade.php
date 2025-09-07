@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan Kinerja</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        @page {
+            margin: 5mm 5mm 5mm 5mm;
+        }
+
+        .page-break {
+            page-break-after: always;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <div class="text-center">
+            <p class="mt-3 mb-0 text-uppercase font-weight-bold">
+                <u>LAPORAN KINERJA PER KEGIATAN</u>
+            </p>
+            <p class="mt-0" style="font-size: 13px">
+                (Periode: {{ $start_date }} s/d {{ $end_date }})
+            </p>
+        </div>
+        <div class="mt-3">
+            <table class="table table-bordered p-1" style="font-size: 10px">
+                <thead>
+                    <tr class="text-center text-uppercase" style="background-color: grey">
+                        <th>No.</th>
+                        <th>Hari</th>
+                        <th>Tanggal</th>
+                        <th>Personel</th>
+                        <th>Kegiatan</th>
+                        <th>Lokasi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($kinerja as $item)
+                        <tr>
+                            <td class="text-center" rowspan="2">{{ $loop->iteration }}</td>
+                            <td class="text-nowrap">{{ $item->hari }}</td>
+                            <td class="text-nowrap">{{ $item->tanggal }}</td>
+                            <td class="text-nowrap font-weight-bold">{{ $item->anggota->name ?? '-' }}</td>
+                            <td class="text-wrap">{{ $item->kategori->name ?? $item->kegiatan }}</td>
+                            <td class="text-wrap">{{ $item->lokasi }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" class="mb-0">
+                                @if($item->photo != null)
+                                    @foreach (json_decode($item->photo, true) as $photo)
+                                        <img class="img-thumbnail" style="height: 80px" src="{{ public_path('storage/' . $photo) }}" alt="Foto Kegiatan">
+                                    @endforeach
+                                @endif
+                                <p class="mb-0">Catatan: {{ $item->deskripsi ?? '-' }}</p>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>

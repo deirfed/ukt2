@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\user\simoja;
 
+use App\DataTables\AbsensiDataTable;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Pulau;
@@ -16,60 +17,51 @@ use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use Intervention\Image\Facades\Image;
 use App\Exports\absensi\AbsensiExport;
+use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Storage;
 
 class AbsensiController extends Controller
 {
     // KASI
-    public function index_kasi(Request $request)
+    public function index_kasi(AbsensiDataTable $dataTable, Request $request)
     {
+        $request->validate([
+            'user_id' => 'nullable|exists:users,id',
+            'pulau_id' => 'nullable|exists:pulau,id',
+            'periode' => 'nullable',
+        ]);
+
+        $user_id = $request->user_id ?? null;
+        $pulau_id = $request->pulau_id ?? null;
+        $periode = $request->periode ?? Carbon::now()->format('Y-m');
+
+        $start_date = Carbon::createFromFormat('Y-m', $periode)->startOfMonth()->toDateString();
+        $end_date   = Carbon::createFromFormat('Y-m', $periode)->endOfMonth()->toDateString();
+
         $seksi_id = auth()->user()->struktur->seksi->id;
-        $perPage = $request->perPage ?? 50;
 
         $user = User::whereRelation('struktur.seksi', 'id', '=', $seksi_id)
-                    ->where('employee_type_id', 3)
+                    ->where('employee_type_id', 3) //PJLP Only
+                    ->notBanned()
                     ->orderBy('name', 'ASC')
                     ->get();
 
         $pulau = Pulau::orderBy('name', 'ASC')->get();
 
-        $search = $request->input('search');
-
-        $absensiQuery = Absensi::whereRelation('user.struktur.seksi', 'id', '=', $seksi_id);
-
-        if ($search) {
-            $absensiQuery->where(function ($query) use ($search) {
-                $query->whereHas('user', function ($query) use ($search) {
-                    $query->where('name', 'LIKE', "%{$search}%");
-                })
-                ->orWhereHas('user.area.pulau', function ($query) use ($search) {
-                    $query->where('name', 'LIKE', "%{$search}%");
-                })
-                ->orWhere('status_masuk', 'LIKE', "%{$search}%")
-                ->orWhere('status_pulang', 'LIKE', "%{$search}%")
-                ->orWhere('catatan_masuk', 'LIKE', "%{$search}%")
-                ->orWhere('catatan_pulang', 'LIKE', "%{$search}%")
-                ->orWhere('status', 'LIKE', "%{$search}%");
-            });
-        }
-
-        $absensi = $absensiQuery->orderBy('tanggal', 'DESC')
-                                ->orderBy('jam_masuk', 'DESC')
-                                ->orderBy('jam_pulang', 'DESC')
-                                ->paginate($perPage);
-
-        $absensi->appends(['search' => $search]);
-
-        return view('user.simoja.kasi.absensi.index', [
-            'absensi' => $absensi,
-            'user' => $user,
-            'pulau' => $pulau,
-            'user_id' => '',
-            'pulau_id' => '',
-            'start_date' => '',
-            'end_date' => '',
-            'sort' => 'DESC',
-        ]);
+        return $dataTable->with([
+            'user_id' => $user_id,
+            'pulau_id' => $pulau_id,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+        ])->render('user.simoja.kasi.absensi.index', compact([
+            'user',
+            'pulau',
+            'user_id',
+            'pulau_id',
+            'start_date',
+            'end_date',
+            'periode',
+        ]));
     }
 
     public function filter_kasi(Request $request)
@@ -137,7 +129,7 @@ class AbsensiController extends Controller
         $pulau_id = $request->pulau_id;
         $start_date = $request->start_date;
         $end_date = $request->end_date ?? $start_date;
-        $sort = $request->sort;
+        $sort = $request->sort ?? 'ASC';
 
         $waktu = Carbon::now()->format('Ymd');
 
@@ -146,9 +138,19 @@ class AbsensiController extends Controller
 
     public function export_pdf_kasi(Request $request)
     {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'periode' => 'required',
+        ]);
+
         $user_id = $request->user_id;
-        $start_date = Carbon::parse($request->start_date);
-        $end_date = Carbon::parse($request->end_date) ?? $start_date;
+        $periode = $request->periode;
+
+        $start_date = Carbon::createFromFormat('Y-m', $periode)->startOfMonth()->toDateString();
+        $end_date   = Carbon::createFromFormat('Y-m', $periode)->endOfMonth()->toDateString();
+
+        $start_date = Carbon::parse($start_date);
+        $end_date = Carbon::parse($end_date) ?? $start_date;
 
         $user = FormasiTim::where('periode', Carbon::now()->year)->where('koordinator_id', $user_id)->orWhere('anggota_id', $user_id)->first();
         $absensi = Absensi::where('user_id', $user_id)
@@ -193,8 +195,10 @@ class AbsensiController extends Controller
             'end_date' => $end_date->isoFormat('D MMMM Y'),
         ]);
 
-        return $pdf->stream(Carbon::now()->format('Ymd_') . 'Data Absensi_' . $user->name . '_' . $user->nip . '_Seksi ' . $user->struktur->seksi->name . '_Pulau ' . $user->area->pulau->name . '.pdf');
+        return $pdf->stream(Carbon::now()->format('Ymd_') . 'Data Absensi_' . $user->anggota->name . '_' . $user->anggota->nip . '_Seksi ' . $user->struktur->seksi->name . '_Pulau ' . $user->area->pulau->name . '.pdf');
     }
+
+
 
     public function ringkasan_kasi(Request $request)
     {
@@ -223,14 +227,19 @@ class AbsensiController extends Controller
         ]));
     }
 
-    public function performance_personel()
+    public function performance_personel(Request $request)
     {
+        $request->validate([
+            'tahun' => 'nullable'
+        ]);
+
+        $tahun = $request->tahun ?? Carbon::now()->format('Y');
+
         $seksi_id = auth()->user()->struktur->seksi->id;
 
-        $users = User::whereHas('struktur.seksi', function($query) use ($seksi_id) {
-                        $query->where('id', $seksi_id);
-                    })
+        $users = User::whereRelation('struktur.seksi', 'id', '=', $seksi_id)
                     ->where('employee_type_id', 3)
+                    ->notBanned()
                     ->orderBy('name', 'ASC')
                     ->get();
 
@@ -238,10 +247,12 @@ class AbsensiController extends Controller
         foreach ($users as $user) {
             $absensi_masuk = Absensi::where('user_id', $user->id)
                                     ->whereNotNull('jam_masuk')
+                                    ->whereYear('tanggal', $tahun)
                                     ->count();
 
             $absensi_pulang = Absensi::where('user_id', $user->id)
                                     ->whereNotNull('jam_pulang')
+                                    ->whereYear('tanggal', $tahun)
                                     ->count();
 
             $absensi[$user->name] = [
@@ -252,13 +263,20 @@ class AbsensiController extends Controller
 
         $kinerja = [];
         foreach ($users as $user) {
-            $jumlahKinerja = Kinerja::where('anggota_id', $user->id)->count();
+            $jumlahKinerja = Kinerja::where('anggota_id', $user->id)
+                                    ->whereYear('tanggal', $tahun)
+                                    ->count();
 
             $kinerja[$user->name] = [
                 'kinerja' => $jumlahKinerja,
             ];
         }
-        return view('user.simoja.kasi.performa', compact('users', 'absensi', 'kinerja'));
+        return view('user.simoja.kasi.performa', compact([
+            'tahun',
+            'users',
+            'absensi',
+            'kinerja',
+        ]));
     }
 
 

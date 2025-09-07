@@ -35,9 +35,9 @@
                                 <div class="launch-box h-180">
                                     <h3>Rekap Data Kinerja</h3>
                                     <i class="fa fa-suitcase"></i>
-                                    <p>{{ $tanggal }}</p>
+                                    <p>Periode tahun {{ $tahun }}</p>
                                     @if ($jumlah_kinerja > 0)
-                                        <h5>{{ $jumlah_kinerja }} Data Kinerja</h5>
+                                        <h5>{{ number_format($jumlah_kinerja, 0, ',', '.') }} Data Kinerja</h5>
                                     @else
                                         <h5>Tidak ada Data Kinerja</h5>
                                     @endif
@@ -49,9 +49,9 @@
                                 <div class="launch-box h-180">
                                     <h3>Rekap Data Cuti</h3>
                                     <i class="fa fa-calendar-times"></i>
-                                    <p>{{ $tanggal }}</p>
+                                    <p>Periode tahun {{ $tahun }}</p>
                                     @if ($data_cuti > 0)
-                                        <h5>{{ $data_cuti }} Data Cuti</h5>
+                                        <h5>{{ number_format($data_cuti, 0, ',', '.') }} Data Cuti</h5>
                                     @else
                                         <h5>Tidak ada Data Cuti</h5>
                                     @endif
@@ -66,9 +66,9 @@
                                     @endif
                                     <h3>Daftar Persetujuan Cuti</h3>
                                     <i class="fa fa-calendar-days"></i>
-                                    <p>{{ $tanggal }}</p>
+                                    <p>Periode tahun {{ $tahun }}</p>
                                     @if ($jumlah_pengajuan_cuti > 0)
-                                        <h5>{{ $jumlah_pengajuan_cuti }} Pengajuan</h5>
+                                        <h5>{{ number_format($jumlah_pengajuan_cuti, 0, ',', '.') }} Pengajuan</h5>
                                     @else
                                         <h5>Tidak ada Pengajuan Cuti</h5>
                                     @endif
@@ -80,7 +80,7 @@
                                 <div class="launch-box h-180">
                                     <h3>Performa Personel </h3>
                                     <i class="fa fa-line-chart"></i>
-                                    <p>{{ $tanggal }}</p>
+                                    <p>Periode tahun {{ $tahun }}</p>
                                     <h5>Lihat Performa Personel</h5>
                                 </div>
                             </a>

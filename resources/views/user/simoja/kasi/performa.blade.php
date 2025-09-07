@@ -16,16 +16,33 @@
 @endsection
 
 @section('content')
-    <div class="row gutters d-flex justify-content-center align-item-center mb-3">
-        <a href="{{ route('simoja.kasi.index') }}" class="btn btn-outline-primary">Kembali Ke Menu Awal</a>
+    <div class="row gutters d-flex justify-content-center">
+        {{-- <a href="{{ route('simoja.kasi.index') }}" class="btn btn-outline-primary">Kembali Ke Menu Awal</a> --}}
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="row d-flex justify-content-between align-items-center">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-3 text-left">
+                    <div class="d-flex justify-content-start align-items-center flex-wrap">
+                        <a href="{{ route('simoja.kasi.index') }}" class="btn btn-outline-primary mr-2 mb-2 mb-sm-0"><i
+                                class="fa fa-arrow-left"></i>
+                            Kembali</a>
+                        <a href="javascript:;" class="btn btn-primary mr-2 mb-2 mb-sm-0" data-toggle="modal"
+                            data-target="#modalFilter" title="Filter"><i class="fa fa-filter"></i></a>
+                        <a href="{{ route('performance-personel') }}" title="Refresh"
+                            class="btn btn-primary mr-2 mb-2 mb-sm-0"><i class="fa fa-refresh"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="row gutters d-flex justify-content-center align-item-center">
-        <div class="col-xl-{{ auth()->user()->struktur->seksi->id == 1 ? '12' : '6' }} col-lg-12 col-md-12 col-sm-12 col-12">
+        <div
+            class="col-xl-{{ auth()->user()->struktur->seksi->id == 1 ? '12' : '6' }} col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="card">
                 <div class="card-body">
                     <h4 style="text-decoration: underline">Grafik Performance Absensi</h4>
                     <p class="ml-3 mb-2">
-                        Update {{ \Carbon\Carbon::now()->format('F Y') }}
+                        Tahun {{ $tahun }}
                     </p>
                     <div id="chartAbsensi"></div>
                 </div>
@@ -37,7 +54,7 @@
                 <div class="card-body">
                     <h4 style="text-decoration: underline">Grafik Performance Kinerja</h4>
                     <p class="ml-3 mb-2">
-                        Update {{ \Carbon\Carbon::now()->format('F Y') }}
+                        Tahun {{ $tahun }}
                     </p>
                     <div id="chartKinerja"></div>
                 </div>
@@ -118,10 +135,50 @@
             </div>
         </div>
     </div>
+
+    {{-- START: FILTER Performance --}}
+    <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="modalFilter" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Filter Performance</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formFilter" action="{{ route('performance-personel') }}" method="GET">
+                        @csrf
+                        @method('GET')
+                        <div class="form-row gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="">Tahun</label>
+                                    {{-- <input type="year" class="form-control" name="tahun" required> --}}
+                                    <input type="text" class="form-control yearpicker" name="tahun" value="{{ $tahun }}" required>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
+                    <button type="submit" form="formFilter" class="btn btn-primary">Filter Data</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- END: FILTER Performance --}}
 @endsection
 
 @section('javascript')
     <script>
+        $('.yearpicker').datepicker({
+            format: "yyyy",
+            viewMode: "years",
+            minViewMode: "years"
+        });
+
         Highcharts.chart('chartAbsensi', {
             chart: {
                 type: 'column'

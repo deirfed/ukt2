@@ -16,17 +16,30 @@ class DashboardController extends Controller
         $today = Carbon::now();
         $seksi_id = auth()->user()->struktur->seksi->id;
         $tanggal = Carbon::parse($today)->isoFormat('dddd, D MMMM Y');
-        $jumlah_kinerja = Kinerja::where('seksi_id', $seksi_id)->count();
 
-        $jumlah_pengajuan_cuti = Cuti::whereRelation('user.struktur.seksi', 'id', '=', $seksi_id)->where('status', 'Diproses')->count();
+        $tahun = $today->format('Y');
 
-        $data_cuti = Cuti::whereRelation('user.struktur.seksi', 'id', '=', $seksi_id)->count();
+        $jumlah_kinerja = Kinerja::where('seksi_id', $seksi_id)
+                                ->whereYear('tanggal', $tahun)
+                                ->count();
+
+        $jumlah_pengajuan_cuti = Cuti::whereRelation('user.struktur.seksi', 'id', '=', $seksi_id)
+                                ->where('status', 'Diproses')
+                                ->whereYear('tanggal_awal', $tahun)
+                                ->whereYear('tanggal_akhir', $tahun)
+                                ->count();
+
+        $data_cuti = Cuti::whereRelation('user.struktur.seksi', 'id', '=', $seksi_id)
+                                ->whereYear('tanggal_awal', $tahun)
+                                ->whereYear('tanggal_akhir', $tahun)
+                                ->count();
 
         return view('user.simoja.kasi.index', compact([
             'tanggal',
+            'tahun',
             'jumlah_kinerja',
             'jumlah_pengajuan_cuti',
-            'data_cuti'
+            'data_cuti',
         ]));
     }
 

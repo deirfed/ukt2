@@ -33,80 +33,20 @@
                                     Kembali</a>
                             </div>
                         </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        {{-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <form class="form-inline mb-2 d-flex justify-content-end">
                                 <input class="form-control mr-sm-2" type="search" placeholder="Cari sesuatu di sini..."
                                     aria-label="Search" id="search-bar">
                                 <button class="btn btn-dark my-2 my-sm-0" type="submit">Pencarian</button>
                             </form>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="projectLog">
                         <div class="logs-container">
                             <div class="table-responsive mt-2">
-                                <table class="table table-bordered table-striped" id="dataTable-2">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center">No.</th>
-                                            <th class="text-center text-wrap">Nama</th>
-                                            <th class="text-center text-wrap">Jabatan</th>
-                                            <th class="text-center text-wrap">Tanggal Pengajuan</th>
-                                            <th class="text-center text-wrap">Jumlah Hari</th>
-                                            <th class="text-center text-wrap">Jenis Pengajuan</th>
-                                            <th class="text-center text-wrap">Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($approval_cuti as $item)
-                                            <tr>
-                                                <td class="text-center">{{ $loop->iteration }}</td>
-                                                <td class="text-center">{{ $item->user->name }}</td>
-                                                <td class="text-center">{{ $item->user->jabatan->name }}</td>
-                                                <td class="text-center text-wrap">
-                                                    {{ $item->tanggal_awal == $item->tanggal_akhir ? date('d-m-Y', strtotime($item->tanggal_awal)) : date('d-m-Y', strtotime($item->tanggal_awal)) . ' - ' . date('d-m-Y', strtotime($item->tanggal_akhir)) }}
-                                                </td>
-                                                <td class="text-center">{{ $item->jumlah }} hari</td>
-                                                <td class="text-center">{{ $item->jenis_cuti->name }}</td>
-                                                <td class="text-center">
-                                                    <a href="javascript:;" class="btn btn-outline-primary" title="Terima"
-                                                        data-toggle="modal" data-target="#approveModal"
-                                                        data-id="{{ $item->id }}">
-                                                        <i class="fa fa-check"></i>
-                                                    </a>
-                                                    <a href="javascript:;" class="btn btn-outline-secondary" title="Tolak"
-                                                        data-toggle="modal" data-target="#rejectModal"
-                                                        data-id="{{ $item->id }}">
-                                                        <i class="fa fa-times"></i>
-                                                    </a>
-                                                    <a href="javascript:;" class="btn btn-outline-primary"
-                                                        title="Lihat lampiran" data-toggle="modal"
-                                                        data-target="#modalDetailPengajuan"
-                                                        data-lampiran="{{ $item->lampiran != null ? asset('storage/' . $item->lampiran) : 'https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg' }}"
-                                                        data-nama="{{ $item->user->name }}"
-                                                        data-jenis_cuti="{{ $item->jenis_cuti->name }} ({{ $item->jumlah }} hari)"
-                                                        data-koordinator="{{ $item->known_by->name }}"
-                                                        data-periode="{{ $item->tanggal_awal }} s/d {{ $item->tanggal_akhir }}"
-                                                        data-tim="{{ $item->user->struktur->tim->name }} (Pulau {{ $item->user->area->pulau->name }})"
-                                                        data-catatan="{{ $item->catatan }}"
-                                                        data-status="@if ($item->status == 'Diproses') <h5>*Pengajuan Cuti masih Dalam Proses persetujuan</h5>
-                                                        @elseif($item->status == 'Ditolak')
-                                                            <h5>*Pengajuan Cuti <span style='color: red'>Ditolak</span>
-                                                        @else
-                                                            <h5>*Pengajuan Cuti Sudah <span style='color: green'>Disetujui</span> pada Tanggal {{ $item->updated_at }}</h5> @endif">
-                                                        <i class="fa fa-eye"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                        @if ($approval_cuti->count() == 0)
-                                            <tr>
-                                                <td class="text-center" colspan="7">
-                                                    Tidak ada data.
-                                                </td>
-                                            </tr>
-                                        @endif
-                                    </tbody>
-                                </table>
+                                {{ $dataTable->table([
+                                    'class' => 'table table-bordered table-striped',
+                                ]) }}
                             </div>
                         </div>
                     </div>
@@ -114,68 +54,6 @@
             </div>
         </div>
     </div>
-
-    {{-- START: FILTER ABSENSI --}}
-    <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="modalFilter" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Filter Data Absensi</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-row gutters">
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="form-group">
-                                <label for="">Personel</label>
-                                <select name="personel" class="form-control" required>
-                                    <option value="" selected disabled>- Pilih Personel -</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="">Pulau</label>
-                                <select name="pulau" class="form-control" required>
-                                    <option value="" selected disabled>- Pilih Pulau -</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="">Tim</label>
-                                <select name="tim" class="form-control" required>
-                                    <option value="" selected disabled>- Pilih Tim -</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="">Status</label>
-                                <select name="tim" class="form-control" required>
-                                    <option value="" selected disabled>- Pilih Status -</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <label for="periode">Periode</label>
-                    <div class="form-row gutters">
-                        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="form-group">
-                                <input type="date" class="form-control" id="start" placeholder="start">
-                            </div>
-                        </div>
-                        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="form-group">
-                                <input type="date" class="form-control" id="end" placeholder="end">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
-                    <button type="button" class="btn btn-primary">Filter Data</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    {{-- END: FILTER ABSENSI --}}
 
     {{-- START: Modal Detail --}}
     <div class="modal fade" id="modalDetailPengajuan" tabindex="-1" role="dialog"
@@ -244,7 +122,6 @@
         </div>
     </div>
     {{-- END Modal Detail --}}
-
 
     <!-- BEGIN: konfirmasi hapus modal -->
     <div id="deleteModal" class="modal" tabindex="-1" aria-hidden="true">
@@ -336,6 +213,10 @@
     </div>
     <!-- END:  konfirmasi reject Modal -->
 @endsection
+
+@push('scripts')
+    {{ $dataTable->scripts() }}
+@endpush
 
 @section('javascript')
     <script>

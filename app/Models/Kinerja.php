@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -27,6 +28,13 @@ class Kinerja extends Model
 
             $model->ticket_number = $timestamp . $randomNumber;
         });
+    }
+
+    public function getHariAttribute()
+    {
+        return $this->tanggal
+            ? Carbon::parse($this->tanggal)->locale('id')->dayName
+            : null;
     }
 
     public function formasi_tim()

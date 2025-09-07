@@ -10,6 +10,28 @@
             $("#error-modal").modal("show");
         })
     </script>
+@elseif ($errors->any())
+    <script>
+        @php
+            $errorsList = $errors->all();
+            $messageError = collect($errorsList)
+                ->map(function ($msg, $index) use ($errorsList) {
+                    return count($errorsList) > 1
+                        ? ($index + 1) . '. ' . e($msg)
+                        : e($msg);
+                })
+                ->implode('<br>');
+        @endphp
+        Swal.fire({
+            icon: "error",
+            title: "Ooopss!",
+            html: @json($messageError) // pakai html, bukan text
+        }).then(() => {
+            if (window.history.replaceState) {
+                window.history.replaceState(null, '', window.location.href);
+            }
+        });
+    </script>
 @endif
 
 <!-- BEGIN: Success Modal -->

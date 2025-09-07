@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\user\simoja;
 
+use App\DataTables\CutiDataTable;
+use App\DataTables\CutiPersetujuanDataTable;
 use App\Exports\cuti\user\CutiExport;
 use App\Http\Controllers\Controller;
 use App\Mail\CutiMail;
@@ -27,64 +29,58 @@ use Illuminate\Support\Facades\Mail;
 class CutiController extends Controller
 {
     // KASI
-    public function index(Request $request)
+    public function index(CutiDataTable $dataTable, Request $request)
     {
+        $request->validate([
+            'user_id' => 'nullable|exists:users,id',
+            'pulau_id' => 'nullable|exists:pulau,id',
+            'jenis_cuti_id' => 'nullable|exists:jenis_cuti,id',
+            'status' => 'nullable|string',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+        ]);
+
+        $user_id = $request->user_id ?? null;
+        $pulau_id = $request->pulau_id ?? null;
+        $jenis_cuti_id = $request->jenis_cuti_id ?? null;
+        $status = $request->status ?? null;
+
+        $periode = Carbon::now()->format('Y');
+
+        $start_date = $request->start_date ?? Carbon::createFromFormat('Y', $periode)->startOfYear()->toDateString();
+        $end_date = $request->end_date ?? Carbon::createFromFormat('Y', $periode)->endOfYear()->toDateString();
+
+
         $seksi_id = auth()->user()->struktur->seksi->id;
         $perPage = $request->perPage ?? 50;
 
         $user = User::whereRelation('struktur.seksi', 'id', '=', $seksi_id)
-            ->where('employee_type_id', 3)
-            ->orderBy('name', 'ASC')
-            ->get();
+                ->where('employee_type_id', 3)
+                ->notBanned()
+                ->orderBy('name', 'ASC')
+                ->get();
 
         $pulau = Pulau::orderBy('name', 'ASC')->get();
         $jenis_cuti = JenisCuti::all();
 
-        $search = $request->input('search');
-
-        $cutiQuery = Cuti::whereRelation('user.struktur.seksi', 'id', '=', $seksi_id);
-
-        if ($search) {
-            $cutiQuery->where(function ($query) use ($search) {
-                $query->whereHas('user', function ($query) use ($search) {
-                    $query->where('name', 'LIKE', "%{$search}%");
-                })
-                ->orWhereHas('user.area.pulau', function ($query) use ($search) {
-                    $query->where('name', 'LIKE', "%{$search}%");
-                })
-                ->orWhereHas('known_by', function ($query) use ($search) {
-                    $query->where('name', 'LIKE', "%{$search}%");
-                })
-                ->orWhereHas('approved_by', function ($query) use ($search) {
-                    $query->where('name', 'LIKE', "%{$search}%");
-                })
-                ->orWhereHas('jenis_cuti', function ($query) use ($search) {
-                    $query->where('name', 'LIKE', "%{$search}%");
-                })
-                ->orWhere('jumlah', 'LIKE', "%{$search}%");
-            });
-        }
-
-        $cuti = $cutiQuery->orderBy('tanggal_awal', 'DESC')
-            ->orderBy('tanggal_akhir', 'DESC')
-            ->paginate($perPage);
-
-        $cuti->appends(['search' => $search]);
-
-        return view('user.simoja.kasi.cuti.index', [
-            'cuti' => $cuti,
-            'user' => $user,
-            'pulau' => $pulau,
-            'jenis_cuti' => $jenis_cuti,
-            'jenis_cuti_id' => '',
-            'user_id' => '',
-            'pulau_id' => '',
-            'start_date' => '',
-            'end_date' => '',
-            'sort' => 'DESC',
-            'status' => '',
-            'perPage' => $perPage,
-        ]);
+        return $dataTable->with([
+            'user_id' => $user_id,
+            'pulau_id' => $pulau_id,
+            'jenis_cuti_id' => $jenis_cuti_id,
+            'status' => $status,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+        ])->render('user.simoja.kasi.cuti.index', compact([
+            'user',
+            'pulau',
+            'jenis_cuti',
+            'status',
+            'jenis_cuti_id',
+            'user_id',
+            'pulau_id',
+            'start_date',
+            'end_date',
+        ]));
     }
 
     public function filter_kasi(Request $request)
@@ -172,6 +168,7 @@ class CutiController extends Controller
     public function export_excel_kasi(Request $request)
     {
         $seksi_id = auth()->user()->struktur->seksi->id;
+
         $user_id = $request->user_id;
         $pulau_id = $request->pulau_id;
         $start_date = $request->start_date;
@@ -181,27 +178,31 @@ class CutiController extends Controller
         $jenis_cuti_id = $request->jenis_cuti_id;
 
         $waktu = Carbon::now()->format('Ymd');
-        $nama_file = $waktu . '_data cuti.xlsx';
+        $nama_file = $waktu . '_Data cuti.xlsx';
 
         return Excel::download(new CutiExport(
             $seksi_id,
             $user_id,
             $pulau_id,
+            $jenis_cuti_id,
+            $status,
             $start_date,
             $end_date,
-            $sort,
-            $status,
-            $jenis_cuti_id),
+            $sort),
             $nama_file,
             \Maatwebsite\Excel\Excel::XLSX);
     }
 
-    public function approval()
+    public function approval(CutiPersetujuanDataTable $dataTable)
     {
         $approval_cuti = Cuti::where('approved_by_id', auth()->user()->id)
                         ->where('status', 'Diproses')->get();
 
-        return view('user.simoja.kasi.cuti.approval', compact([
+        // return view('user.simoja.kasi.cuti.approval', compact([
+        //     'approval_cuti',
+        // ]));
+
+        return $dataTable->render('user.simoja.kasi.cuti.approval', compact([
             'approval_cuti',
         ]));
     }
