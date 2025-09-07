@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\user\simoja;
 
 use App\DataTables\AbsensiDataTable;
+use App\DataTables\AbsensiSayaDataTable;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Pulau;
@@ -499,33 +500,24 @@ class AbsensiController extends Controller
 
 
     // PJLP
-    public function my_index_pjlp(Request $request)
+    public function my_index_pjlp(AbsensiSayaDataTable $dataTable, Request $request)
     {
-        $user_id = auth()->user()->id;
+        $request->validate([
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+        ]);
 
-        $start_date = '';
-        $end_date = '';
-        $sort = 'DESC';
-        $perPage = $request->perPage ?? 50;
+        $periode = Carbon::now()->format('Y-m');
+        $start_date = $request->start_date ?? Carbon::createFromFormat('Y-m', $periode)->startOfMonth()->toDateString();
+        $end_date = $request->end_date ?? Carbon::createFromFormat('Y-m', $periode)->endOfMonth()->toDateString();
 
-        $search = $request->input('search');
-
-        $absensiQuery = Absensi::where('user_id', $user_id)
-                        ->orderBy('tanggal', 'DESC')
-                        ->orderBy('jam_masuk', 'DESC')
-                        ->orderBy('jam_pulang', 'DESC');
-
-        if ($search) {
-            $absensiQuery->where(function ($query) use ($search) {
-                $query->where('status', 'LIKE', "%{$search}%");
-            });
-        }
-
-        $absensi = $absensiQuery->paginate($perPage);
-
-        $absensi->appends(['search' => $search]);
-
-        return view('user.simoja.pjlp.absensi.my_index', compact('absensi', 'start_date', 'end_date', 'sort', 'perPage'));
+        return $dataTable->with([
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+        ])->render('user.simoja.pjlp.absensi.my_index', compact([
+            'start_date',
+            'end_date',
+        ]));
     }
     public function create_pjlp()
     {

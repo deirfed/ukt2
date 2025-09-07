@@ -4,6 +4,7 @@ namespace App\Http\Controllers\user\simoja;
 
 use App\DataTables\CutiDataTable;
 use App\DataTables\CutiPersetujuanDataTable;
+use App\DataTables\CutiSayaDataTable;
 use App\Exports\cuti\user\CutiExport;
 use App\Http\Controllers\Controller;
 use App\Mail\CutiMail;
@@ -52,7 +53,6 @@ class CutiController extends Controller
 
 
         $seksi_id = auth()->user()->struktur->seksi->id;
-        $perPage = $request->perPage ?? 50;
 
         $user = User::whereRelation('struktur.seksi', 'id', '=', $seksi_id)
                 ->where('employee_type_id', 3)
@@ -470,39 +470,44 @@ class CutiController extends Controller
 
 
     // PJLP
-    public function my_index_pjlp(Request $request)
+    public function my_index_pjlp(CutiSayaDataTable $dataTable, Request $request)
     {
+        $request->validate([
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+        ]);
+
+        $periode = Carbon::now()->format('Y');
+        $start_date = $request->start_date ?? Carbon::createFromFormat('Y', $periode)->startOfYear()->toDateString();
+        $end_date = $request->end_date ?? Carbon::createFromFormat('Y', $periode)->endOfYear()->toDateString();
+
         $user_id = auth()->user()->id;
-
-        $jenis_cuti = JenisCuti::all();
-        $jenis_cuti_id = null;
-        $start_date = null;
-        $end_date = null;
-        $sort = 'DESC';
-        $status = null;
-
-        $perPage = $request->perPage ?? 50;
-
-        $cuti = Cuti::where('user_id', $user_id)
-                    ->orderBy('tanggal_awal', $sort)
-                    ->orderBy('tanggal_akhir', $sort)
-                    ->paginate($perPage);
 
         $konfigurasi_cuti = KonfigurasiCuti::where('periode', Carbon::now()->year)
                     ->where('jenis_cuti_id', 1)
                     ->where('user_id', $user_id)
                     ->firstOrFail();
 
-        return view('user.simoja.pjlp.cuti.my_index', [
-            'cuti' => $cuti,
-            'konfigurasi_cuti' => $konfigurasi_cuti,
-            'jenis_cuti' => $jenis_cuti,
-            'jenis_cuti_id' => $jenis_cuti_id,
+        // return view('user.simoja.pjlp.cuti.my_index', [
+        //     'cuti' => $cuti,
+        //     'konfigurasi_cuti' => $konfigurasi_cuti,
+        //     'jenis_cuti' => $jenis_cuti,
+        //     'jenis_cuti_id' => $jenis_cuti_id,
+        //     'start_date' => $start_date,
+        //     'end_date' => $end_date,
+        //     'sort' => $sort,
+        //     'status' => $status,
+        // ]);
+
+        return $dataTable->with([
+            'user_id' => $user_id,
             'start_date' => $start_date,
             'end_date' => $end_date,
-            'sort' => $sort,
-            'status' => $status,
-        ]);
+        ])->render('user.simoja.pjlp.cuti.my_index', compact([
+            'konfigurasi_cuti',
+            'start_date',
+            'end_date',
+        ]));
     }
 
     public function create_pjlp()

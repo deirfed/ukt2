@@ -40,119 +40,17 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <form class="form-inline mb-2 d-flex justify-content-end">
-                                <input class="form-control mr-sm-2" type="search" placeholder="Cari sesuatu di sini..."
-                                    aria-label="Search" id="search-bar">
-                                <button class="btn btn-dark my-2 my-sm-0" type="submit">Pencarian</button>
-                            </form>
-                        </div>
                         <div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-12 mb-2 ml-2">
                             <span class="btn btn-outline-primary">Sisa Cuti Tahunan:
                                 <strong>{{ $konfigurasi_cuti->jumlah ?? '#' }} hari</strong></span>
                         </div>
                     </div>
-                    <div class="paginate-style">
-                        <div class="d-flex justify-content-center mb-2">
-                            <nav aria-label="Pagination">
-                                <ul class="pagination">
-                                    {{ $cuti->links('vendor.pagination.bootstrap-4') }}
-                                </ul>
-                            </nav>
-                        </div>
-                    </div>
                     <div class="projectLog">
                         <div class="logs-container">
                             <div class="table-responsive mt-2">
-                                <table class="table table-bordered table-striped" id="dataTable">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center">No.</th>
-                                            <th class="text-center text-wrap">Nama</th>
-                                            <th class="text-center text-wrap">Tanggal Pengajuan </th>
-                                            <th class="text-center text-wrap">Jenis Izin</th>
-                                            <th class="text-center text-wrap">Jumlah Hari</th>
-                                            <th class="text-center text-wrap">Diketahui</th>
-                                            <th class="text-center text-wrap">Disetujui</th>
-                                            <th class="text-center text-wrap">Status</th>
-                                            <th class="text-center text-wrap">Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($cuti as $item)
-                                            <tr>
-                                                <td class="text-center">
-                                                    {{ ($cuti->currentPage() - 1) * $cuti->perPage() + $loop->index + 1 }}
-                                                </td>
-                                                <td class="text-center font-weight-bold">{{ $item->user->name }}</td>
-                                                <td class="text-center text-wrap">
-                                                    {{ $item->tanggal_awal == $item->tanggal_akhir ? date('d-m-Y', strtotime($item->tanggal_awal)) : date('d-m-Y', strtotime($item->tanggal_awal)) . ' - ' . date('d-m-Y', strtotime($item->tanggal_akhir)) }}
-                                                </td>
-                                                <td class="text-center">{{ $item->jenis_cuti->name }}</td>
-                                                <td class="text-center">{{ $item->jumlah }} hari</td>
-                                                <td class="text-center">
-                                                    {{ $item->known_by->name }} <br>
-                                                    ({{ $item->known_by->jabatan->name }})
-                                                </td>
-                                                <td class="text-center">
-                                                    @if ($item->status == 'Diterima')
-                                                        {{ $item->approved_by->name }} <br>
-                                                        ({{ $item->approved_by->jabatan->name }})
-                                                    @else
-                                                        -
-                                                    @endif
-                                                </td>
-                                                <td class="text-center">
-                                                    <span
-                                                        class="btn @if ($item->status == 'Diproses') btn-warning @elseif ($item->status == 'Ditolak') btn-secondary @else btn-primary @endif">
-                                                        {{ $item->status }}
-                                                    </span>
-                                                </td>
-                                                <td class="text-center">
-                                                    @if ($item->status == 'Diterima')
-                                                        <a href="javascript:;" class="btn btn-outline-primary"
-                                                            title="Print" title="Download PDF" data-toggle="modal"
-                                                            data-target="#modalDownloadPDF"
-                                                            data-href="{{ route('cuti.pdf', $item->uuid) }}">
-                                                            <i class="fa fa-print"></i>
-                                                        </a>
-                                                    @endif
-                                                    <a href="javascript:;" class="btn btn-outline-primary"
-                                                        title="Lihat lampiran" data-toggle="modal"
-                                                        data-target="#modalDetailPengajuan"
-                                                        data-lampiran="{{ $item->lampiran != null ? asset('storage/' . $item->lampiran) : 'https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg' }}"
-                                                        data-nama="{{ $item->user->name }}"
-                                                        data-jenis_cuti="{{ $item->jenis_cuti->name }} ({{ $item->jumlah }} hari)"
-                                                        data-koordinator="{{ $item->known_by->name }}"
-                                                        data-periode="{{ $item->tanggal_awal }} s/d {{ $item->tanggal_akhir }}"
-                                                        data-tim="{{ $item->user->struktur->tim->name }} (Pulau {{ $item->user->area->pulau->name }})"
-                                                        data-catatan="{{ $item->catatan }}"
-                                                        data-status="@if ($item->status == 'Diproses') <h5>*Pengajuan Cuti masih Dalam Proses persetujuan</h5>
-                                                        @elseif($item->status == 'Ditolak')
-                                                            <h5>*Pengajuan Cuti <span style='color: red'>Ditolak</span>
-                                                        @else
-                                                            <h5>*Pengajuan Cuti Sudah <span style='color: green'>Disetujui</span> pada Tanggal {{ $item->updated_at }}</h5> @endif">
-                                                        <i class="fa fa-eye"></i>
-                                                    </a>
-                                                    @if ($item->status == 'Diproses' or $item->status == 'Ditolak')
-                                                        <a href="javascript:;" class="btn btn-outline-secondary"
-                                                            title="Hapus" data-toggle="modal" data-target="#deleteModal"
-                                                            data-id="{{ $item->id }}">
-                                                            <i class="fa fa-trash"></i>
-                                                        </a>
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                        @if ($cuti->count() == 0)
-                                            <tr>
-                                                <td class="text-center" colspan="9">
-                                                    Tidak ada data.
-                                                </td>
-                                            </tr>
-                                        @endif
-                                    </tbody>
-                                </table>
+                                {{ $dataTable->table([
+                                    'class' => 'table table-bordered table-striped',
+                                ]) }}
                             </div>
                         </div>
                     </div>
@@ -164,7 +62,7 @@
     {{-- START: FILTER CUTI --}}
     <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="modalFilter"
         aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Filter Data Cuti</h5>
@@ -173,7 +71,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="formFilter" action="{{ route('simoja.pjlp.cuti.filter') }}" method="GET">
+                    <form id="formFilter" action="{{ route('simoja.pjlp.my-cuti') }}" method="GET">
                         @csrf
                         @method('GET')
                         <div class="form-row gutters">
@@ -189,59 +87,14 @@
                         <div class="form-row gutters">
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <input type="date" class="form-control" value="{{ $start_date ?? '' }}"
+                                    <input type="date" class="form-control" value="{{ $start_date }}"
                                         name="start_date">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <input type="date" class="form-control" value="{{ $end_date ?? '' }}"
+                                    <input type="date" class="form-control" value="{{ $end_date }}"
                                         name="end_date">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-row gutters">
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label for="">Jenis Cuti</label>
-                                    <select name="jenis_cuti_id" class="form-control">
-                                        <option value="" selected disabled>- Pilih Jenis Cuti -</option>
-                                        @foreach ($jenis_cuti as $item)
-                                            <option value="{{ $item->id }}"
-                                                @if ($jenis_cuti_id == $item->id) selected @endif>{{ $item->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-row gutters">
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label for="">Status</label>
-                                    <select name="status" class="form-control">
-                                        <option value="" selected disabled>- Pilih Status -</option>
-                                        <option value="Diproses" @if ($status == 'Diproses') selected @endif>Diproses
-                                        </option>
-                                        <option value="Diterima" @if ($status == 'Diterima') selected @endif>
-                                            Diterima
-                                        </option>
-                                        <option value="Ditolak" @if ($status == 'Ditolak') selected @endif>Ditolak
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-row gutters">
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label for="">Urutan</label>
-                                    <select name="sort" class="form-control">
-                                        <option value="ASC" @if ($sort == 'ASC') selected @endif>A to Z
-                                        </option>
-                                        <option value="DESC" @if ($sort == 'DESC') selected @endif>Z to A
-                                        </option>
-                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -381,6 +234,10 @@
     </div>
     {{-- END: Konfirmasi PDF --}}
 @endsection
+
+@push('scripts')
+    {{ $dataTable->scripts() }}
+@endpush
 
 @section('javascript')
     <script>

@@ -396,36 +396,30 @@ class KinerjaController extends Controller
 
 
     // PJLP
-    public function my_index_pjlp(Request $request)
+    public function my_index_pjlp(KinerjaDataTable $dataTable, Request $request)
     {
+        $request->validate([
+            'user_id' => 'nullable|exists:users,id',
+            'pulau_id' => 'nullable|exists:pulau,id',
+            'kategori_id' => 'nullable|exists:kategori,id',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+        ]);
+
+        $periode = Carbon::now()->format('Y');
+
+        $start_date = $request->start_date ?? Carbon::createFromFormat('Y', $periode)->startOfYear()->toDateString();
+        $end_date = $request->end_date ?? Carbon::createFromFormat('Y', $periode)->endOfYear()->toDateString();
         $user_id = auth()->user()->id;
 
-        $start_date = '';
-        $end_date = '';
-        $sort = 'DESC';
-        $perPage = $request->perPage ?? 50;
-
-        $search = $request->input('search');
-
-        $kinerjaQuery = Kinerja::where('anggota_id', $user_id)
-                        ->orderBy('tanggal', $sort);
-
-        if ($search) {
-            $kinerjaQuery->where(function ($query) use ($search) {
-                $query->orWhereHas('kategori', function ($query) use ($search) {
-                    $query->where('name', 'LIKE', "%{$search}%");
-                })
-                ->orWhere('kegiatan', 'LIKE', "%{$search}%")
-                ->orWhere('deskripsi', 'LIKE', "%{$search}%")
-                ->orWhere('lokasi', 'LIKE', "%{$search}%");
-            });
-        }
-
-        $kinerja = $kinerjaQuery->paginate($perPage);
-
-        $kinerja->appends(['search' => $search]);
-
-        return view('user.simoja.pjlp.kinerja.my_index', compact('kinerja', 'start_date', 'end_date', 'sort'));
+        return $dataTable->with([
+            'user_id' => $user_id,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+        ])->render('user.simoja.pjlp.kinerja.my_index', compact([
+            'start_date',
+            'end_date',
+        ]));
     }
 
     public function create_pjlp()

@@ -20,7 +20,7 @@
     <body>
         <div>
             <div class="text-center">
-                <p class="mt-5 mb-1 text-uppercase font-weight-bold">
+                <p class="mt-5 mb-0 text-uppercase font-weight-bold">
                     <u>SURAT IZIN @if ($cuti->jenis_cuti->id == 1)
                             CUTI TAHUNAN
                         @else
@@ -28,9 +28,9 @@
                         @endif
                     </u>
                 </p>
-                <p class="mt-1">Nomor: {{ $cuti->no_surat ?? '-' }}</p>
+                <p class="mt-0">Nomor: {{ $cuti->no_surat ?? '-' }}</p>
             </div>
-            <div class="mt-5">
+            <div class="mt-5" style="font-size: 14px">
                 <ol>
                     <li class="text-justify mb-1">
                         Diberikan {{ $cuti->jenis_cuti->name ?? '-' }} @if ($cuti->jenis_cuti->id == 1)
@@ -103,7 +103,7 @@
                     </li>
                 </ol>
             </div>
-            <div class="mt-5 text-center">
+            <div class="mt-5 text-center" style="font-size: 14px">
                 <table>
                     <tbody>
                         <tr>
@@ -151,7 +151,7 @@
                 </table>
             </div>
 
-            <div class="mt-5">
+            <div class="mt-5" style="font-size: 14px">
                 <p class="mb-0 mt-5">Tembusan:</p>
                 <ol class="mt-0">
                     <li>Kepala Unit Kerja Teknis 2 Kabupaten Administrasi Kepulauan Seribu</li>

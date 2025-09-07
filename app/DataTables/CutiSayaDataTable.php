@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\Cuti;
+use App\Models\CutiSaya;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
@@ -13,14 +14,10 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class CutiDataTable extends DataTable
+class CutiSayaDataTable extends DataTable
 {
     protected $start_date;
     protected $end_date;
-    protected $user_id;
-    protected $pulau_id;
-    protected $jenis_cuti_id;
-    protected $status;
 
     public function with(array|string $key, mixed $value = null): static
     {
@@ -48,18 +45,45 @@ class CutiDataTable extends DataTable
                                 </a>";
 
                 $lampiranURL = $item->lampiran != null ? asset('storage/' . $item->lampiran) : 'https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg';
-                $lampiranButton = "<a href='javascript:;' class='btn btn-outline-primary'
-                                    title='Lihat lampiran' data-toggle='modal'
-                                    data-target='#modalLampiran'
-                                    data-lampiran='{$lampiranURL}'>
-                                    <i class='fa fa-eye'></i>
+
+                if ($item->status == 'Diproses') {
+                    $statusCuti = "<h5>*Pengajuan Cuti masih Dalam Proses persetujuan</h5>";
+                } elseif ($item->status == 'Ditolak') {
+                    $statusCuti = "<h5>*Pengajuan Cuti <span style='color: red'>Ditolak</span></h5>";
+                } else {
+                    $statusCuti = "<h5>*Pengajuan Cuti Sudah <span style='color: green'>Disetujui</span> pada Tanggal {$item->updated_at}</h5>";
+                }
+
+                // Encode biar aman ditaruh di atribut HTML
+                $statusAttr = htmlspecialchars($statusCuti, ENT_QUOTES, 'UTF-8');
+
+                $lampiranButton = "
+                    <a href='javascript:;' class='btn btn-outline-primary'
+                        title='Lihat lampiran' data-toggle='modal'
+                        data-target='#modalDetailPengajuan'
+                        data-lampiran='{$lampiranURL}'
+                        data-nama='{$item->user->name}'
+                        data-jenis_cuti='{$item->jenis_cuti->name} ({$item->jumlah} hari)'
+                        data-koordinator='{$item->known_by->name}'
+                        data-periode='{$item->tanggal_awal} s/d {$item->tanggal_akhir}'
+                        data-tim='{$item->user->struktur->tim->name} (Pulau {$item->user->area->pulau->name})'
+                        data-catatan='{$item->catatan}'
+                        data-status=\"{$statusAttr}\">
+                        <i class='fa fa-eye'></i>
+                    </a>
+                ";
+
+                $deleteButton = "<a href='javascript:;' class='btn btn-outline-secondary'
+                                    title='Hapus' data-toggle='modal' data-target='#deleteModal'
+                                    data-id='{{ $item->id }}'>
+                                    <i class='fa fa-trash'></i>
                                 </a>";
 
                 if ($item->status == 'Diterima') {
                     return $printButton . ' ' . $lampiranButton;
                 }
 
-                return $lampiranButton;
+                return $lampiranButton . ' ' . $deleteButton;
             })
             ->addColumn('jumlah_hari', function ($item) {
                 return $item->jumlah . ' hari';
@@ -91,30 +115,9 @@ class CutiDataTable extends DataTable
             'known_by',
         ])->newQuery();
 
-        $seksi_id = auth()->user()->struktur->seksi->id;
-
-        $query->whereRelation('user.struktur.seksi', 'id', '=', $seksi_id);
-
         // Filter
-        if($this->user_id != null)
-        {
-            $query->where('user_id', $this->user_id);
-        }
-
-        if($this->pulau_id != null)
-        {
-            $query->whereRelation('user.area.pulau', 'id', '=', $this->pulau_id);
-        }
-
-        if($this->jenis_cuti_id != null)
-        {
-            $query->where('jenis_cuti_id', $this->jenis_cuti_id);
-        }
-
-        if($this->status != null)
-        {
-            $query->where('status', $this->status);
-        }
+        $user_id = auth()->user()->id;
+        $query->where('user_id', $user_id);
 
         if ($this->start_date != null && $this->end_date != null) {
             $clean_start_date = explode('?', $this->start_date)[0];
@@ -132,7 +135,7 @@ class CutiDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('cuti-table')
+                    ->setTableId('cutisaya-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->pageLength(50)
@@ -176,6 +179,6 @@ class CutiDataTable extends DataTable
 
     protected function filename(): string
     {
-        return 'Cuti_' . date('YmdHis');
+        return 'CutiSaya_' . date('YmdHis');
     }
 }

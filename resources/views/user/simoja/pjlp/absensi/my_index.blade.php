@@ -40,68 +40,11 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <form class="form-inline mb-2 d-flex justify-content-end">
-                                <input class="form-control mr-sm-2" type="search" name="search" placeholder="Cari sesuatu di sini..."
-                                    aria-label="Search" id="search-bar">
-                                <button class="btn btn-dark my-2 my-sm-0" type="submit">Pencarian</button>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="paginate-style">
-                        <div class="d-flex justify-content-center mb-2">
-                            <nav aria-label="Pagination">
-                                <ul class="pagination">
-                                    {{ $absensi->links('vendor.pagination.bootstrap-4') }}
-                                </ul>
-                            </nav>
-                        </div>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-bordered table-striped" id="dataTable">
-                            <thead>
-                                <tr>
-                                    <th class="text-center">No.</th>
-                                    <th class="text-center">Tanggal</th>
-                                    <th class="text-center">Nama</th>
-                                    <th class="text-center">Pulau</th>
-                                    <th class="text-center">Jabatan</th>
-                                    <th class="text-center">Jam Datang</th>
-                                    <th class="text-center">Jam Pulang</th>
-                                    <th class="text-center">Status</th>
-                                    <th class="text-center">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($absensi as $item)
-                                    <tr>
-                                        <td class="text-center">
-                                            {{ ($absensi->currentPage() - 1) * $absensi->perPage() + $loop->index + 1 }}
-                                        </td>
-                                        <td class="text-center">{{ date('d-m-Y', strtotime($item->tanggal)) }}</td>
-                                        <td class="text-center font-weight-bold">{{ $item->user->name }}</td>
-                                        <td class="text-center">Pulau {{ $item->user->area->pulau->name }}</td>
-                                        <td class="text-center">{{ $item->user->jabatan->name }}</td>
-                                        <td class="text-center">{{ $item->jam_masuk ?? '-' }}</td>
-                                        <td class="text-center">{{ $item->jam_pulang ?? '-' }}</td>
-                                        <td class="text-center">{{ $item->status }}</td>
-                                        <td class="text-center">
-                                            <a href="#" data-toggle="modal" data-target="#modalDokumentasi"
-                                                data-photo_masuk='{{ asset('storage/' . $item->photo_masuk) }}'
-                                                data-photo_pulang='{{ asset('storage/' . $item->photo_pulang) }}'><button
-                                                    class="btn btn-outline-primary"><i class="fa fa-eye"></i></button></a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                @if ($absensi->count() == 0)
-                                    <tr>
-                                        <td class="text-center" colspan="10">
-                                            Tidak ada data.
-                                        </td>
-                                    </tr>
-                                @endif
-                            </tbody>
-                        </table>
+                        {{ $dataTable->table([
+                            'class' => 'table table-bordered table-striped',
+                        ]) }}
                     </div>
                 </div>
             </div>
@@ -110,7 +53,7 @@
 
     {{-- START: FILTER ABSENSI --}}
     <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="modalFilter" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Filter Data Absensi</h5>
@@ -119,7 +62,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="formFilter" action="{{ route('simoja.pjlp.absensi.filter') }}" method="GET">
+                    <form id="formFilter" action="{{ route('simoja.pjlp.my-absensi') }}" method="GET">
                         @csrf
                         @method('GET')
                         <div class="form-row gutters">
@@ -134,27 +77,14 @@
                         <div class="form-row gutters">
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <input type="date" class="form-control" value="{{ $start_date ?? '' }}"
+                                    <input type="date" class="form-control" value="{{ $start_date }}"
                                         name="start_date">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <input type="date" class="form-control" value="{{ $end_date ?? '' }}"
+                                    <input type="date" class="form-control" value="{{ $end_date }}"
                                         name="end_date">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-row gutters">
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label for="">Urutan</label>
-                                    <select name="sort" class="form-control">
-                                        <option value="ASC" @if ($sort == 'ASC') selected @endif>A to Z
-                                        </option>
-                                        <option value="DESC" @if ($sort == 'DESC') selected @endif>Z to A
-                                        </option>
-                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -205,6 +135,9 @@
     {{-- END: MODAL DOKUMENTASI --}}
 @endsection
 
+@push('scripts')
+    {{ $dataTable->scripts() }}
+@endpush
 
 @section('javascript')
     <script type="text/javascript">
