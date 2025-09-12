@@ -24,11 +24,14 @@
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <form class="form-inline mb-2">
                                 <input class="form-control mr-sm-2" type="search" placeholder="Cari sesuatu di sini..."
-                                    aria-label="Search" id="search-bar-2">
+                                    aria-label="Search" id="search-bar">
                                 <button class="btn btn-dark my-2 my-sm-0" type="submit">Pencarian</button>
                             </form>
                         </div>
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3 text-left">
+                            <a href="{{ route('dashboard.index') }}" class="btn btn-outline-primary"><i
+                                    class="fa fa-arrow-left"></i>Kembali</a>
+                            </a <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3 text-left">
                             @if ($approval_cuti->count() > 0)
                                 <a href="javascript:;" class="btn btn-primary">Setujui Semua</a>
                             @endif

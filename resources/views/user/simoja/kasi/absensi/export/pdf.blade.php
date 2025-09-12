@@ -20,10 +20,10 @@
 <body>
     <div>
         <div class="text-center">
-            <p class="mt-3 mb-1 text-uppercase font-weight-bold">
-                <u>LAPORAN ABSENSI
+            <h5 class="mt-3 mb-1 text-uppercase font-weight-bold">
+                <u>LAPORAN PRESENSI
                 </u>
-            </p>
+            </h5>
         </div>
         <div class="mt-2">
             <table class="ml-4 p-0" style="font-size: 14px">
@@ -64,43 +64,208 @@
                 </tr>
             </table>
         </div>
-        <div class="mt-3">
-            <table class="table table-bordered text-center p-1" style="font-size: 12px">
-                <thead>
-                    <tr style="background-color: grey">
-                        <th>No.</th>
-                        <th>Hari</th>
-                        <th>Tanggal</th>
-                        <th>Jam Datang</th>
-                        <th>Jam Pulang</th>
-                        <th>Photo Datang</th>
-                        <th>Photo Pulang</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($datesInRange as $item)
-                        <tr>
-                            <td class="p-1">{{ $loop->iteration }}</td>
-                            <td class="p-1">{{ $item['hari'] }}</td>
-                            <td class="p-1">{{ $item['tanggal']->isoFormat('D MMMM Y') }}</td>
-                            <td class="p-1">{{ $item['jam_masuk'] }}</td>
-                            <td class="p-1">{{ $item['jam_pulang'] }}</td>
-                            <td class="p-1">
-                                <img class="img-thumbnail" src="{{ $item['url_photo_masuk'] }}" alt="photo_datang"
-                                    style="height: 70px">
-                            </td>
-                            <td class="p-1">
-                                <img class="img-thumbnail" src="{{ $item['url_photo_pulang'] }}" alt="photo_pulang"
-                                    style="height: 70px">
-                            </td>
-                            <td class="{{ $item['bg'] }} p-1">{{ $item['status'] }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
-</body>
 
-</html>
+        <p class="text-center mt-3 text-uppercase font-weight-bold"><u>SUMMARY PRESENSI</u></p>
+
+        <p class="ml-4"><u>Total Hari Kerja : 30 Hari</u></p>
+        <table class="table table-bordered" style="width:90%; margin:auto; font-size:13px;">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Jenis Presensi</th>
+                    <th>Jumlah</th>
+                    <th>Keterangan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Presensi Masuk & Pulang</td>
+                    <td class="text-center">30</td>
+                    <td class="text-center"></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Presensi Tidak Lengkap</td>
+                    <td class="text-center">2</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Presensi Telat</td>
+                    <td class="text-center">1</td>
+                    <td class="text-center"></td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Tidak Hadir</td>
+                    <td class="text-center">1</td>
+                    <td class="text-center">Cuti: 1 <br> Sakit:2</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div style="text-align:center; margin-top:50px;">
+
+            @php
+                $kehadiran = 90;
+                $ketertiban = 70;
+                $efisiensi = 80;
+
+                function getColor($value)
+                {
+                    if ($value >= 90) {
+                        return '#90ee90';
+                    } elseif ($value >= 70) {
+                        return '#fffacd';
+                    } else {
+                        return '#f08080';
+                    }
+                }
+            @endphp
+
+            <div
+                style="display:inline-block; background:{{ getColor($kehadiran) }}; color:#000; padding:18px; width:20%; text-align:center; border-radius:12px; box-shadow:0 4px 8px rgba(0,0,0,0.1); margin-right:2%;">
+                <div style="font-size:50px; font-weight:bold;">{{ $kehadiran }}%</div>
+                <div style="margin-top:5px; font-size:14px;">
+                    Tingkat Kehadiran <br>
+                    <p style="font-size:10px">27/30 Hari</p>
+                </div>
+            </div>
+
+            <div
+                style="display:inline-block; background:{{ getColor($ketertiban) }}; color:#000; padding:18px; width:20%; text-align:center; border-radius:12px; box-shadow:0 4px 8px rgba(0,0,0,0.1); margin-right:2%;">
+                <div style="font-size:50px; font-weight:bold;">{{ $ketertiban }}%</div>
+                <div style="margin-top:5px; font-size:14px;">
+                    Tingkat Ketertiban <br>
+                    <p style="font-size:10px">10/30 Absen Tidak Komplit / Telat</p>
+                </div>
+            </div>
+
+            <div
+                style="display:inline-block; background:{{ getColor($efisiensi) }}; color:#000; padding:18px; width:20%; text-align:center; border-radius:12px; box-shadow:0 4px 8px rgba(0,0,0,0.1);">
+                <div style="font-size:50px; font-weight:bold;">{{ $efisiensi }}%</div>
+                <div style="margin-top:5px; font-size:14px;">
+                    Efisiensi Kerja <br>
+                    <p style="font-size:10px">6000/20000 jam Efektif Bekerja</p>
+                </div>
+            </div>
+
+        </div>
+
+        <div style="font-size:12px;" class="ml-4">
+            <p><u>Catatan: </u></p>
+            <p>% Tingkat Kehadiran: Presentase Kehadiran & Ketidakhadiran dari Data Absensi</p>
+            <p>% Tingkat Ketertiban: Presentase Ketertiban & Kesesuaian Absen Masuk & Pulang</p>
+            <p>% Efisiensi Kerja: Presentase Jam Kerja Efektif terhadap Jam Absensi</p>
+        </div>
+
+    </div>
+
+    <div class="page-break"></div>
+
+    <div class="text-center">
+        <p class="mt-3 mb-1 text-uppercase font-weight-bold">
+            <u>DETAIL PRESENSI
+            </u>
+        </p>
+    </div>
+
+    <div class="mt-3">
+        <table class="table table-bordered text-center p-1" style="font-size: 12px">
+            <thead>
+                <tr style="background-color: grey">
+                    <th>No.</th>
+                    <th>Hari</th>
+                    <th>Tanggal</th>
+                    <th>Jam Datang</th>
+                    <th>Jam Pulang</th>
+                    <th>Photo Datang</th>
+                    <th>Photo Pulang</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($datesInRange as $item)
+                    <tr>
+                        <td class="p-1">{{ $loop->iteration }}</td>
+                        <td class="p-1">{{ $item['hari'] }}</td>
+                        <td class="p-1">{{ $item['tanggal']->isoFormat('D MMMM Y') }}</td>
+                        <td class="p-1">{{ $item['jam_masuk'] }}</td>
+                        <td class="p-1">{{ $item['jam_pulang'] }}</td>
+                        <td class="p-1">
+                            <img class="img-thumbnail" src="{{ $item['url_photo_masuk'] }}" alt="photo_datang"
+                                style="height: 70px">
+                        </td>
+                        <td class="p-1">
+                            <img class="img-thumbnail" src="{{ $item['url_photo_pulang'] }}" alt="photo_pulang"
+                                style="height: 70px">
+                        </td>
+                        <td class="{{ $item['bg'] }} p-1">{{ $item['status'] }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-5 text-center" style="margin-top: 30px">
+        <table class="table table-borderless">
+            <tr>
+                <td class="text-center p-0">Koordinator</td>
+                <td style="width: 4cm"></td>
+                <td class="text-center p-0">Kepala Seksi</td>
+            </tr>
+            <tr>
+                <td class="text-center p-0">Pulau {{ $user->area->pulau->name }}</td>
+                <td></td>
+                <td class="text-center p-0">{{ $user->struktur->seksi->name }}</td>
+            </tr>
+            <tr>
+                <td style="height: 27mm;"></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="text-center text-uppercase font-weight-bold p-0" style="border-bottom:1pt solid black;">
+                     {{ $user->koordinator->name ?? '-'  }}
+                </td>
+                <td></td>
+                <td class="text-center text-uppercase font-weight-bold p-0" style="border-bottom:1pt solid black;">
+                    -
+                </td>
+            </tr>
+            <tr>
+                <td class="text-center p-0">
+                    NIP. {{ $user->koordinator->nip ?? '-'  }}
+                </td>
+                <td></td>
+                <td class="text-center p-0">
+                    -
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="footer">
+        <i> SIMOJA - Dibuat {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</i>
+    </div>
+
+    <style>
+        @page {
+            margin: 20mm 5mm 20mm 5mm;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            text-align: right;
+            font-size: 10px;
+            color: #555;
+        }
+
+        .content {
+            margin-bottom: 25mm;
+        }
+    </style>
+</body>

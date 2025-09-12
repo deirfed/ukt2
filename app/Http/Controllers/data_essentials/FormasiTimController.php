@@ -25,13 +25,13 @@ class FormasiTimController extends Controller
         $this_year = Carbon::now()->format('Y');
         $struktur = Struktur::all();
         $area = Area::all();
-        $koordinator = User::where('employee_type_id', 2)->get();
+        $koordinator = User::where('jabatan_id', 4)->get();
         $anggota = User::where('employee_type_id', 3)
-                        ->whereNotIn('id', function($query) use ($this_year) {
-                            $query->select('anggota_id')
-                                ->from('formasi_tim')
-                                ->whereYear('periode', $this_year);
-                        })->get();
+            ->whereNotIn('id', function ($query) use ($this_year) {
+                $query->select('anggota_id')
+                    ->from('formasi_tim')
+                    ->whereYear('periode', $this_year);
+            })->get();
 
         return view('admin.masterdata.data_relasi.relasi_formasi_tim.create', compact([
             'this_year',
@@ -64,8 +64,7 @@ class FormasiTimController extends Controller
         $this_year = Carbon::now()->format('Y');
         $formasi_tim = FormasiTim::where('uuid', $uuid)->first();
 
-        if(!$formasi_tim)
-        {
+        if (!$formasi_tim) {
             return back()->withNotifyerror('Something went wrong!');
         }
 

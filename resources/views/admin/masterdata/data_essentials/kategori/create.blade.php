@@ -2,17 +2,16 @@
 
 @section('title-head')
     <title>
-        Masterdata | Tambah Data Kategori
+        Superadmin | Ubah Data Kegiatan
     </title>
 @endsection
 
 @section('path')
     <div class="page-header">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item">Masterdata</li>
-            <li class="breadcrumb-item">Data Essentials</li>
-            <li class="breadcrumb-item">Kategori</li>
-            <li class="breadcrumb-item active">Tambah Data Kategori</li>
+            <li class="breadcrumb-item">Superadmin</li>
+            <li class="breadcrumb-item">Kegiatan</li>
+            <li class="breadcrumb-item active">Tambah Data Kegiatan</li>
         </ol>
     </div>
 @endsection

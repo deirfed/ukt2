@@ -54,9 +54,9 @@ class KinerjaController extends Controller
     {
         $user_id = auth()->user()->id;
         $kinerja = Kinerja::where('anggota_id', $user_id)
-                        ->orWhere('koordinator_id', $user_id)
-                        ->orderBy('tanggal', 'DESC')
-                        ->get();
+            ->orWhere('koordinator_id', $user_id)
+            ->orderBy('tanggal', 'DESC')
+            ->get();
         return view('pages.kinerja.my_index', compact([
             'kinerja',
         ]));
@@ -67,9 +67,9 @@ class KinerjaController extends Controller
         $user_id = auth()->user()->id;
         $periode = Carbon::now()->format('Y');
         $formasi_tim = FormasiTim::orWhere('anggota_id', $user_id)
-                        ->orWhere('koordinator_id', $user_id)
-                        ->where('periode', $periode)
-                        ->firstOrFail();
+            ->orWhere('koordinator_id', $user_id)
+            ->where('periode', $periode)
+            ->firstOrFail();
         $kategori = Kategori::where('seksi_id', $formasi_tim->struktur->seksi->id)->get();
         return view('pages.kinerja.create', compact([
             'formasi_tim',
@@ -119,14 +119,14 @@ class KinerjaController extends Controller
             foreach ($request->file('photo') as $file) {
                 $image = Image::make($file);
 
-                $imageName = time().'-'.$file->getClientOriginalName();
-                $destinationPath = public_path('storage/'. $detailPath);
+                $imageName = time() . '-' . $file->getClientOriginalName();
+                $destinationPath = public_path('storage/' . $detailPath);
 
                 $image->resize(null, 500, function ($constraint) {
                     $constraint->aspectRatio();
                 });
 
-                $image->save($destinationPath.$imageName);
+                $image->save($destinationPath . $imageName);
                 $lampiranPaths[] = $detailPath . $imageName;
             }
 
@@ -239,10 +239,8 @@ class KinerjaController extends Controller
 
         $id = $request->id;
         $kinerja = Kinerja::findOrFail($id);
-        if($kinerja->photo != null)
-        {
-            foreach(json_decode($kinerja->photo) as $photo)
-            {
+        if ($kinerja->photo != null) {
+            foreach (json_decode($kinerja->photo) as $photo) {
                 Storage::delete($photo);
             }
         }

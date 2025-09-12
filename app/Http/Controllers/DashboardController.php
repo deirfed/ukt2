@@ -2,54 +2,117 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\data_essentials\MasterGudangController;
+use App\Models\Tim;
 use App\Models\Area;
-use App\Models\EmployeeType;
-use App\Models\FormasiTim;
+use App\Models\Cuti;
+use App\Models\Role;
+use App\Models\User;
+use App\Models\Pulau;
+use App\Models\Seksi;
 use App\Models\Gudang;
 use App\Models\Jabatan;
-use App\Models\JenisAbsensi;
-use App\Models\JenisCuti;
-use App\Models\Kategori;
-use App\Models\Kecamatan;
-use App\Models\Kelurahan;
-use App\Models\KonfigurasiAbsensi;
-use App\Models\KonfigurasiCuti;
-use App\Models\KonfigurasiGudang;
+use App\Models\Kinerja;
 use App\Models\Kontrak;
-use App\Models\KontrakBarang;
-use Illuminate\Http\Request;
+use App\Models\Kategori;
 use App\Models\Provinsi;
-use App\Models\UnitKerja;
-use App\Models\Walikota;
-use App\Models\Seksi;
-use App\Models\Pulau;
-use App\Models\Role;
 use App\Models\RoleUser;
 use App\Models\Struktur;
-use App\Models\Tim;
-use App\Models\User;
+use App\Models\Walikota;
+use App\Models\JenisCuti;
+use App\Models\Kecamatan;
+use App\Models\Kelurahan;
+use App\Models\UnitKerja;
+use App\Models\FormasiTim;
+use App\Models\EmployeeType;
+use App\Models\JenisAbsensi;
+use Illuminate\Support\Carbon;
+use App\Models\KonfigurasiCuti;
+use App\Models\KonfigurasiAbsensi;
+use App\Http\Controllers\Controller;
+use GuzzleHttp\Psr7\Request;
+use Svg\Tag\Rect;
 
 class DashboardController extends Controller
 {
     public function index()
     {
+        // Navigasi
         $jabatan_id = auth()->user()->jabatan->id;
 
-        if($jabatan_id == 1) {
+        // Dashboard
+        $today = Carbon::today();
+        $tahun = date('Y');
+        $totalUser = User::where('employee_type_id', 3)->count();
+        $jumlahKinerja = Kinerja::whereYear('tanggal', now()->year)->count();
+        $jumlahKinerja = number_format($jumlahKinerja, 0, ',', '.');
+
+        $cuti = Cuti::whereHas('user', function ($q) {
+            $q->where('employee_type_id', 3);
+        })
+            ->whereDate('tanggal_awal', '<=', $today)
+            ->whereDate('tanggal_akhir', '>=', $today)
+            ->count();
+
+        $tersedia = $totalUser - $cuti;
+
+        $persentase = $totalUser > 0 ? ($tersedia / $totalUser) * 100 : 0;
+
+        $cutiHariIni = Cuti::where('tanggal_awal', '<=', $today)
+            ->where('tanggal_akhir', '>=', $today)
+            ->count();
+
+        // Abesensi
+        $user_id = null;
+
+        $user = User::where('employee_type_id', 3)
+            ->orderBy('name', 'ASC')
+            ->get();
+
+        $periode = now()->format('Y-m');
+        $kategori = Kategori::get();
+        $kategori_id = $request->kategori_id ?? null;
+
+        $start_date = Carbon::createFromFormat('Y-m', $periode)->startOfMonth()->toDateString();
+        $end_date   = Carbon::createFromFormat('Y-m', $periode)->endOfMonth()->toDateString();
+
+        $start_date = Carbon::parse($start_date);
+        $end_date = Carbon::parse($end_date) ?? $start_date;
+
+        if ($jabatan_id == 1) {
             return redirect()->route('simoja.kasi.index');
-        } elseif($jabatan_id == 2) {
+        } elseif ($jabatan_id == 2) {
             return redirect()->route('simoja.kasi.index');
-        } elseif($jabatan_id == 3) {
+        } elseif ($jabatan_id == 3) {
             return redirect()->route('simoja.koordinator.index');
-        } elseif($jabatan_id == 4) {
+        } elseif ($jabatan_id == 4) {
             return redirect()->route('simoja.koordinator.index');
-        } elseif($jabatan_id == 5) {
+        } elseif ($jabatan_id == 5) {
             return redirect()->route('simoja.pjlp.index');
+        } else {
+            return view(
+                'superadmin.dashboard.index',
+                compact(
+                    'totalUser',
+                    'jumlahKinerja',
+                    'tahun',
+                    'tersedia',
+                    'persentase',
+                    'cutiHariIni',
+                    'user',
+                    'user_id',
+                    'periode',
+                    'kategori',
+                    'kategori_id',
+                    'start_date',
+                    'end_date',
+                )
+            );
         }
-        else {
-            return view('dashboard.index');
-        }
+    }
+
+    public function godmode()
+    {
+        return view('dashboard.index');
     }
 
     public function data_essentials()
@@ -152,5 +215,15 @@ class DashboardController extends Controller
     public function landingpage()
     {
         return view('landingpage.index');
+    }
+
+    // Superadmin
+    public function getUsers()
+    {
+        $users = User::where('employee_type_id', 3)
+            ->orderBy('name', 'asc')
+            ->get(['id', 'name']);
+
+        return response()->json($users);
     }
 }

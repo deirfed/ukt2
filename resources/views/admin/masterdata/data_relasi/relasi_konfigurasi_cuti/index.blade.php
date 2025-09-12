@@ -9,10 +9,9 @@
 @section('path')
     <div class="page-header">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item">Masterdata</li>
-            <li class="breadcrumb-item">Data Relasi</li>
-            <li class="breadcrumb-item">Konfigurasi Cuti</li>
-            <li class="breadcrumb-item active">Daftar Relasi Konfigurasi Cuti {{ $this_year }}</li>
+            <li class="breadcrumb-item">Superadmin</li>
+            <li class="breadcrumb-item">Cuti</li>
+            <li class="breadcrumb-item active">Konfigurasi Cuti</li>
         </ol>
     </div>
 @endsection
@@ -33,7 +32,7 @@
                             </form>
                         </div>
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3 text-left">
-                            <a href="{{ route('data_relasi.index') }}" class="btn btn-outline-primary"><i
+                            <a href="{{ route('dashboard.index') }}" class="btn btn-outline-primary"><i
                                     class="fa fa-arrow-left"></i>Kembali</a>
                             <a href="{{ route('konfigurasi_cuti.create') }}" class="btn btn-primary">Tambah
                                 Data</a>

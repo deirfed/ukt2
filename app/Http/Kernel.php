@@ -68,5 +68,6 @@ class Kernel extends HttpKernel
         'KepalaSeksi' => \App\Http\Middleware\KepalaSeksi::class,
         'Koordinator' => \App\Http\Middleware\Koordinator::class,
         'PJLP' => \App\Http\Middleware\PJLP::class,
+        'Superadmin' => \App\Http\Middleware\Superadmin::class,
     ];
 }

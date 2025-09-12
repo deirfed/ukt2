@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\pages;
 
-use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Models\Absensi;
 use App\Models\JenisAbsensi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 
 class AbsensiController extends Controller
@@ -48,21 +50,40 @@ class AbsensiController extends Controller
         $file = $folderPath . $fileName;
         Storage::put($file, $image_base64);
 
-        dd('Image uploaded successfully: '.$fileName);
+        dd('Image uploaded successfully: ' . $fileName);
     }
 
-    public function edit(string $uuid)
+    public function admin_absensi()
     {
-        //
+        $tahun = $tahun ?? date('Y');
+
+        return view('pages.absensi.admin', compact('tahun'));
     }
 
-    public function update(Request $request, string $uuid)
+    public function getDataAbsensi(Request $request)
     {
-        //
+        $tanggal = $request->input('tanggal', Carbon::today()->toDateString());
+
+        $sudahAbsen = Absensi::whereDate('tanggal', $tanggal)
+            ->whereNotNull('jam_masuk')
+            ->whereNotNull('jam_pulang')
+            ->count();
+
+        $totalUser = User::where('employee_type_id', 3)->count();
+
+        $belumAbsen = $totalUser - $sudahAbsen;
+
+        return response()->json([
+            'tanggal'    => $tanggal,
+            'sudahAbsen' => $sudahAbsen,
+            'belumAbsen' => $belumAbsen,
+            'totalUser'  => $totalUser
+        ]);
     }
 
-    public function destroy(Request $request)
+    public function getUsers()
     {
-        //
+        $users = User::where('employee_type_id', 3)->get(['id', 'name']);
+        return response()->json($users);
     }
 }

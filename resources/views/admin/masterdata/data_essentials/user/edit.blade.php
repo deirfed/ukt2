@@ -2,17 +2,16 @@
 
 @section('title-head')
     <title>
-        Masterdata | Ubah Data User
+        Superadmin | Ubah Data Users
     </title>
 @endsection
 
 @section('path')
     <div class="page-header">
         <ol class="breadcrumb">
+            <li class="breadcrumb-item">Superadmin</li>
             <li class="breadcrumb-item">Masterdata</li>
-            <li class="breadcrumb-item">Data Essentials</li>
-            <li class="breadcrumb-item">Users</li>
-            <li class="breadcrumb-item active">Ubah User</li>
+            <li class="breadcrumb-item active">Ubah Data User</li>
         </ol>
     </div>
 @endsection

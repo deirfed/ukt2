@@ -29,8 +29,8 @@
                 <h5>{{ auth()->user()->nip }}</h5>
                 <br>
                 <h5>Seksi {{ auth()->user()->struktur->seksi->name }}</h5>
-                {{-- <h5>{{ auth()->user()->struktur->tim->name }}</h5> --}}
                 <p>Pulau {{ auth()->user()->area->pulau->name }}</p>
+                <h5>Sisa Cuti Anda: {{ $sisa_cuti }} </h5>
             </div>
         </div>
         <div class="col-xl-8 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -90,33 +90,34 @@
         </div>
     </div>
     <div class="row gutters">
-        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-12">
-            <div class="info-stats4">
-                <div class="info-icon">
-                    <i class="fa fa-calendar"></i>
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="m-0">📄 Daftar Surat Peringatan (SP)</h5>
                 </div>
-                <div class="sale-num">
-                    <h4>{{ $sisa_cuti }}</h4>
-                    <p>Sisa Cuti Tahun Ini</p>
-                </div>
-            </div>
-        </div>
-        {{-- <div class="col-xl-6 col-lg-3 col-md-6 col-sm-6 col-12">
-            <div class="info-stats4">
-                <div class="info-icon">
-                    <i class="icon-activity"></i>
-                </div>
-                <div class="sale-num">
-                    <h4>TTD</h4>
-                    <div class="user-thumb">
-                        <a href="javascript:;" data-toggle="modal" data-target="#formPhotoTTDModal">
-                    <p>Lihat Tanda Tangan Saya</p>
-                        </a>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover text-center">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+                                    <th>Jenis SP</th>
+                                    <th>Keterangan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="4" class="text-muted">Belum ada Surat Peringatan</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-        </div> --}}
+        </div>
     </div>
+
 
     {{-- BEGIN: Update Photo Profil --}}
     <div id="formPhotoProfilModal" class="modal" tabindex="-1" aria-hidden="true">

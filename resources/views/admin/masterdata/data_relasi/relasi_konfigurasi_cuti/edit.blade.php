@@ -9,10 +9,9 @@
 @section('path')
     <div class="page-header">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item">Masterdata</li>
-            <li class="breadcrumb-item">Data Relasi</li>
-            <li class="breadcrumb-item">Konfigurasi Cuti</li>
-            <li class="breadcrumb-item active">Ubah Data Relasi Konfigurasi Cuti</li>
+            <li class="breadcrumb-item">Superadmin</li>
+            <li class="breadcrumb-item">Cuti</li>
+            <li class="breadcrumb-item active">Edit Cuti</li>
         </ol>
     </div>
 @endsection

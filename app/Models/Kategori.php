@@ -28,4 +28,19 @@ class Kategori extends Model
     {
         return $this->belongsTo(Seksi::class);
     }
+
+    public function kinerja()
+    {
+        return $this->hasMany(Kinerja::class);
+    }
+
+
+    public function cekRelasi()
+    {
+        if ($this->kinerja()->exists()) {
+            return false;
+        }
+
+        return true;
+    }
 }

@@ -34,6 +34,13 @@ use App\Http\Controllers\pages\KinerjaController;
 use App\Http\Controllers\pages\CutiController;
 use App\Http\Controllers\pages\PengirimanBarangController;
 use App\Http\Controllers\pages\TransaksiBarangPulauController;
+use App\Http\Controllers\superadmin\AbsensiController as SuperadminAbsensiController;
+use App\Http\Controllers\superadmin\CutiController as SuperadminCutiController;
+use App\Http\Controllers\superadmin\FormasiTimController as SuperadminFormasiTimController;
+use App\Http\Controllers\superadmin\KategoriController as SuperadminKategoriController;
+use App\Http\Controllers\superadmin\KinerjaController as SuperadminKinerjaController;
+use App\Http\Controllers\superadmin\KonfigurasiCutiController as SuperadminKonfigurasiCutiController;
+use App\Http\Controllers\superadmin\UserController as SuperadminUserController;
 use App\Http\Controllers\user\aset\DashboardController as AsetDashboardController;
 use App\Http\Controllers\user\aset\GudangBarangController;
 use App\Http\Controllers\user\aset\KontrakController as AsetKontrakController;
@@ -63,6 +70,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::controller(DashboardController::class)->group(function () {
         // Mainmenu
         Route::get('/dashboard', 'index')->name('dashboard.index');
+        // Mainmenu
+        Route::get('/godmode', 'godmode')->name('dashboard.godmode');
         // Data Essentials
         Route::get('/data_essentials', 'data_essentials')->name('data_essentials.index');
         // Data Assets
@@ -73,6 +82,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/landingpage', 'landingpage')->name('landingpage');
 
 
+        // Superadmin
+        Route::get('/getUsers', 'getUsers')->name('getUsers');
     });
     // ---------------------MASTERDATA ESSENTIALS----------------------------
 
@@ -308,11 +319,12 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/kinerja/{uuid}/edit', 'edit')->name('kinerja.edit');
         Route::put('/kinerja/{uuid}/update', 'update')->name('kinerja.update');
         Route::delete('/kinerja', 'destroy')->name('kinerja.destroy');
-
         Route::get('/kinerja/filter', 'filter')->name('kinerja.filter');
         Route::get('/kinerja/export-excel', 'excel')->name('kinerja.excel');
-
         Route::get('/formasi', 'formasi')->name('formasi.index');
+
+        // Superadmin
+        Route::get('/admin-kinerja', 'admin_kinerja')->name('admin.kinerja');
     });
 
     // CUTI
@@ -344,6 +356,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/absensi/{uuid}/edit', 'edit')->name('absensi.edit');
         Route::put('/absensi/{uuid}/update', 'update')->name('absensi.update');
         Route::delete('/absensi', 'destroy')->name('absensi.destroy');
+
+        // Superadmin
+        Route::get('/admin-absensi', 'admin_absensi')->name('admin.absensi');
+        Route::get('/getDataAbsensi', 'getDataAbsensi')->name('getDataAbsensi');
     });
 
     // Barang
@@ -422,7 +438,6 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/simoja-pjlp-absensi', 'store_pjlp')->name('simoja.pjlp.absensi.store');
             Route::get('/simoja-pjlp-absensi/filter', 'filter_pjlp')->name('simoja.pjlp.absensi.filter');
         });
-
     });
 
     // KINERJA
@@ -452,7 +467,6 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/simoja-pjlp-kinerja', 'store_pjlp')->name('simoja.kinerja.pjlp.store');
             Route::get('/simoja-pjlp-kinerja/filter', 'filter_pjlp')->name('simoja.kinerja.pjlp.filter');
         });
-
     });
 
     // CUTI
@@ -486,7 +500,6 @@ Route::group(['middleware' => 'auth'], function () {
 
             Route::get('/simoja-pjlp-cuti/filter', 'filter_pjlp')->name('simoja.pjlp.cuti.filter');
         });
-
     });
     // END SIMOJA ----------------------------------------------------------------------
 
@@ -545,5 +558,67 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/aset-penerimaan/terima', 'terima_barang')->name('aset.penerimaan.terima');
         Route::get('/aset-penerimaan/generate-BAST', 'generateBAST')->name('aset.penerimaan.BAST');
         Route::get('/aset-penerimaan/{no_resi}/detail', 'show_penerimaan')->name('aset.penerimaan.show');
+    });
+
+    Route::middleware('Superadmin')->group(function () {
+        Route::controller(SuperadminUserController::class)->group(function () {
+            Route::get('/admin-users', 'index')->name('admin-user.index');
+            Route::get('/admin-users-create', 'create')->name('admin-user.create');
+            Route::post('/admin-users', 'store')->name('admin-user.store');
+            Route::get('/admin-users-show/{uuid}', 'show')->name('admin-user.show');
+            Route::put('/admin-users/{id}', 'update')->name('admin-user.update');
+            Route::delete('/admin-users', 'destroy')->name('admin-user.destroy');
+        });
+
+        Route::controller(SuperadminKategoriController::class)->group(function () {
+            Route::get('/admin-kategori', 'index')->name('admin-kategori.index');
+            Route::get('/admin-kategori-create', 'create')->name('admin-kategori.create');
+            Route::post('/admin-kategori', 'store')->name('admin-kategori.store');
+            Route::get('/admin-kategori/{uuid}/edit', 'edit')->name('admin-kategori.edit');
+            Route::put('/admin-kategori/{uuid}', 'update')->name('admin-kategori.update');
+            Route::delete('/admin-kategori', 'destroy')->name('admin-kategori.destroy');
+        });
+
+        Route::controller(SuperadminAbsensiController::class)->group(function () {
+            Route::get('/admin-absensi', 'index')->name('admin-absensi.index');
+        });
+
+        Route::controller(SuperadminKinerjaController::class)->group(function () {
+            Route::get('/admin-kinerja', 'index')->name('admin-kinerja.index');
+        });
+
+        Route::controller(SuperadminKonfigurasiCutiController::class)->group(function () {
+            Route::get('/admin-konfigurasi-cuti', 'index')->name('admin-konfigurasi_cuti.index');
+            Route::get('/admin-konfigurasi-cuti-create', 'create')->name('admin-konfigurasi_cuti.create');
+            Route::post('/admin-konfigurasi-cuti', 'store')->name('admin-konfigurasi_cuti.store');
+            Route::get('/admin-konfigurasi-cuti/{uuid}/edit', 'edit')->name('admin-konfigurasi_cuti.edit');
+            Route::put('/admin-konfigurasi-cuti/{uuid}/update', 'update')->name('admin-konfigurasi_cuti.update');
+            Route::delete('/admin-konfigurasi-cuti', 'destroy')->name('admin-konfigurasi_cuti.destroy');
+        });
+
+        Route::controller(SuperadminCutiController::class)->group(function () {
+            Route::get('/admin-cuti-setting', 'index')->name('admin-cuti.index');
+            Route::get('/admin-cuti-create', 'create')->name('admin-cuti.create');
+            // Route::get('/cuti-email', 'email')->name('cuti.email');
+            Route::post('/admin-cuti', 'store')->name('admin-cuti.store');
+            Route::get('/admin-cuti/{uuid}/edit', 'edit')->name('admin-cuti.edit');
+            Route::put('/admin-cuti/{uuid}/update', 'update')->name('cadmin-uti.update');
+            Route::delete('/admin-cuti', 'destroy')->name('admin-cuti.destroy');
+            Route::put('/admin-cuti/approve', 'approve')->name('admin-cuti.approve');
+            Route::put('/admin-cuti/reject', 'reject')->name('admin-cuti.reject');
+            Route::get('/admin-cuti-approval', 'approval_page')->name('admin-cuti.approval_page');
+            Route::get('/admin-cuti/{uuid}/export-pdf', 'pdf')->name('admin-cuti.pdf');
+            Route::get('/admin-cuti/export-excel', 'excel')->name('admin-cuti.excel');
+            Route::get('/admin-cuti/filter', 'filter')->name('admin-cuti.filter');
+        });
+
+        Route::controller(SuperadminFormasiTimController::class)->group(function () {
+            Route::get('/admin-formasi-tim', 'index')->name('admin-formasi_tim.index');
+            Route::get('/admin-formasi-tim-create', 'create')->name('admin-formasi_tim.create');
+            Route::post('/admin-formasi-tim', 'store')->name('admin-formasi_tim.store');
+            Route::get('/admin-formasi-tim/{uuid}/edit', 'edit')->name('admin-formasi_tim.edit');
+            Route::put('/admin-formasi-tim/{uuid}/update', 'update')->name('admin-formasi_tim.update');
+            Route::delete('/admin-formasi-tim', 'destroy')->name('admin-formasi_tim.destroy');
+        });
     });
 });

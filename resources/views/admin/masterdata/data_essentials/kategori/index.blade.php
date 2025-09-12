@@ -2,24 +2,22 @@
 
 @section('title-head')
     <title>
-        Masterdata | Daftar Kategori
+        Superadmin | Data Kegiatan
     </title>
 @endsection
 
 @section('path')
     <div class="page-header">
         <ol class="breadcrumb">
+            <li class="breadcrumb-item">Superadmin</li>
             <li class="breadcrumb-item">Masterdata</li>
-            <li class="breadcrumb-item">Data Essentials</li>
-            <li class="breadcrumb-item">Kategori</li>
             <li class="breadcrumb-item active">Daftar Kategori</li>
         </ol>
     </div>
 @endsection
 
-
 @section('content')
-    <div class="row gutters">
+    <div class="row gutters d-flex justify-content-center">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="card">
                 <div class="card-body">
@@ -33,7 +31,7 @@
                             </form>
                         </div>
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3 text-left">
-                            <a href="{{ route('data_essentials.index') }}" class="btn btn-outline-primary"><i
+                            <a href="{{ route('dashboard.index') }}" class="btn btn-outline-primary"><i
                                     class="fa fa-arrow-left"></i>Kembali</a>
                             <a href="{{ route('kategori.create') }}" class="btn btn-primary">Tambah
                                 Data</a>
@@ -44,7 +42,7 @@
                             <thead>
                                 <tr>
                                     <th class="text-center">No.</th>
-                                    <th class="text-center">Nama</th>
+                                    <th class="text-center">Nama Kegiatan</th>
                                     <th class="text-center">Seksi</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
@@ -53,7 +51,7 @@
                                 @foreach ($kategori as $item)
                                     <tr>
                                         <td class="text-center">{{ $loop->iteration }}</td>
-                                        <td class="text-center">{{ $item->name }}</td>
+                                        <td class="text-left">{{ $item->name }}</td>
                                         <td class="text-center">{{ $item->seksi->name }}</td>
                                         <td class="text-center">
                                             <a href="{{ route('kategori.edit', $item->uuid) }}"><button
@@ -83,7 +81,7 @@
                         <div class="text-slate-500 mt-2">Peringatan: Data ini akan dihapus secara permanent</div>
                     </div>
                     <div class="px-5 pb-8 text-center mt-3">
-                        <form action="{{ route('kategori.destroy') }}" method="POST">
+                        <form action="{{ route('admin-kategori.destroy') }}" method="POST">
                             @csrf
                             @method('delete')
                             <input type="text" name="id" id="id" hidden>

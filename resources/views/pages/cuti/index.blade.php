@@ -9,6 +9,7 @@
 @section('path')
     <div class="page-header">
         <ol class="breadcrumb">
+            <li class="breadcrumb-item">Superadmin</li>
             <li class="breadcrumb-item">Cuti</li>
             <li class="breadcrumb-item active">Data Pengajuan Cuti</li>
         </ol>
@@ -29,6 +30,8 @@
                             </form>
                         </div>
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3 text-left">
+                            <a href="{{ route('dashboard.index') }}" class="btn btn-outline-primary"><i
+                                class="fa fa-arrow-left"></i>Kembali</a>
                             <button data-toggle="modal" data-target="#modalDownloadExcel" title="Export Excel"
                                 class="btn btn-primary">
                                 <i class="fa fa-file-excel"></i>

@@ -61,8 +61,14 @@ class KategoriController extends Controller
         $id = $request->id;
         $kategori = Kategori::findOrFail($id);
 
+        if (! $kategori->cekRelasi()) {
+            return redirect()->back()
+                ->withError('Kategori masih memiliki data Kinerja, tidak bisa dihapus!');
+        }
+
         $kategori->delete();
 
-        return redirect()->route('kategori.index')->withNotify('Data berhasil dihapus!');
+        return redirect()->route('admin-kategori.index')
+            ->withNotify('Data berhasil dihapus!');
     }
 }

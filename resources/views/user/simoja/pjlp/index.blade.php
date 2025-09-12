@@ -67,6 +67,34 @@
             }
         }
     </style>
+
+    <div class="modal fade" id="spModal" tabindex="-1" role="dialog" aria-labelledby="spModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content border-danger shadow-lg">
+                <div class="modal-header bg-danger text-white d-flex justify-content-center">
+                    <h5 class="modal-title">⚠️ Peringatan SP</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    Halo <strong>{{ Auth::user()->name }}</strong>, berdasarkan catatan sistem <br>Anda memiliki
+                    <b>Surat Peringatan (SP)</b>.
+                    <br><br>
+                    Mohon untuk lebih <span class="text-danger font-weight-bold">meningkatkan kedisiplinan</span>
+                    dan <span class="text-danger font-weight-bold">ketertiban dalam absensi</span>.
+                    <br><br>
+                    Silakan klik tombol di bawah untuk melihat detail Surat Peringatan Anda.
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <a href="{{ route('user.profile') }}" class="btn btn-primary">
+                        📄 Lihat Detail SP
+                    </a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 
@@ -96,6 +124,12 @@
 
         $(document).ready(function() {
             startTime();
+        });
+
+        $(document).ready(function() {
+            startTime();
+
+            $('#spModal').modal('show');
         });
     </script>
 @endsection
