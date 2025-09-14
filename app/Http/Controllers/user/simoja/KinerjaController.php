@@ -51,6 +51,7 @@ class KinerjaController extends Controller
         $kategori = Kategori::where('seksi_id', $seksi_id)->get();
 
         return $dataTable->with([
+            'seksi_id' => $seksi_id,
             'user_id' => $user_id,
             'pulau_id' => $pulau_id,
             'kategori_id' => $kategori_id,
@@ -60,6 +61,7 @@ class KinerjaController extends Controller
             'user',
             'pulau',
             'kategori',
+            'seksi_id',
             'user_id',
             'pulau_id',
             'kategori_id',
@@ -143,7 +145,7 @@ class KinerjaController extends Controller
 
     public function export_excel_kasi(Request $request)
     {
-        $seksi_id = auth()->user()->struktur->seksi->id;
+        $seksi_id = $request->seksi_id ?? null;
         $user_id = $request->user_id ?? null;
         $pulau_id = $request->pulau_id ?? null;
         $kategori_id = $request->kategori_id ?? null;
@@ -199,18 +201,27 @@ class KinerjaController extends Controller
     {
         $request->validate([
             'kategori_id' => 'required|exists:kategori,id',
+            'user_id' => 'nullable|exists:users,id',
             'start_date' => 'date|required',
             'end_date' => 'date|required|after_or_equal:start_date',
         ]);
 
         $kategori_id = $request->kategori_id;
+        $user_id = $request->user_id;
         $start_date = Carbon::parse($request->start_date);
         $end_date = Carbon::parse($request->end_date) ?? $start_date;
 
         $kategori = Kategori::findOrFail($kategori_id);
 
-        $kinerja = Kinerja::where('kategori_id', $kategori_id)
-                            ->whereBetween('tanggal', [$start_date, $end_date])
+        $query = Kinerja::query();
+
+        $query->where('kategori_id', $kategori_id);
+
+        if ($user_id) {
+            $query->where('anggota_id', $user_id);
+        }
+
+        $kinerja = $query->whereBetween('tanggal', [$start_date, $end_date])
                             ->orderBy('tanggal', 'ASC')
                             ->get();
 
@@ -227,16 +238,44 @@ class KinerjaController extends Controller
     public function export_pdf_all_kasi(Request $request)
     {
         $request->validate([
-            'start_date' => 'date|required',
-            'end_date' => 'date|required|after_or_equal:start_date',
+            'seksi_id' => 'nullable|exists:seksi,id',
+            'user_id' => 'nullable|exists:users,id',
+            'pulau_id' => 'nullable|exists:pulau,id',
+            'kategori_id' => 'nullable|exists:kategori,id',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
         ]);
 
+        $seksi_id = $request->seksi_id ?? null;
+        $user_id = $request->user_id ?? null;
+        $pulau_id = $request->pulau_id ?? null;
+        $kategori_id = $request->kategori_id ?? null;
         $start_date = Carbon::parse($request->start_date);
         $end_date = Carbon::parse($request->end_date) ?? $start_date;
 
-        $kinerja = Kinerja::whereBetween('tanggal', [$start_date, $end_date])
-                            ->orderBy('tanggal', 'ASC')
-                            ->get();
+        $query = Kinerja::query();
+
+        if ($seksi_id) {
+            $query->where('seksi_id', $seksi_id);
+        }
+
+        if ($user_id) {
+            $query->where('anggota_id', $user_id);
+        }
+
+        if ($pulau_id) {
+            $query->where('pulau_id', $pulau_id);
+        }
+
+        if ($kategori_id) {
+            $query->where('kategori_id', $kategori_id);
+        }
+
+        if ($start_date) {
+            $query->whereBetween('tanggal', [$start_date, $end_date]);
+        }
+
+        $kinerja = $query->orderBy('tanggal', 'ASC')->get();
 
         $pdf = Pdf::loadView('user.simoja.kasi.kinerja.export.pdf_all', [
             'kinerja' => $kinerja,

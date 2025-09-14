@@ -77,7 +77,7 @@
                         </div>
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="text-right">
-                                <button type="button" id="submit" name="submit" class="btn btn-primary">Kirim
+                                <button type="button" id="submit" name="submit" class="btn btn-primary">Simpan
                                     Perubahan</button>
                                 <a href="{{ route('user.profile.edit.password') }}" class="btn btn-warning">Ubah
                                     Password</a>
@@ -93,25 +93,13 @@
         <div class="col-12">
             <div class="card shadow-sm">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="m-0">📄 Daftar Surat Peringatan (SP)</h5>
+                    <h5 class="m-0">📄 Daftar Surat Peringatan (SP) - Tahun {{ $tahun }}</h5>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-striped table-hover text-center">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th>No</th>
-                                    <th>Tanggal</th>
-                                    <th>Jenis SP</th>
-                                    <th>Keterangan</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td colspan="4" class="text-muted">Belum ada Surat Peringatan</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        {{ $dataTable->table([
+                            'class' => 'table table-bordered table-striped',
+                        ]) }}
                     </div>
                 </div>
             </div>
@@ -193,6 +181,10 @@
     </div>
     {{-- END: Update Photo TTD --}}
 @endsection
+
+@push('scripts')
+    {{ $dataTable->scripts() }}
+@endpush
 
 @section('javascript')
     <script>

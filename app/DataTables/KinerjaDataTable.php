@@ -15,6 +15,7 @@ use Yajra\DataTables\Services\DataTable;
 
 class KinerjaDataTable extends DataTable
 {
+    protected $seksi_id;
     protected $start_date;
     protected $end_date;
     protected $user_id;
@@ -60,13 +61,15 @@ class KinerjaDataTable extends DataTable
             'anggota',
             'pulau',
             'koordinator',
+            'seksi',
         ])->newQuery();
 
-        $seksi_id = auth()->user()->struktur->seksi->id;
-
-        $query->where('seksi_id', $seksi_id);
-
         // Filter
+        if($this->seksi_id != null)
+        {
+            $query->where('seksi_id', $this->seksi_id);
+        }
+
         if($this->user_id != null)
         {
             $query->where('anggota_id', $this->user_id);
@@ -124,6 +127,7 @@ class KinerjaDataTable extends DataTable
             Column::make('anggota.name')->title('Nama')->addClass('font-weight-bold text-nowrap')->sortable(true),
             Column::make('pulau.name')->title('Pulau')->sortable(false)->addClass('text-nowrap'),
             Column::make('koordinator.name')->title('Koordinator')->sortable(false)->addClass('text-nowrap'),
+            Column::make('seksi.name')->title('Seksi')->sortable(false),
             Column::computed('giat')->title('Giat')->sortable(false),
             Column::make('deskripsi')->title('Deskripsi')->sortable(false),
             Column::make('lokasi')->title('Lokasi')->sortable(false),

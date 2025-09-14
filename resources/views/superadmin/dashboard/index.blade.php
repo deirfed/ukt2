@@ -18,7 +18,7 @@
 @section('content')
     <div class="row gutters">
         <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
-            <a href="{{ route('user.index') }}">
+            <a href="{{ route('admin-user.index') }}">
                 <div class="info-stats4">
                     <div class="info-icon">
                         <i class="icon-user"></i>
@@ -58,7 +58,7 @@
             </a>
         </div>
         <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
-            <a href="{{ route('cuti.index') }}">
+            <a href="{{ route('admin-cuti.index') }}">
                 <div class="info-stats4">
                     <div class="info-icon">
                         <i class="icon-activity"></i>
@@ -96,7 +96,8 @@
                                         <div class="dropdown">
                                             <button class="btn btn-dark mr-2 mb-2 mb-sm-0 text-white" data-toggle="modal"
                                                 data-target="#modalDownloadPDFAbsensi" aria-haspopup="true"
-                                                aria-expanded="false" title="Export"> Export PDF
+                                                aria-expanded="false" title="Export">
+                                                <i class="fa fa-paper-plane"></i> Export PDF
                                             </button>
                                         </div>
                                     </div>

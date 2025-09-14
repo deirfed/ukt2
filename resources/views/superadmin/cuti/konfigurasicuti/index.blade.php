@@ -11,7 +11,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">Superadmin</li>
             <li class="breadcrumb-item">Cuti</li>
-            <li class="breadcrumb-item active">Konfigurasi Cuti</li>
+            <li class="breadcrumb-item active">Konfigurasi Cuti Tahun {{ $periode }}</li>
         </ol>
     </div>
 @endsection
@@ -23,57 +23,17 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <br>
-                            <form class="form-inline mb-2">
-                                <input class="form-control mr-sm-2" type="search" placeholder="Cari sesuatu di sini..."
-                                    aria-label="Search" id="search-bar">
-                                <button class="btn btn-dark my-2 my-sm-0" type="submit">Pencarian</button>
-                            </form>
-                        </div>
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3 text-left">
                             <a href="{{ route('dashboard.index') }}" class="btn btn-outline-primary"><i
-                                    class="fa fa-arrow-left"></i>Kembali</a>
+                                    class="fa fa-arrow-left"></i> Kembali</a>
                             <a href="{{ route('admin-konfigurasi_cuti.create') }}" class="btn btn-primary">Tambah
                                 Data</a>
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <table class="table table-bordered table-striped" id="dataTable">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">No.</th>
-                                        <th class="text-center">Nama Karyawan</th>
-                                        <th class="text-center">Jabatan</th>
-                                        <th class="text-center">Jenis Cuti</th>
-                                        <th class="text-center">Jumlah</th>
-                                        <th class="text-center">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($konfigurasi_cuti as $item)
-                                        <tr>
-                                            <td class="text-center">{{ $loop->iteration }}</td>
-                                            <td class="text-center">{{ $item->user->name ?? '-' }}</td>
-                                            <td class="text-center">{{ $item->user->jabatan->name ?? '-' }}</td>
-                                            <td class="text-center">{{ $item->jenis_cuti->name ?? '-' }}</td>
-                                            <td class="text-center">{{ $item->jumlah ?? '-' }} hari</td>
-                                            <td class="text-center">
-                                                <a href="{{ route('admin-konfigurasi_cuti.edit', $item->uuid) }}"><button
-                                                        class="btn btn-outline-primary"><i
-                                                            class="fa fa-edit"></i></button></a>
-                                                <a href="#" href="javascript:;" data-toggle="modal"
-                                                    data-target="#delete-confirmation-modal"
-                                                    onclick="toggleModal('{{ $item->id }}')"><button
-                                                        class="btn btn-outline-danger"><i
-                                                            class="fa fa-trash"></i></button></a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+                        {{ $dataTable->table([
+                            'class' => 'table table-bordered table-striped',
+                        ]) }}
                     </div>
                 </div>
             </div>
@@ -106,6 +66,9 @@
     </div>
 @endsection
 
+@push('scripts')
+    {{ $dataTable->scripts() }}
+@endpush
 
 @section('javascript')
     <script type="text/javascript">

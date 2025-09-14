@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\superadmin;
 
+use App\DataTables\KategoriDataTable;
 use App\Models\Seksi;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
@@ -9,11 +10,9 @@ use App\Http\Controllers\Controller;
 
 class KategoriController extends Controller
 {
-    public function index()
+    public function index(KategoriDataTable $dataTable, Request $request)
     {
-        $kategori = Kategori::all();
-
-        return view('superadmin.masterdata.kategori.index', compact(['kategori']));
+        return $dataTable->render('superadmin.masterdata.kategori.index');
     }
 
     public function create()

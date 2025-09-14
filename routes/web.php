@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\pages\AbsensiController;
+use App\Http\Controllers\superadmin\SuratPeringatanController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
@@ -64,7 +65,7 @@ Route::get('/', function () {
     return redirect('dashboard');
 })->middleware('auth');
 
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => ['auth', 'CheckBanned']], function () {
     // ---------------------DASHBOARDCONTROLLER----------------------------
 
     Route::controller(DashboardController::class)->group(function () {
@@ -322,9 +323,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/kinerja/filter', 'filter')->name('kinerja.filter');
         Route::get('/kinerja/export-excel', 'excel')->name('kinerja.excel');
         Route::get('/formasi', 'formasi')->name('formasi.index');
-
-        // Superadmin
-        Route::get('/admin-kinerja', 'admin_kinerja')->name('admin.kinerja');
     });
 
     // CUTI
@@ -418,6 +416,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/simoja-kasi-absensi/filter', 'filter_kasi')->name('simoja.kasi.absensi.filter');
             Route::get('/simoja-kasi-absensi/export/excel', 'export_excel_kasi')->name('simoja.kasi.absensi.export.excel');
             Route::get('/simoja-kasi-absensi/export/pdf', 'export_pdf_kasi')->name('simoja.kasi.absensi.export.pdf');
+            Route::get('/simoja-kasi-absensi/export/pdf-all', 'export_pdf_all_kasi')->name('simoja.kasi.absensi.export.pdf.all');
             Route::get('/simoja-kasi-absensi/ringkasan', 'ringkasan_kasi')->name('simoja.kasi.absensi.ringkasan');
 
             Route::get('/performance-personel', 'performance_personel')->name('performance-personel');
@@ -563,6 +562,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::middleware('Superadmin')->group(function () {
         Route::controller(SuperadminUserController::class)->group(function () {
             Route::get('/admin-users', 'index')->name('admin-user.index');
+            Route::put('/admin-users/ban-or-unband/{uuid}', 'banOrUnban')->name('admin-user.ban-or-unban');
+            Route::put('/admin-users/sp/{uuid}', 'suratPeringatan')->name('admin-user.sp');
+            Route::put('/admin-users/reset-password/{uuid}', 'resetPassword')->name('admin-user.reset-password');
             Route::get('/admin-users-create', 'create')->name('admin-user.create');
             Route::post('/admin-users', 'store')->name('admin-user.store');
             Route::get('/admin-users-show/{uuid}', 'show')->name('admin-user.show');
@@ -619,6 +621,13 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/admin-formasi-tim/{uuid}/edit', 'edit')->name('admin-formasi_tim.edit');
             Route::put('/admin-formasi-tim/{uuid}/update', 'update')->name('admin-formasi_tim.update');
             Route::delete('/admin-formasi-tim', 'destroy')->name('admin-formasi_tim.destroy');
+        });
+
+        Route::controller(SuratPeringatanController::class)->group(function () {
+            Route::get('/admin-surat-peringatan', 'index')->name('admin.surat-peringatan.index');
+            Route::post('/admin-surat-peringatan/{uuid}', 'store')->name('admin.surat-peringatan.store');
+            Route::put('/admin-surat-peringatan/{uuid}/update', 'update')->name('admin.surat-peringatan.update');
+            Route::delete('/admin-surat-peringatan', 'destroy')->name('admin.surat-peringatan.destroy');
         });
     });
 });

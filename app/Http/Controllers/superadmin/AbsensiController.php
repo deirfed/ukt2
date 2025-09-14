@@ -15,6 +15,7 @@ use App\DataTables\AbsensiDataTable;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\absensi\AbsensiExport;
+use App\Models\Seksi;
 use Illuminate\Support\Facades\Storage;
 
 class AbsensiController extends Controller
@@ -24,29 +25,44 @@ class AbsensiController extends Controller
         $tahun = $tahun ?? date('Y');
 
         $request->validate([
+            'seksi_id' => 'nullable|exists:seksi,id',
             'user_id' => 'nullable|exists:users,id',
             'pulau_id' => 'nullable|exists:pulau,id',
-            'periode' => 'nullable',
+            'bulan' => 'nullable|numeric',
+            'tahun' => 'nullable|numeric',
         ]);
 
+        $seksi_id = $request->seksi_id ?? null;
         $user_id = $request->user_id ?? null;
         $pulau_id = $request->pulau_id ?? null;
-        $periode = $request->periode ?? Carbon::now()->format('Y-m');
 
-        $start_date = Carbon::createFromFormat('Y-m', $periode)->startOfMonth()->toDateString();
-        $end_date   = Carbon::createFromFormat('Y-m', $periode)->endOfMonth()->toDateString();
+        $tahun = $request->tahun ?? date('Y');
+        $bulan = $request->bulan ?? date('m');
 
-        $seksi_id = auth()->user()->struktur->seksi->id;
+        // Buat string periode Y-m
+        $periode = $tahun . '-' . $bulan;
 
-        $user = User::whereRelation('struktur.seksi', 'id', '=', $seksi_id)
-            ->where('employee_type_id', 3) //PJLP Only
-            ->notBanned()
-            ->orderBy('name', 'ASC')
-            ->get();
+        // Parse periode dengan format Y-m
+        $periodeCarbon = Carbon::createFromFormat('Y-m', $periode);
 
+        // Ambil tanggal awal & akhir bulan
+        $start_date = $periodeCarbon->startOfMonth()->toDateString();
+        $end_date   = $periodeCarbon->endOfMonth()->toDateString();
+
+        $user = User::where('employee_type_id', 3) //PJLP Only
+                ->orderBy('name', 'ASC')
+                ->get();
+
+        $seksi = Seksi::all();
         $pulau = Pulau::orderBy('name', 'ASC')->get();
+        $tahuns = Kinerja::selectRaw('YEAR(tanggal) as tahun')
+                ->distinct()
+                ->orderBy('tahun', 'asc')
+                ->pluck('tahun');
+
 
         return $dataTable->with([
+            'seksi_id' => $seksi_id,
             'user_id' => $user_id,
             'pulau_id' => $pulau_id,
             'start_date' => $start_date,
@@ -54,12 +70,16 @@ class AbsensiController extends Controller
         ])->render('superadmin.arsipdata.absensi.index', compact([
             'user',
             'pulau',
+            'seksi',
+            'seksi_id',
             'user_id',
             'pulau_id',
             'start_date',
             'end_date',
             'periode',
-            'tahun'
+            'tahuns',
+            'tahun',
+            'bulan',
         ]));
     }
 

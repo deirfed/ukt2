@@ -1,4 +1,4 @@
-@extends('superadminlayout.base')
+@extends('superadmin.layout.base')
 
 @section('title-head')
     <title>

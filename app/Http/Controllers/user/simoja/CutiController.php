@@ -64,6 +64,7 @@ class CutiController extends Controller
         $jenis_cuti = JenisCuti::all();
 
         return $dataTable->with([
+            'seksi_id' => $seksi_id,
             'user_id' => $user_id,
             'pulau_id' => $pulau_id,
             'jenis_cuti_id' => $jenis_cuti_id,
@@ -76,6 +77,7 @@ class CutiController extends Controller
             'jenis_cuti',
             'status',
             'jenis_cuti_id',
+            'seksi_id',
             'user_id',
             'pulau_id',
             'start_date',
@@ -167,8 +169,7 @@ class CutiController extends Controller
 
     public function export_excel_kasi(Request $request)
     {
-        $seksi_id = auth()->user()->struktur->seksi->id;
-
+        $seksi_id = $request->seksi_id;
         $user_id = $request->user_id;
         $pulau_id = $request->pulau_id;
         $start_date = $request->start_date;
@@ -195,14 +196,14 @@ class CutiController extends Controller
 
     public function approval(CutiPersetujuanDataTable $dataTable)
     {
-        $approval_cuti = Cuti::where('approved_by_id', auth()->user()->id)
-                        ->where('status', 'Diproses')->get();
+        $user_id = auth()->user()->id;
+        $approval_cuti = Cuti::where('approved_by_id', $user_id)
+                        ->where('status', 'Diproses')
+                        ->get();
 
-        // return view('user.simoja.kasi.cuti.approval', compact([
-        //     'approval_cuti',
-        // ]));
-
-        return $dataTable->render('user.simoja.kasi.cuti.approval', compact([
+        return $dataTable->with([
+            'approved_by_id' => $user_id,
+        ])->render('user.simoja.kasi.cuti.approval', compact([
             'approval_cuti',
         ]));
     }

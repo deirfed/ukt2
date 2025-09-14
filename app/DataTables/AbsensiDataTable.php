@@ -17,6 +17,7 @@ class AbsensiDataTable extends DataTable
 {
     protected $start_date;
     protected $end_date;
+    protected $seksi_id;
     protected $user_id;
     protected $pulau_id;
 
@@ -99,13 +100,15 @@ class AbsensiDataTable extends DataTable
         $query = $model->with([
             'user.jabatan',
             'user.area.pulau',
+            'user.struktur.seksi',
         ])->newQuery();
 
-        $seksi_id = auth()->user()->struktur->seksi->id;
-
-        $query->whereRelation('user.struktur.seksi', 'id', '=', $seksi_id);
-
         // Filter
+        if($this->seksi_id != null)
+        {
+            $query->whereRelation('user.struktur.seksi', 'id', '=', $this->seksi_id);
+        }
+
         if($this->user_id != null)
         {
             $query->where('user_id', $this->user_id);
@@ -158,6 +161,7 @@ class AbsensiDataTable extends DataTable
             Column::make('user.name')->title('Nama')->addClass('font-weight-bold')->sortable(true),
             Column::make('user.jabatan.name')->title('Jabatan')->sortable(false),
             Column::make('user.area.pulau.name')->title('Pulau')->sortable(false),
+            Column::make('user.struktur.seksi.name')->title('Seksi')->addClass('text-wrap')->sortable(false),
             Column::make('jam_masuk')->title('Jam Datang')->sortable(false),
             Column::computed('status_masuk')->title('Status Datang')->sortable(false),
             Column::make('jam_pulang')->title('Jam Pulang')->sortable(false),

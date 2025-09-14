@@ -22,16 +22,9 @@
             <div class="card h-250">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <form class="form-inline mb-2">
-                                <input class="form-control mr-sm-2" type="search" placeholder="Cari sesuatu di sini..."
-                                    aria-label="Search" id="search-bar">
-                                <button class="btn btn-dark my-2 my-sm-0" type="submit">Pencarian</button>
-                            </form>
-                        </div>
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3 text-left">
                             <a href="{{ route('dashboard.index') }}" class="btn btn-outline-primary"><i
-                                class="fa fa-arrow-left"></i>Kembali</a>
+                                class="fa fa-arrow-left"></i> Kembali</a>
                             <button data-toggle="modal" data-target="#modalDownloadExcel" title="Export Excel"
                                 class="btn btn-primary">
                                 <i class="fa fa-file-excel"></i>
@@ -39,91 +32,15 @@
                             </button>
                             <a href="javascript:;" title="Filter" class="btn btn-primary" data-toggle="modal"
                                 data-target="#modalFilter"><i class="fa fa-filter"></i> Filter</a>
-                            <a href="{{ route('cuti.index') }}" class="btn btn-primary" title="Reset Filter">
+                            <a href="{{ route('admin-cuti.index') }}" class="btn btn-primary" title="Reset Filter">
                                 <i class="fa fa-refresh"></i>
                             </a>
                         </div>
                     </div>
-                    <div class="projectLog">
-                        <div class="logs-container">
-                            <div class="table-responsive mt-2">
-                                <table class="table table-bordered table-striped" id="dataTable">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center">No.</th>
-                                            <th class="text-center text-wrap">Nama</th>
-                                            <th class="text-center text-wrap">Jabatan</th>
-                                            <th class="text-center text-wrap">Pulau</th>
-                                            <th class="text-center text-wrap">Seksi</th>
-                                            <th class="text-center text-wrap">Tim</th>
-                                            <th class="text-center text-wrap">Tanggal Pengajuan</th>
-                                            <th class="text-center text-wrap">Jenis Izin</th>
-                                            <th class="text-center text-wrap">Jumlah Hari</th>
-                                            <th class="text-center text-wrap">Koordinator</th>
-                                            <th class="text-center text-wrap">Disetujui</th>
-                                            <th class="text-center text-wrap">Status</th>
-                                            <th class="text-center text-wrap">Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($cuti as $item)
-                                            <tr>
-                                                <td class="text-center">{{ $loop->iteration }}</td>
-                                                <td class="text-center">{{ $item->user->name }}</td>
-                                                <td class="text-center">{{ $item->user->jabatan->name }}</td>
-                                                <td class="text-center">{{ $item->user->area->pulau->name }}</td>
-                                                <td class="text-center">{{ $item->user->struktur->seksi->name }}</td>
-                                                <td class="text-center">{{ $item->user->struktur->tim->name }}</td>
-                                                <td class="text-center text-wrap">
-                                                    {{ $item->tanggal_awal == $item->tanggal_akhir ? $item->tanggal_awal : $item->tanggal_awal . ' - ' . $item->tanggal_akhir }}
-                                                </td>
-                                                <td class="text-center">{{ $item->jenis_cuti->name }}</td>
-                                                <td class="text-center">{{ $item->jumlah }} hari</td>
-                                                <td class="text-center">
-                                                    {{ $item->known_by->name }}
-                                                </td>
-                                                <td class="text-center">
-                                                    @if ($item->status == 'Diterima')
-                                                        {{ $item->approved_by->name }}
-                                                    @else
-                                                        -
-                                                    @endif
-                                                </td>
-                                                <td class="text-center">
-                                                    <span
-                                                        class="btn @if ($item->status == 'Diproses') btn-warning @elseif ($item->status == 'Ditolak') btn-secondary @else btn-primary @endif">
-                                                        {{ $item->status }}
-                                                    </span>
-                                                </td>
-                                                <td class="text-center">
-                                                    @if ($item->status == 'Diterima')
-                                                        <a href="javascript:;" class="btn btn-outline-primary"
-                                                            title="Print" title="Download PDF" data-toggle="modal"
-                                                            data-target="#modalDownloadPDF"
-                                                            data-href="{{ route('cuti.pdf', $item->uuid) }}">
-                                                            <i class="fa fa-print"></i>
-                                                        </a>
-                                                    @endif
-                                                    <a href="javascript:;" class="btn btn-outline-primary"
-                                                        title="Lihat lampiran" data-toggle="modal"
-                                                        data-target="#modalLampiran"
-                                                        data-lampiran="{{ $item->lampiran != null ? asset('storage/' . $item->lampiran) : 'https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg' }}">
-                                                        <i class="fa fa-eye"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                        @if ($cuti->count() == 0)
-                                            <tr>
-                                                <td class="text-center" colspan="13">
-                                                    Tidak ada data.
-                                                </td>
-                                            </tr>
-                                        @endif
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                    <div class="table-responsive">
+                        {{ $dataTable->table([
+                            'class' => 'table table-bordered table-striped',
+                        ]) }}
                     </div>
                 </div>
             </div>
@@ -131,7 +48,7 @@
     </div>
 
     {{-- BEGIN: Filter Modal --}}
-    <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="modalFilter" aria-hidden="true">
+    {{-- <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="modalFilter" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -141,7 +58,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="formFilter" action="{{ route('admin-cuti.filter') }}" method="GET">
+                    <form id="formFilter" action="{{ route('admin-cuti.index') }}" method="GET">
                         @csrf
                         @method('GET')
                         <div class="form-row gutters">
@@ -229,8 +146,119 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     {{-- END: Filter Modal --}}
+
+    {{-- START: FILTER CUTI --}}
+    <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="modalFilter"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Filter Data Cuti</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formFilter" action="{{ route('admin-cuti.index') }}" method="GET">
+                        @csrf
+                        @method('GET')
+                        <div class="form-row gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="seksi_id">Seksi</label>
+                                    <select name="seksi_id" id="seksi_id" class="form-control">
+                                        <option value="" selected disabled>- pilih seksi -</option>
+                                        @foreach ($seksi as $item)
+                                            <option value="{{ $item->id }}"
+                                                @if ($item->id == $seksi_id ?? '') selected @endif>{{ $item->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Personel</label>
+                                    <select name="user_id" class="form-control">
+                                        <option value="" selected disabled>- Pilih Personel -</option>
+                                        @foreach ($user as $item)
+                                            <option value="{{ $item->id }}"
+                                                @if ($item->id == $user_id) selected @endif>{{ $item->name }} -
+                                                {{ $item->nip ?? '-' }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Pulau</label>
+                                    <select name="pulau_id" class="form-control">
+                                        <option value="" selected disabled>- Pilih Pulau -</option>
+                                        @foreach ($pulau as $item)
+                                            <option value="{{ $item->id }}"
+                                                @if ($item->id == $pulau_id) selected @endif>Pulau {{ $item->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <label for="periode">Periode</label>
+                        <div class="form-row gutters">
+                            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <input type="date" class="form-control" value="{{ $start_date }}"
+                                        name="start_date">
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <input type="date" class="form-control" value="{{ $end_date }}"
+                                        name="end_date">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="">Jenis Cuti</label>
+                                    <select name="jenis_cuti_id" class="form-control">
+                                        <option value="" selected disabled>- Pilih Jenis Cuti -</option>
+                                        @foreach ($jenis_cuti as $item)
+                                            <option value="{{ $item->id }}"
+                                                @if ($jenis_cuti_id == $item->id) selected @endif>{{ $item->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="">Status</label>
+                                    <select name="status" class="form-control">
+                                        <option value="" selected disabled>- Pilih Status -</option>
+                                        <option value="Diproses" @if ($status == 'Diproses') selected @endif>Diproses
+                                        </option>
+                                        <option value="Diterima" @if ($status == 'Diterima') selected @endif>
+                                            Diterima
+                                        </option>
+                                        <option value="Ditolak" @if ($status == 'Ditolak') selected @endif>Ditolak
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
+                    <button type="submit" form="formFilter" class="btn btn-primary">Filter Data</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- END: FILTER CUTI --}}
 
     {{-- BEGIN: Detail Pengajuan Cuti --}}
     <div class="modal fade" id="modalLampiran" tabindex="-1" role="dialog" aria-labelledby="detailPersonel"
@@ -305,16 +333,17 @@
                                 Data ini akan di-generate dalam format Excel!
                             </p>
                         </div>
-                        <form id="exportExcel" action="{{ route('cuti.excel') }}" method="GET" hidden>
+                        <form id="exportExcel" action="{{ route('simoja.kasi.cuti.export.excel') }}" method="GET" hidden>
                             @csrf
                             @method('GET')
-                            <input type="text" name="pulau_id" value="{{ $pulau_id ?? '' }}">
                             <input type="text" name="seksi_id" value="{{ $seksi_id ?? '' }}">
-                            <input type="text" name="koordinator_id" value="{{ $koordinator_id ?? '' }}">
-                            <input type="text" name="tim_id" value="{{ $tim_id ?? '' }}">
-                            <input type="text" name="status" value="{{ $status ?? '' }}">
+                            <input type="text" name="user_id" value="{{ $user_id ?? '' }}">
+                            <input type="text" name="pulau_id" value="{{ $pulau_id ?? '' }}">
                             <input type="text" name="start_date" value="{{ $start_date ?? '' }}">
                             <input type="text" name="end_date" value="{{ $end_date ?? '' }}">
+                            <input type="text" name="status" value="{{ $status ?? '' }}">
+                            <input type="text" name="jenis_cuti_id" value="{{ $jenis_cuti_id ?? '' }}">
+                            <input type="text" name="sort" value="{{ $sort ?? 'ASC' }}">
                         </form>
                     </div>
                     <div class="px-5 pb-8 text-center mt-3">
@@ -328,6 +357,10 @@
     </div>
     {{-- END: Konfirmasi Excel --}}
 @endsection
+
+@push('scripts')
+    {{ $dataTable->scripts() }}
+@endpush
 
 @section('javascript')
     <script>

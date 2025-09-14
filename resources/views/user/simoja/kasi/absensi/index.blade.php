@@ -185,6 +185,7 @@
                             hidden>
                             @csrf
                             @method('GET')
+                            <input type="text" name="seksi_id" value="{{ $seksi_id ?? '' }}">
                             <input type="text" name="user_id" value="{{ $user_id ?? '' }}">
                             <input type="text" name="pulau_id" value="{{ $pulau_id ?? '' }}">
                             <input type="text" name="start_date" value="{{ $start_date ?? '' }}">

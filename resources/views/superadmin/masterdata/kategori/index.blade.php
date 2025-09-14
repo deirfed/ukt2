@@ -11,7 +11,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">Superadmin</li>
             <li class="breadcrumb-item">Masterdata</li>
-            <li class="breadcrumb-item active">Daftar Kategori</li>
+            <li class="breadcrumb-item active">Daftar Kategori Kegiatan</li>
         </ol>
     </div>
 @endsection
@@ -22,49 +22,17 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <br>
-                            <form class="form-inline mb-2">
-                                <input class="form-control mr-sm-2" type="search" placeholder="Cari sesuatu di sini..."
-                                    aria-label="Search" id="search-bar">
-                                <button class="btn btn-dark my-2 my-sm-0" type="submit">Pencarian</button>
-                            </form>
-                        </div>
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3 text-left">
                             <a href="{{ route('dashboard.index') }}" class="btn btn-outline-primary"><i
-                                    class="fa fa-arrow-left"></i>Kembali</a>
+                                    class="fa fa-arrow-left"></i> Kembali</a>
                             <a href="{{ route('admin-kategori.create') }}" class="btn btn-primary">Tambah
                                 Data</a>
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-bordered table-striped" id="dataTable">
-                            <thead>
-                                <tr>
-                                    <th class="text-center">No.</th>
-                                    <th class="text-center">Nama Kegiatan</th>
-                                    <th class="text-center">Seksi</th>
-                                    <th class="text-center">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($kategori as $item)
-                                    <tr>
-                                        <td class="text-center">{{ $loop->iteration }}</td>
-                                        <td class="text-left">{{ $item->name }}</td>
-                                        <td class="text-center">{{ $item->seksi->name }}</td>
-                                        <td class="text-center">
-                                            <a href="{{ route('admin-kategori.edit', $item->uuid) }}"><button
-                                                    class="btn btn-outline-primary"><i class="fa fa-edit"></i></button></a>
-                                            <a href="#" href="javascript:;" data-toggle="modal"
-                                                data-target="#delete-confirmation-modal"
-                                                onclick="toggleModal('{{ $item->id }}')"><button
-                                                    class="btn btn-outline-danger"><i class="fa fa-trash"></i></button></a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                        {{ $dataTable->table([
+                            'class' => 'table table-bordered table-striped',
+                        ]) }}
                     </div>
                 </div>
             </div>
@@ -96,6 +64,9 @@
     <!-- END: Delete Confirmation Modal -->
 @endsection
 
+@push('scripts')
+    {{ $dataTable->scripts() }}
+@endpush
 
 @section('javascript')
     <script type="text/javascript">

@@ -28,17 +28,16 @@
                                 <div class="filters-block">
                                     <h5>Arsip Tahun</h5>
                                     <div class="filters">
-                                        @for ($y = 2024; $y <= date('Y'); $y++)
-                                            <a href="javascript:void(0);"
-                                                class="year-link {{ $y == $tahun ? 'active' : '' }}"
-                                                data-year="{{ $y }}">
+                                        @foreach ($tahuns as $y)
+                                            <a href="{{ route('admin-absensi.index', ['tahun' => $y]) }}"
+                                                class="{{ $y == $tahun ? 'active' : '' }}">
                                                 <i class="icon-receipt"></i>
                                                 {{ $y }}
                                                 @if ($y == date('Y'))
                                                     (Tahun Berjalan)
                                                 @endif
                                             </a>
-                                        @endfor
+                                        @endforeach
                                     </div>
 
                                 </div>
@@ -90,11 +89,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{-- <div class="table-responsive">
+                                <div class="table-responsive">
                                     {{ $dataTable->table([
                                         'class' => 'table table-bordered table-striped',
                                     ]) }}
-                            </div> --}}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -115,11 +114,22 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="formFilter" action="{{ route('simoja.kasi.absensi') }}" method="GET">
+                    <form id="formFilter" action="{{ route('admin-absensi.index') }}" method="GET">
                         @csrf
                         @method('GET')
                         <div class="form-row gutters">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="">Seksi</label>
+                                    <select name="seksi_id" class="form-control">
+                                        <option value="" selected disabled>- Pilih Seksi -</option>
+                                        @foreach ($seksi as $item)
+                                            <option value="{{ $item->id }}" @selected($item->id == $seksi_id)>
+                                                {{ $item->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
                                 <div class="form-group">
                                     <label for="">Personel</label>
                                     <select name="user_id" class="form-control">
@@ -143,10 +153,31 @@
                                         @endforeach
                                     </select>
                                 </div>
+                            </div>
+                        </div>
+                        <label for="periode">Bulan & Tahun</label>
+                        <div class="form-row gutters">
+                            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <label for="">Periode</label>
-                                    <input type="month" class="form-control" name="periode"
-                                        value="{{ $periode }}">
+                                    <select class="form-control" name="bulan" id="bulan" required>
+                                        @for ($m = 1; $m <= 12; $m++)
+                                            @php
+                                                $val = str_pad($m, 2, '0', STR_PAD_LEFT);
+                                            @endphp
+                                            <option value="{{ $val }}" @selected($val == $bulan)>
+                                                {{ \Carbon\Carbon::create()->month($m)->translatedFormat('F') }}
+                                            </option>
+                                        @endfor
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <select class="form-control" name="tahun" id="tahun" required>
+                                        @foreach ($tahuns as $y)
+                                            <option value="{{ $y }}" @selected($y == $tahun)>{{ $y }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -217,6 +248,7 @@
                             hidden>
                             @csrf
                             @method('GET')
+                            <input type="text" name="seksi_id" value="{{ $seksi_id ?? '' }}">
                             <input type="text" name="user_id" value="{{ $user_id ?? '' }}">
                             <input type="text" name="pulau_id" value="{{ $pulau_id ?? '' }}">
                             <input type="text" name="start_date" value="{{ $start_date ?? '' }}">
@@ -273,7 +305,6 @@
         </div>
     </div>
 @endsection
-
 
 
 @push('scripts')

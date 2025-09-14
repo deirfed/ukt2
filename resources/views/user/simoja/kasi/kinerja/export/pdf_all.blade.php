@@ -23,9 +23,6 @@
             <p class="mt-3 mb-0 text-uppercase font-weight-bold">
                 <u>LAPORAN KINERJA PER KEGIATAN</u>
             </p>
-            <p class="mt-0" style="font-size: 13px">
-                (Periode: {{ $start_date }} s/d {{ $end_date }})
-            </p>
         </div>
         <div class="mt-3">
             <table class="table table-bordered p-1" style="font-size: 10px">

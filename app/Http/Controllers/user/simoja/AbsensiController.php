@@ -50,6 +50,7 @@ class AbsensiController extends Controller
         $pulau = Pulau::orderBy('name', 'ASC')->get();
 
         return $dataTable->with([
+            'seksi_id' => $seksi_id,
             'user_id' => $user_id,
             'pulau_id' => $pulau_id,
             'start_date' => $start_date,
@@ -57,6 +58,7 @@ class AbsensiController extends Controller
         ])->render('user.simoja.kasi.absensi.index', compact([
             'user',
             'pulau',
+            'seksi_id',
             'user_id',
             'pulau_id',
             'start_date',
@@ -125,7 +127,7 @@ class AbsensiController extends Controller
 
     public function export_excel_kasi(Request $request)
     {
-        $seksi_id = auth()->user()->struktur->seksi->id;
+        $seksi_id = $request->seksi_id;
         $user_id = $request->user_id;
         $pulau_id = $request->pulau_id;
         $start_date = $request->start_date;
@@ -153,7 +155,15 @@ class AbsensiController extends Controller
         $start_date = Carbon::parse($start_date);
         $end_date = Carbon::parse($end_date) ?? $start_date;
 
-        $user = FormasiTim::where('periode', Carbon::now()->year)->where('koordinator_id', $user_id)->orWhere('anggota_id', $user_id)->first();
+        $user = FormasiTim::where('anggota_id', $user_id)
+                        ->orderBy('periode', 'DESC')
+                        ->first();
+
+        $kepala_seksi = User::where('jabatan_id', 2) //Kepala Seksi
+                        ->where('struktur_id', $user->struktur_id)
+                        ->orderBy('updated_at', 'DESC')
+                        ->first();
+
         $absensi = Absensi::where('user_id', $user_id)
                             ->whereBetween('tanggal', [$start_date, $end_date])
                             ->get()
@@ -188,8 +198,98 @@ class AbsensiController extends Controller
             ];
         }
 
+        $jumlah_hari_kerja = $start_date->diffInDays($end_date) + 1;
+        $jumlah_hari_masuk = Absensi::where('user_id', $user_id)
+                            ->whereBetween('tanggal', [$start_date, $end_date])
+                            ->where(function ($q) {
+                                $q->whereNotNull('jam_masuk')
+                                    ->orWhereNotNull('jam_pulang');
+                            })
+                            ->count();
+        $jumlah_hari_tidak_masuk = $jumlah_hari_kerja - $jumlah_hari_masuk;
+        $persentase_kehadiran = $jumlah_hari_kerja > 0
+                                ? round(($jumlah_hari_masuk / $jumlah_hari_kerja) * 100)
+                                : 0;
+        $jumlah_hari_ok = Absensi::where('user_id', $user_id)
+                            ->whereBetween('tanggal', [$start_date, $end_date])
+                            ->whereNotNull('jam_masuk')
+                            ->whereNotNull('jam_pulang')
+                            ->where('telat_masuk', 0)
+                            ->where('cepat_pulang', 0)
+                            ->count();
+        $jumlah_hari_tidak_ok = $jumlah_hari_kerja - $jumlah_hari_ok;
+        $jumlah_hari_lengkap = Absensi::where('user_id', $user_id)
+                            ->whereBetween('tanggal', [$start_date, $end_date])
+                            ->whereNotNull('jam_masuk')
+                            ->whereNotNull('jam_pulang')
+                            ->count();
+        $jumlah_hari_tidak_lengkap = $jumlah_hari_kerja - $jumlah_hari_lengkap;
+        $persentase_ketertiban = $jumlah_hari_kerja > 0
+                                ? round(($jumlah_hari_ok / $jumlah_hari_kerja) * 100)
+                                : 0;
+
+        $cuti = Absensi::where('user_id', $user_id)
+                            ->whereBetween('tanggal', [$start_date, $end_date])
+                            ->where('status', 'Cuti Tahunan')
+                            ->count();
+
+        $sakit = Absensi::where('user_id', $user_id)
+                            ->whereBetween('tanggal', [$start_date, $end_date])
+                            ->where('status', 'Izin Sakit')
+                            ->count();
+
+        $konfigurasi = KonfigurasiAbsensi::latest()->first();
+        $jamStandarMasuk  = Carbon::parse($konfigurasi->jam_masuk);   // 07:30
+        $jamStandarPulang = Carbon::parse($konfigurasi->jam_pulang);  // 16:00
+        $jamKerjaHarian   = $jamStandarMasuk->floatDiffInHours($jamStandarPulang);
+
+        // total jam kerja standar (efektif)
+        $total_jam_kerja = $jamKerjaHarian * $jumlah_hari_kerja;
+
+        // total jam kerja aktual
+        $total_jam_kerja_aktual = Absensi::where('user_id', $user_id)
+            ->whereBetween('tanggal', [$start_date, $end_date])
+            ->get()
+            ->sum(function ($absen) use ($jamStandarMasuk, $jamStandarPulang, $jamKerjaHarian) {
+                if ($absen->jam_masuk && $absen->jam_pulang) {
+                    $jamMasuk  = Carbon::parse($absen->jam_masuk);
+                    $jamPulang = Carbon::parse($absen->jam_pulang);
+
+                    if ($jamMasuk->greaterThan($jamStandarMasuk) || $jamPulang->lessThan($jamStandarPulang)) {
+                        // real jam kerja (karena telat masuk atau cepat pulang)
+                        return $jamMasuk->floatDiffInHours($jamPulang);
+                    } else {
+                        // full ikut standar
+                        return $jamKerjaHarian;
+                    }
+                }
+                return 0; // absen tidak lengkap
+            });
+
+        // persentase jam kerja aktual
+        $persentase_jam_kerja_aktual = $total_jam_kerja > 0
+            ? round(($total_jam_kerja_aktual / $total_jam_kerja) * 100)
+            : 0;
+
+        $total_jam_kerja_aktual = round($total_jam_kerja_aktual);
+
         $pdf = Pdf::loadView('user.simoja.kasi.absensi.export.pdf', [
             'user' => $user,
+            'kepala_seksi' => $kepala_seksi,
+            'jumlah_hari_kerja' => $jumlah_hari_kerja,
+            'jumlah_hari_masuk' => $jumlah_hari_masuk,
+            'jumlah_hari_tidak_masuk' => $jumlah_hari_tidak_masuk,
+            'persentase_kehadiran' => $persentase_kehadiran,
+            'jumlah_hari_ok' => $jumlah_hari_ok,
+            'jumlah_hari_tidak_ok' => $jumlah_hari_tidak_ok,
+            'persentase_ketertiban' => $persentase_ketertiban,
+            'jumlah_hari_lengkap' => $jumlah_hari_lengkap,
+            'jumlah_hari_tidak_lengkap' => $jumlah_hari_tidak_lengkap,
+            'cuti' => $cuti,
+            'sakit' => $sakit,
+            'total_jam_kerja' => $total_jam_kerja,
+            'total_jam_kerja_aktual' => $total_jam_kerja_aktual,
+            'persentase_jam_kerja_aktual' => $persentase_jam_kerja_aktual,
             'datesInRange' => $datesInRange,
             'absensi' => $absensi,
             'start_date' => $start_date->isoFormat('D MMMM Y'),

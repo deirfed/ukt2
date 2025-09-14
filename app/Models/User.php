@@ -88,4 +88,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(KonfigurasiCuti::class);
     }
+
+    public function surat_peringatans()
+    {
+        return $this->hasMany(SuratPeringatan::class, 'user_id');
+    }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\superadmin;
 
+use App\DataTables\CutiDataTable;
+use App\DataTables\CutiPersetujuanDataTable;
 use App\Exports\cuti\CutiExport;
 use App\Http\Controllers\Controller;
 use App\Mail\CutiMail;
@@ -25,34 +27,57 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class CutiController extends Controller
 {
-    public function index()
+    public function index(CutiDataTable $dataTable, Request $request)
     {
-        $cuti = Cuti::orderBy('created_at', 'DESC')->get();
+        $request->validate([
+            'user_id' => 'nullable|exists:users,id',
+            'pulau_id' => 'nullable|exists:pulau,id',
+            'jenis_cuti_id' => 'nullable|exists:jenis_cuti,id',
+            'status' => 'nullable|string',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+        ]);
+
+        $user_id = $request->user_id ?? null;
+        $pulau_id = $request->pulau_id ?? null;
+        $seksi_id = $request->seksi_id ?? null;
+        $jenis_cuti_id = $request->jenis_cuti_id ?? null;
+        $status = $request->status ?? null;
+        $tim_id = $request->tim_id ?? null;
+
+        $periode = Carbon::now()->format('Y');
+
+        $start_date = $request->start_date ?? Carbon::createFromFormat('Y', $periode)->startOfYear()->toDateString();
+        $end_date = $request->end_date ?? Carbon::createFromFormat('Y', $periode)->endOfYear()->toDateString();
+
+
+        $user = User::where('employee_type_id', 3)
+                ->orderBy('name', 'ASC')
+                ->whereNot('jabatan_id', 6)
+                ->get();
 
         $pulau = Pulau::orderBy('name', 'ASC')->get();
         $seksi  = Seksi::all();
-        $koordinator  = User::whereRelation('jabatan', 'id', '=', 4)->get();
-        $tim = Tim::orderBy('name', 'ASC')->get();
+        $jenis_cuti = JenisCuti::all();
 
-        $pulau_id = '';
-        $seksi_id = '';
-        $koordinator_id = '';
-        $tim_id = '';
-        $status = '';
-        $start_date = '';
-        $end_date = '';
-
-        return view('superadmin.cuti.cuti.index', compact([
-            'cuti',
-            'pulau',
+        return $dataTable->with([
+            'seksi_id' => $seksi_id,
+            'user_id' => $user_id,
+            'pulau_id' => $pulau_id,
+            'jenis_cuti_id' => $jenis_cuti_id,
+            'status' => $status,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+        ])->render('superadmin.cuti.cuti.index', compact([
             'seksi',
-            'koordinator',
-            'tim',
-            'pulau_id',
-            'seksi_id',
-            'koordinator_id',
-            'tim_id',
+            'user',
+            'pulau',
+            'jenis_cuti',
             'status',
+            'seksi_id',
+            'user_id',
+            'pulau_id',
+            'jenis_cuti_id',
             'start_date',
             'end_date',
         ]));
@@ -118,12 +143,9 @@ class CutiController extends Controller
         return redirect()->route('admin-cuti.approval_page')->withNotify('Data berhasil ditolak!');
     }
 
-    public function approval_page()
+    public function approval_page(CutiPersetujuanDataTable $dataTable)
     {
-        $approval_cuti = Cuti::where('status', 'Diproses')->get();
-        return view('superadmin.cuti.cuti.approval', compact([
-            'approval_cuti',
-        ]));
+        return $dataTable->render('superadmin.cuti.cuti.approval');
     }
 
     public function pdf($uuid)

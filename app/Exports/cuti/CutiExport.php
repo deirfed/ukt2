@@ -18,6 +18,7 @@ class CutiExport implements FromView, ShouldAutoSize
     public $status;
     public $start_date;
     public $end_date;
+
     public function __construct(?int $pulau_id = null, ?int $seksi_id = null, ?int $koordinator_id = null, ?int $tim_id, ?string $status = null, ?string $start_date = null, ?string $end_date = null)
     {
         $this->pulau_id = $pulau_id;

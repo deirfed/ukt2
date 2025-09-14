@@ -17,6 +17,7 @@ class CutiDataTable extends DataTable
 {
     protected $start_date;
     protected $end_date;
+    protected $seksi_id;
     protected $user_id;
     protected $pulau_id;
     protected $jenis_cuti_id;
@@ -84,6 +85,7 @@ class CutiDataTable extends DataTable
     public function query(Cuti $model): QueryBuilder
     {
         $query = $model->select('cuti.*')->with([
+            'user.struktur.seksi',
             'user.jabatan',
             'user.area.pulau',
             'jenis_cuti',
@@ -91,11 +93,12 @@ class CutiDataTable extends DataTable
             'known_by',
         ])->newQuery();
 
-        $seksi_id = auth()->user()->struktur->seksi->id;
-
-        $query->whereRelation('user.struktur.seksi', 'id', '=', $seksi_id);
-
         // Filter
+        if($this->seksi_id != null)
+        {
+            $query->whereRelation('user.struktur.seksi', 'id', '=', $this->seksi_id);
+        }
+
         if($this->user_id != null)
         {
             $query->where('user_id', $this->user_id);
@@ -137,7 +140,7 @@ class CutiDataTable extends DataTable
                     ->minifiedAjax()
                     ->pageLength(50)
                     ->lengthMenu([10, 50, 100, 250, 500, 1000])
-                    ->orderBy([3, 'desc'])
+                    ->orderBy([4, 'desc'])
                     ->selectStyleSingle()
                     ->buttons([
                         [
@@ -156,6 +159,7 @@ class CutiDataTable extends DataTable
         return [
             Column::make('user.name')->title('Nama')->addClass('font-weight-bold text-nowrap')->sortable(true),
             Column::make('user.jabatan.name')->title('Jabatan')->sortable(false),
+            Column::make('user.struktur.seksi.name')->title('Seksi')->sortable(false),
             Column::make('user.area.pulau.name')->title('Pulau')->sortable(false),
             Column::make('tanggal_awal')->title('Tanggal Awal')->sortable(true),
             Column::make('tanggal_akhir')->title('Tanggal Akhir')->sortable(true),
@@ -164,7 +168,7 @@ class CutiDataTable extends DataTable
             Column::make('user.konfigurasi_cuti.jumlah')->title('Sisa Cuti')->sortable(false),
             Column::make('known_by.name')->title('Koordinator')->sortable(false),
             Column::computed('disetujui')->title('Disetujui')->sortable(false),
-            Column::computed('status')->title('Status')->sortable(false),
+            Column::computed('status')->title('Status')->addClass('text-center')->sortable(false),
             // Column::make('catatan')->title('Catatan')->sortable(false)->addClass('text-wrap'),
             Column::computed('#')
                 ->exportable(false)

@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
         'Koordinator' => \App\Http\Middleware\Koordinator::class,
         'PJLP' => \App\Http\Middleware\PJLP::class,
         'Superadmin' => \App\Http\Middleware\Superadmin::class,
+        'CheckBanned' => \App\Http\Middleware\CheckBanned::class,
     ];
 }

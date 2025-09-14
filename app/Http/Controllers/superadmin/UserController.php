@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\superadmin;
 
+use App\DataTables\UserDataTable;
 use App\Models\Area;
 use App\Models\Role;
 use App\Models\User;
@@ -16,27 +17,13 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function index(Request $request)
+    public function index(UserDataTable $dataTable, Request $request)
     {
         $employee_type_id = $request->employee_type_id;
-        switch ($employee_type_id) {
-            case 1:
-                $users = User::where('employee_type_id', 1)->get();
-                break;
-            case 2:
-                $users = User::where('employee_type_id', 2)->get();
-                break;
-            case 3:
-                $users = User::where('employee_type_id', 3)->get();
-                break;
-            default:
-                $users = User::all();
-                break;
-        }
 
-        return view('superadmin.masterdata.user.index', compact([
-            'users',
-        ]));
+        return $dataTable->with([
+            'employee_type_id' => $employee_type_id,
+        ])->render('superadmin.masterdata.user.index');
     }
 
     public function create()
@@ -59,17 +46,17 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'email' => 'required|email',
-            'role_id' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'role_id' => 'required|exists:role,id',
             'phone' => 'required|numeric',
         ]);
 
-        $password = $password = Hash::make('user123');
+        $defaultPassword = 'user123';
 
         $user = User::create([
             "name" => $request->name,
             "email" => $request->email,
-            "password" => $password,
+            "password" => Hash::make($defaultPassword),
             "nip" => $request->nip,
             "phone" => $request->phone,
             "gender" => $request->gender,
@@ -83,12 +70,15 @@ class UserController extends Controller
             "struktur_id" => $request->struktur_id,
         ]);
 
-        RoleUser::create([
+        RoleUser::updateOrCreate([
+            'user_id' => $user->id,
+            'role_id' => $user->role_id,
+        ], [
             'user_id' => $user->id,
             'role_id' => $user->role_id,
         ]);
 
-        return redirect()->route('admin-user.index')->withNotify('Data berhasil ditambah!');
+        return redirect()->route('admin-user.index')->withNotify('Data user <strong>' . $user->name . '</strong> berhasil ditambahkan, dengan default password <strong><code>' . $defaultPassword . '</code></strong>');
     }
 
     public function show(string $uuid)
@@ -139,6 +129,33 @@ class UserController extends Controller
             "struktur_id" => $request->struktur_id,
         ]);
         return redirect()->route('admin-user.index')->withNotify('Data berhasil diperbaharui!');
+    }
+
+    public function banOrUnban($uuid) {
+        $user = User::where('uuid', $uuid)->firstOrFail();
+
+        //Cek status user sedang banned atau tidak
+        if ($user->isBanned()) {
+            $user->unban();
+            $message = 'unban!';
+        } else {
+            // Kalau user masih aktif → lakukan Ban
+            $user->ban();
+            $message = 'banned!';
+        }
+
+        return redirect()->route('admin-user.index')->withNotify('User ' . $user->name . ' berhasil di-' . $message);
+    }
+
+    public function resetPassword($uuid) {
+        $user = User::where('uuid', $uuid)->firstOrFail();
+        $defaultPassword = "user123";
+        $password = Hash::make($defaultPassword);
+        $user->update([
+            'password' => $password,
+        ]);
+
+        return redirect()->route('admin-user.index')->withNotify("Password user <strong>" . $user->name . "</strong> berhasil diubah ke <strong><code>" . $defaultPassword . "</code></strong>");
     }
 
     public function destroy(Request $request)

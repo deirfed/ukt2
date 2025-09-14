@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\data_essentials;
 
+use App\DataTables\SuratPeringatanSayaDataTable;
 use App\Models\Area;
 use App\Models\Role;
 use App\Models\User;
@@ -12,6 +13,7 @@ use App\Models\EmployeeType;
 use Illuminate\Http\Request;
 use App\Models\KonfigurasiCuti;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Intervention\Image\Facades\Image;
@@ -150,8 +152,9 @@ class UserController extends Controller
         return back()->withError('Data tidak bisa dihapus');
     }
 
-    public function user_profile()
+    public function user_profile(SuratPeringatanSayaDataTable $dataTable)
     {
+        $tahun = Carbon::now()->format('Y');
         $jumlah_cuti = KonfigurasiCuti::where('user_id', auth()->id())->first();
 
         if ($jumlah_cuti) {
@@ -159,7 +162,15 @@ class UserController extends Controller
         } else {
             $sisa_cuti = 0;
         }
-        return view('pages.profile.index', compact(['sisa_cuti']));
+
+        // return view('pages.profile.index', compact(['sisa_cuti']));
+
+        return $dataTable->with([
+            'tahun' => $tahun,
+        ])->render('pages.profile.index', compact([
+            'sisa_cuti',
+            'tahun',
+        ]));
     }
 
     public function edit_password()

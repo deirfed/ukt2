@@ -42,7 +42,7 @@ class DashboardController extends Controller
         // Dashboard
         $today = Carbon::today();
         $tahun = date('Y');
-        $totalUser = User::where('employee_type_id', 3)->count();
+        $totalUser = User::where('employee_type_id', 3)->notBanned()->count();
         $jumlahKinerja = Kinerja::whereYear('tanggal', now()->year)->count();
         $jumlahKinerja = number_format($jumlahKinerja, 0, ',', '.');
 
@@ -89,24 +89,21 @@ class DashboardController extends Controller
         } elseif ($jabatan_id == 5) {
             return redirect()->route('simoja.pjlp.index');
         } else {
-            return view(
-                'superadmin.dashboard.index',
-                compact(
-                    'totalUser',
-                    'jumlahKinerja',
-                    'tahun',
-                    'tersedia',
-                    'persentase',
-                    'cutiHariIni',
-                    'user',
-                    'user_id',
-                    'periode',
-                    'kategori',
-                    'kategori_id',
-                    'start_date',
-                    'end_date',
-                )
-            );
+            return view('superadmin.dashboard.index', compact([
+                'totalUser',
+                'jumlahKinerja',
+                'tahun',
+                'tersedia',
+                'persentase',
+                'cutiHariIni',
+                'user',
+                'user_id',
+                'periode',
+                'kategori',
+                'kategori_id',
+                'start_date',
+                'end_date',
+            ]));
         }
     }
 

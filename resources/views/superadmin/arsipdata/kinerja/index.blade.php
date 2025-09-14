@@ -28,17 +28,16 @@
                                 <div class="filters-block">
                                     <h5>Arsip Tahun</h5>
                                     <div class="filters">
-                                        @for ($y = 2024; $y <= date('Y'); $y++)
-                                            <a href="javascript:void(0);"
-                                                class="year-link {{ $y == $tahun ? 'active' : '' }}"
-                                                data-year="{{ $y }}">
+                                        @foreach ($tahuns as $y)
+                                            <a href="{{ route('admin-kinerja.index', ['tahun' => $y]) }}"
+                                                class="{{ $y == $tahun ? 'active' : '' }}">
                                                 <i class="icon-receipt"></i>
                                                 {{ $y }}
                                                 @if ($y == date('Y'))
                                                     (Tahun Berjalan)
                                                 @endif
                                             </a>
-                                        @endfor
+                                        @endforeach
                                     </div>
 
                                 </div>
@@ -81,8 +80,20 @@
                                                     </li>
                                                     <li>
                                                         <a class="dropdown-item" href="javascript:;" data-toggle="modal"
-                                                            data-target="#modalDownloadPDF" title="Export PDF">
-                                                            <i class="fa fa-file-pdf text-danger"></i> Export PDF
+                                                            data-target="#modalDownloadPDFAll">
+                                                            <i class="fa fa-file-pdf text-danger"></i> PDF
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item" href="javascript:;" data-toggle="modal"
+                                                            data-target="#modalDownloadPDF">
+                                                            <i class="fa fa-file-pdf text-danger"></i> PDF per Personil
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item" href="javascript:;" data-toggle="modal"
+                                                            data-target="#modalDownloadPDFKegiatan">
+                                                            <i class="fa fa-file-pdf text-danger"></i> PDF per Kegiatan
                                                         </a>
                                                     </li>
                                                 </ul>
@@ -90,11 +101,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{-- <div class="table-responsive">
-                                {{ $dataTable->table([
-                                    'class' => 'table table-bordered table-striped',
-                                ]) }}
-                        </div> --}}
+                                <div class="table-responsive">
+                                    {{ $dataTable->table([
+                                        'class' => 'table table-bordered table-striped',
+                                    ]) }}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -114,11 +125,22 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="formFilter" action="{{ route('simoja.kasi.kinerja') }}" method="GET">
+                    <form id="formFilter" action="{{ route('admin-kinerja.index') }}" method="GET">
                         @csrf
                         @method('GET')
                         <div class="form-row gutters">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="">Seksi</label>
+                                    <select name="seksi_id" class="form-control" required>
+                                        <option value="" selected disabled>- Pilih Seksi -</option>
+                                        @foreach ($seksi as $item)
+                                            <option value="{{ $item->id }}" @selected($item->id == $seksi_id)>
+                                                {{ $item->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
                                 <div class="form-group">
                                     <label for="">Personel</label>
                                     <select name="user_id" class="form-control">
@@ -147,26 +169,30 @@
                                     <select name="kategori_id" class="form-control">
                                         <option value="" selected disabled>- Pilih Kegiatan -</option>
                                         @foreach ($kategori as $item)
-                                            <option value="{{ $item->id }}"
-                                                @if ($item->id == $kategori_id) selected @endif>{{ $item->name }}
+                                            <option value="{{ $item->id }}" @selected($item->id == $kategori_id)>
+                                                ({{ $item->seksi->name ?? '#' }}) - {{ $item->name }}
                                             </option>
                                         @endforeach
                                     </select>
                                 </div>
+                                <div class="form-group">
+                                    <label for="">Tahun</label>
+                                    <input type="text" class="form-control" name="tahun" value="{{ $tahun }}" readonly>
+                                </div>
                             </div>
                         </div>
-                        <label for="periode">Periode</label>
+                        <label for="periode">Tanggal & Bulan</label>
                         <div class="form-row gutters">
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
                                     <input type="date" class="form-control" value="{{ $start_date }}"
-                                        name="start_date">
+                                        name="start_date" id="start_date" required>
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
                                     <input type="date" class="form-control" value="{{ $end_date }}"
-                                        name="end_date">
+                                        name="end_date" id="end_date" required>
                                 </div>
                             </div>
                         </div>
@@ -227,6 +253,7 @@
                             hidden>
                             @csrf
                             @method('GET')
+                            <input type="text" name="seksi_id" value="{{ $seksi_id ?? '' }}">
                             <input type="text" name="user_id" value="{{ $user_id ?? '' }}">
                             <input type="text" name="pulau_id" value="{{ $pulau_id ?? '' }}">
                             <input type="text" name="kategori_id" value="{{ $kategori_id ?? '' }}">
@@ -310,8 +337,24 @@
                                     <select name="kategori_id" class="form-control" required>
                                         <option value="" selected disabled>- Pilih Kegiatan -</option>
                                         @foreach ($kategori as $item)
+                                            <option value="{{ $item->id }}" @selected($item->id == $kategori_id)>
+                                                ({{ $item->seksi->name ?? '#' }}) - {{ $item->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="">Personil</label>
+                                    <select name="user_id" class="form-control">
+                                        <option value="" selected disabled>- Pilih Personil (opsional) -</option>
+                                        @foreach ($user as $item)
                                             <option value="{{ $item->id }}"
-                                                @if ($item->id == $kategori_id) selected @endif>{{ $item->name }}
+                                                @if ($item->id == $user_id) selected @endif>{{ $item->name }} -
+                                                {{ $item->nip ?? '-' }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -349,32 +392,36 @@
     <div id="modalDownloadPDFAll" class="modal fade" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-body">
-                    <form id="formKegiatanPDFAll" action="{{ route('simoja.kasi.kinerja.export.pdf.all') }}"
-                        method="GET">
-                        @csrf
-                        @method('GET')
-                        <label for="periode">Periode</label>
-                        <div class="form-row gutters">
-                            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <input type="date" class="form-control" value="{{ $start_date }}"
-                                        name="start_date" required>
-                                </div>
-                            </div>
-                            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <input type="date" class="form-control" value="{{ $end_date }}"
-                                        name="end_date" required>
-                                </div>
-                            </div>
+                <div class="modal-body p-2">
+                    <div class="p-2 text-center">
+                        <div class="mt-2 fw-bolder">Apakah anda yakin?</div>
+                        <div class="mt-2">
+                            <img style="height: 100px;"
+                                src="https://static.vecteezy.com/system/resources/previews/019/016/806/non_2x/adobe-acrobat-reader-icon-free-png.png"
+                                alt="PDF">
                         </div>
-                    </form>
+                        <div class="text-slate-500 mt-2">
+                            <p>
+                                Data ini akan di-generate dalam format PDF!
+                            </p>
+                        </div>
+                        <form id="formKegiatanPDFAll" action="{{ route('simoja.kasi.kinerja.export.pdf.all') }}" method="GET"
+                            hidden>
+                            @csrf
+                            @method('GET')
+                            <input type="text" name="seksi_id" value="{{ $seksi_id ?? '' }}">
+                            <input type="text" name="user_id" value="{{ $user_id ?? '' }}">
+                            <input type="text" name="pulau_id" value="{{ $pulau_id ?? '' }}">
+                            <input type="text" name="kategori_id" value="{{ $kategori_id ?? '' }}">
+                            <input type="text" name="start_date" value="{{ $start_date ?? '' }}">
+                            <input type="text" name="end_date" value="{{ $end_date ?? '' }}">
+                        </form>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
                     <button type="submit" form="formKegiatanPDFAll" formtarget="_blank"
-                        class="btn btn-primary">Buat</button>
+                        class="btn btn-primary">Unduh</button>
                 </div>
             </div>
         </div>
@@ -382,23 +429,12 @@
     {{-- END: Konfirmasi PDF All --}}
 @endsection
 
+@push('scripts')
+    {{ $dataTable->scripts() }}
+@endpush
+
 @section('javascript')
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const yearLinks = document.querySelectorAll(".year-link");
-
-            yearLinks.forEach(link => {
-                link.addEventListener("click", function(e) {
-                    e.preventDefault();
-                    let year = this.dataset.year;
-
-                    document.getElementById("kinerja-title").innerHTML = "Arsip Kinerja - " + year;
-
-                    yearLinks.forEach(l => l.classList.remove("active"));
-
-                    this.classList.add("active");
-                });
-            });
-        });
+        //
     </script>
 @endsection

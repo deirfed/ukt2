@@ -67,7 +67,7 @@
 
         <p class="text-center mt-3 text-uppercase font-weight-bold"><u>SUMMARY PRESENSI</u></p>
 
-        <p class="ml-4"><u>Total Hari Kerja : 30 Hari</u></p>
+        <p class="ml-4"><u>Total Hari Kerja : {{ $jumlah_hari_kerja ?? 'N/A' }} Hari</u></p>
         <table class="table table-bordered" style="width:90%; margin:auto; font-size:13px;">
             <thead>
                 <tr>
@@ -81,26 +81,30 @@
                 <tr>
                     <td>1</td>
                     <td>Presensi Masuk & Pulang</td>
-                    <td class="text-center">30</td>
+                    <td class="text-center">{{ $jumlah_hari_masuk ?? 'N/A' }}</td>
                     <td class="text-center"></td>
                 </tr>
                 <tr>
                     <td>2</td>
                     <td>Presensi Tidak Lengkap</td>
-                    <td class="text-center">2</td>
+                    <td class="text-center">{{ $jumlah_hari_tidak_lengkap ?? 'N/A' }}</td>
                     <td></td>
                 </tr>
                 <tr>
                     <td>3</td>
-                    <td>Presensi Telat</td>
-                    <td class="text-center">1</td>
+                    <td>Presensi Tidak Tertib</td>
+                    <td class="text-center">{{ $jumlah_hari_tidak_ok ?? 'N/A' }}</td>
                     <td class="text-center"></td>
                 </tr>
                 <tr>
                     <td>4</td>
                     <td>Tidak Hadir</td>
-                    <td class="text-center">1</td>
-                    <td class="text-center">Cuti: 1 <br> Sakit:2</td>
+                    <td class="text-center">{{ $jumlah_hari_tidak_masuk ?? 'N/A' }}</td>
+                    <td class="text-left">
+                        Cuti: {{ $cuti ?? 'N/A' }} <br>
+                        Sakit: {{ $sakit ?? 'N/A' }} <br>
+                        Tanpa Keterangan: {{ $jumlah_hari_tidak_lengkap ?? 'N/A' }}
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -108,49 +112,46 @@
         <div style="text-align:center; margin-top:50px;">
 
             @php
-                $kehadiran = 90;
-                $ketertiban = 70;
-                $efisiensi = 80;
-
                 function getColor($value)
                 {
-                    if ($value >= 90) {
-                        return '#90ee90';
+                    if ($value === null) {
+                        return '#d3d3d3'; // abu-abu kalau N/A
+                    } elseif ($value >= 90) {
+                        return '#90ee90'; // hijau muda
                     } elseif ($value >= 70) {
-                        return '#fffacd';
+                        return '#fffacd'; // kuning muda
                     } else {
-                        return '#f08080';
+                        return '#f08080'; // merah muda
                     }
                 }
             @endphp
 
             <div
-                style="display:inline-block; background:{{ getColor($kehadiran) }}; color:#000; padding:18px; width:20%; text-align:center; border-radius:12px; box-shadow:0 4px 8px rgba(0,0,0,0.1); margin-right:2%;">
-                <div style="font-size:50px; font-weight:bold;">{{ $kehadiran }}%</div>
+                style="display:inline-block; background:{{ getColor($persentase_kehadiran ?? null) }}; color:#000; padding:18px; width:20%; text-align:center; border-radius:12px; box-shadow:0 4px 8px rgba(0,0,0,0.1); margin-right:2%;">
+                <div style="font-size:50px; font-weight:bold;">{{ $persentase_kehadiran ?? 'N/A' }}%</div>
                 <div style="margin-top:5px; font-size:14px;">
                     Tingkat Kehadiran <br>
-                    <p style="font-size:10px">27/30 Hari</p>
+                    <p style="font-size:10px">{{ $jumlah_hari_masuk ?? 'N/A' }}/{{ $jumlah_hari_kerja ?? 'N/A' }} Hari</p>
                 </div>
             </div>
 
             <div
-                style="display:inline-block; background:{{ getColor($ketertiban) }}; color:#000; padding:18px; width:20%; text-align:center; border-radius:12px; box-shadow:0 4px 8px rgba(0,0,0,0.1); margin-right:2%;">
-                <div style="font-size:50px; font-weight:bold;">{{ $ketertiban }}%</div>
+                style="display:inline-block; background:{{ getColor($persentase_ketertiban ?? null) }}; color:#000; padding:18px; width:20%; text-align:center; border-radius:12px; box-shadow:0 4px 8px rgba(0,0,0,0.1); margin-right:2%;">
+                <div style="font-size:50px; font-weight:bold;">{{ $persentase_ketertiban ?? 'N/A' }}%</div>
                 <div style="margin-top:5px; font-size:14px;">
                     Tingkat Ketertiban <br>
-                    <p style="font-size:10px">10/30 Absen Tidak Komplit / Telat</p>
+                    <p style="font-size:10px">{{ $jumlah_hari_ok ?? 'N/A' }}/{{ $jumlah_hari_kerja ?? 'N/A' }} Hari</p>
                 </div>
             </div>
 
             <div
-                style="display:inline-block; background:{{ getColor($efisiensi) }}; color:#000; padding:18px; width:20%; text-align:center; border-radius:12px; box-shadow:0 4px 8px rgba(0,0,0,0.1);">
-                <div style="font-size:50px; font-weight:bold;">{{ $efisiensi }}%</div>
+                style="display:inline-block; background:{{ getColor($persentase_jam_kerja_aktual ?? null) }}; color:#000; padding:18px; width:20%; text-align:center; border-radius:12px; box-shadow:0 4px 8px rgba(0,0,0,0.1);">
+                <div style="font-size:50px; font-weight:bold;">{{ $persentase_jam_kerja_aktual ?? 'N/A' }}%</div>
                 <div style="margin-top:5px; font-size:14px;">
                     Efisiensi Kerja <br>
-                    <p style="font-size:10px">6000/20000 jam Efektif Bekerja</p>
+                    <p style="font-size:10px">{{ $total_jam_kerja_aktual ?? 'N/A' }}/{{ $total_jam_kerja ?? 'N/A' }} Jam</p>
                 </div>
             </div>
-
         </div>
 
         <div style="font-size:12px;" class="ml-4">
@@ -158,6 +159,10 @@
             <p>% Tingkat Kehadiran: Presentase Kehadiran & Ketidakhadiran dari Data Absensi</p>
             <p>% Tingkat Ketertiban: Presentase Ketertiban & Kesesuaian Absen Masuk & Pulang</p>
             <p>% Efisiensi Kerja: Presentase Jam Kerja Efektif terhadap Jam Absensi</p>
+        </div>
+
+        <div class="footer">
+            <i> SIMOJA - Dibuat {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</i>
         </div>
 
     </div>
@@ -208,7 +213,7 @@
         </table>
     </div>
 
-    <div class="mt-5 text-center" style="margin-top: 30px">
+    <div class="mt-5 text-center" style="margin-top: 30px; font-size: 14px">
         <table class="table table-borderless">
             <tr>
                 <td class="text-center p-0">Koordinator</td>
@@ -216,9 +221,9 @@
                 <td class="text-center p-0">Kepala Seksi</td>
             </tr>
             <tr>
-                <td class="text-center p-0">Pulau {{ $user->area->pulau->name }}</td>
+                <td class="text-center p-0">Pulau {{ $user->area->pulau->name ?? 'N/A' }}</td>
                 <td></td>
-                <td class="text-center p-0">{{ $user->struktur->seksi->name }}</td>
+                <td class="text-center p-0">{{ $user->struktur->seksi->name ?? 'N/A' }}</td>
             </tr>
             <tr>
                 <td style="height: 27mm;"></td>
@@ -227,11 +232,11 @@
             </tr>
             <tr>
                 <td class="text-center text-uppercase font-weight-bold p-0" style="border-bottom:1pt solid black;">
-                     {{ $user->koordinator->name ?? '-'  }}
+                    {{ $user->koordinator->name ?? '-'  }}
                 </td>
                 <td></td>
                 <td class="text-center text-uppercase font-weight-bold p-0" style="border-bottom:1pt solid black;">
-                    -
+                    {{ $kepala_seksi->name ?? 'N/A' }}
                 </td>
             </tr>
             <tr>
@@ -240,7 +245,7 @@
                 </td>
                 <td></td>
                 <td class="text-center p-0">
-                    -
+                    NIP. {{ $kepala_seksi->nip ?? 'N/A' }}
                 </td>
             </tr>
         </table>

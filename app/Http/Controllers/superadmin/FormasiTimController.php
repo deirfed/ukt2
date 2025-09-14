@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\superadmin;
 
+use App\DataTables\FormasiTimDataTable;
 use App\Models\Area;
 use App\Models\User;
 use App\Models\Struktur;
@@ -12,11 +13,19 @@ use App\Http\Controllers\Controller;
 
 class FormasiTimController extends Controller
 {
-    public function index()
+    public function index(FormasiTimDataTable $dataTable, Request $request)
     {
-        $formasi_tim = FormasiTim::get();
+        $request->validate([
+            'periode' => 'nullable|numeric'
+        ]);
 
-        return view('superadmin.formasitim.index', compact(['formasi_tim']));
+        $periode = $request->periode ?? Carbon::now()->format('Y');
+
+        return $dataTable->with([
+            'periode' => $periode,
+        ])->render('superadmin.formasitim.index', compact([
+            'periode',
+        ]));
     }
 
     public function create()

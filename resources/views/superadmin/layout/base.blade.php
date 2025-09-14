@@ -91,6 +91,7 @@
     <script src="{{ asset('assets/vendor/daterange/custom-daterange.js') }}"></script>
     <script src="{{ asset('assets/js/main.js') }}"></script>
     <script src="{{ asset('Helper/search.js') }}"></script>
+    <script src="{{ asset('js/plugins/sweetalert2/sweetalert2.all.js') }}"></script>
 
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
@@ -120,6 +121,7 @@
 
     @include('superadmin.layout.modal_notif')
     @yield('javascript')
+    @stack('scripts')
 </body>
 
 </html>

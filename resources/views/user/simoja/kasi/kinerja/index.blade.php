@@ -48,7 +48,7 @@
                                     <li>
                                         <a class="dropdown-item" href="javascript:;" data-toggle="modal"
                                             data-target="#modalDownloadPDFAll">
-                                            <i class="fa fa-file-pdf text-danger"></i> PDF Semua Data
+                                            <i class="fa fa-file-pdf text-danger"></i> PDF
                                         </a>
                                     </li>
                                     <li>
@@ -202,6 +202,7 @@
                             hidden>
                             @csrf
                             @method('GET')
+                            <input type="text" name="seksi_id" value="{{ $seksi_id ?? '' }}">
                             <input type="text" name="user_id" value="{{ $user_id ?? '' }}">
                             <input type="text" name="pulau_id" value="{{ $pulau_id ?? '' }}">
                             <input type="text" name="kategori_id" value="{{ $kategori_id ?? '' }}">
@@ -324,32 +325,36 @@
     <div id="modalDownloadPDFAll" class="modal fade" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-body">
-                    <form id="formKegiatanPDFAll" action="{{ route('simoja.kasi.kinerja.export.pdf.all') }}"
-                        method="GET">
-                        @csrf
-                        @method('GET')
-                        <label for="periode">Periode</label>
-                        <div class="form-row gutters">
-                            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <input type="date" class="form-control" value="{{ $start_date }}"
-                                        name="start_date" required>
-                                </div>
-                            </div>
-                            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <input type="date" class="form-control" value="{{ $end_date }}"
-                                        name="end_date" required>
-                                </div>
-                            </div>
+                <div class="modal-body p-2">
+                    <div class="p-2 text-center">
+                        <div class="mt-2 fw-bolder">Apakah anda yakin?</div>
+                        <div class="mt-2">
+                            <img style="height: 100px;"
+                                src="https://static.vecteezy.com/system/resources/previews/019/016/806/non_2x/adobe-acrobat-reader-icon-free-png.png"
+                                alt="PDF">
                         </div>
-                    </form>
+                        <div class="text-slate-500 mt-2">
+                            <p>
+                                Data ini akan di-generate dalam format PDF!
+                            </p>
+                        </div>
+                        <form id="formKegiatanPDFAll" action="{{ route('simoja.kasi.kinerja.export.pdf.all') }}" method="GET"
+                            hidden>
+                            @csrf
+                            @method('GET')
+                            <input type="text" name="seksi_id" value="{{ $seksi_id ?? '' }}">
+                            <input type="text" name="user_id" value="{{ $user_id ?? '' }}">
+                            <input type="text" name="pulau_id" value="{{ $pulau_id ?? '' }}">
+                            <input type="text" name="kategori_id" value="{{ $kategori_id ?? '' }}">
+                            <input type="text" name="start_date" value="{{ $start_date ?? '' }}">
+                            <input type="text" name="end_date" value="{{ $end_date ?? '' }}">
+                        </form>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
                     <button type="submit" form="formKegiatanPDFAll" formtarget="_blank"
-                        class="btn btn-primary">Buat</button>
+                        class="btn btn-primary">Unduh</button>
                 </div>
             </div>
         </div>

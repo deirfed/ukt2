@@ -99,37 +99,25 @@
 
 
 @section('javascript')
-    <script type="text/javascript">
+    <script>
         function toggleModal(id) {
             $('#id').val(id);
         }
 
         function startTime() {
             const today = new Date();
-            let h = today.getHours();
-            let m = today.getMinutes();
-            let s = today.getSeconds();
-            m = checkTime(m);
-            s = checkTime(s);
-            document.getElementById('jam').innerHTML = h + ":" + m + ":" + s + " WIB";
+            const h = today.getHours();
+            const m = String(today.getMinutes()).padStart(2, '0');
+            const s = String(today.getSeconds()).padStart(2, '0');
+            document.getElementById('jam').textContent = `${h}:${m}:${s} WIB`;
             setTimeout(startTime, 1000);
         }
 
-        function checkTime(i) {
-            if (i < 10) {
-                i = "0" + i
-            };
-            return i;
-        }
-
-        $(document).ready(function() {
+        $(function() {
             startTime();
-        });
-
-        $(document).ready(function() {
-            startTime();
-
-            $('#spModal').modal('show');
+            @if ($surat_peringatan > 0)
+                $('#spModal').modal('show');
+            @endif
         });
     </script>
 @endsection

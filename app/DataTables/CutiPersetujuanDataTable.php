@@ -15,6 +15,21 @@ use Yajra\DataTables\Services\DataTable;
 
 class CutiPersetujuanDataTable extends DataTable
 {
+    protected $approved_by_id;
+
+    public function with(array|string $key, mixed $value = null): static
+    {
+        if (is_array($key)) {
+            foreach ($key as $k => $v) {
+                $this->{$k} = $v;
+            }
+        } else {
+            $this->{$key} = $value;
+        }
+
+        return $this;
+    }
+
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
@@ -86,10 +101,15 @@ class CutiPersetujuanDataTable extends DataTable
             'jenis_cuti',
             'user.konfigurasi_cuti',
             'known_by',
+            'approved_by',
         ])->newQuery();
 
-        $query->where('approved_by_id', auth()->user()->id)
-            ->where('status', 'Diproses');
+        $query->where('status', 'Diproses');
+
+        if($this->approved_by_id != null)
+        {
+            $query->where('approved_by_id', $this->approved_by_id);
+        }
 
         return $query;
     }
@@ -102,7 +122,7 @@ class CutiPersetujuanDataTable extends DataTable
                     ->minifiedAjax()
                     ->pageLength(50)
                     ->lengthMenu([10, 50, 100, 250, 500, 1000])
-                    ->orderBy([4, 'desc'])
+                    ->orderBy([3, 'desc'])
                     ->selectStyleSingle()
                     ->buttons([
                         [
@@ -127,6 +147,7 @@ class CutiPersetujuanDataTable extends DataTable
             Column::computed('jumlah_hari')->title('Jumlah Hari')->sortable(false),
             Column::make('jenis_cuti.name')->title('Jenis Izin')->sortable(false),
             Column::make('known_by.name')->title('Koordinator')->sortable(false),
+            Column::make('approved_by.name')->title('Kepala Seksi')->sortable(false),
             Column::computed('#')
                 ->exportable(false)
                 ->printable(false)

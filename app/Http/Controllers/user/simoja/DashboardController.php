@@ -8,6 +8,7 @@ use App\Models\Kinerja;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\KonfigurasiCuti;
+use App\Models\SuratPeringatan;
 
 class DashboardController extends Controller
 {
@@ -59,8 +60,15 @@ class DashboardController extends Controller
     {
         $today = Carbon::now();
         $tanggal = Carbon::parse($today)->isoFormat('dddd, D MMMM Y');
+        $tahun = Carbon::parse($today)->format('Y');
         $user_id = auth()->user()->id;
-        $jumlah_cuti = KonfigurasiCuti::where('periode', $today->year)->where('user_id', $user_id)->first();
+        $jumlah_cuti = KonfigurasiCuti::where('periode', $tahun)
+                        ->where('user_id', $user_id)
+                        ->first();
+        $surat_peringatan = SuratPeringatan::whereYear('tanggal', $tahun)
+                            ->where('user_id', $user_id)
+                            ->count();
+
 
         if ($jumlah_cuti) {
             $sisa_cuti = $jumlah_cuti->jumlah;
@@ -71,6 +79,7 @@ class DashboardController extends Controller
         return view('user.simoja.pjlp.index', compact([
             'tanggal',
             'sisa_cuti',
+            'surat_peringatan',
         ]));
     }
 }

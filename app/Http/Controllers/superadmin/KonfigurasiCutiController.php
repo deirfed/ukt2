@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\superadmin;
 
+use App\DataTables\KonfigurasiCutiDataTable;
 use App\Models\User;
 use App\Models\JenisCuti;
 use Illuminate\Http\Request;
@@ -11,12 +12,19 @@ use App\Http\Controllers\Controller;
 
 class KonfigurasiCutiController extends Controller
 {
-    public function index()
+    public function index(KonfigurasiCutiDataTable $dataTable, Request $request)
     {
-        $this_year = Carbon::now()->format('Y');
-        $konfigurasi_cuti = KonfigurasiCuti::where('periode', $this_year)->get();
+        $request->validate([
+            'periode' => 'nullable|numeric'
+        ]);
 
-        return view('superadmin.cuti.konfigurasicuti.index', compact(['konfigurasi_cuti', 'this_year']));
+        $periode = $request->periode ?? Carbon::now()->format('Y');
+
+        return $dataTable->with([
+            'periode' => $periode,
+        ])->render('superadmin.cuti.konfigurasicuti.index', compact([
+            'periode'
+        ]));
     }
 
     public function create()
