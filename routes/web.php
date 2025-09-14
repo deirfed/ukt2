@@ -627,7 +627,7 @@ Route::group(['middleware' => ['auth', 'CheckBanned']], function () {
             Route::get('/admin-surat-peringatan', 'index')->name('admin.surat-peringatan.index');
             Route::post('/admin-surat-peringatan/{uuid}', 'store')->name('admin.surat-peringatan.store');
             Route::put('/admin-surat-peringatan/{uuid}/update', 'update')->name('admin.surat-peringatan.update');
-            Route::delete('/admin-surat-peringatan', 'destroy')->name('admin.surat-peringatan.destroy');
+            Route::delete('/admin-surat-peringatan/{uuid}/delete', 'destroy')->name('admin.surat-peringatan.destroy');
         });
     });
 });

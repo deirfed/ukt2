@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\superadmin;
 
+use App\DataTables\SuratPeringatanDataTable;
 use App\Http\Controllers\Controller;
 use App\Models\SuratPeringatan;
 use App\Models\User;
 use App\Services\FileUploadService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class SuratPeringatanController extends Controller
 {
@@ -18,9 +20,10 @@ class SuratPeringatanController extends Controller
         $this->fileUploadService = $fileUploadService;
     }
 
-    public function index()
+    public function index(SuratPeringatanDataTable $dataTable, Request $request)
     {
-        return view('superadmin.suratperingatan.index');
+        // return view('superadmin.suratperingatan.index');
+        return $dataTable->render('superadmin.suratperingatan.index');
     }
 
     public function create()
@@ -81,8 +84,16 @@ class SuratPeringatanController extends Controller
         //
     }
 
-    public function destroy(string $id)
+    public function destroy(string $uuid)
     {
-        //
+        $data = SuratPeringatan::where('uuid', $uuid)->firstOrFail();
+
+        if ($data->photo_after) {
+            Storage::delete($data->dokumen);
+        }
+
+        $data->forceDelete();
+
+        return redirect()->route('admin.surat-peringatan.index')->withNotify('Surat Peringatan untuk <strong>' . $data->user->name . '</strong> berhasil dihapus permanen!');
     }
 }

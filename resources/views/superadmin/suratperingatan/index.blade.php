@@ -25,14 +25,14 @@
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3 text-left">
                             <a href="{{ route('admin-user.index') }}" class="btn btn-outline-primary"><i
                                     class="fa fa-arrow-left"></i> Kembali</a>
-                            <a href="{{ route('admin-kategori.create') }}" class="btn btn-primary">Tambah
-                                Data</a>
+                            {{-- <a href="{{ route('admin-kategori.create') }}" class="btn btn-primary">Tambah
+                                Data</a> --}}
                         </div>
                     </div>
                     <div class="table-responsive">
-                        {{-- {{ $dataTable->table([
+                        {{ $dataTable->table([
                             'class' => 'table table-bordered table-striped',
-                        ]) }} --}}
+                        ]) }}
                     </div>
                 </div>
             </div>
@@ -46,10 +46,11 @@
                 <div class="modal-body p-2">
                     <div class="p-2 text-center">
                         <div class="text-3xl mt-2">Apakah anda yakin?</div>
-                        <div class="text-slate-500 mt-2">Informasi: Mengapus Surat Teguran akan menghapus notifikasi Teguran pada akun PJLP</div>
+                        <div class="text-slate-500 mt-2">Informasi: Mengapus Surat Teguran akan menghapus notifikasi Teguran
+                            pada akun PJLP</div>
                     </div>
                     <div class="px-5 pb-8 text-center mt-3">
-                        <form action="{{ route('admin-kategori.destroy') }}" method="POST">
+                        <form id="formDeleteSuratPeringatan" action="#" method="POST">
                             @csrf
                             @method('delete')
                             <input type="text" name="id" id="id" hidden>
@@ -64,14 +65,17 @@
     <!-- END: Delete Confirmation Modal -->
 @endsection
 
-{{-- @push('scripts')
+@push('scripts')
     {{ $dataTable->scripts() }}
-@endpush --}}
+@endpush
 
 @section('javascript')
-    <script type="text/javascript">
-        function toggleModal(id) {
-            $('#id').val(id);
-        }
+    <script>
+        $(document).ready(function() {
+            $('#delete-confirmation-modal').on('show.bs.modal', function(e) {
+                var url = $(e.relatedTarget).data('url');
+                document.getElementById("formDeleteSuratPeringatan").action = url;
+            });
+        })
     </script>
 @endsection
