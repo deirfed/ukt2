@@ -26,10 +26,10 @@
                     </div>
                 </a>
                 <h4>{{ auth()->user()->name }}</h4>
-                <h5>{{ auth()->user()->nip }}</h5>
+                <h5>{{ auth()->user()->nip ?? '-' }}</h5>
                 <br>
-                <h5>Seksi {{ auth()->user()->struktur->seksi->name }}</h5>
-                <p>Pulau {{ auth()->user()->area->pulau->name }}</p>
+                <h5>Seksi {{ auth()->user()->struktur->seksi->name ?? 'N/A' }}</h5>
+                <p>Pulau {{ auth()->user()->area->pulau->name ?? 'N/A' }}</p>
                 <h5>Sisa Cuti Anda: {{ $sisa_cuti }} </h5>
             </div>
         </div>
@@ -62,17 +62,17 @@
                             <div class="form-group">
                                 <label for="seksi">Seksi</label>
                                 <input type="text" class="form-control" id="pulau" placeholder="Seksi"
-                                    value="{{ auth()->user()->struktur->seksi->name }}" disabled>
+                                    value="{{ auth()->user()->struktur->seksi->name ?? 'N/A' }}" disabled>
                             </div>
                             <div class="form-group">
                                 <label for="ciTy">Jabatan</label>
-                                <input type="koordinator" class="form-control" id="pulau" placeholder="Koordinator"
-                                    value="{{ auth()->user()->jabatan->name }}" disabled>
+                                <input type="koordinator" class="form-control" id="pulau" placeholder="Jabatan"
+                                    value="{{ auth()->user()->jabatan->name ?? 'N/A' }}" disabled>
                             </div>
                             <div class="form-group">
                                 <label for="pulau">Tempat Bertugas</label>
                                 <input type="text" class="form-control" id="pulau" placeholder="Pulau"
-                                    value="Pulau {{ auth()->user()->area->pulau->name }}" disabled>
+                                    value="Pulau {{ auth()->user()->area->pulau->name ?? '-' }}" disabled>
                             </div>
                         </div>
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
