@@ -20,7 +20,7 @@ class SuratPeringatanController extends Controller
 
     public function index()
     {
-        //
+        return view('superadmin.suratperingatan.index');
     }
 
     public function create()

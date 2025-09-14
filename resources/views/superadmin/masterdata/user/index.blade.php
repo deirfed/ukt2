@@ -197,6 +197,11 @@
                         <h5 class="modal-title" id="uploadSuratModalLabel">Upload Surat Teguran</h5>
                     </div>
                     <div class="modal-body">
+                        <div class="mb-3 text-end">
+                            <a href="{{ route('admin.surat-peringatan.index') }}" class="btn btn-danger w-100">
+                                <i class="fa fa-list"></i> Daftar Semua Surat Peringatan
+                            </a>
+                        </div>
                         <div class="mb-3">
                             <label for="file" class="form-label">Nama PJLP:</label><br>
                             <strong id="SPUsername">user</strong>
@@ -257,7 +262,7 @@
             $('#resetPasswordModal').on('show.bs.modal', function(event) {
                 let button = $(event.relatedTarget);
                 let username = button.data('username');
-                let url      = button.data('url');
+                let url = button.data('url');
 
                 document.getElementById("modalUsername").textContent = username;
                 document.getElementById("resultUsername").textContent = username;
@@ -274,20 +279,20 @@
 
         document.addEventListener("DOMContentLoaded", function() {
             // === Modal BAN ===
-            $('#banUser').on('show.bs.modal', function (event) {
-                let button   = $(event.relatedTarget);
+            $('#banUser').on('show.bs.modal', function(event) {
+                let button = $(event.relatedTarget);
                 let username = button.data('username');
-                let url      = button.data('url');
+                let url = button.data('url');
 
                 document.getElementById("modalBanUsername").textContent = username;
                 document.getElementById("formBanUser").action = url;
             });
 
             // === Modal UNBAN ===
-            $('#unbanUser').on('show.bs.modal', function (event) {
-                let button   = $(event.relatedTarget);
+            $('#unbanUser').on('show.bs.modal', function(event) {
+                let button = $(event.relatedTarget);
                 let username = button.data('username');
-                let url      = button.data('url');
+                let url = button.data('url');
 
                 document.getElementById("modalUnbanUsername").textContent = username;
                 document.getElementById("formUnbanUser").action = url;
@@ -300,7 +305,7 @@
                 let button = $(event.relatedTarget);
                 let username = button.data('username');
                 let jumlahWarnings = button.data('warnings');
-                let url      = button.data('url');
+                let url = button.data('url');
 
                 document.getElementById("jumlahwarnings").textContent = jumlahWarnings;
                 document.getElementById("SPUsername").textContent = username;
