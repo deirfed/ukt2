@@ -46,7 +46,7 @@
     <div class="container-fluid">
         <!-- Navigation start -->
         <nav class="navbar navbar-expand-lg custom-navbar">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#UKT2.ORGAdmin"
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#dropdownMenu"
                 aria-controls="" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon">
                     <i></i>
@@ -54,7 +54,7 @@
                     <i></i>
                 </span>
             </button>
-            <div class="collapse navbar-collapse" id="UKT2.ORGAdmin">
+            <div class="collapse navbar-collapse" id="dropdownMenu">
                 <ul class="navbar-nav">
                     {{-- Include Navbar Dashboard --}}
                     @include('superadmin.layout.navbar')
