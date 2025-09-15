@@ -33,7 +33,7 @@
                                 required autofocus>
                         </div>
                         @error('email')
-                            <span class="badge bg-danger p-2 mb-3" role="alert">
+                            <span class="badge bg-danger p-2 mb-3 text-start fs-6 w-100 text-wrap" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
                         @enderror
@@ -43,7 +43,7 @@
                                 required>
                         </div>
                         @error('password')
-                            <span class="badge badge-danger p-2 mb-3" role="alert">
+                            <span class="badge bg-danger p-2 mb-3 text-start fs-6 w-100 text-wrap" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
                         @enderror

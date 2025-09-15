@@ -73,9 +73,13 @@ class AbsensiDataTable extends DataTable
                 ";
             })
             ->addColumn('status', function ($item) {
-                $badgeClass = $item->status === 'Tidak Absen Datang'
-                    ? 'badge badge-pill badge-danger'
-                    : 'badge badge-pill badge-primary';
+                $badgeClass = match ($item->status) {
+                    'Tidak Absen Datang' => 'badge badge-pill badge-danger',
+                    'Absensi Datang'     => 'badge badge-pill badge-warning',
+                    'Cuti Tahunan'       => 'badge badge-pill badge-dark',
+                    'Izin Sakit'         => 'badge badge-pill badge-dark',
+                    default              => 'badge badge-pill badge-primary',
+                };
 
                 return "
                     <div class='{$badgeClass}'>

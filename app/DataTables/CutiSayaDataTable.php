@@ -16,6 +16,7 @@ use Yajra\DataTables\Services\DataTable;
 
 class CutiSayaDataTable extends DataTable
 {
+    protected $user_id;
     protected $start_date;
     protected $end_date;
 
@@ -116,8 +117,9 @@ class CutiSayaDataTable extends DataTable
         ])->newQuery();
 
         // Filter
-        $user_id = auth()->user()->id;
-        $query->where('user_id', $user_id);
+        if ($this->user_id != null) {
+            $query->where('user_id', $this->user_id);
+        }
 
         if ($this->start_date != null && $this->end_date != null) {
             $clean_start_date = explode('?', $this->start_date)[0];

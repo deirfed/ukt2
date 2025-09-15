@@ -214,35 +214,64 @@ class CutiController extends Controller
             'id' => 'required',
             'no_surat' => 'required',
         ]);
+
         $cuti = Cuti::findOrFail($request->id);
-        $konfigurasi_cuti = KonfigurasiCuti::where('user_id', $cuti->user_id)->firstOrFail();
-        $cuti->status = 'Diterima';
-        $cuti->no_surat = $request->no_surat;
-        $cuti->save();
 
-        if($cuti->jenis_cuti->id == 1){
-            $konfigurasi_cuti->jumlah = $konfigurasi_cuti->jumlah - $cuti->jumlah;
-            $konfigurasi_cuti->save();
+        // Tahun cuti dari tanggal_awal
+        $tahun = Carbon::parse($cuti->tanggal_awal)->year;
+
+        // Ambil konfigurasi cuti sesuai user + periode + jenis cuti
+        $konfigurasi_cuti = KonfigurasiCuti::where('user_id', $cuti->user_id)
+            ->where('periode', $tahun)
+            ->where('jenis_cuti_id', 1) // cuti tahunan
+            ->firstOrFail();
+
+        // Cek kalau cuti sudah pernah diapprove, hentikan
+        if ($cuti->status === 'Diterima') {
+            return back()->withError('Cuti ini sudah pernah disetujui.');
         }
 
+        // Validasi saldo cuti
+        if ($cuti->jenis_cuti_id == 1) {
+            if ($konfigurasi_cuti->jumlah < $cuti->jumlah) {
+                return back()->withError('Sisa cuti tidak mencukupi. Tersisa ' . $konfigurasi_cuti->jumlah . ' hari.');
+            }
 
+            $konfigurasi_cuti->decrement('jumlah', $cuti->jumlah);
+        }
+
+        // Update status cuti
+        $cuti->update([
+            'status'   => 'Diterima',
+            'no_surat' => $request->no_surat,
+        ]);
+
+        // Generate absensi otomatis untuk rentang tanggal
+        $konfigurasi_absensi = KonfigurasiAbsensi::where('jenis_absensi_id', 1)->first();
         for ($date = Carbon::parse($cuti->tanggal_awal); $date->lte(Carbon::parse($cuti->tanggal_akhir)); $date->addDay()) {
-            $konfigurasi_absensi = KonfigurasiAbsensi::where('jenis_absensi_id', 1)->first();
-            Absensi::create([
-                'user_id' => $cuti->user_id,
-                'jenis_absensi_id' => 1,
-                'tanggal' => $date->copy(),
-                'jam_masuk' => $konfigurasi_absensi->jam_masuk,
-                'status_masuk' => 'Datang tepat waktu',
-                'telat_masuk' => 0,
-                'jam_pulang' => $konfigurasi_absensi->jam_pulang,
-                'status_pulang' => 'Pulang tepat waktu',
-                'cepat_pulang' => 0,
-                'status' => $cuti->jenis_cuti->name,
-            ]);
+
+            // Hindari duplicate absensi
+            $exists = Absensi::where('user_id', $cuti->user_id)
+                ->whereDate('tanggal', $date->toDateString())
+                ->exists();
+
+            if (!$exists) {
+                Absensi::create([
+                    'user_id'          => $cuti->user_id,
+                    'jenis_absensi_id' => 1,
+                    'tanggal'          => $date->copy(),
+                    'jam_masuk'        => $konfigurasi_absensi->jam_masuk,
+                    'status_masuk'     => 'Datang tepat waktu',
+                    'telat_masuk'      => 0,
+                    'jam_pulang'       => $konfigurasi_absensi->jam_pulang,
+                    'status_pulang'    => 'Pulang tepat waktu',
+                    'cepat_pulang'     => 0,
+                    'status'           => $cuti->jenis_cuti->name,
+                ]);
+            }
         }
 
-        return redirect()->route('simoja.kasi.cuti.approval')->withNotify('Data berhasil diterima!');
+        return redirect()->route('simoja.kasi.cuti.approval')->withNotify('Cuti berhasil diterima!');
     }
 
     public function reject(Request $request)
@@ -484,10 +513,14 @@ class CutiController extends Controller
 
         $user_id = auth()->user()->id;
 
-        $konfigurasi_cuti = KonfigurasiCuti::where('periode', Carbon::now()->year)
-                    ->where('jenis_cuti_id', 1)
+        $konfigurasi_cuti = KonfigurasiCuti::where('periode', $periode)
+                    ->where('jenis_cuti_id', 1) //Cuti tahunan
                     ->where('user_id', $user_id)
-                    ->firstOrFail();
+                    ->first();
+
+        $jumlah = optional($konfigurasi_cuti)->jumlah ?? 0;
+
+
 
         // return view('user.simoja.pjlp.cuti.my_index', [
         //     'cuti' => $cuti,
@@ -505,7 +538,7 @@ class CutiController extends Controller
             'start_date' => $start_date,
             'end_date' => $end_date,
         ])->render('user.simoja.pjlp.cuti.my_index', compact([
-            'konfigurasi_cuti',
+            'jumlah',
             'start_date',
             'end_date',
         ]));
@@ -513,12 +546,18 @@ class CutiController extends Controller
 
     public function create_pjlp()
     {
-        $this_year = Carbon::now()->format('Y');
+        $tahun = Carbon::now()->format('Y');
         $user_id = auth()->user()->id;
 
-        $konfigurasi_cuti = KonfigurasiCuti::where('periode', $this_year)
+        $konfigurasi_cuti = KonfigurasiCuti::where('periode', $tahun)
                         ->where('user_id', $user_id)
-                        ->firstOrFail();
+                        ->first();
+
+        if(!$konfigurasi_cuti) {
+            return redirect()
+                ->route('dashboard.index')
+                ->withError('Anda belum memiliki konfigurasi cuti di tahun ' . $tahun . ', silahkan hubungi admin.');
+        }
 
         $jenis_cuti = JenisCuti::all();
 
@@ -531,36 +570,57 @@ class CutiController extends Controller
     public function store_pjlp(Request $request)
     {
         $request->validate([
-            'jenis_cuti_id' => 'required',
+            'jenis_cuti_id' => 'required|exists:jenis_cuti,id',
             'tanggal_awal' => 'required|date',
             'tanggal_akhir' => 'required|date|after_or_equal:tanggal_awal',
-            'lampiran' => 'image',
+            'lampiran' => 'nullable|file|image',
         ], [
             'tanggal_akhir.after_or_equal' => 'Tanggal akhir tidak boleh kurang dari tanggal awal.',
             'lampiran.image' => 'Lampiran harus dalam format image.',
         ]);
 
-        $user_id = auth()->user()->id;
-        $jenis_cuti_id = $request->jenis_cuti_id;
-        $tanggal_awal = $request->tanggal_awal;
-        $tanggal_akhir = $request->tanggal_akhir;
-        $catatan = $request->catatan;
+        $user = auth()->user();
+        $tahun = Carbon::now()->format('Y');
+
+        $user_id = $user->id ?? null;
+        $jenis_cuti_id = $request->jenis_cuti_id ?? null;
+        $tanggal_awal = $request->tanggal_awal ?? null;
+        $tanggal_akhir = $request->tanggal_akhir ?? null;
+        $catatan = $request->catatan ?? null;
         $lampiran = $request->lampiran;
         $status = 'Diproses';
-        $seksi_id = FormasiTim::where('koordinator_id', $user_id)->orWhere('anggota_id', $user_id)->firstOrFail()->struktur->seksi->id;
-        $approved_by_id = User::where('jabatan_id', 2)
-                        ->whereHas('struktur', function($query) use ($seksi_id) {
-                            $query->where('seksi_id', $seksi_id);
-                        })
-                        ->firstOrFail()->id;
 
-        $known_by_id = '';
-        $jabatan_id = auth()->user()->jabatan->id;
+        $formasi_tim = FormasiTim::where('periode', $tahun)
+                    ->where('anggota_id', $user_id)
+                    ->orderBy('periode', 'DESC')
+                    ->first();
+
+        if(!$formasi_tim) {
+            return redirect()
+                    ->route('dashboard.index')
+                    ->withError('Anda belum memiliki formasi tim di tahun ' . $tahun . ', silahkan hubungi admin.');
+        }
+
+        $seksi_id = $formasi_tim->struktur->seksi_id ?? null;
+
+        $kepala_seksi = User::where('jabatan_id', 2) //Kasi (Kepala Seksi)
+                        ->whereRelation('struktur.seksi', 'id', '=', $seksi_id)
+                        ->first();
+
+        if(!$kepala_seksi) {
+            return redirect()
+                    ->route('dashboard.index')
+                    ->withError('Data user dengan jabatan Kepala Seksi ' . $formasi_tim->struktur->seksi->name ?? 'N/A' . ' tidak ditemukan, silahkan hubungi admin.');
+        }
+
+        $approved_by_id = $kepala_seksi->id;
+        $known_by_id = null;
+        $jabatan_id = $user->jabatan_id;
 
         if($jabatan_id == 4) {
             $known_by_id = $user_id;
         } else if ($jabatan_id == 5) {
-            $known_by_id = FormasiTim::where('anggota_id', $user_id)->firstOrFail()->koordinator->id;
+            $known_by_id = $formasi_tim->koordinator_id;
         } else {
             return back()->withError('Jabatan anda tidak bisa mengajukan cuti di sistem ini.');
         }
@@ -580,15 +640,30 @@ class CutiController extends Controller
         }
 
         if($jenis_cuti_id == 1){
-            $jumlahSisaCuti = KonfigurasiCuti::where('periode', Carbon::now()->year)->where('jenis_cuti_id', 1)->where('user_id', $user_id)->firstOrFail()->jumlah;
+            $konfigurasi_cuti = KonfigurasiCuti::where('periode', $tahun)
+                            ->where('jenis_cuti_id', 1)
+                            ->where('user_id', $user_id)
+                            ->orderBy('periode', 'DESC')
+                            ->first();
+
+            if(!$konfigurasi_cuti) {
+                return redirect()
+                        ->route('dashboard.index')
+                        ->withError('Anda belum memiliki konfigurasi cuti di tahun ' . $tahun . ', silahkan hubungi admin.');
+            }
+
+            $jumlahSisaCuti = $konfigurasi_cuti->jumlah;
+
             if ($jumlahHariCuti > $jumlahSisaCuti){
-                return back()->withError('Jumlah hari Cuti yang anda ajukan melebihi sisa Cuti yang anda miliki.');
+                return redirect()
+                        ->route('dashboard.index')
+                        ->withError('Di tahun ' . $tahun . ', Jumlah hari cuti yang anda ajukan (' . $jumlahHariCuti . ' hari) melebihi sisa cuti yang anda miliki (' . $jumlahSisaCuti .' hari).');
             }
         }
 
         $heightPhoto = 500;
 
-        $cuti = Cuti::create([
+        $data = [
             'user_id' => $user_id,
             'jenis_cuti_id' => $jenis_cuti_id,
             'tanggal_awal' => $tanggal_awal,
@@ -598,7 +673,9 @@ class CutiController extends Controller
             'approved_by_id' => $approved_by_id,
             'catatan' => $catatan,
             'status' => $status,
-        ]);
+        ];
+
+        $cuti = Cuti::updateOrCreate($data, $data);
 
         if ($request->hasFile('lampiran') && $lampiran != '') {
             $cuti = Cuti::findOrFail($cuti->id);
@@ -619,8 +696,13 @@ class CutiController extends Controller
             $cuti->save();
         }
 
+        $nama = $user->name ?? '-';
+        $jabatan = $user->jabatan->name ?? '-';
+        $pulau = $user->area->pulau->name ?? '-';
+        $route = route('cuti.approval_page'); //Link untuk show approval via email
+
         $tanggal = Carbon::parse($tanggal_awal)->format('d-m-Y') . ' s/d ' . Carbon::parse($tanggal_akhir)->format('d-m-Y');
-        $message = $this->send_email(auth()->user()->name, auth()->user()->jabatan->name ?? '-', auth()->user()->area->pulau->name ?? '-', $jumlahHariCuti, $tanggal, $catatan, route('cuti.approval_page'));
+        $message = $this->send_email($nama, $jabatan, $pulau, $jumlahHariCuti, $tanggal, $catatan, $route);
 
         return redirect()->route('simoja.pjlp.my-cuti')->withNotify('Data pengajuan cuti berhasil ditambah & ' . $message);
     }
@@ -628,6 +710,10 @@ class CutiController extends Controller
     public function send_email($nama, $jabatan, $lokasi_pulau, $jumlah_hari, $tanggal, $alasan, $url)
     {
         $email_tujuan = env('EMAIL_NOTIFICATION');
+
+        if(!$email_tujuan) {
+            return "Email tujuan untuk notifikasi belum ditambahkan, silahkan hubungi admin.";
+        }
 
         $mailData = [
             'nama' => $nama,
@@ -648,13 +734,16 @@ class CutiController extends Controller
     public function destroy_pjlp(Request $request)
     {
         $request->validate([
-            'id' => 'required'
+            'id' => 'required|exists:cuti,id'
         ]);
+
         $cuti = Cuti::findOrFail($request->id);
+
         if($cuti->lampiran != null)
         {
             Storage::delete($cuti->lampiran);
         }
+
         $cuti->forceDelete();
 
         return redirect()->route('simoja.pjlp.my-cuti')->withNotify('Data berhasil dihapus secara permanen!');
@@ -662,8 +751,17 @@ class CutiController extends Controller
 
     public function filter_pjlp(Request $request)
     {
+        $request->validate([
+            'pulau_id' => 'nullable|exists:pulau,id',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'sort' => 'nullable|string',
+            'jenis_cuti_id' => 'nullable|exists:jenis_cuti,id',
+            'status' => 'nullable|string',
+        ]);
+
         $user_id = auth()->user()->id;
-        $pulau_id = null;
+        $pulau_id = $request->pulau_id;
         $start_date = $request->start_date;
         $end_date = $request->end_date ?? $start_date;
         $sort = $request->sort;
@@ -671,39 +769,41 @@ class CutiController extends Controller
         $jenis_cuti_id = $request->jenis_cuti_id;
 
         $jenis_cuti = JenisCuti::all();
+        $tahun = Carbon::now()->format('Y');
 
-        $cuti = Cuti::query();
-
-        // Filter by user_id
-        $cuti->when($user_id, function ($query) use ($user_id) {
-            return $query->where('user_id', $user_id);
-        });
+        $cuti = Cuti::where('user_id', $user_id)->query();
 
         // Filter by pulau_id
-        $cuti->when($pulau_id, function ($query) use ($request) {
-            $anggota_id = FormasiTim::where('periode', Carbon::now()->year)->whereRelation('area.pulau', 'id', '=', $request->pulau_id)->pluck('anggota_id')->toArray();
-            $koordinator_id = FormasiTim::where('periode', Carbon::now()->year)->whereRelation('area.pulau', 'id', '=', $request->pulau_id)->pluck('koordinator_id')->toArray();
-            $user_id = array_unique(array_merge($anggota_id, $koordinator_id));
+        if ($pulau_id) {
+            $anggota_id = FormasiTim::where('periode', $tahun)
+                ->whereRelation('area.pulau', 'id', $pulau_id)
+                ->pluck('anggota_id')
+                ->toArray();
 
-            return $query->where(function($query) use ($user_id) {
-                $query->whereIn('user_id', $user_id);
-            });
-        });
+            $koordinator_id = FormasiTim::where('periode', $tahun)
+                ->whereRelation('area.pulau', 'id', $pulau_id)
+                ->pluck('koordinator_id')
+                ->toArray();
+
+            $user_ids = array_unique(array_merge($anggota_id, $koordinator_id));
+
+            $cuti->whereIn('user_id', $user_ids);
+        }
 
         // Filter by tanggal
-        if ($start_date != null and $end_date != null) {
+        if ($start_date and $end_date) {
             $cuti->whereBetween('tanggal_awal', [$start_date, $end_date]);
         }
 
         // Filter by jenis_cuti_id
-        $cuti->when($jenis_cuti_id, function ($query) use ($request) {
-            return $query->where('jenis_cuti_id', $request->jenis_cuti_id);
-        });
+        if ($jenis_cuti_id) {
+            $cuti->where('jenis_cuti_id', $jenis_cuti_id);
+        }
 
         // Filter by status
-        $cuti->when($status, function ($query) use ($request) {
-            return $query->where('status', $request->status);
-        });
+        if ($status) {
+            $cuti->where('status', $status);
+        }
 
         // Order By
         $cuti = $cuti->orderBy('tanggal_awal', $sort)

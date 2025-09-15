@@ -191,6 +191,8 @@ class AbsensiController extends Controller
                 'tanggal' => $date->copy(),
                 'jam_masuk' => $absen->jam_masuk ?? '',
                 'jam_pulang' => $absen->jam_pulang ?? '',
+                'status_masuk' => $absen->status_masuk ?? '',
+                'status_pulang' => $absen->status_pulang ?? '',
                 'status' => $absen->status ?? 'Tidak Absen',
                 'bg' => $bg,
                 'url_photo_masuk' => $absen && $absen->photo_masuk ? public_path('storage/' . $absen->photo_masuk) : '',
@@ -719,7 +721,7 @@ class AbsensiController extends Controller
             }
         }
         else {
-            return back()->withError('Anda harus melakukan absensi, pada rentan Waktu yang telah ditentukan!');
+            return back()->withError('Anda harus melakukan absensi, pada rentang Waktu yang telah ditentukan!');
         }
 
         if ($mode == 'Absensi Datang') {
@@ -753,7 +755,7 @@ class AbsensiController extends Controller
             if($validasi > 0) {
                 return back()->withError('Anda sudah melakukan ' . $mode . ' hari ini.');
             } else {
-                $mode = 'Absensi Pulang';
+                $mode = 'Absensi Lengkap';
             }
 
             $absensi = Absensi::where('user_id', $user_id)

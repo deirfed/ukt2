@@ -21,28 +21,39 @@ class FormasiTimController extends Controller
 
         $periode = $request->periode ?? Carbon::now()->format('Y');
 
+        $tahuns = FormasiTim::select('periode')
+            ->distinct()
+            ->orderBy('periode', 'asc')
+            ->pluck('periode');
+
         return $dataTable->with([
             'periode' => $periode,
         ])->render('superadmin.formasitim.index', compact([
             'periode',
+            'tahuns',
         ]));
     }
 
     public function create()
     {
-        $this_year = Carbon::now()->format('Y');
+        $periode = Carbon::now()->format('Y');
         $struktur = Struktur::all();
         $area = Area::all();
-        $koordinator = User::where('jabatan_id', 4)->get();
-        $anggota = User::where('employee_type_id', 3)
-            ->whereNotIn('id', function ($query) use ($this_year) {
-                $query->select('anggota_id')
-                    ->from('formasi_tim')
-                    ->whereYear('periode', $this_year);
-            })->get();
+        $koordinator = User::where('jabatan_id', 4)
+                ->orderBy('name', 'ASC')
+                ->get();
+
+        $anggota = User::where('employee_type_id', 3) //PJLP
+                // ->whereNotIn('id', function ($query) use ($periode) {
+                //     $query->select('anggota_id')
+                //         ->from('formasi_tim')
+                //         ->where('periode', $periode);
+                // })
+                ->orderBy('name', 'ASC')
+                ->get();
 
         return view('superadmin.formasitim.create', compact([
-            'this_year',
+            'periode',
             'struktur',
             'area',
             'koordinator',
@@ -52,24 +63,48 @@ class FormasiTimController extends Controller
 
     public function store(Request $request)
     {
-        FormasiTim::create([
-            'struktur_id' => $request->struktur_id,
-            'area_id' => $request->area_id,
-            'koordinator_id' => $request->koordinator_id,
+        $rawData = $request->validate([
+            'struktur_id' => 'required|exists:struktur,id',
+            'area_id' => 'required|exists:area,id',
+            'koordinator_id' => 'required|exists:users,id',
+            'anggota_id' => 'required|exists:users,id',
+            'periode' => 'required|numeric',
+        ]);
+
+        $user = User::findOrFail($request->anggota_id);
+
+        $validate = [
             'anggota_id' => $request->anggota_id,
             'periode' => $request->periode,
-        ]);
-        return redirect()->route('admin-formasi_tim.index')->withNotify('Data berhasil ditambah!');
+        ];
+
+        $formasi_tim = FormasiTim::updateOrCreate($validate, $rawData);
+
+        // ✅ cek apakah periode ini adalah yang terbaru untuk user
+        $latestPeriode = FormasiTim::where('anggota_id', $user->id)->max('periode');
+
+        if ($request->periode == $latestPeriode) {
+            $user->update([
+                'area_id' => $request->area_id,
+                'struktur_id' => $request->struktur_id,
+            ]);
+        }
+
+        $message = $formasi_tim->wasRecentlyCreated
+            ? 'Data baru formasi tim berhasil ditambahkan!'
+            : 'Data formasi tim untuk user <strong>' . e($user->name) . '</strong> di tahun ' . $request->periode .' sudah ada dan berhasil diperbaharui!';
+
+        return redirect()->route('admin-formasi_tim.index')->withNotify($message);
     }
 
     public function edit(string $uuid)
     {
-        $this_year = Carbon::now()->format('Y');
-        $formasi_tim = FormasiTim::where('uuid', $uuid)->first();
+        $formasi_tim = FormasiTim::where('uuid', $uuid)->firstOrFail();
 
-        if (!$formasi_tim) {
-            return back()->withNotifyerror('Something went wrong!');
-        }
+        $start = $formasi_tim->periode;
+        $end = Carbon::now()->addYear()->format('Y');
+
+        $tahuns = range($start, $end);
 
         $struktur = Struktur::all();
         $area = Area::all();
@@ -78,7 +113,7 @@ class FormasiTimController extends Controller
 
         return view('superadmin.formasitim.edit', compact([
             'formasi_tim',
-            'this_year',
+            'tahuns',
             'struktur',
             'area',
             'koordinator',
@@ -90,13 +125,16 @@ class FormasiTimController extends Controller
     {
         $formasi_tim = FormasiTim::where('uuid', $uuid)->firstOrFail();
 
-        $formasi_tim->update([
-            'struktur_id' => $request->struktur_id,
-            'area_id' => $request->area_id,
-            'koordinator_id' => $request->koordinator_id,
-            'anggota_id' => $request->anggota_id,
-            'periode' => $request->periode,
+        $rawData = $request->validate([
+            'struktur_id' => 'required|exists:struktur,id',
+            'area_id' => 'required|exists:area,id',
+            'koordinator_id' => 'required|exists:users,id',
+            'anggota_id' => 'required|exists:users,id',
+            'periode' => 'required|numeric',
         ]);
+
+        $formasi_tim->update($rawData);
+
         return redirect()->route('admin-formasi_tim.index')->withNotify('Data berhasil diperbaharui!');
     }
 

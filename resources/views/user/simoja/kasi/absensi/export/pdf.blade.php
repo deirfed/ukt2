@@ -15,6 +15,25 @@
             page-break-after: always;
         }
     </style>
+    <style>
+        @page {
+            margin: 20mm 5mm 20mm 5mm;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            text-align: right;
+            font-size: 10px;
+            color: #555;
+        }
+
+        .content {
+            margin-bottom: 25mm;
+        }
+    </style>
 </head>
 
 <body>
@@ -196,8 +215,14 @@
                         <td class="p-1">{{ $loop->iteration }}</td>
                         <td class="p-1">{{ $item['hari'] }}</td>
                         <td class="p-1">{{ $item['tanggal']->isoFormat('D MMMM Y') }}</td>
-                        <td class="p-1">{{ $item['jam_masuk'] }}</td>
-                        <td class="p-1">{{ $item['jam_pulang'] }}</td>
+                        <td class="p-1">
+                            {{ $item['jam_masuk'] }}
+                            <p>{{ $item['status_masuk'] }}</p>
+                        </td>
+                        <td class="p-1">
+                            {{ $item['jam_pulang'] }}
+                            <p>{{ $item['status_pulang'] }}</p>
+                        </td>
                         <td class="p-1">
                             <img class="img-thumbnail" src="{{ $item['url_photo_masuk'] }}" alt="photo_datang"
                                 style="height: 70px">
@@ -253,24 +278,4 @@
     <div class="footer">
         <i> SIMOJA - Dibuat {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</i>
     </div>
-
-    <style>
-        @page {
-            margin: 20mm 5mm 20mm 5mm;
-        }
-
-        .footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            text-align: right;
-            font-size: 10px;
-            color: #555;
-        }
-
-        .content {
-            margin-bottom: 25mm;
-        }
-    </style>
 </body>

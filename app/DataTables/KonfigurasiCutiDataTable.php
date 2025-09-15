@@ -103,11 +103,11 @@ class KonfigurasiCutiDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('periode')->title('Tahun')->sortable(true),
+            Column::make('periode')->title('Periode (Tahun)')->sortable(true),
             Column::make('user.name')->title('Nama Karyawan')->sortable(true),
             Column::make('user.jabatan.name')->title('Jabatan')->sortable(false),
             Column::make('jenis_cuti.name')->title('Jenis Cuti')->sortable(false),
-            Column::make('jumlah')->title('Jumlah Cuti')->sortable(false),
+            Column::make('jumlah')->title('Sisa Cuti')->sortable(false),
             Column::computed('aksi')
                 ->exportable(false)
                 ->printable(false)

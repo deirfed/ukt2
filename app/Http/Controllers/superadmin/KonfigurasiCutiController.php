@@ -20,18 +20,26 @@ class KonfigurasiCutiController extends Controller
 
         $periode = $request->periode ?? Carbon::now()->format('Y');
 
+        $tahuns = KonfigurasiCuti::select('periode')
+            ->distinct()
+            ->orderBy('periode', 'asc')
+            ->pluck('periode');
+
         return $dataTable->with([
             'periode' => $periode,
         ])->render('superadmin.cuti.konfigurasicuti.index', compact([
-            'periode'
+            'periode',
+            'tahuns',
         ]));
     }
 
     public function create()
     {
         $this_year = Carbon::now()->format('Y');
-        $user = User::all();
-        $jenis_cuti = JenisCuti::all();
+        $user = User::where('employee_type_id', 3)
+                ->orderBy('name', 'ASC')
+                ->get();
+        $jenis_cuti = JenisCuti::where('id', 1)->get();
 
         return view('superadmin.cuti.konfigurasicuti.create', compact([
             'this_year',
@@ -42,26 +50,47 @@ class KonfigurasiCutiController extends Controller
 
     public function store(Request $request)
     {
-        KonfigurasiCuti::create([
-            'user_id' => $request->user_id,
-            'jenis_cuti_id' => $request->jenis_cuti_id,
-            'periode' => $request->periode,
-            'jumlah' => $request->jumlah,
+        $rawData = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'jenis_cuti_id' => 'required|exists:jenis_cuti,id',
+            'periode' => 'required|numeric',
+            'jumlah' => 'required|numeric|min:1',
         ]);
-        return redirect()->route('admin-konfigurasi_cuti.index')->withNotify('Data berhasil ditambah!');
+
+        $user = User::findOrFail($request->user_id);
+
+        $validate = [
+            'user_id' => $request->user_id,
+            'periode' => $request->periode,
+        ];
+
+        $konfigurasi_cuti = KonfigurasiCuti::updateOrCreate($validate, $rawData);
+
+        $message = $konfigurasi_cuti->wasRecentlyCreated
+            ? 'Data baru konfigurasi cuti untuk user <strong>' . e($user->name) . '</strong> di tahun ' . $request->periode .' berhasil ditambahkan!'
+            : 'Data konfigurasi cuti atas user <strong>' . e($user->name) . '</strong> di tahun ' . $request->periode .' sudah ada dan berhasil diperbaharui!';
+
+        return redirect()->route('admin-konfigurasi_cuti.index')->withNotify($message);
     }
 
     public function edit(string $uuid)
     {
-        $this_year = Carbon::now()->format('Y');
         $konfigurasi_cuti = KonfigurasiCuti::where('uuid', $uuid)->firstOrFail();
 
-        $user = User::all();
-        $jenis_cuti = JenisCuti::all();
+        $start = $konfigurasi_cuti->periode;
+        $end = Carbon::now()->addYear()->format('Y');
+
+        $tahuns = range($start, $end);
+
+        $user = User::where('employee_type_id', 3)
+                ->orderBy('name', 'ASC')
+                ->get();
+
+        $jenis_cuti = JenisCuti::where('id', 1)->get();
 
         return view('superadmin.cuti.konfigurasicuti.edit', compact([
             'konfigurasi_cuti',
-            'this_year',
+            'tahuns',
             'user',
             'jenis_cuti',
         ]));
@@ -71,12 +100,15 @@ class KonfigurasiCutiController extends Controller
     {
         $konfigurasi_cuti = KonfigurasiCuti::where('uuid', $uuid)->firstOrFail();
 
-        $konfigurasi_cuti->update([
-            'user_id' => $request->user_id,
-            'jenis_cuti_id' => $request->jenis_cuti_id,
-            'periode' => $request->periode,
-            'jumlah' => $request->jumlah,
+        $rawData = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'jenis_cuti_id' => 'required|exists:jenis_cuti,id',
+            'periode' => 'required|numeric',
+            'jumlah' => 'required|numeric|min:1',
         ]);
+
+        $konfigurasi_cuti->update($rawData);
+
         return redirect()->route('admin-konfigurasi_cuti.index')->withNotify('Data berhasil diperbaharui!');
     }
 

@@ -54,22 +54,6 @@
                                     <option value="{{ $item->id }}">{{ $item->name }}
                                     </option>
                                 @endforeach
-                                50
-                                Total Pengguna Aktif (Tahun 2025)
-
-                                50 / 50 (100%)
-                                PJLP Hari Ini
-
-                                11.962
-                                Total Input Kinerja (Tahun 2025)
-
-                                0
-                                PJLP Cuti Hari Ini
-
-                                Pintasan
-                                Pintasan Generate Report PDF
-
-
                             </select>
                         </div>
                         <div class="form-group">

@@ -42,7 +42,7 @@
                         </div>
                         <div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-12 mb-2 ml-2">
                             <span class="btn btn-outline-primary">Sisa Cuti Tahunan:
-                                <strong>{{ $konfigurasi_cuti->jumlah ?? '#' }} hari</strong></span>
+                                <strong>{{ $jumlah ?? '0' }} hari</strong></span>
                         </div>
                     </div>
                     <div class="projectLog">

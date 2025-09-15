@@ -44,31 +44,27 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
+        $rawData = $request->validate([
+            'name' => 'required|string',
             'email' => 'required|email|unique:users,email',
             'role_id' => 'required|exists:role,id',
             'phone' => 'required|numeric',
+            "nip" => 'required|string',
+            "gender" => 'required|string',
+            "tempat_lahir" => 'required|string',
+            "tanggal_lahir" => 'required|date',
+            "alamat" => 'required|string',
+            "jabatan_id" => 'required|exists:jabatan,id',
+            "employee_type_id" => 'required|exists:employee_type,id',
+            "area_id" => 'required|exists:area,id',
+            "struktur_id" => 'required|exists:struktur,id',
         ]);
 
         $defaultPassword = 'user123';
 
-        $user = User::create([
-            "name" => $request->name,
-            "email" => $request->email,
-            "password" => Hash::make($defaultPassword),
-            "nip" => $request->nip,
-            "phone" => $request->phone,
-            "gender" => $request->gender,
-            "tempat_lahir" => $request->tempat_lahir,
-            "tanggal_lahir" => $request->tanggal_lahir,
-            "alamat" => $request->alamat,
-            "role_id" => $request->role_id,
-            "jabatan_id" => $request->jabatan_id,
-            "employee_type_id" => $request->employee_type_id,
-            "area_id" => $request->area_id,
-            "struktur_id" => $request->struktur_id,
-        ]);
+        $rawData['password'] = Hash::make($defaultPassword);
+
+        $user = User::updateOrCreate($rawData, $rawData);
 
         RoleUser::updateOrCreate([
             'user_id' => $user->id,
@@ -78,15 +74,17 @@ class UserController extends Controller
             'role_id' => $user->role_id,
         ]);
 
-        return redirect()->route('admin-user.index')->withNotify('Data user <strong>' . $user->name . '</strong> berhasil ditambahkan, dengan default password <strong><code>' . $defaultPassword . '</code></strong>');
+        $message = 'Data user <strong>' . $user->name . '</strong> berhasil ditambahkan, dengan default password <strong><code>' . $defaultPassword . '</code></strong>';
+        if($user->employee_type_id == 3) {
+            $message = 'Data user <strong>' . $user->name . '</strong> berhasil ditambahkan, dengan default password <strong><code>' . $defaultPassword . '</code></strong>, segera lakukan setting <strong>Formasi Tim & Konfigurasi Cuti</strong> agar user bisa login!';
+        }
+
+        return redirect()->route('admin-user.index')->withNotify($message);
     }
 
     public function show(string $uuid)
     {
-        $user = User::where('uuid', $uuid)->first();
-        if (!$user) {
-            return back()->withNotifyerror('Data tidak ditemukan');
-        }
+        $user = User::where('uuid', $uuid)->firstOrFail();
         $role = Role::all();
         $jabatan = Jabatan::all();
         $employee_type = EmployeeType::all();
@@ -106,29 +104,25 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email',
-            'role_id' => 'required',
+        $rawData = $request->validate([
+            'name' => 'required|string',
+            'email' => "required|email|unique:users,email,{$user->id}",
+            'role_id' => 'required|exists:role,id',
             'phone' => 'required|numeric',
+            "nip" => 'required|string',
+            "gender" => 'required|string',
+            "tempat_lahir" => 'required|string',
+            "tanggal_lahir" => 'required|date',
+            "alamat" => 'required|string',
+            "jabatan_id" => 'required|exists:jabatan,id',
+            "employee_type_id" => 'required|exists:employee_type,id',
+            "area_id" => 'required|exists:area,id',
+            "struktur_id" => 'required|exists:struktur,id',
         ]);
 
-        $user->update([
-            "name" => $request->name,
-            "email" => $request->email,
-            "nip" => $request->nip,
-            "phone" => $request->phone,
-            "gender" => $request->gender,
-            "tempat_lahir" => $request->tempat_lahir,
-            "tanggal_lahir" => $request->tanggal_lahir,
-            "alamat" => $request->alamat,
-            "role_id" => $request->role_id,
-            "jabatan_id" => $request->jabatan_id,
-            "employee_type_id" => $request->employee_type_id,
-            "area_id" => $request->area_id,
-            "struktur_id" => $request->struktur_id,
-        ]);
-        return redirect()->route('admin-user.index')->withNotify('Data berhasil diperbaharui!');
+        $user->update($rawData);
+
+        return redirect()->route('admin-user.index')->withNotify('Data user <strong>' . $user->name . '</strong> berhasil diperbaharui!');
     }
 
     public function banOrUnban($uuid) {

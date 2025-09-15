@@ -65,7 +65,7 @@ Route::get('/', function () {
     return redirect('dashboard');
 })->middleware('auth');
 
-Route::group(['middleware' => ['auth', 'CheckBanned']], function () {
+Route::group(['middleware' => ['auth', 'CheckBanned', 'CheckKonfigurasiPJLP']], function () {
     // ---------------------DASHBOARDCONTROLLER----------------------------
 
     Route::controller(DashboardController::class)->group(function () {

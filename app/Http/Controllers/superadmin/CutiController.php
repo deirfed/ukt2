@@ -114,21 +114,67 @@ class CutiController extends Controller
     public function approve(Request $request)
     {
         $request->validate([
-            'id' => 'required',
-            'no_surat' => 'required',
+            'id' => 'required|exists:cuti,id',
+            'no_surat' => 'required|string',
         ]);
-        $cuti = Cuti::findOrFail($request->id);
-        $konfigurasi_cuti = KonfigurasiCuti::where('user_id', $cuti->user_id)->firstOrFail();
-        $cuti->status = 'Diterima';
-        $cuti->no_surat = $request->no_surat;
-        $cuti->save();
 
-        if ($cuti->jenis_cuti->id == 1) {
-            $konfigurasi_cuti->jumlah = $konfigurasi_cuti->jumlah - $cuti->jumlah;
-            $konfigurasi_cuti->save();
+        $cuti = Cuti::findOrFail($request->id);
+
+        $tahun = Carbon::parse($cuti->tanggal_awal)->year; // pakai tanggal_awal
+
+        $konfigurasi_cuti = KonfigurasiCuti::where('user_id', $cuti->user_id)
+            ->where('periode', $tahun)
+            ->where('jenis_cuti_id', 1) // cuti tahunan
+            ->firstOrFail();
+
+        // Hindari approve ulang
+        if ($cuti->status === 'Diterima') {
+            return back()->withError('Cuti ini sudah pernah disetujui.');
         }
 
-        return redirect()->route('admin-cuti.approval_page')->withNotify('Data berhasil diterima!');
+        // Validasi sisa cuti
+        if ($cuti->jenis_cuti_id == 1) {
+            if ($konfigurasi_cuti->jumlah < $cuti->jumlah) {
+                return back()->withError(
+                    'Sisa cuti tidak mencukupi. Tersisa ' . $konfigurasi_cuti->jumlah . ' hari.'
+                );
+            }
+
+            $konfigurasi_cuti->decrement('jumlah', $cuti->jumlah);
+        }
+
+        // Update status cuti
+        $cuti->update([
+            'status'   => 'Diterima',
+            'no_surat' => $request->no_surat,
+        ]);
+
+        // Generate absensi otomatis
+        $konfigurasi_absensi = KonfigurasiAbsensi::where('jenis_absensi_id', 1)->first();
+        for ($date = Carbon::parse($cuti->tanggal_awal); $date->lte(Carbon::parse($cuti->tanggal_akhir)); $date->addDay()) {
+
+            // Hindari absensi double
+            $exists = Absensi::where('user_id', $cuti->user_id)
+                ->whereDate('tanggal', $date->toDateString())
+                ->exists();
+
+            if (!$exists) {
+                Absensi::create([
+                    'user_id'          => $cuti->user_id,
+                    'jenis_absensi_id' => 1,
+                    'tanggal'          => $date->copy(),
+                    'jam_masuk'        => $konfigurasi_absensi->jam_masuk,
+                    'status_masuk'     => 'Datang tepat waktu',
+                    'telat_masuk'      => 0,
+                    'jam_pulang'       => $konfigurasi_absensi->jam_pulang,
+                    'status_pulang'    => 'Pulang tepat waktu',
+                    'cepat_pulang'     => 0,
+                    'status'           => $cuti->jenis_cuti->name,
+                ]);
+            }
+        }
+
+        return redirect()->route('admin-cuti.approval_page')->withNotify('Cuti berhasil diterima!');
     }
 
     public function reject(Request $request)

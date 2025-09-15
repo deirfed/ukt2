@@ -27,17 +27,23 @@
                         <div class="card-title">Form Ubah Data Formasi Tim</div>
                     </div>
                     <div class="card-body">
-                        {{-- <div class="form-group">
+                        <div class="form-group">
                             <label for="">Periode</label>
-                            <input type="text" class="form-control" name="periode" value="{{ $formasi_tim->periode }}"
-                                readonly>
-                        </div> --}}
+                            <select name="periode" class="form-control" required>
+                                <option value="" selected disabled>- pilih periode -</option>
+                                @foreach ($tahuns as $y)
+                                    <option value="{{ $y }}" @selected($y == $formasi_tim->periode)>
+                                        {{ $y }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div class="form-group">
                             <label for="">Tim</label>
                             <select name="struktur_id" class="form-control" required>
                                 <option value="" selected disabled>- pilih nama tim -</option>
                                 @foreach ($struktur as $item)
-                                    <option value="{{ $item->id }}" @if ($item->id == $formasi_tim->struktur->id) selected @endif>
+                                    <option value="{{ $item->id }}" @selected($item->id == $formasi_tim->struktur_id)>
                                         {{ $item->tim->name }} ({{ $item->seksi->name }})
                                     </option>
                                 @endforeach
@@ -48,7 +54,7 @@
                             <select name="area_id" class="form-control" required>
                                 <option value="" selected disabled>- pilih nama pulau -</option>
                                 @foreach ($area as $item)
-                                    <option value="{{ $item->id }}" @if ($item->id == $formasi_tim->area->id) selected @endif>
+                                    <option value="{{ $item->id }}" @selected($item->id == $formasi_tim->area_id)>
                                         {{ $item->pulau->name }}
                                     </option>
                                 @endforeach
@@ -59,7 +65,7 @@
                             <select name="koordinator_id" class="form-control" required>
                                 <option value="" selected disabled>- pilih koordinator -</option>
                                 @foreach ($koordinator as $item)
-                                    <option value="{{ $item->id }}" @if ($item->id == $formasi_tim->koordinator->id) selected @endif>
+                                    <option value="{{ $item->id }}" @selected($item->id == $formasi_tim->koordinator_id)>
                                         {{ $item->name }}
                                     </option>
                                 @endforeach
@@ -70,7 +76,7 @@
                             <select name="anggota_id" class="form-control" required>
                                 <option value="" selected disabled>- pilih anggota -</option>
                                 @foreach ($anggota as $item)
-                                    <option value="{{ $item->id }}" @if ($item->id == $formasi_tim->anggota->id) selected @endif>
+                                    <option value="{{ $item->id }}" @selected($item->id == $formasi_tim->anggota_id)>
                                         {{ $item->name }}
                                     </option>
                                 @endforeach

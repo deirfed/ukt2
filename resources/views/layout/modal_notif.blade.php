@@ -1,14 +1,26 @@
 @if (session('notify'))
     <script>
-        $(document).ready(function() {
-            $("#success-modal").modal("show");
-        })
+        Swal.fire({
+            icon: "success",
+            title: "Success!",
+            html: @json(session('notify')) // pakai html, bukan text
+        }).then(() => {
+            if (window.history.replaceState) {
+                window.history.replaceState(null, '', window.location.href);
+            }
+        });
     </script>
 @elseif (session('error'))
     <script>
-        $(document).ready(function() {
-            $("#error-modal").modal("show");
-        })
+        Swal.fire({
+            icon: "error",
+            title: "Oops!",
+            html: @json(session('error')) // pakai html, bukan text
+        }).then(() => {
+            if (window.history.replaceState) {
+                window.history.replaceState(null, '', window.location.href);
+            }
+        });
     </script>
 @elseif ($errors->any())
     <script>

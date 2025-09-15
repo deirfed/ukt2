@@ -29,8 +29,14 @@
                     <div class="card-body">
                         <div class="form-group">
                             <label for="">Periode</label>
-                            <input type="text" class="form-control" name="periode"
-                                value="{{ $konfigurasi_cuti->periode }}" readonly required>
+                            <select name="periode" class="form-control" required>
+                                <option value="" selected disabled>- pilih periode -</option>
+                                @foreach ($tahuns as $y)
+                                    <option value="{{ $y }}" @selected($y == $konfigurasi_cuti->periode)>
+                                        {{ $y }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="">Karyawan</label>

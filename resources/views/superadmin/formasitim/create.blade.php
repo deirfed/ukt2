@@ -19,7 +19,7 @@
 @section('content')
     <div class="row gutters justify-content-center">
         <div class="col-xl-4 col-lg-4 col-md-5 col-sm-6 col-12">
-            <form action="{{ route('formasi_tim.store') }}" method="POST">
+            <form action="{{ route('admin-formasi_tim.store') }}" method="POST">
                 @csrf
                 @method('post')
                 <div class="card m-0">
@@ -31,8 +31,8 @@
                             <label for="">Periode</label>
                             <select name="periode" class="form-control" required>
                                 <option value="" selected disabled>- pilih periode -</option>
-                                <option value="{{ $this_year }}">{{ $this_year }}</option>
-                                <option value="{{ $this_year + 1 }}">{{ $this_year + 1 }}</option>
+                                <option value="{{ $periode }}">{{ $periode }}</option>
+                                <option value="{{ $periode + 1 }}">{{ $periode + 1 }}</option>
                             </select>
                         </div>
                         <div class="form-group">
