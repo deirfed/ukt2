@@ -11,6 +11,26 @@
                 margin: 5mm 20mm 5mm 20mm;
             }
 
+            .header {
+                position: fixed;
+                top: 0px;
+                left: -40px;
+                right: 0px;
+                height: 60px;
+                text-align: left;
+                line-height: 35px;
+            }
+
+            .footer {
+                position: fixed;
+                bottom: -60px;
+                left: 0;
+                right: 0;
+                text-align: right;
+                font-size: 12px;
+                color: #555;
+            }
+
             .page-break {
                 page-break-after: always;
             }
@@ -18,6 +38,9 @@
     </head>
 
     <body>
+        <div class="header">
+            <img style="height: 60px" src="{{ public_path('assets/img/logo-ukt2.png') }}" alt="logo-ukt2">
+        </div>
         <div>
             <div class="text-center">
                 <p class="mt-5 mb-0 text-uppercase font-weight-bold">
@@ -107,7 +130,7 @@
                 <table>
                     <tbody>
                         <tr>
-                            <td style="width: 85mm"></td>
+                            <td style="width: 100mm"></td>
                             <td class="text-center">
                                 <p>
                                     {{ $tanggal_approve ?? '-' }}

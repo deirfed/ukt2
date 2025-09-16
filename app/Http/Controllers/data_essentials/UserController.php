@@ -181,33 +181,35 @@ class UserController extends Controller
     public function update_password(Request $request)
     {
         $request->validate([
-            'old_password' => 'required',
-            'new_password' => 'required',
-            'confirm_new_password' => 'required',
+            'old_password' => ['required'],
+            'new_password' => ['required', 'confirmed', 'min:6'],
+        ], [
+            'new_password.confirmed' => 'Konfirmasi password baru tidak sesuai!',
+            'new_password.min' => 'Password minimal 6 digits'
         ]);
 
-        $user_id = auth()->user()->id;
+        $user = User::findOrFail(Auth::id());
 
-        $old_password = $request->old_password;
-        $new_password = $request->new_password;
-        $confirm_new_password = $request->confirm_new_password;
-
-        if($new_password != $confirm_new_password) {
-            return back()->withError('Password Baru & Konfirmasi Password Baru tidak sesuai!');
-        } else {
-            $user = User::findOrFail($user_id);
-            $cek = Hash::check($old_password, $user->password);
-            if(!$cek){
-                return back()->withError('Password Lama yang anda masukan tidak sesuai!');
-            }
-
-            $user->update([
-                'password' => Hash::make($new_password),
-            ]);
-
-            Auth::logout();
-            return redirect()->route('dashboard.index');
+        // cek password lama
+        if (!Hash::check($request->old_password, $user->password)) {
+            return back()->withError('Password lama tidak sesuai.');
         }
+
+        // cek password baru tidak boleh sama dengan password lama
+        if (Hash::check($request->new_password, $user->password)) {
+            return back()->withError('Password baru tidak boleh sama dengan password lama.');
+        }
+
+        // update password
+        $user->update([
+            'password' => Hash::make($request->new_password),
+        ]);
+
+        Auth::logout();
+
+        return redirect()
+            ->route('login')
+            ->withErrors(['email' => 'Password berhasil diubah. Silakan login kembali.']);
     }
 
     public function update_photo(Request $request)

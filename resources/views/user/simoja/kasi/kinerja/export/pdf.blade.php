@@ -8,7 +8,27 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         @page {
-            margin: 5mm 5mm 5mm 5mm;
+            margin: 20mm 5mm 20mm 5mm;
+        }
+
+        .header {
+            position: fixed;
+            top: -65px;
+            left: 20px;
+            right: 0px;
+            height: 60px;
+            text-align: left;
+            line-height: 35px;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: -60px;
+            left: 0;
+            right: 0;
+            text-align: right;
+            font-size: 12px;
+            color: #555;
         }
 
         .page-break {
@@ -18,6 +38,14 @@
 </head>
 
 <body>
+    <div class="header">
+        <img style="height: 60px" src="{{ public_path('assets/img/logo-ukt2.png') }}" alt="logo-ukt2">
+    </div>
+
+    <div class="footer">
+        <i> SIMOJA © {{ \Carbon\Carbon::now()->translatedFormat('Y') }}</i>
+    </div>
+
     <div>
         <div class="text-center">
             <p class="mt-3 mb-1 text-uppercase font-weight-bold">

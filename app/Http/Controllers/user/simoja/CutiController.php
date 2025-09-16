@@ -661,7 +661,16 @@ class CutiController extends Controller
             }
         }
 
-        $heightPhoto = 500;
+        $check_cuti = Cuti::where('user_id', $user_id)
+                        ->whereYear('tanggal_awal', $tahun)
+                        ->where('status', 'Diproses')
+                        ->first();
+
+        if($check_cuti) {
+            return redirect()
+                    ->route('dashboard.index')
+                    ->withError('Pengajuan cuti anda sebelumnya <strong>(' . $check_cuti->tanggal_awal ?? 'N/A' . ')</strong> masih diproses, silahkan hubungi Koordinator anda!');
+        }
 
         $data = [
             'user_id' => $user_id,
@@ -674,6 +683,8 @@ class CutiController extends Controller
             'catatan' => $catatan,
             'status' => $status,
         ];
+
+        $heightPhoto = 400;
 
         $cuti = Cuti::updateOrCreate($data, $data);
 

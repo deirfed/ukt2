@@ -27,18 +27,19 @@
                         <div class="form-group">
                             <label for="old_password">Password Lama</label>
                             <input type="password" id="old_password" name="old_password" class="form-control"
-                                placeholder="input password lama" required autocomplete="off">
+                                placeholder="Input password lama" required autocomplete="off">
                         </div>
+
                         <div class="form-group">
                             <label for="new_password">Password Baru</label>
                             <input type="password" id="new_password" name="new_password" class="form-control"
-                                placeholder="input password baru" required autocomplete="off">
+                                placeholder="Input password baru" required autocomplete="off">
                         </div>
+
                         <div class="form-group">
-                            <label for="confirm_new_password">Konfirmasi Password Baru</label>
-                            <input type="password" id="confirm_new_password" name="confirm_new_password"
-                                class="form-control" placeholder="input konfirmasi password baru" required
-                                autocomplete="off">
+                            <label for="new_password_confirmation">Konfirmasi Password Baru</label>
+                            <input type="password" id="new_password_confirmation" name="new_password_confirmation"
+                                class="form-control" placeholder="Input konfirmasi password baru" required autocomplete="off">
                         </div>
                         <div class="btn group-button mt-2">
                             <button type="submit" id="submit" name="submit"

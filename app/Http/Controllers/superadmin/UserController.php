@@ -60,7 +60,7 @@ class UserController extends Controller
             "struktur_id" => 'required|exists:struktur,id',
         ]);
 
-        $defaultPassword = 'user123';
+        $defaultPassword = env('DEFAULT_PASSWORD', 'user123');
 
         $rawData['password'] = Hash::make($defaultPassword);
 
@@ -144,7 +144,7 @@ class UserController extends Controller
 
     public function resetPassword($uuid) {
         $user = User::where('uuid', $uuid)->firstOrFail();
-        $defaultPassword = "user123";
+        $defaultPassword = env('DEFAULT_PASSWORD', 'user123');
         $password = Hash::make($defaultPassword);
         $user->update([
             'password' => $password,
