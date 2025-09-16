@@ -89,7 +89,7 @@
             </div>
         </div>
     </div>
-    @if(auth()->user()->employee_type() === 3)
+    @if((auth()->user()->employee_type_id == 3) and (auth()->user()->jabatan_id == 5))
         <div class="row gutters">
             <div class="col-12">
                 <div class="card shadow-sm">

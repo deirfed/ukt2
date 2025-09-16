@@ -180,9 +180,9 @@
             <p>% Efisiensi Kerja: Presentase Jam Kerja Efektif terhadap Jam Absensi</p>
         </div>
 
-        {{-- <div class="footer">
-            <i> SIMOJA - Dibuat {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</i>
-        </div> --}}
+        <div class="footer">
+            <i> Simoja - © {{ \Carbon\Carbon::now()->translatedFormat('Y') }}</i>
+        </div>
 
     </div>
 
@@ -275,7 +275,7 @@
             </tr>
         </table>
     </div>
-    {{-- <div class="footer">
-        <i> SIMOJA - Dibuat {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</i>
-    </div> --}}
+    <div class="footer">
+        <i> Simoja - © {{ \Carbon\Carbon::now()->translatedFormat('Y') }}</i>
+    </div>
 </body>
