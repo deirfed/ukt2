@@ -32,6 +32,7 @@ class User extends Authenticatable
         "photo",
         "bio",
         "ttd",
+        "is_plt",
         "active",
     ];
 

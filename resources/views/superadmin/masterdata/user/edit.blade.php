@@ -28,22 +28,27 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group">
+                            <label for="">Nama Lengkap</label>
                             <input type="text" class="form-control" id="name" name="name"
                                 placeholder="Nama Lengkap" value="{{ $user->name }}" required autocomplete="off">
                         </div>
                         <div class="form-group">
+                            <label for="">Email</label>
                             <input type="email" class="form-control" id="email" value="{{ $user->email }}"
                                 name="email" placeholder="Email" required autocomplete="off">
                         </div>
                         <div class="form-group">
+                            <label for="">NIP</label>
                             <input type="text" class="form-control" id="nip" name="nip" placeholder="NIP"
                                 value="{{ $user->nip }}" autocomplete="off">
                         </div>
                         <div class="form-group">
+                            <label for="">No HP/WA</label>
                             <input type="text" class="form-control" id="phone" name="phone" placeholder="No HP"
                                 required autocomplete="off" value="{{ $user->phone }}">
                         </div>
                         <div class="form-group">
+                            <label for="">Jenis Kelamin</label>
                             <select class="form-control selectpicker" name="gender" required>
                                 <option value="" selected disabled> - jenis kelamin - </option>
                                 <option value="Bapak" @if ($user->gender == 'Bapak') selected @endif>Laki-laki</option>
@@ -51,19 +56,22 @@
                             </select>
                         </div>
                         <div class="form-group">
+                            <label for="">Tempat Lahir</label>
                             <input type="text" class="form-control" id="tempat_lahir" name="tempat_lahir"
                                 placeholder="Tempat Lahir" value="{{ $user->tempat_lahir }}" required autocomplete="off">
                         </div>
                         <div class="form-group">
+                            <label for="">Tanggal Lahir</label>
                             <input type="text" class="form-control" id="tanggal_lahir" name="tanggal_lahir"
                                 placeholder="Tanggal Lahir" onfocus="(this.type='date')" onblur="(this.type='text')"
                                 required value="{{ $user->tanggal_lahir }}">
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="alamat" name="alamat"
-                                placeholder="Alamat Lengkap" value="{{ $user->alamat }}" required autocomplete="off">
+                            <label for="">Alamat</label>
+                            <textarea class="form-control" name="alamat" id="alamat" rows="4" required placeholder="input alamat lengkap">{{ $user->alamat }}</textarea>
                         </div>
                         <div class="form-group">
+                            <label for="">Role</label>
                             <select class="form-control selectpicker" name="role_id" required>
                                 <option value="" selected disabled> - pilih role - </option>
                                 @foreach ($role as $item)
@@ -73,6 +81,7 @@
                             </select>
                         </div>
                         <div class="form-group">
+                            <label for="">Jabatan</label>
                             <select class="form-control selectpicker" name="jabatan_id" required>
                                 <option value="" selected disabled> - pilih jabatan - </option>
                                 @foreach ($jabatan as $item)
@@ -82,6 +91,15 @@
                             </select>
                         </div>
                         <div class="form-group">
+                            <label for="">Apakah PLT?</label>
+                            <select class="form-control selectpicker" name="is_plt" required>
+                                <option value="" selected disabled> - pilih apakah plt? - </option>
+                                <option value="0" @selected($user->is_plt === 0)>Tidak</option>
+                                <option value="1" @selected($user->is_plt === 1)>Ya</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Employee Type</label>
                             <select class="form-control selectpicker" name="employee_type_id" required>
                                 <option value="" selected disabled> - pilih employee type - </option>
                                 @foreach ($employee_type as $item)
@@ -91,6 +109,7 @@
                             </select>
                         </div>
                         <div class="form-group">
+                            <label for="">Area</label>
                             <select class="form-control selectpicker" name="area_id" required>
                                 <option value="" selected disabled> - pilih area - </option>
                                 @foreach ($area as $item)
@@ -102,6 +121,7 @@
                             </select>
                         </div>
                         <div class="form-group">
+                            <label for="">Seksi</label>
                             <select class="form-control selectpicker" name="struktur_id" required>
                                 <option value="" selected disabled> - pilih seksi - </option>
                                 @foreach ($struktur as $item)

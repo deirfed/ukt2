@@ -118,6 +118,7 @@ class UserController extends Controller
             "employee_type_id" => 'required|exists:employee_type,id',
             "area_id" => 'required|exists:area,id',
             "struktur_id" => 'required|exists:struktur,id',
+            "is_plt" => 'required|boolean'
         ]);
 
         $user->update($rawData);

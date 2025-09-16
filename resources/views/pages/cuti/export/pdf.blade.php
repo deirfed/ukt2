@@ -116,7 +116,7 @@
                         </tr>
                         <tr>
                             <td></td>
-                            <td class="text-center p-0">{{ $cuti->approved_by->jabatan->name ?? '-' }}
+                            <td class="text-center p-0">@if($cuti->approved_by->is_plt == true)Plt.@endif {{ $cuti->approved_by->jabatan->name ?? '-' }}
                                 {{ $cuti->approved_by->struktur->seksi->name ?? '-' }}</td>
                         </tr>
                         <tr>

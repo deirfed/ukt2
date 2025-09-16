@@ -243,7 +243,7 @@
             <tr>
                 <td class="text-center p-0">Koordinator</td>
                 <td style="width: 4cm"></td>
-                <td class="text-center p-0">Kepala Seksi</td>
+                <td class="text-center p-0">@if($kepala_seksi->is_plt == true)Plt.@endif Kepala Seksi</td>
             </tr>
             <tr>
                 <td class="text-center p-0">Pulau {{ $user->area->pulau->name ?? 'N/A' }}</td>
