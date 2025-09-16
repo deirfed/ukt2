@@ -94,8 +94,8 @@
                             <label for="">Apakah PLT?</label>
                             <select class="form-control selectpicker" name="is_plt" required>
                                 <option value="" selected disabled> - pilih apakah plt? - </option>
-                                <option value="0" @selected($user->is_plt === 0)>Tidak</option>
-                                <option value="1" @selected($user->is_plt === 1)>Ya</option>
+                                <option value="0" @selected($user->is_plt == 0)>Tidak</option>
+                                <option value="1" @selected($user->is_plt == 1)>Ya</option>
                             </select>
                         </div>
                         <div class="form-group">
