@@ -180,9 +180,9 @@
             <p>% Efisiensi Kerja: Presentase Jam Kerja Efektif terhadap Jam Absensi</p>
         </div>
 
-        <div class="footer">
+        {{-- <div class="footer">
             <i> SIMOJA - Dibuat {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</i>
-        </div>
+        </div> --}}
 
     </div>
 
@@ -206,7 +206,7 @@
                     <th>Jam Pulang</th>
                     <th>Photo Datang</th>
                     <th>Photo Pulang</th>
-                    <th>Status</th>
+                    {{-- <th>Status</th> --}}
                 </tr>
             </thead>
             <tbody>
@@ -231,7 +231,7 @@
                             <img class="img-thumbnail" src="{{ $item['url_photo_pulang'] }}" alt="photo_pulang"
                                 style="height: 70px">
                         </td>
-                        <td class="{{ $item['bg'] }} p-1">{{ $item['status'] }}</td>
+                        {{-- <td class="{{ $item['bg'] }} p-1">{{ $item['status'] }}</td> --}}
                     </tr>
                 @endforeach
             </tbody>
@@ -275,7 +275,7 @@
             </tr>
         </table>
     </div>
-    <div class="footer">
+    {{-- <div class="footer">
         <i> SIMOJA - Dibuat {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</i>
-    </div>
+    </div> --}}
 </body>

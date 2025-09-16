@@ -89,22 +89,24 @@
             </div>
         </div>
     </div>
-    <div class="row gutters">
-        <div class="col-12">
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="m-0">📄 Daftar Surat Peringatan (SP) - Tahun {{ $tahun }}</h5>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        {{ $dataTable->table([
-                            'class' => 'table table-bordered table-striped',
-                        ]) }}
+    @if(auth()->user()->employee_type() === 3)
+        <div class="row gutters">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="m-0">📄 Daftar Surat Peringatan (SP) - Tahun {{ $tahun }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            {{ $dataTable->table([
+                                'class' => 'table table-bordered table-striped',
+                            ]) }}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    @endif
 
 
     {{-- BEGIN: Update Photo Profil --}}

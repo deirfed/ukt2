@@ -32,7 +32,17 @@ class SuratPeringatanSayaDataTable extends DataTable
 
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
-        return (new EloquentDataTable($query));
+        return (new EloquentDataTable($query))
+            ->addColumn('dokumen', function ($item) {
+                $routeDokumen = asset('storage/' . $item->dokumen);
+                $actionButton = "<a href='{$routeDokumen}' target='_blank'>
+                    <button class='btn btn-outline-primary'>
+                        <i class='fa fa-file'></i>
+                    </button>
+                </a>";
+
+                return $actionButton;
+            })->rawColumns(['dokumen']);
     }
 
     public function query(SuratPeringatan $model): QueryBuilder
@@ -82,6 +92,7 @@ class SuratPeringatanSayaDataTable extends DataTable
             Column::make('user.name')->title('Nama')->addClass('font-weight-bold')->sortable(true),
             Column::make('user.jabatan.name')->title('Jabatan')->sortable(false),
             Column::make('jenis')->title('Jenis SP')->sortable(false),
+            Column::computed('dokumen')->title('Dokumen')->sortable(false),
             Column::make('alasan')->title('Keterangan')->sortable(false)->addClass('text-wrap'),
         ];
     }

@@ -435,6 +435,20 @@
 
 @section('javascript')
     <script>
-        //
+        $(document).ready(function() {
+            $('#modalDokumentasi').on('show.bs.modal', function(e) {
+                var photoArray = $(e.relatedTarget).data('photo');
+                var photoHTML = '';
+
+                photoArray.forEach(function(item) {
+                    var photoPath = "{{ asset('storage/') }}" + '/' + item;
+                    photoHTML +=
+                        '<div class""><img class="img-thumbnail img-fluid" style="width: 400px;" src="' +
+                        photoPath + '" alt="photo"></div>';
+                });
+
+                document.getElementById("photo_modal").innerHTML = photoHTML;
+            });
+        });
     </script>
 @endsection
