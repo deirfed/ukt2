@@ -71,8 +71,8 @@
                     <td>{{ $item->user->jabatan->name }}</td>
                     <td>{{ $item->user->area->pulau->name }}</td>
                     <td>{{ $item->user->struktur->seksi->name }}</td>
-                    <td>{{ $item->tanggal_awal }}</td>
-                    <td>{{ $item->tanggal_akhir }}</td>
+                    <td>{{ $item->formatted_tanggal_awal }}</td>
+                    <td>{{ $item->formatted_tanggal_akhir }}</td>
                     <td>{{ $item->jenis_cuti->name }}</td>
                     <td>{{ $item->jumlah }}</td>
                     <td>{{ $item->user->konfigurasi_cuti->jumlah }}</td>

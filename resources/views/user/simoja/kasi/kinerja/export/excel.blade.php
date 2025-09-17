@@ -60,7 +60,7 @@
             @foreach ($kinerja as $item)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $item->tanggal }}</td>
+                    <td>{{ $item->formatted_tanggal }}</td>
                     <td>{{ $item->anggota->name }}</td>
                     <td>{{ $item->anggota->nip }}</td>
                     <td>{{ $item->anggota->jabatan->name }}</td>

@@ -571,10 +571,11 @@ class CutiController extends Controller
     {
         $request->validate([
             'jenis_cuti_id' => 'required|exists:jenis_cuti,id',
-            'tanggal_awal' => 'required|date',
+            'tanggal_awal' => 'required|date|after_or_equal:today',
             'tanggal_akhir' => 'required|date|after_or_equal:tanggal_awal',
             'lampiran' => 'nullable|file|image',
         ], [
+            'tanggal_awal.after_or_equal' => 'Tanggal mulai cuti tidak boleh sebelum hari ini (' . now()->format('d-m-Y') . ').',
             'tanggal_akhir.after_or_equal' => 'Tanggal akhir tidak boleh kurang dari tanggal awal.',
             'lampiran.image' => 'Lampiran harus dalam format image.',
         ]);

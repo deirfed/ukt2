@@ -243,14 +243,14 @@
     <div class="mt-5 text-center" style="margin-top: 30px; font-size: 14px">
         <table class="table table-borderless">
             <tr>
-                <td class="text-center p-0">Koordinator</td>
-                <td style="width: 4cm"></td>
-                <td class="text-center p-0">@if($kepala_seksi->is_plt == true)Plt.@endif Kepala Seksi</td>
+                <td style="width: 7cm" class="text-center p-0">Koordinator</td>
+                <td></td>
+                <td style="width: 7cm" class="text-center p-0">PJLP</td>
             </tr>
             <tr>
                 <td class="text-center p-0">Pulau {{ $user->area->pulau->name ?? 'N/A' }}</td>
                 <td></td>
-                <td class="text-center p-0">{{ $user->struktur->seksi->name ?? 'N/A' }}</td>
+                <td class="text-center p-0">Pulau {{ $user->area->pulau->name ?? 'N/A' }}</td>
             </tr>
             <tr>
                 <td style="height: 27mm;"></td>
@@ -263,7 +263,7 @@
                 </td>
                 <td></td>
                 <td class="text-center text-uppercase font-weight-bold p-0" style="border-bottom:1pt solid black;">
-                    {{ $kepala_seksi->name ?? 'N/A' }}
+                    {{ $user->anggota->name ?? 'N/A' }}
                 </td>
             </tr>
             <tr>
@@ -272,8 +272,42 @@
                 </td>
                 <td></td>
                 <td class="text-center p-0">
+                    ID PJLP. {{ $user->anggota->nip ?? 'N/A' }}
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="mt-5 text-center" style="margin-top: 30px; font-size: 14px">
+        <table class="table table-borderless">
+            <tr>
+                <td style="width: 6cm"></td>
+                <td class="text-center p-0">@if($kepala_seksi->is_plt == true)Plt.@endif Kepala Seksi</td>
+                <td style="width: 6cm"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td class="text-center p-0">{{ $user->struktur->seksi->name ?? 'N/A' }}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="height: 27mm;"></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td class="text-center text-uppercase font-weight-bold p-0" style="border-bottom:1pt solid black;">
+                    {{ $kepala_seksi->name ?? 'N/A' }}
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td class="text-center p-0">
                     NIP. {{ $kepala_seksi->nip ?? 'N/A' }}
                 </td>
+                <td></td>
             </tr>
         </table>
     </div>

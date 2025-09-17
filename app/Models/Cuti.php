@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -22,6 +23,16 @@ class Cuti extends Model
         self::creating(function ($model) {
             $model->uuid = Str::uuid();
         });
+    }
+
+    public function getFormattedTanggalAwalAttribute()
+    {
+        return Carbon::parse($this->tanggal_awal)->format('d-m-Y');
+    }
+
+    public function getFormattedTanggalAkhirAttribute()
+    {
+        return Carbon::parse($this->tanggal_akhir)->format('d-m-Y');
     }
 
     public function user()

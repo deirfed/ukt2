@@ -72,7 +72,7 @@
             @foreach ($absensi as $item)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $item->tanggal }}</td>
+                    <td>{{ $item->formatted_tanggal }}</td>
                     <td>{{ $item->user->name }}</td>
                     <td>{{ $item->user->nip }}</td>
                     <td>{{ $item->user->jabatan->name }}</td>

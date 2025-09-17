@@ -182,6 +182,11 @@ class KinerjaController extends Controller
 
         $user = FormasiTim::where('anggota_id', $user_id)->first();
 
+        $kepala_seksi = User::where('jabatan_id', 2) //Kepala Seksi
+                        ->where('struktur_id', $user->struktur_id)
+                        ->orderBy('updated_at', 'DESC')
+                        ->first();
+
         $kinerja = Kinerja::where('anggota_id', $user_id)
                             ->whereBetween('tanggal', [$start_date, $end_date])
                             ->orderBy('tanggal', 'ASC')
@@ -189,6 +194,7 @@ class KinerjaController extends Controller
 
         $pdf = Pdf::loadView('user.simoja.kasi.kinerja.export.pdf', [
             'user' => $user,
+            'kepala_seksi' => $kepala_seksi,
             'kinerja' => $kinerja,
             'start_date' => $start_date->isoFormat('D MMMM Y'),
             'end_date' => $end_date->isoFormat('D MMMM Y'),

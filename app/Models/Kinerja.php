@@ -30,6 +30,11 @@ class Kinerja extends Model
         });
     }
 
+    public function getFormattedTanggalAttribute()
+    {
+        return Carbon::parse($this->tanggal)->format('d-m-Y');
+    }
+
     public function getHariAttribute()
     {
         return $this->tanggal

@@ -83,7 +83,7 @@
                         <tr>
                             <td class="text-center" rowspan="2">{{ $loop->iteration }}</td>
                             <td class="text-nowrap">{{ $item->hari }}</td>
-                            <td class="text-nowrap">{{ $item->tanggal }}</td>
+                            <td class="text-nowrap">{{ $item->formatted_tanggal }}</td>
                             <td class="text-nowrap font-weight-bold">{{ $item->anggota->name ?? '-' }}</td>
                             <td class="text-wrap">{{ $item->kategori->name ?? $item->kegiatan }}</td>
                             <td class="text-wrap">{{ $item->lokasi }}</td>
