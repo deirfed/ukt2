@@ -301,8 +301,6 @@ class AbsensiController extends Controller
         return $pdf->stream(Carbon::now()->format('Ymd_') . 'Data Absensi_' . $user->anggota->name . '_' . $user->anggota->nip . '_Seksi ' . $user->struktur->seksi->name . '_Pulau ' . $user->area->pulau->name . '.pdf');
     }
 
-
-
     public function ringkasan_kasi(Request $request)
     {
         $seksi_id = auth()->user()->struktur->seksi->id;
@@ -654,6 +652,269 @@ class AbsensiController extends Controller
         ]));
     }
 
+    // public function store_pjlp(Request $request)
+    // {
+    //     $request->validate([
+    //         'photo' => 'required'
+    //     ]);
+
+    //     $img = $request->photo;
+    //     $catatan = $request->catatan;
+
+    //     $now = Carbon::now();
+    //     $tanggal = Carbon::parse($now)->format('Y-m-d');
+    //     $waktu = Carbon::parse($now);
+    //     $konfigurasi_absensi = KonfigurasiAbsensi::where('jenis_absensi_id', 1)->first();
+    //     $toleransi_masuk = $konfigurasi_absensi->toleransi_masuk;
+    //     $toleransi_pulang = $konfigurasi_absensi->toleransi_pulang;
+    //     $jam_masuk = Carbon::parse($konfigurasi_absensi->jam_masuk)->addMinutes($toleransi_masuk);
+    //     $jam_pulang = Carbon::parse($konfigurasi_absensi->jam_pulang)->subMinutes($toleransi_pulang);
+
+    //     $user_id = auth()->user()->id;
+    //     $latitude = 'xxx';
+    //     $longitude = 'xxx';
+
+    //     $mode = '';
+    //     $telat = '';
+    //     $status_absensi = '';
+
+    //     $batas_mulai_absen_masuk = Carbon::parse($konfigurasi_absensi->mulai_absen_masuk);
+    //     $batas_selesai_absen_masuk = Carbon::parse($konfigurasi_absensi->selesai_absen_masuk);
+    //     $batas_mulai_absen_pulang = Carbon::parse($konfigurasi_absensi->mulai_absen_pulang);
+    //     $batas_selesai_absen_pulang = Carbon::parse($konfigurasi_absensi->selesai_absen_pulang);
+
+    //     $hari = Carbon::parse($waktu)->isoFormat('dddd');
+    //     if($hari == 'Jumat'){
+    //         $jam_pulang = $jam_pulang->addMinutes(30);
+    //         $batas_mulai_absen_pulang = $batas_mulai_absen_pulang->addMinutes(30);
+    //     }
+
+    //     $formasi = FormasiTim::where('periode', Carbon::now()->year)
+    //                 ->where('anggota_id', $user_id)
+    //                 ->first();
+    //     $nama = strtoupper($formasi->anggota->name) . ' - ' . $formasi->anggota->nip;
+    //     $jam = Carbon::parse($waktu)->format('H:i:s') . ' WIB';
+    //     $date = Carbon::parse($waktu)->isoFormat('dddd, D MMMM Y') . ' - ' . $jam;
+    //     $seksi = 'Seksi ' . $formasi->struktur->seksi->name;
+    //     $pulau = 'Pulau ' . $formasi->area->pulau->name;
+
+    //     if(($waktu >= $batas_mulai_absen_masuk) and ($waktu <= $batas_selesai_absen_masuk)) {
+    //         $mode = 'Absensi Datang';
+    //         if ($waktu > $jam_masuk){
+    //             $telat = $waktu->diffInMinutes($jam_masuk);
+    //             $status_absensi = 'Datang terlambat';
+
+    //         } else {
+    //             $telat = 0;
+    //             $status_absensi = 'Datang tepat waktu';
+    //         }
+    //     }
+    //     elseif($waktu >= $batas_mulai_absen_pulang and $waktu <= $batas_selesai_absen_pulang) {
+    //         $mode = 'Absensi Pulang';
+    //         if ($waktu < $jam_pulang){
+    //             $telat = $waktu->diffInMinutes($jam_pulang);
+    //             $status_absensi = 'Pulang Cepat';
+
+    //         } else {
+    //             $telat = 0;
+    //             $status_absensi = 'Pulang tepat waktu';
+    //         }
+    //     }
+    //     else {
+    //         return back()->withError('Anda harus melakukan absensi, pada rentang Waktu yang telah ditentukan!');
+    //     }
+
+    //     if ($mode == 'Absensi Datang') {
+    //         $validasi = Absensi::where('user_id', $user_id)
+    //                     ->whereDate('tanggal', $tanggal)
+    //                     ->where('jam_masuk', '!=', null)
+    //                     ->count();
+
+    //         if($validasi > 0) {
+    //             return back()->withError('Anda sudah melakukan ' . $mode . ' hari ini.');
+    //         }
+
+    //         $absensi = Absensi::create([
+    //             'jenis_absensi_id' => 1,
+    //             'user_id' => $user_id,
+    //             'tanggal' => $tanggal,
+    //             'jam_masuk' => $waktu,
+    //             'telat_masuk' => $telat,
+    //             'latitude_masuk' => $latitude,
+    //             'longitude_masuk' => $longitude,
+    //             'status_masuk' => $status_absensi,
+    //             'status' => $mode,
+    //             'catatan_masuk' => $catatan,
+    //         ]);
+    //     } else {
+    //         $validasi = Absensi::where('user_id', $user_id)
+    //                     ->whereDate('tanggal', $tanggal)
+    //                     ->where('jam_pulang', '!=', null)
+    //                     ->count();
+
+    //         if($validasi > 0) {
+    //             return back()->withError('Anda sudah melakukan ' . $mode . ' hari ini.');
+    //         } else {
+    //             $mode = 'Absensi Lengkap';
+    //         }
+
+    //         $absensi = Absensi::where('user_id', $user_id)
+    //                         ->whereDate('tanggal', $tanggal)
+    //                         ->first();
+
+    //         if($absensi) {
+    //             $absensi->update([
+    //                 'jam_pulang' => $waktu,
+    //                 'cepat_pulang' => $telat,
+    //                 'latitude_pulang' => $latitude,
+    //                 'longitude_pulang' => $longitude,
+    //                 'status_pulang' => $status_absensi,
+    //                 'status'=> $mode,
+    //                 'catatan_pulang' => $catatan,
+    //             ]);
+    //         } else {
+    //             $absensi = Absensi::create([
+    //                 'jenis_absensi_id' => 1,
+    //                 'user_id' => $user_id,
+    //                 'tanggal' => $tanggal,
+    //                 'jam_pulang' => $waktu,
+    //                 'cepat_pulang' => $telat,
+    //                 'latitude_pulang' => $latitude,
+    //                 'longitude_pulang' => $longitude,
+    //                 'status_pulang' => $status_absensi,
+    //                 'status'=> 'Tidak Absen Datang',
+    //                 'catatan_pulang' => $catatan,
+    //             ]);
+    //         }
+    //     }
+
+    //     $folderPath = "absensi/";
+
+    //     $image_parts = explode(";base64,", $img);
+    //     $image_type_aux = explode("image/", $image_parts[0]);
+    //     $image_type = $image_type_aux[1];
+
+    //     $image_base64 = base64_decode($image_parts[1]);
+    //     $fileName = uniqid() . '.' . $image_type;
+
+    //     $file = $folderPath . $fileName;
+
+    //     Storage::put($file, $image_base64);
+
+    //     $absen = Absensi::find($absensi->id);
+
+
+
+    //     if ($mode == 'Absensi Pulang') {
+    //         $absen->update([
+    //             'photo_pulang' => $file,
+    //         ]);
+
+    //         $path = public_path('storage/'. $absen->photo_pulang);
+    //         $pathWatermark = public_path('assets/img/watermark.png');
+    //         $imageName = basename($path);
+    //         $image = Image::make($path);
+
+    //         $image->insert($pathWatermark, 'bottom-center', 0, 0);
+    //         $image->text($nama, 150, 245, function($font) {
+    //             $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
+    //             $font->color('#000000');
+    //             $font->align('center');
+    //             $font->valign('bottom');
+    //             $font->size(13);
+    //         });
+    //         $image->text($mode, 150, 260, function($font) {
+    //             $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
+    //             $font->color('#000000');
+    //             $font->align('center');
+    //             $font->valign('bottom');
+    //             $font->size(10);
+    //         });
+    //         $image->text($date, 150, 270, function($font) {
+    //             $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
+    //             $font->color('#000000');
+    //             $font->align('center');
+    //             $font->valign('bottom');
+    //             $font->size(10);
+    //         });
+    //         $image->text($seksi, 150, 280, function($font) {
+    //             $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
+    //             $font->color('#000000');
+    //             $font->align('center');
+    //             $font->valign('bottom');
+    //             $font->size(10);
+    //         });
+    //         $image->text($pulau, 150, 290, function($font) {
+    //             $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
+    //             $font->color('#000000');
+    //             $font->align('center');
+    //             $font->valign('bottom');
+    //             $font->size(10);
+    //         });
+
+    //         $destinationPath = public_path('storage/'. $folderPath);
+
+    //         $image->save($destinationPath.$imageName);
+
+    //         $message = 'Data absensi berhasil disimpan!';
+    //     } else {
+    //         $absen->update([
+    //             'photo_masuk' => $file,
+    //         ]);
+
+    //         $path = public_path('storage/'. $absen->photo_masuk);
+    //         $pathWatermark = public_path('assets/img/watermark.png');
+    //         $imageName = basename($path);
+    //         $image = Image::make($path);
+
+    //         $image->insert($pathWatermark, 'bottom-center', 0, 0);
+    //         $image->text($nama, 150, 245, function($font) {
+    //             $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
+    //             $font->color('#000000');
+    //             $font->align('center');
+    //             $font->valign('bottom');
+    //             $font->size(13);
+    //         });
+    //         $image->text($mode, 150, 260, function($font) {
+    //             $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
+    //             $font->color('#000000');
+    //             $font->align('center');
+    //             $font->valign('bottom');
+    //             $font->size(10);
+    //         });
+    //         $image->text($date, 150, 270, function($font) {
+    //             $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
+    //             $font->color('#000000');
+    //             $font->align('center');
+    //             $font->valign('bottom');
+    //             $font->size(10);
+    //         });
+    //         $image->text($seksi, 150, 280, function($font) {
+    //             $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
+    //             $font->color('#000000');
+    //             $font->align('center');
+    //             $font->valign('bottom');
+    //             $font->size(10);
+    //         });
+    //         $image->text($pulau, 150, 290, function($font) {
+    //             $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
+    //             $font->color('#000000');
+    //             $font->align('center');
+    //             $font->valign('bottom');
+    //             $font->size(10);
+    //         });
+
+    //         $destinationPath = public_path('storage/'. $folderPath);
+
+    //         $image->save($destinationPath.$imageName);
+
+    //         $message = 'Data absensi berhasil disimpan!';
+    //     }
+
+    //     return redirect()->route('simoja.pjlp.my-absensi')->withNotify($message);
+    // }
+
+
     public function store_pjlp(Request $request)
     {
         $request->validate([
@@ -667,6 +928,11 @@ class AbsensiController extends Controller
         $tanggal = Carbon::parse($now)->format('Y-m-d');
         $waktu = Carbon::parse($now);
         $konfigurasi_absensi = KonfigurasiAbsensi::where('jenis_absensi_id', 1)->first();
+
+        if(!$konfigurasi_absensi) {
+            return back()->withError('Konfigurasi Absensi belum diatur, silahkan hubungi admin.');
+        }
+
         $toleransi_masuk = $konfigurasi_absensi->toleransi_masuk;
         $toleransi_pulang = $konfigurasi_absensi->toleransi_pulang;
         $jam_masuk = Carbon::parse($konfigurasi_absensi->jam_masuk)->addMinutes($toleransi_masuk);
@@ -676,7 +942,8 @@ class AbsensiController extends Controller
         $latitude = 'xxx';
         $longitude = 'xxx';
 
-        $mode = '';
+        $mode = '';   // indikator masuk/pulang
+        $status = ''; // status absensi untuk DB
         $telat = '';
         $status_absensi = '';
 
@@ -691,30 +958,38 @@ class AbsensiController extends Controller
             $batas_mulai_absen_pulang = $batas_mulai_absen_pulang->addMinutes(30);
         }
 
-        $formasi = FormasiTim::where('periode', Carbon::now()->year)->where('koordinator_id', $user_id)->orWhere('anggota_id', $user_id)->first();
+        $formasi = FormasiTim::where('periode', Carbon::now()->year)
+                    ->where('anggota_id', $user_id)
+                    ->first();
+
+        if(!$formasi) {
+            return back()->withError('Anda belum memiliki Formasi Tim, silahkan hubungi admin.');
+        }
+
         $nama = strtoupper($formasi->anggota->name) . ' - ' . $formasi->anggota->nip;
         $jam = Carbon::parse($waktu)->format('H:i:s') . ' WIB';
         $date = Carbon::parse($waktu)->isoFormat('dddd, D MMMM Y') . ' - ' . $jam;
         $seksi = 'Seksi ' . $formasi->struktur->seksi->name;
         $pulau = 'Pulau ' . $formasi->area->pulau->name;
 
-        if($waktu >= $batas_mulai_absen_masuk and $waktu <= $batas_selesai_absen_masuk) {
-            $mode = 'Absensi Datang';
+        // Tentukan mode absensi
+        if(($waktu >= $batas_mulai_absen_masuk) and ($waktu <= $batas_selesai_absen_masuk)) {
+            $mode = 'masuk';
+            $status = 'Absensi Datang';
             if ($waktu > $jam_masuk){
                 $telat = $waktu->diffInMinutes($jam_masuk);
                 $status_absensi = 'Datang terlambat';
-
             } else {
                 $telat = 0;
                 $status_absensi = 'Datang tepat waktu';
             }
         }
-        elseif($waktu >= $batas_mulai_absen_pulang and $waktu <= $batas_selesai_absen_pulang) {
-            $mode = 'Absensi Pulang';
+        elseif(($waktu >= $batas_mulai_absen_pulang) and ($waktu <= $batas_selesai_absen_pulang)) {
+            $mode = 'pulang';
+            $status = 'Absensi Pulang';
             if ($waktu < $jam_pulang){
                 $telat = $waktu->diffInMinutes($jam_pulang);
                 $status_absensi = 'Pulang Cepat';
-
             } else {
                 $telat = 0;
                 $status_absensi = 'Pulang tepat waktu';
@@ -724,14 +999,15 @@ class AbsensiController extends Controller
             return back()->withError('Anda harus melakukan absensi, pada rentang Waktu yang telah ditentukan!');
         }
 
-        if ($mode == 'Absensi Datang') {
+        // Simpan ke DB
+        if ($mode == 'masuk') {
             $validasi = Absensi::where('user_id', $user_id)
                         ->whereDate('tanggal', $tanggal)
-                        ->where('jam_masuk', '!=', null)
+                        ->whereNot('jam_masuk', null)
                         ->count();
 
             if($validasi > 0) {
-                return back()->withError('Anda sudah melakukan ' . $mode . ' hari ini.');
+                return back()->withError('Anda sudah melakukan ' . $status . ' hari ini.');
             }
 
             $absensi = Absensi::create([
@@ -743,19 +1019,19 @@ class AbsensiController extends Controller
                 'latitude_masuk' => $latitude,
                 'longitude_masuk' => $longitude,
                 'status_masuk' => $status_absensi,
-                'status' => $mode,
+                'status' => $status,
                 'catatan_masuk' => $catatan,
             ]);
-        } else {
+        } else { // pulang
             $validasi = Absensi::where('user_id', $user_id)
                         ->whereDate('tanggal', $tanggal)
-                        ->where('jam_pulang', '!=', null)
+                        ->whereNot('jam_pulang', null)
                         ->count();
 
             if($validasi > 0) {
-                return back()->withError('Anda sudah melakukan ' . $mode . ' hari ini.');
+                return back()->withError('Anda sudah melakukan ' . $status . ' hari ini.');
             } else {
-                $mode = 'Absensi Lengkap';
+                $status = 'Absensi Lengkap'; // ubah status, tapi tidak ubah $mode
             }
 
             $absensi = Absensi::where('user_id', $user_id)
@@ -769,7 +1045,7 @@ class AbsensiController extends Controller
                     'latitude_pulang' => $latitude,
                     'longitude_pulang' => $longitude,
                     'status_pulang' => $status_absensi,
-                    'status'=> $mode,
+                    'status'=> $status,
                     'catatan_pulang' => $catatan,
                 ]);
             } else {
@@ -788,6 +1064,7 @@ class AbsensiController extends Controller
             }
         }
 
+        // Simpan foto absensi
         $folderPath = "absensi/";
 
         $image_parts = explode(";base64,", $img);
@@ -803,113 +1080,66 @@ class AbsensiController extends Controller
 
         $absen = Absensi::find($absensi->id);
 
-
-
-        if ($mode == 'Absensi Pulang') {
+        if ($mode == 'pulang') {
             $absen->update([
                 'photo_pulang' => $file,
             ]);
 
             $path = public_path('storage/'. $absen->photo_pulang);
-            $pathWatermark = public_path('assets/img/watermark.png');
-            $imageName = basename($path);
-            $image = Image::make($path);
-
-            $image->insert($pathWatermark, 'bottom-center', 0, 0);
-            $image->text($nama, 150, 245, function($font) {
-                $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
-                $font->color('#000000');
-                $font->align('center');
-                $font->valign('bottom');
-                $font->size(13);
-            });
-            $image->text($mode, 150, 260, function($font) {
-                $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
-                $font->color('#000000');
-                $font->align('center');
-                $font->valign('bottom');
-                $font->size(10);
-            });
-            $image->text($date, 150, 270, function($font) {
-                $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
-                $font->color('#000000');
-                $font->align('center');
-                $font->valign('bottom');
-                $font->size(10);
-            });
-            $image->text($seksi, 150, 280, function($font) {
-                $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
-                $font->color('#000000');
-                $font->align('center');
-                $font->valign('bottom');
-                $font->size(10);
-            });
-            $image->text($pulau, 150, 290, function($font) {
-                $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
-                $font->color('#000000');
-                $font->align('center');
-                $font->valign('bottom');
-                $font->size(10);
-            });
-
-            $destinationPath = public_path('storage/'. $folderPath);
-
-            $image->save($destinationPath.$imageName);
-
-            $message = 'Data absensi berhasil disimpan!';
-        } else {
+        } else { // masuk
             $absen->update([
                 'photo_masuk' => $file,
             ]);
 
             $path = public_path('storage/'. $absen->photo_masuk);
-            $pathWatermark = public_path('assets/img/watermark.png');
-            $imageName = basename($path);
-            $image = Image::make($path);
-
-            $image->insert($pathWatermark, 'bottom-center', 0, 0);
-            $image->text($nama, 150, 245, function($font) {
-                $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
-                $font->color('#000000');
-                $font->align('center');
-                $font->valign('bottom');
-                $font->size(13);
-            });
-            $image->text($mode, 150, 260, function($font) {
-                $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
-                $font->color('#000000');
-                $font->align('center');
-                $font->valign('bottom');
-                $font->size(10);
-            });
-            $image->text($date, 150, 270, function($font) {
-                $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
-                $font->color('#000000');
-                $font->align('center');
-                $font->valign('bottom');
-                $font->size(10);
-            });
-            $image->text($seksi, 150, 280, function($font) {
-                $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
-                $font->color('#000000');
-                $font->align('center');
-                $font->valign('bottom');
-                $font->size(10);
-            });
-            $image->text($pulau, 150, 290, function($font) {
-                $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
-                $font->color('#000000');
-                $font->align('center');
-                $font->valign('bottom');
-                $font->size(10);
-            });
-
-            $destinationPath = public_path('storage/'. $folderPath);
-
-            $image->save($destinationPath.$imageName);
-
-            $message = 'Data absensi berhasil disimpan!';
         }
+
+        // Tambah watermark
+        $pathWatermark = public_path('assets/img/watermark.png');
+        $imageName = basename($path);
+        $image = Image::make($path);
+
+        $image->insert($pathWatermark, 'bottom-center', 0, 0);
+        $image->text($nama, 150, 245, function($font) {
+            $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
+            $font->color('#000000');
+            $font->align('center');
+            $font->valign('bottom');
+            $font->size(13);
+        });
+        $image->text($status, 150, 260, function($font) {
+            $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
+            $font->color('#000000');
+            $font->align('center');
+            $font->valign('bottom');
+            $font->size(10);
+        });
+        $image->text($date, 150, 270, function($font) {
+            $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
+            $font->color('#000000');
+            $font->align('center');
+            $font->valign('bottom');
+            $font->size(10);
+        });
+        $image->text($seksi, 150, 280, function($font) {
+            $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
+            $font->color('#000000');
+            $font->align('center');
+            $font->valign('bottom');
+            $font->size(10);
+        });
+        $image->text($pulau, 150, 290, function($font) {
+            $font->file(public_path('assets/fonts/Roboto-Regular.ttf'));
+            $font->color('#000000');
+            $font->align('center');
+            $font->valign('bottom');
+            $font->size(10);
+        });
+
+        $destinationPath = public_path('storage/'. $folderPath);
+        $image->save($destinationPath.$imageName);
+
+        $message = 'Data absensi berhasil disimpan!';
 
         return redirect()->route('simoja.pjlp.my-absensi')->withNotify($message);
     }
