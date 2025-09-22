@@ -21,10 +21,14 @@
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="card h-250">
                 <div class="card-body">
+                    <h5 class="d-flex justify-content-center mb-3 text-center">Nomor
+                        Surat dapat diakses&nbsp;<a href="https://s.id/cutipjlp" target="_blank"
+                            style="text-decoration: underline; color:#034ea2">Disini</a>
+                    </h5>
                     <div class="row gutters">
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3 text-left">
                             <a href="{{ route('dashboard.index') }}" class="btn btn-outline-primary"><i
-                                    class="fa fa-arrow-left"></i> Kembali</a>
+                                class="fa fa-arrow-left"></i> Kembali</a>
                         </div>
                     </div>
                     <div class="table-responsive">
