@@ -526,7 +526,7 @@ class KinerjaController extends Controller
                 $imageName = time().'-'.$file->getClientOriginalName();
                 $destinationPath = public_path('storage/'. $detailPath);
 
-                $image->resize(null, 500, function ($constraint) {
+                $image->resize(null, 300, function ($constraint) {
                     $constraint->aspectRatio();
                 });
 
