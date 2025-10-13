@@ -16,6 +16,7 @@
         "maatwebsite/excel": "^3.1",
         "mchev/banhammer": "^2.4",
         "opcodesio/log-viewer": "^3.19",
+        "spatie/laravel-backup": "^9.3",
         "yajra/laravel-datatables": "^10.1"
     },
     "require-dev": {
