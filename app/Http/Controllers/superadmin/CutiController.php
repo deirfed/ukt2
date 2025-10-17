@@ -45,10 +45,26 @@ class CutiController extends Controller
         $status = $request->status ?? null;
         $tim_id = $request->tim_id ?? null;
 
-        $periode = Carbon::now()->format('Y');
+        $periode = null;
 
-        $start_date = $request->start_date ?? Carbon::createFromFormat('Y', $periode)->startOfYear()->toDateString();
-        $end_date = $request->end_date ?? Carbon::createFromFormat('Y', $periode)->endOfYear()->toDateString();
+        if (($request->start_date != null) && ($request->end_date != null)) {
+            $start = Carbon::parse($request->start_date);
+            $end = Carbon::parse($request->end_date);
+
+            // Pastikan tahun sama
+            if ($start->year !== $end->year) {
+                return back()->withError('Tanggal awal dan akhir harus dalam tahun yang sama.');
+            }
+
+            $periode = $start->year;
+            $start_date = $start->toDateString();
+            $end_date = $end->toDateString();
+        } else {
+            // Default: tahun berjalan
+            $periode = Carbon::now()->year;
+            $start_date = Carbon::createFromDate($periode, 1, 1)->toDateString();
+            $end_date = Carbon::createFromDate($periode, 12, 31)->toDateString();
+        }
 
 
         $user = User::where('employee_type_id', 3)
@@ -68,6 +84,7 @@ class CutiController extends Controller
             'status' => $status,
             'start_date' => $start_date,
             'end_date' => $end_date,
+            'periode' => $periode,
         ])->render('superadmin.cuti.cuti.index', compact([
             'seksi',
             'user',

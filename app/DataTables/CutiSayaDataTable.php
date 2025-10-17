@@ -19,6 +19,7 @@ class CutiSayaDataTable extends DataTable
     protected $user_id;
     protected $start_date;
     protected $end_date;
+    protected $periode;
 
     public function with(array|string $key, mixed $value = null): static
     {
@@ -88,6 +89,17 @@ class CutiSayaDataTable extends DataTable
             })
             ->addColumn('jumlah_hari', function ($item) {
                 return $item->jumlah . ' hari';
+            })
+            ->addColumn('sisa_cuti', function ($item) {
+                $jatah = 12; //default per tahun
+
+                // Hitung total cuti yang sudah diambil di this->periode itu, SEBELUM cuti ini
+                $totalDiambil = Cuti::where('user_id', $item->user_id)
+                    ->whereYear('tanggal_awal', $this->periode)
+                    ->where('tanggal_awal', '<', $item->tanggal_awal)
+                    ->sum('jumlah');
+
+                return $jatah - $totalDiambil - $item->jumlah . ' hari';
             })
             ->addColumn('disetujui', function ($item) {
                 return $item->status == 'Diterima'
@@ -166,7 +178,8 @@ class CutiSayaDataTable extends DataTable
             Column::make('tanggal_akhir')->title('Tanggal Akhir')->sortable(true),
             Column::make('jenis_cuti.name')->title('Jenis Izin')->sortable(false),
             Column::computed('jumlah_hari')->title('Jumlah Hari')->sortable(false),
-            Column::make('user.konfigurasi_cuti.jumlah')->title('Sisa Cuti')->sortable(false),
+            // Column::make('user.konfigurasi_cuti.jumlah')->title('Sisa Cuti')->sortable(false),
+            Column::computed('sisa_cuti')->title('Sisa Cuti')->sortable(false),
             Column::make('known_by.name')->title('Koordinator')->sortable(false),
             Column::computed('disetujui')->title('Disetujui')->sortable(false),
             Column::computed('status')->title('Status')->sortable(false),
