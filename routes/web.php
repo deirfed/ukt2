@@ -593,6 +593,7 @@ Route::group(['middleware' => ['auth', 'CheckBanned', 'CheckKonfigurasiPJLP']], 
             Route::get('/admin-konfigurasi-cuti', 'index')->name('admin-konfigurasi_cuti.index');
             Route::get('/admin-konfigurasi-cuti-create', 'create')->name('admin-konfigurasi_cuti.create');
             Route::post('/admin-konfigurasi-cuti', 'store')->name('admin-konfigurasi_cuti.store');
+            Route::post('/admin-konfigurasi-cuti/generate', 'generate')->name('admin-konfigurasi_cuti.generate');
             Route::get('/admin-konfigurasi-cuti/{uuid}/edit', 'edit')->name('admin-konfigurasi_cuti.edit');
             Route::put('/admin-konfigurasi-cuti/{uuid}/update', 'update')->name('admin-konfigurasi_cuti.update');
             Route::delete('/admin-konfigurasi-cuti', 'destroy')->name('admin-konfigurasi_cuti.destroy');

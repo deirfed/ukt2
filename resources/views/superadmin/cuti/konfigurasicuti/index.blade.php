@@ -33,6 +33,8 @@
                             <a href="{{ route('admin-konfigurasi_cuti.index') }}" title="Reset Filter" class="btn btn-primary"><i
                                     class="fa fa-refresh"></i>
                             </a>
+                            <a href="javascript:;" class="btn btn-primary" data-toggle="modal"
+                                data-target="#modalGenerateCuti" title="Generate Cuti PJLP tahun {{ $tahun_depan }}"><i class="fa fa-magic"></i> Generate Cuti {{ $tahun_depan }}</a>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -83,6 +85,36 @@
             </div>
         </div>
         {{-- END: FILTER Konfigurasi Cuti --}}
+
+        {{-- START: Generate Konfigurasi Cuti tahun Depan --}}
+        <div class="modal fade" id="modalGenerateCuti" tabindex="-1" role="dialog" aria-labelledby="modalFilter" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Form Generate Konfigurasi Cuti PJLP Periode {{ $tahun_depan }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formGenerate" action="{{ route('admin-konfigurasi_cuti.generate') }}" method="POST">
+                            @csrf
+                            @method('POST')
+                            <div class="form-row gutters">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-center">
+                                    <p>Apakah anda yakin akan mengubah konfigurasi cuti semua akun PJLP pada Periode {{ $tahun_depan }}?</p>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
+                        <button type="submit" form="formGenerate" class="btn btn-primary">Generate</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- END: Generate Konfigurasi Cuti tahun Depan --}}
 
         <!-- BEGIN: Delete Confirmation Modal -->
         <div id="delete-confirmation-modal" class="modal" tabindex="-1" aria-hidden="true">

@@ -20,6 +20,8 @@ class KonfigurasiCutiController extends Controller
 
         $periode = $request->periode ?? Carbon::now()->format('Y');
 
+        $tahun_depan = $periode + 1;
+
         $tahuns = KonfigurasiCuti::select('periode')
             ->distinct()
             ->orderBy('periode', 'asc')
@@ -30,6 +32,7 @@ class KonfigurasiCutiController extends Controller
         ])->render('superadmin.cuti.konfigurasicuti.index', compact([
             'periode',
             'tahuns',
+            'tahun_depan',
         ]));
     }
 
@@ -69,6 +72,34 @@ class KonfigurasiCutiController extends Controller
         $message = $konfigurasi_cuti->wasRecentlyCreated
             ? 'Data baru konfigurasi cuti untuk user <strong>' . e($user->name) . '</strong> di tahun ' . $request->periode .' berhasil ditambahkan!'
             : 'Data konfigurasi cuti atas user <strong>' . e($user->name) . '</strong> di tahun ' . $request->periode .' sudah ada dan berhasil diperbaharui!';
+
+        return redirect()->route('admin-konfigurasi_cuti.index')->withNotify($message);
+    }
+
+    public function generate()
+    {
+        $periode = Carbon::now()->format('Y') + 1;
+
+        $pjlp = User::where('jabatan_id', 5) //PJLP
+                    ->where('employee_type_id', 3) //PJLP
+                    ->notBanned()
+                    ->get();
+
+        $default_cuti = 12; //12 hari
+
+        foreach ($pjlp as $user) {
+            KonfigurasiCuti::updateOrCreate(
+                [
+                    'user_id' => $user->id,
+                    'periode' => $periode,
+                ],
+                [
+                    'jumlah' => $default_cuti,
+                ]
+            );
+        }
+
+        $message = "Sebanyak <b>{$pjlp->count()}</b> akun PJLP telah berhasil diperbarui konfigurasi cutinya menjadi <b>{$default_cuti} hari</b> untuk periode <b>{$periode}</b>.";
 
         return redirect()->route('admin-konfigurasi_cuti.index')->withNotify($message);
     }
