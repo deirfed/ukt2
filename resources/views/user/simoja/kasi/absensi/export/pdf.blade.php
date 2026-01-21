@@ -69,11 +69,11 @@
                 <td>:</td>
                 <td>{{ $user->anggota->jabatan->name }}</td>
             </tr>
-            <tr>
+            {{-- <tr>
                 <td>Koordinator</td>
                 <td>:</td>
                 <td>{{ $user->koordinator->name }}</td>
-            </tr>
+            </tr> --}}
             <tr>
                 <td>Seksi</td>
                 <td>:</td>
@@ -215,11 +215,11 @@
                 <td>:</td>
                 <td>{{ $user->anggota->jabatan->name }}</td>
             </tr>
-            <tr>
+            {{-- <tr>
                 <td>Koordinator</td>
                 <td>:</td>
                 <td>{{ $user->koordinator->name }}</td>
-            </tr>
+            </tr> --}}
             <tr>
                 <td>Seksi</td>
                 <td>:</td>
