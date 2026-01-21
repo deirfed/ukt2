@@ -21,12 +21,36 @@
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="task-section">
                 <div class="row no-gutters">
-                    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-3 col-4">
-                        <div class="labels-container">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="d-md-none mb-2 mt-2 text-center">
+                            <button class="btn btn-primary px-4" type="button" data-toggle="collapse"
+                                data-target="#arsipTahunMobile">
+                                ☰ Arsip Tahun
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-12 d-md-none">
+                        <div class="collapse" id="arsipTahunMobile">
+                            <div class="card mb-3">
+                                <div class="card-body p-2">
+                                    <div class="list-group list-group-flush">
+                                        @foreach ($tahuns as $y)
+                                            <a href="{{ route('admin-absensi.index', ['tahun' => $y]) }}"
+                                                class="list-group-item list-group-item-action {{ $y == $tahun ? 'active' : '' }}">
+                                                <i class="icon-receipt"></i> {{ $y }}
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-4">
+                        <div class="labels-container collapse d-md-block" id="arsipTahun">
                             <div class="mt-5"></div>
                             <div class="lablesContainerScroll">
                                 <div class="filters-block">
-                                    <h5>Arsip Tahun</h5>
+                                    <h5><u>Arsip Tahun</u></h5>
                                     <div class="filters">
                                         @foreach ($tahuns as $y)
                                             <a href="{{ route('admin-absensi.index', ['tahun' => $y]) }}"
@@ -44,14 +68,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-10 col-lg-10 col-md-9 col-sm-9 col-8">
+                    <div class="col-xl-10 col-lg-10 col-md-10 col-sm-12 col-12">
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="d-flex justify-content-center mb-3 text-center"
                                     style="text-decoration: underline">Rekap
                                     Absensi - PJLP UKT 2</h4>
                                 <h4 class="d-flex justify-content-center mb-3 text-center"
-                                    style="text-decoration: underline" id="kinerja-title">Tahun {{ $tahun }}</h4>
+                                    style="text-decoration: underline" id="absensi-title">Tahun {{ $tahun }}</h4>
                                 <div class="row d-flex justify-content-between align-items-center">
                                     <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-3 text-left">
                                         <div class="d-flex justify-content-start align-items-center flex-wrap">
@@ -175,7 +199,8 @@
                                 <div class="form-group">
                                     <select class="form-control" name="tahun" id="tahun" required>
                                         @foreach ($tahuns as $y)
-                                            <option value="{{ $y }}" @selected($y == $tahun)>{{ $y }}</option>
+                                            <option value="{{ $y }}" @selected($y == $tahun)>
+                                                {{ $y }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -336,7 +361,7 @@
                     e.preventDefault();
                     let year = this.dataset.year;
 
-                    document.getElementById("kinerja-title").innerHTML = 'Tahun ' + year;
+                    document.getElementById("absensi-title").innerHTML = 'Tahun ' + year;
 
                     yearLinks.forEach(l => l.classList.remove("active"));
 

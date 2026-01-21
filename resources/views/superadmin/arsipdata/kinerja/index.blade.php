@@ -21,12 +21,36 @@
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="task-section">
                 <div class="row no-gutters">
-                    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-3 col-4">
-                        <div class="labels-container">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="d-md-none mb-2 mt-2 text-center">
+                            <button class="btn btn-primary px-4" type="button" data-toggle="collapse"
+                                data-target="#arsipTahunMobile">
+                                ☰ Arsip Tahun
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-12 d-md-none">
+                        <div class="collapse" id="arsipTahunMobile">
+                            <div class="card mb-3">
+                                <div class="card-body p-2">
+                                    <div class="list-group list-group-flush">
+                                        @foreach ($tahuns as $y)
+                                            <a href="{{ route('admin-kinerja.index', ['tahun' => $y]) }}"
+                                                class="list-group-item list-group-item-action {{ $y == $tahun ? 'active' : '' }}">
+                                                <i class="icon-receipt"></i> {{ $y }}
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-4">
+                        <div class="labels-container collapse d-md-block" id="arsipTahun">
                             <div class="mt-5"></div>
                             <div class="lablesContainerScroll">
                                 <div class="filters-block">
-                                    <h5>Arsip Tahun</h5>
+                                    <h5><u>Arsip Tahun</u></h5>
                                     <div class="filters">
                                         @foreach ($tahuns as $y)
                                             <a href="{{ route('admin-kinerja.index', ['tahun' => $y]) }}"
@@ -44,7 +68,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-10 col-lg-10 col-md-9 col-sm-9 col-8">
+                    <div class="col-xl-10 col-lg-10 col-md-10 col-sm-12 col-12">
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="d-flex justify-content-center mb-3 text-center"
@@ -170,14 +194,16 @@
                                         <option value="" selected disabled>- Pilih Kegiatan -</option>
                                         @foreach ($kategori as $item)
                                             <option value="{{ $item->id }}" @selected($item->id == $kategori_id)>
-                                                ({{ $item->seksi->name ?? '#' }}) - {{ $item->name }}
+                                                ({{ $item->seksi->name ?? '#' }})
+                                                - {{ $item->name }}
                                             </option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="">Tahun</label>
-                                    <input type="text" class="form-control" name="tahun" value="{{ $tahun }}" readonly>
+                                    <input type="text" class="form-control" name="tahun"
+                                        value="{{ $tahun }}" readonly>
                                 </div>
                             </div>
                         </div>
@@ -338,7 +364,8 @@
                                         <option value="" selected disabled>- Pilih Kegiatan -</option>
                                         @foreach ($kategori as $item)
                                             <option value="{{ $item->id }}" @selected($item->id == $kategori_id)>
-                                                ({{ $item->seksi->name ?? '#' }}) - {{ $item->name }}
+                                                ({{ $item->seksi->name ?? '#' }})
+                                                - {{ $item->name }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -405,8 +432,8 @@
                                 Data ini akan di-generate dalam format PDF!
                             </p>
                         </div>
-                        <form id="formKegiatanPDFAll" action="{{ route('simoja.kasi.kinerja.export.pdf.all') }}" method="GET"
-                            hidden>
+                        <form id="formKegiatanPDFAll" action="{{ route('simoja.kasi.kinerja.export.pdf.all') }}"
+                            method="GET" hidden>
                             @csrf
                             @method('GET')
                             <input type="text" name="seksi_id" value="{{ $seksi_id ?? '' }}">
