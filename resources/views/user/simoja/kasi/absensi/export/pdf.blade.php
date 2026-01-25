@@ -281,6 +281,15 @@
         </table>
     </div>
 
+    <div class="page-break"></div>
+
+    {{-- PAGE DETAIL --}}
+    <div class="text-center">
+        <p class="mt-3 mb-1 text-uppercase font-weight-bold">
+            <u>PERSETUJUAN</u>
+        </p>
+    </div>
+
     <div class="mt-5 text-center" style="margin-top: 30px; font-size: 14px">
         <table class="table table-borderless">
             <tr>
