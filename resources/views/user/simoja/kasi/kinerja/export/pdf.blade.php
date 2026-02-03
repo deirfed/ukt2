@@ -70,11 +70,11 @@
                     <td>:</td>
                     <td>{{ $user->anggota->jabatan->name ?? '-' }}</td>
                 </tr>
-                <tr>
+                {{-- <tr>
                     <td>Koordinator</td>
                     <td>:</td>
                     <td>{{ $user->koordinator->name ?? '-' }}</td>
-                </tr>
+                </tr> --}}
                 <tr>
                     <td>Seksi</td>
                     <td>:</td>
@@ -116,9 +116,10 @@
                         </tr>
                         <tr>
                             <td colspan="5" class="mb-0">
-                                @if($item->photo != null)
+                                @if ($item->photo != null)
                                     @foreach (json_decode($item->photo, true) as $photo)
-                                        <img class="img-thumbnail" style="height: 80px" src="{{ public_path('storage/' . $photo) }}" alt="Foto Kegiatan">
+                                        <img class="img-thumbnail" style="height: 80px"
+                                            src="{{ public_path('storage/' . $photo) }}" alt="Foto Kegiatan">
                                     @endforeach
                                 @endif
                                 <p class="mb-0">Catatan: {{ $item->deskripsi ?? '-' }}</p>
@@ -152,10 +153,14 @@
             <tr>
                 <td style="width: 7cm" class="text-center p-0">PJLP</td>
                 <td></td>
-                <td style="width: 7cm" class="text-center p-0">@if($kepala_seksi->is_plt == true)Plt.@endif Kepala Seksi {{ $user->struktur->seksi->name ?? 'N/A' }}</td>
+                <td style="width: 7cm" class="text-center p-0">
+                    @if ($kepala_seksi->is_plt == true)
+                        Plt.
+                    @endif Kepala Seksi {{ $user->struktur->seksi->name ?? 'N/A' }}
+                </td>
             </tr>
             <tr>
-                <td class="text-center p-0">Pulau {{ $user->area->pulau->name ?? 'N/A' }}</td>
+                <td class="text-center p-0">Seksi {{ $user->struktur->seksi->name ?? 'N/A' }}</td>
                 <td></td>
                 <td class="text-center p-0">{{ $user->struktur->unitkerja->name ?? 'N/A' }}</td>
             </tr>
@@ -194,7 +199,7 @@
         <table class="table table-borderless">
             <tr>
                 <td style="width: 6cm"></td>
-                <td class="text-center p-0">@if($kepala_seksi->is_plt == true)Plt.@endif Kepala Seksi</td>
+                <td class="text-center p-0">@if ($kepala_seksi->is_plt == true)Plt.@endif Kepala Seksi</td>
                 <td style="width: 6cm"></td>
             </tr>
             <tr>
