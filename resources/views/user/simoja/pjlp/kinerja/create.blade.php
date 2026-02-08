@@ -77,7 +77,7 @@
                                 @foreach ($kategori as $item)
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                 @endforeach
-                                <option value="">Lainnya</option>
+                                {{-- <option value="">Lainnya</option> --}}
                             </select>
                         </div>
                         <div class="form-group" id="kegiatan_lainnya_container" style="display: none">
