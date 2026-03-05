@@ -18,6 +18,7 @@ use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use Intervention\Image\Facades\Image;
 use App\Exports\absensi\AbsensiExport;
+use App\Services\ReverseGeocodingService;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Storage;
 
@@ -653,19 +654,26 @@ class AbsensiController extends Controller
         ]));
     }
 
-    public function store_pjlp(Request $request)
+    public function store_pjlp(Request $request, ReverseGeocodingService $geoService,)
     {
         $request->validate([
-            'photo' => 'required'
+            'photo' => 'required',
+            'jenis_absensi_id' => 'required|exists:jenis_absensi,id',
+            'latitude' => 'required|string',
+            'longitude' => 'required|string',
+            'catatan' => 'nullable|string|max:255',
         ]);
 
         $img = $request->photo;
+        $jenis_absensi_id = $request->jenis_absensi_id;
         $catatan = $request->catatan;
+        $latitude = $request->latitude ?? null;
+        $longitude = $request->longitude ?? null;
 
         $now = Carbon::now();
         $tanggal = Carbon::parse($now)->format('Y-m-d');
         $waktu = Carbon::parse($now);
-        $konfigurasi_absensi = KonfigurasiAbsensi::where('jenis_absensi_id', 1)->first();
+        $konfigurasi_absensi = KonfigurasiAbsensi::where('jenis_absensi_id', $jenis_absensi_id)->first();
 
         if(!$konfigurasi_absensi) {
             return back()->withError('Konfigurasi Absensi belum diatur, silahkan hubungi admin.');
@@ -677,8 +685,6 @@ class AbsensiController extends Controller
         $jam_pulang = Carbon::parse($konfigurasi_absensi->jam_pulang)->subMinutes($toleransi_pulang);
 
         $user_id = auth()->user()->id;
-        $latitude = 'xxx';
-        $longitude = 'xxx';
 
         $mode = '';     // logic untuk simpan foto (masuk / pulang)
         $status = '';   // status absensi untuk DB
@@ -744,6 +750,9 @@ class AbsensiController extends Controller
             return back()->withError('Anda harus melakukan absensi, pada rentang Waktu yang telah ditentukan!');
         }
 
+        // GeoLocation
+        $lokasi = $geoService->getAddress($latitude, $longitude);
+
         // Simpan ke DB
         if ($mode == 'masuk') {
             $validasi = Absensi::where('user_id', $user_id)
@@ -766,6 +775,7 @@ class AbsensiController extends Controller
                 'status_masuk' => $status_absensi,
                 'status' => $status,
                 'catatan_masuk' => $catatan,
+                'lokasi_masuk' => $lokasi,
             ]);
         } else { // pulang
             $validasi = Absensi::where('user_id', $user_id)
@@ -792,6 +802,7 @@ class AbsensiController extends Controller
                     'status_pulang' => $status_absensi,
                     'status'=> $status,
                     'catatan_pulang' => $catatan,
+                    'lokasi_pulang' => $lokasi,
                 ]);
             } else {
                 $absensi = Absensi::create([
@@ -805,6 +816,7 @@ class AbsensiController extends Controller
                     'status_pulang' => $status_absensi,
                     'status'=> 'Tidak Absen Datang',
                     'catatan_pulang' => $catatan,
+                    'lokasi_pulang' => $lokasi,
                 ]);
             }
         }

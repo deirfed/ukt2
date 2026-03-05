@@ -108,6 +108,8 @@
                         <div class="form-group">
                             <label for="catatan">Catatan <span class="text-primary">(Opsional)</span></label>
                             <textarea id="catatan" class="form-control" name="catatan" rows="3"></textarea>
+                            <input type="hidden" name="latitude" id="latitude" required>
+                            <input type="hidden" name="longitude" id="longitude" required>
                         </div>
                         <div class="btn group-button mt-2">
                             <button type="submit" id="submit" name="submit" class="btn btn-primary float-right ml-3"
@@ -138,24 +140,55 @@
         var submitButton = document.getElementById('submit');
 
         function take_snapshot() {
-            Webcam.snap(function(data_uri) {
-                $(".input-photo").val(data_uri);
-                result.innerHTML = '<img class="img-thumbnail" src="' + data_uri + '"/>';
-            });
-            Webcam.reset();
-            camera.style.display = 'none';
-            takeButton.style.display = 'none';
-            retakeButton.style.display = 'block';
-            submitButton.style.display = 'block';
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        // Simpan latitude & longitude ke input hidden
+                        $('#latitude').val(parseFloat(position.coords.latitude));
+                        $('#longitude').val(parseFloat(position.coords.longitude));
+
+                        // Ambil foto setelah lokasi didapat
+                        Webcam.snap(function(data_uri) {
+                            $(".input-photo").val(data_uri);
+                            result.innerHTML = '<img class="img-thumbnail" src="' + data_uri + '"/>';
+                        });
+
+                        Webcam.reset();
+                        camera.style.display = 'none';
+                        takeButton.style.display = 'none';
+                        retakeButton.style.display = 'block';
+                        submitButton.style.display = 'block';
+                    },
+                    function(error) {
+                        alert("Gagal mendapatkan lokasi: " + error.message);
+                    }, {
+                        enableHighAccuracy: true, // Lokasi lebih presisi
+                        timeout: 10000, // Tunggu max 10 detik
+                        maximumAge: 0 // Jangan pakai lokasi cache
+                    }
+                );
+            } else {
+                alert("Geolocation tidak didukung oleh browser ini.");
+            }
         }
 
         function retake() {
+            // Re-attach webcam
             Webcam.attach('#my_camera');
+
+            // Tampilkan/hilangkan tombol dan kamera
             retakeButton.style.display = 'none';
             camera.style.display = 'block';
             takeButton.style.display = 'block';
-            result.innerHTML = '';
             submitButton.style.display = 'none';
+
+            // Kosongkan preview foto
+            result.innerHTML = '';
+
+            // Kosongkan input hidden
+            $(".input-photo").val('');
+            $('#latitude').val('');
+            $('#logitude').val('');
         }
 
         function startTime() {
