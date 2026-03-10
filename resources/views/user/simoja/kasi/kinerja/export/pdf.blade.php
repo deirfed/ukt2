@@ -170,6 +170,12 @@
             margin-bottom: 0.5rem;
             line-height: 1.3;
         }
+
+        .text-nowrap {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
     </style>
 </head>
 
@@ -224,7 +230,7 @@
                 <tr>
                     <td>Periode</td>
                     <td>:</td>
-                    <td>{{ $start_date }} s/d {{ $end_date }}</td>
+                    <td style="width: 100%">{{ $start_date }} s/d {{ $end_date }}</td>
                 </tr>
             </table>
         </div>

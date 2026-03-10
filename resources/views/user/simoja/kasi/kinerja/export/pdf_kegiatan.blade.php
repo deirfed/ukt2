@@ -170,6 +170,12 @@
             margin-bottom: 0.5rem;
             line-height: 1.3;
         }
+
+        .text-nowrap {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
     </style>
 </head>
 
