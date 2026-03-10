@@ -354,7 +354,7 @@
                         <div class="form-row gutters">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <label for="">Personel</label>
+                                    <label class="required" for="">Personel</label>
                                     <select name="user_id" class="form-control" required>
                                         <option value="" selected disabled>- Pilih Personel -</option>
                                         @foreach ($user as $item)
@@ -365,10 +365,19 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="form-group">
-                                    <label for="">Periode</label>
-                                    <input type="month" class="form-control" name="periode"
-                                        value="{{ $periode }}">
+                                <label for="periode" class="required">Periode</label>
+                                <div class="form-row gutters">
+                                    <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="form-group">
+                                            <input type="date" class="form-control" value="" name="start_date"
+                                                required>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="form-group">
+                                            <input type="date" class="form-control" value="" name="end_date" required>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -376,7 +385,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
-                    <button type="submit" form="formPDF" formtarget="_blank" class="btn btn-primary">Buat</button>
+                    <button type="submit" form="formPDF" formtarget="_blank" class="btn btn-primary">Generate</button>
                 </div>
             </div>
         </div>

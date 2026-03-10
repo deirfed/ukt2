@@ -94,11 +94,20 @@
                                         </div>
                                         <div class="doc-title text-white">Generate Report Absensi PJLP</div>
                                         <div class="dropdown">
-                                            <button class="btn btn-dark mr-2 mb-2 mb-sm-0 text-white" data-toggle="modal"
-                                                data-target="#modalDownloadPDFAbsensi" aria-haspopup="true"
+                                            <button class="btn btn-dark mr-2 mb-2 mb-sm-0 text-white" href="#"
+                                                id="appsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
                                                 aria-expanded="false" title="Export">
                                                 <i class="fa fa-paper-plane"></i> Export PDF
                                             </button>
+
+                                            <ul class="dropdown-menu" aria-labelledby="dashboardsDropdown">
+                                                <li>
+                                                    <a class="dropdown-item" href="javascript:;" data-toggle="modal"
+                                                        data-target="#modalDownloadPDFAbsensi">
+                                                        <i class="fa fa-file-pdf text-danger"></i> PDF per Personil
+                                                    </a>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </div>
                                 </div>
@@ -107,7 +116,7 @@
                                         <div class="doc-icon">
                                             <i class="fa fa-list fa-2x"></i>
                                         </div>
-                                        <div class="doc-title text-white">Generate Report Kegiatan PJLP</div>
+                                        <div class="doc-title text-white">Generate Report Kinerja PJLP</div>
                                         <div class="dropdown">
                                             <button class="btn btn-dark mr-2 mb-2 mb-sm-0 text-white" href="#"
                                                 id="appsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
@@ -190,7 +199,7 @@
                         <div class="form-row gutters">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <label for="">Personel</label>
+                                    <label class="required" for="">Personel</label>
                                     <select name="user_id" class="form-control" required>
                                         <option value="" selected disabled>- Pilih Personel -</option>
                                         @foreach ($user as $item)
@@ -201,10 +210,19 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="form-group">
-                                    <label for="">Periode</label>
-                                    <input type="month" class="form-control" name="periode"
-                                        value="{{ $periode }}">
+                                <label for="periode" class="required">Periode</label>
+                                <div class="form-row gutters">
+                                    <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="form-group">
+                                            <input type="date" class="form-control" value="" name="start_date"
+                                                required>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="form-group">
+                                            <input type="date" class="form-control" value="" name="end_date" required>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -213,7 +231,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
                     <button type="submit" form="formPDFAbsensi" formtarget="_blank"
-                        class="btn btn-primary">Buat</button>
+                        class="btn btn-primary">Generate</button>
                 </div>
             </div>
         </div>
@@ -238,7 +256,7 @@
                         <div class="form-row gutters">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <label for="">Personil</label>
+                                    <label class="required" for="">Personil</label>
                                     <select name="user_id" class="form-control" required>
                                         <option value="" selected disabled>- Pilih Personil -</option>
                                         @foreach ($user as $item)
@@ -251,7 +269,7 @@
                                 </div>
                             </div>
                         </div>
-                        <label for="periode">Periode</label>
+                        <label class="required" for="periode">Periode</label>
                         <div class="form-row gutters">
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
@@ -271,7 +289,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
                     <button type="submit" form="formPDFKegiatanPersonel" formtarget="_blank"
-                        class="btn btn-primary">Buat</button>
+                        class="btn btn-primary">Generate</button>
                 </div>
             </div>
         </div>

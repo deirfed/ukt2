@@ -21,6 +21,7 @@ use App\Exports\absensi\AbsensiExport;
 use App\Services\ReverseGeocodingService;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Storage;
+use Barryvdh\Snappy\Facades\SnappyPdf as SnappyPDF;
 
 class AbsensiController extends Controller
 {
@@ -144,17 +145,34 @@ class AbsensiController extends Controller
     {
         $request->validate([
             'user_id' => 'required|exists:users,id',
-            'periode' => 'required',
+
+            // salah satu harus ada
+            'periode'     => 'required_without:start_date|date_format:Y-m',
+            'start_date'  => 'required_without:periode|date',
+            'end_date'    => 'nullable|date|after_or_equal:start_date',
         ]);
 
         $user_id = $request->user_id;
-        $periode = $request->periode;
 
-        $start_date = Carbon::createFromFormat('Y-m', $periode)->startOfMonth()->toDateString();
-        $end_date   = Carbon::createFromFormat('Y-m', $periode)->endOfMonth()->toDateString();
+        if ($request->filled('periode')) {
+            // Jika pakai periode (Y-m)
+            $start_date = Carbon::createFromFormat('Y-m', $request->periode)->startOfMonth();
+            $end_date   = Carbon::createFromFormat('Y-m', $request->periode)->endOfMonth();
+        } else {
+            // Jika pakai start & end date
+            $start_date = Carbon::parse($request->start_date);
+            $end_date   = Carbon::parse($request->end_date ?? $request->start_date);
+        }
 
         $start_date = Carbon::parse($start_date);
         $end_date = Carbon::parse($end_date) ?? $start_date;
+
+        // total hari kalender (basis awal kamu)
+        $total_hari = $start_date->diffInDays($end_date) + 1;
+
+        if ($total_hari > 31) {
+            return back()->withErrors('Data absensi yang bisa di-export PDF maksimal hanya 31 hari.');
+        }
 
         $user = FormasiTim::where('anggota_id', $user_id)
                         ->orderBy('periode', 'DESC')
@@ -276,7 +294,7 @@ class AbsensiController extends Controller
 
         $total_jam_kerja_aktual = round($total_jam_kerja_aktual);
 
-        $pdf = Pdf::loadView('user.simoja.kasi.absensi.export.pdf', [
+        $pdf = SnappyPDF::loadView('user.simoja.kasi.absensi.export.pdf', [
             'user' => $user,
             'kepala_seksi' => $kepala_seksi,
             'jumlah_hari_kerja' => $jumlah_hari_kerja,
@@ -298,6 +316,8 @@ class AbsensiController extends Controller
             'start_date' => $start_date->isoFormat('D MMMM Y'),
             'end_date' => $end_date->isoFormat('D MMMM Y'),
         ]);
+
+        $pdf->setOption('header-html', storage_path('app/pdf/header.html'));
 
         return $pdf->stream(Carbon::now()->format('Ymd_') . 'Data Absensi_' . $user->anggota->name . '_' . $user->anggota->nip . '_Seksi ' . $user->struktur->seksi->name . '_Pulau ' . $user->area->pulau->name . '.pdf');
     }

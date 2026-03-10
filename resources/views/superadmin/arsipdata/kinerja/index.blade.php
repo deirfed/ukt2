@@ -308,7 +308,7 @@
                         <div class="form-row gutters">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <label for="">Personil</label>
+                                    <label class="required" for="">Personel</label>
                                     <select name="user_id" class="form-control" required>
                                         <option value="" selected disabled>- Pilih Personil -</option>
                                         @foreach ($user as $item)
@@ -321,7 +321,7 @@
                                 </div>
                             </div>
                         </div>
-                        <label for="periode">Periode</label>
+                        <label class="required" for="periode">Periode</label>
                         <div class="form-row gutters">
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
@@ -340,7 +340,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
-                    <button type="submit" form="formPDF" formtarget="_blank" class="btn btn-primary">Buat</button>
+                    <button type="submit" form="formPDF" formtarget="_blank" class="btn btn-primary">Generate</button>
                 </div>
             </div>
         </div>
@@ -359,7 +359,7 @@
                         <div class="form-row gutters">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <label for="">Kegiatan</label>
+                                    <label class="required" for="">Kegiatan</label>
                                     <select name="kategori_id" class="form-control" required>
                                         <option value="" selected disabled>- Pilih Kegiatan -</option>
                                         @foreach ($kategori as $item)
@@ -375,7 +375,7 @@
                         <div class="form-row gutters">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <label for="">Personil</label>
+                                    <label class="required" for="">Personel</label>
                                     <select name="user_id" class="form-control">
                                         <option value="" selected disabled>- Pilih Personil (opsional) -</option>
                                         @foreach ($user as $item)
@@ -388,7 +388,7 @@
                                 </div>
                             </div>
                         </div>
-                        <label for="periode">Periode</label>
+                        <label class="required" for="periode">Periode</label>
                         <div class="form-row gutters">
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
@@ -408,7 +408,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
                     <button type="submit" form="formKegiatanPDF" formtarget="_blank"
-                        class="btn btn-primary">Buat</button>
+                        class="btn btn-primary">Generate</button>
                 </div>
             </div>
         </div>
