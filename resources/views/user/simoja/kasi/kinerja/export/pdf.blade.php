@@ -228,7 +228,7 @@
                 <tr>
                     <td>Periode</td>
                     <td>:</td>
-                    <td style="white-space: nowrap;">{{ $start_date }} s/d {{ $end_date }}</td>
+                    <td style="white-space: nowrap; display:inline-block;">{{ $start_date }} s/d {{ $end_date }}</td>
                 </tr>
             </table>
         </div>
