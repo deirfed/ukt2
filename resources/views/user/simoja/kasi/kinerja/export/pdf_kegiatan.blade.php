@@ -192,7 +192,7 @@
                 <tr>
                     <td style="width: 20mm">Kegiatan</td>
                     <td style="width: 5mm">:</td>
-                    <td class="text-wrap" style="width: auto">{{ $kategori->name }}</td>
+                    <td class="text-wrap" style="width: 100%">{{ $kategori->name }}</td>
                 </tr>
                 <tr>
                     <td>Periode</td>
