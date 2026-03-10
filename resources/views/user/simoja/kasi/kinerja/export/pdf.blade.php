@@ -198,7 +198,7 @@
                 <tr>
                     <td style="width: 20mm">Nama</td>
                     <td style="width: 5mm">:</td>
-                    <td class="font-weight-bold text-uppercase">{{ $user->anggota->name ?? '-' }}</td>
+                    <td class="font-weight-bold text-uppercase" style="width:150mm;">{{ $user->anggota->name ?? '-' }}</td>
                 </tr>
                 <tr>
                     <td>ID PJLP</td>
@@ -228,7 +228,7 @@
                 <tr>
                     <td>Periode</td>
                     <td>:</td>
-                    <td style="width:120mm; white-space: nowrap; display:inline-block;">{{ $start_date }} s/d {{ $end_date }}</td>
+                    <td style="width:150mm;">{{ $start_date }} s/d {{ $end_date }}</td>
                 </tr>
             </table>
         </div>
