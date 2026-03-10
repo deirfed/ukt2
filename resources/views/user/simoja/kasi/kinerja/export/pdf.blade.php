@@ -230,7 +230,7 @@
                 <tr>
                     <td>Periode</td>
                     <td>:</td>
-                    <td style="width: 100%">{{ $start_date }} s/d {{ $end_date }}</td>
+                    <td class="text-nowrap">{{ $start_date }} s/d {{ $end_date }}</td>
                 </tr>
             </table>
         </div>
