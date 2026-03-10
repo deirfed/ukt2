@@ -339,7 +339,7 @@
             <tr>
                 <td style="width: 20mm">Nama</td>
                 <td style="width: 5mm">:</td>
-                <td class="font-weight-bold text-uppercase">{{ $user->anggota->name }}</td>
+                <td class="font-weight-bold text-uppercase" style="width: auto">{{ $user->anggota->name }}</td>
             </tr>
             <tr>
                 <td>ID PJLP</td>
