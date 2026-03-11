@@ -326,18 +326,12 @@
                         @method('GET')
                         <div class="form-row gutters">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label class="required" for="">Personel</label>
-                                    <select name="user_id" class="form-control" required>
-                                        <option value="" selected disabled>- Pilih Personel -</option>
-                                        @foreach ($user as $item)
-                                            <option value="{{ $item->id }}"
-                                                @if ($item->id == $user_id) selected @endif>{{ $item->name }} -
-                                                {{ $item->nip ?? '-' }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                                @livewire('form-filter-absensi', [
+                                    'seksi_id' => old('seksi_id', $seksi_id),
+                                    'pulau_id' => old('pulau_id', $pulau_id),
+                                    'user_id' => old('user_id', $user_id),
+                                    'user_required' => true,
+                                ])
                                 <label for="periode" class="required">Periode</label>
                                 <div class="form-row gutters">
                                     <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">

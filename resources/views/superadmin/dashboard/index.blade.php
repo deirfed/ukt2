@@ -190,7 +190,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="resetPasswordModalLabel">Export Laporan Absensi</h5>
+                    <h5 class="modal-title" id="resetPasswordModalLabel">Export Laporan Absensi per Personel</h5>
                 </div>
                 <div class="modal-body">
                     <form id="formPDFAbsensi" action="{{ route('simoja.kasi.absensi.export.pdf') }}" method="GET">
@@ -198,18 +198,9 @@
                         @method('GET')
                         <div class="form-row gutters">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label class="required" for="">Personel</label>
-                                    <select name="user_id" class="form-control" required>
-                                        <option value="" selected disabled>- Pilih Personel -</option>
-                                        @foreach ($user as $item)
-                                            <option value="{{ $item->id }}"
-                                                @if ($item->id == $user_id) selected @endif>{{ $item->name }} -
-                                                {{ $item->nip ?? '-' }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                                @livewire('form-filter-absensi', [
+                                    'user_required' => true,
+                                ])
                                 <label for="periode" class="required">Periode</label>
                                 <div class="form-row gutters">
                                     <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -246,29 +237,16 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="resetPasswordModalLabel">Export Laporan Kinerja</h5>
+                    <h5 class="modal-title" id="resetPasswordModalLabel">Export Laporan Kinerja per Personel</h5>
                 </div>
                 <div class="modal-body">
                     <form id="formPDFKegiatanPersonel" action="{{ route('simoja.kasi.kinerja.export.pdf') }}"
                         method="GET">
                         @csrf
                         @method('GET')
-                        <div class="form-row gutters">
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label class="required" for="">Personil</label>
-                                    <select name="user_id" class="form-control" required>
-                                        <option value="" selected disabled>- Pilih Personil -</option>
-                                        @foreach ($user as $item)
-                                            <option value="{{ $item->id }}"
-                                                @if ($item->id == $user_id) selected @endif>{{ $item->name }} -
-                                                {{ $item->nip ?? '-' }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
+                        @livewire('form-filter-absensi', [
+                            'user_required' => true,
+                        ])
                         <label class="required" for="periode">Periode</label>
                         <div class="form-row gutters">
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
