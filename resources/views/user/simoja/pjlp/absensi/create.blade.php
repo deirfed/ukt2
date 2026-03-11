@@ -5,6 +5,21 @@
         Absensi | Tambah Data Absensi
     </title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.min.js"></script>
+    <style>
+        #my_camera video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        #result img {
+            width: 300px;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+    </style>
 @endsection
 
 @section('path')
@@ -42,7 +57,7 @@
                         </div>
                         <h4 class="text-center"><u>Form Absensi</u></h4>
                         <div class="form-group">
-                            <label>Data Lengkap</label>
+                            <label>Data Lengkap:</label>
                             <table>
                                 <tr>
                                     <td style="width: 90px">Nama</td>
@@ -76,27 +91,28 @@
                                 </tr>
                             </table>
                         </div>
+                        <hr>
                         <div class="form-group">
-                            <label for="">Jenis Absensi</label>
+                            <label for="">Jenis Absensi:</label>
                             <input type="text" class="form-control" value="{{ $mode ?? '-' }}" disabled>
                             <input type="text" class="form-control" value="{{ $jenis_absensi->id }}"
                                 name="jenis_absensi_id" hidden>
                         </div>
                         <div class="form-group">
-                            <label for="">Tanggal</label>
+                            <label for="">Tanggal:</label>
                             <input type="text" class="form-control" value="{{ $tanggal }}" autocomplete="off"
                                 disabled>
                         </div>
                         <div class="form-group">
-                            <label for="">Jam</label>
+                            <label for="">Jam:</label>
                             <input type="text" id="jam" class="form-control" value="__:__ WIB" autocomplete="off"
                                 disabled>
                         </div>
                         <div class="form-group">
-                            <label for="">Photo</label>
+                            <label class="required" for="">Photo:</label>
                             <input type="hidden" class="form-control input-photo" name="photo" id="photo"
                                 accept="image/*" required hidden>
-                            <div class="container">
+                            <div class="container text-center">
                                 <div class="mt-2 mx-auto" id="my_camera"></div>
                                 <div class="mb-3 text-center">
                                     <div id="result">Silahkan ambil foto absen terlebih dahulu...</div>
@@ -116,11 +132,12 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="catatan">Catatan <span class="text-primary">(Opsional)</span></label>
+                            <label class="optional" for="catatan">Catatan</label>
                             <textarea id="catatan" class="form-control" name="catatan" rows="3"></textarea>
                             <input type="hidden" name="latitude" id="latitude" required>
                             <input type="hidden" name="longitude" id="longitude" required>
                         </div>
+                        <hr>
                         <div class="btn group-button mt-2 d-flex justify-content-end">
                             <a href="{{ route('simoja.pjlp.index') }}" class="btn btn-dark rounded me-3">
                                 <i class="fa fa-times"></i>
@@ -149,6 +166,13 @@
 
         Webcam.attach('#my_camera');
 
+        setTimeout(function () {
+            let video = document.querySelector('#my_camera video');
+            if (video) {
+                video.classList.add('img-thumbnail', 'shadow-lg');
+            }
+        }, 300);
+
         var camera = document.getElementById('my_camera');
         var takeButton = document.getElementById('takeButton');
         var retakeButton = document.getElementById('retakeButton');
@@ -166,7 +190,7 @@
                         // Ambil foto setelah lokasi didapat
                         Webcam.snap(function(data_uri) {
                             $(".input-photo").val(data_uri);
-                            result.innerHTML = '<img class="img-thumbnail" src="' + data_uri + '"/>';
+                            result.innerHTML = '<img class="img-thumbnail shadow-lg" src="' + data_uri + '"/>';
                         });
 
                         Webcam.reset();
@@ -191,6 +215,12 @@
         function retake() {
             // Re-attach webcam
             Webcam.attach('#my_camera');
+            setTimeout(function () {
+                let video = document.querySelector('#my_camera video');
+                if (video) {
+                    video.classList.add('img-thumbnail', 'shadow-lg');
+                }
+            }, 300);
 
             // Tampilkan/hilangkan tombol dan kamera
             retakeButton.style.display = 'none';

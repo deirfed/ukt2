@@ -60,6 +60,7 @@
                                 </tr>
                             </table>
                         </div>
+                        <hr>
                         <div class="form-group">
                             <label>Informasi:</label>
                             <div class="border rounded p-3" style="background-color: rgb(255, 234, 206)">
@@ -84,6 +85,7 @@
                                 </table>
                             </div>
                         </div>
+                        <hr>
                         <div class="form-group">
                             <label>Jenis Absensi:</label>
                             <input type="text" class="form-control" value="{{ $jenis_absensi->name ?? '#' }}" disabled>
@@ -109,8 +111,9 @@
                             <label class="optional" for="catatan">Catatan:</label>
                             <textarea id="catatan" class="form-control" name="catatan" rows="3"></textarea>
                         </div>
+                        <hr>
                         <div class="btn group-button mt-2 d-flex justify-content-end">
-                            <a href="{{ route('simoja.pjlp.my-absensi') }}" class="btn btn-dark rounded me-3">
+                            <a href="{{ route('simoja.pjlp.absensi-create') }}" class="btn btn-dark rounded me-3">
                                 <i class="fa fa-times"></i>
                                 Batal
                             </a>

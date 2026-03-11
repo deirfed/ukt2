@@ -143,45 +143,12 @@
                     <form id="formFilter" action="{{ route('admin-absensi.index') }}" method="GET">
                         @csrf
                         @method('GET')
-                        <div class="form-row gutters">
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label for="">Seksi</label>
-                                    <select name="seksi_id" class="form-control">
-                                        <option value="" selected disabled>- Pilih Seksi -</option>
-                                        @foreach ($seksi as $item)
-                                            <option value="{{ $item->id }}" @selected($item->id == $seksi_id)>
-                                                {{ $item->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="">Personel</label>
-                                    <select name="user_id" class="form-control">
-                                        <option value="" selected disabled>- Pilih Personel -</option>
-                                        @foreach ($user as $item)
-                                            <option value="{{ $item->id }}"
-                                                @if ($item->id == $user_id) selected @endif>{{ $item->name }} -
-                                                {{ $item->nip ?? '-' }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="">Pulau</label>
-                                    <select name="pulau_id" class="form-control">
-                                        <option value="" selected disabled>- Pilih Pulau -</option>
-                                        @foreach ($pulau as $item)
-                                            <option value="{{ $item->id }}"
-                                                @if ($item->id == $pulau_id) selected @endif>Pulau {{ $item->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <label for="periode">Bulan & Tahun</label>
+                        @livewire('form-filter-absensi', [
+                            'seksi_id' => old('seksi_id', $seksi_id),
+                            'pulau_id' => old('pulau_id', $pulau_id),
+                            'user_id' => old('user_id', $user_id),
+                        ])
+                        <label class="required" for="periode">Bulan & Tahun</label>
                         <div class="form-row gutters">
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
@@ -347,6 +314,12 @@
     <div id="modalDownloadPDF" class="modal fade" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Export Absensi Personel</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
                 <div class="modal-body">
                     <form id="formPDF" action="{{ route('simoja.kasi.absensi.export.pdf') }}" method="GET">
                         @csrf
@@ -369,13 +342,13 @@
                                 <div class="form-row gutters">
                                     <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                         <div class="form-group">
-                                            <input type="date" class="form-control" value="" name="start_date"
+                                            <input type="date" class="form-control" value="{{ $start_date }}" name="start_date"
                                                 required>
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                         <div class="form-group">
-                                            <input type="date" class="form-control" value="" name="end_date" required>
+                                            <input type="date" class="form-control" value="{{ $end_date }}" name="end_date" required>
                                         </div>
                                     </div>
                                 </div>

@@ -154,60 +154,20 @@
                         @method('GET')
                         <div class="form-row gutters">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                @livewire('form-filter-kinerja', [
+                                    'seksi_id' => old('seksi_id', $seksi_id),
+                                    'pulau_id' => old('pulau_id', $pulau_id),
+                                    'user_id' => old('user_id', $user_id),
+                                    'kategori_id' => old('kategori_id', $kategori_id),
+                                ])
                                 <div class="form-group">
-                                    <label for="">Seksi</label>
-                                    <select name="seksi_id" class="form-control" required>
-                                        <option value="" selected disabled>- Pilih Seksi -</option>
-                                        @foreach ($seksi as $item)
-                                            <option value="{{ $item->id }}" @selected($item->id == $seksi_id)>
-                                                {{ $item->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="">Personel</label>
-                                    <select name="user_id" class="form-control">
-                                        <option value="" selected disabled>- Pilih Personel -</option>
-                                        @foreach ($user as $item)
-                                            <option value="{{ $item->id }}"
-                                                @if ($item->id == $user_id) selected @endif>{{ $item->name }} -
-                                                {{ $item->nip ?? '-' }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="">Pulau</label>
-                                    <select name="pulau_id" class="form-control">
-                                        <option value="" selected disabled>- Pilih Pulau -</option>
-                                        @foreach ($pulau as $item)
-                                            <option value="{{ $item->id }}"
-                                                @if ($item->id == $pulau_id) selected @endif>Pulau {{ $item->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="">Kegiatan</label>
-                                    <select name="kategori_id" class="form-control">
-                                        <option value="" selected disabled>- Pilih Kegiatan -</option>
-                                        @foreach ($kategori as $item)
-                                            <option value="{{ $item->id }}" @selected($item->id == $kategori_id)>
-                                                ({{ $item->seksi->name ?? '#' }})
-                                                - {{ $item->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="">Tahun</label>
+                                    <label class="required" for="">Tahun</label>
                                     <input type="text" class="form-control" name="tahun"
                                         value="{{ $tahun }}" readonly>
                                 </div>
                             </div>
                         </div>
-                        <label for="periode">Tanggal & Bulan</label>
+                        <label class="required" for="periode">Tanggal & Bulan</label>
                         <div class="form-row gutters">
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
@@ -301,37 +261,33 @@
     <div id="modalDownloadPDF" class="modal fade" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Export PDF Kinerja per Personel</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
                 <div class="modal-body">
                     <form id="formPDF" action="{{ route('simoja.kasi.kinerja.export.pdf') }}" method="GET">
                         @csrf
                         @method('GET')
-                        <div class="form-row gutters">
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label class="required" for="">Personel</label>
-                                    <select name="user_id" class="form-control" required>
-                                        <option value="" selected disabled>- Pilih Personil -</option>
-                                        @foreach ($user as $item)
-                                            <option value="{{ $item->id }}"
-                                                @if ($item->id == $user_id) selected @endif>{{ $item->name }} -
-                                                {{ $item->nip ?? '-' }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
+                        @livewire('form-filter-absensi', [
+                            'seksi_id' => old('seksi_id', $seksi_id),
+                            'pulau_id' => old('pulau_id', $pulau_id),
+                            'user_id' => old('user_id', $user_id),
+                            'user_required' => true,
+                        ])
                         <label class="required" for="periode">Periode</label>
                         <div class="form-row gutters">
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <input type="date" class="form-control" value="{{ $start_date }}"
+                                    <input type="date" class="form-control" value=""
                                         name="start_date" required>
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <input type="date" class="form-control" value="{{ $end_date }}"
+                                    <input type="date" class="form-control" value=""
                                         name="end_date" required>
                                 </div>
                             </div>
@@ -351,54 +307,35 @@
     <div id="modalDownloadPDFKegiatan" class="modal fade" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Export PDF Kinerja per Kegiatan</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
                 <div class="modal-body">
                     <form id="formKegiatanPDF" action="{{ route('simoja.kasi.kinerja.export.pdf.kegiatan') }}"
                         method="GET">
                         @csrf
                         @method('GET')
-                        <div class="form-row gutters">
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label class="required" for="">Kegiatan</label>
-                                    <select name="kategori_id" class="form-control" required>
-                                        <option value="" selected disabled>- Pilih Kegiatan -</option>
-                                        @foreach ($kategori as $item)
-                                            <option value="{{ $item->id }}" @selected($item->id == $kategori_id)>
-                                                ({{ $item->seksi->name ?? '#' }})
-                                                - {{ $item->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-row gutters">
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label class="required" for="">Personel</label>
-                                    <select name="user_id" class="form-control">
-                                        <option value="" selected disabled>- Pilih Personil (opsional) -</option>
-                                        @foreach ($user as $item)
-                                            <option value="{{ $item->id }}"
-                                                @if ($item->id == $user_id) selected @endif>{{ $item->name }} -
-                                                {{ $item->nip ?? '-' }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
+                        @livewire('form-filter-kinerja', [
+                            'seksi_id' => old('seksi_id', $seksi_id),
+                            'pulau_id' => old('pulau_id', $pulau_id),
+                            'user_id' => old('user_id', $user_id),
+                            'kategori_id' => old('kategori_id', $kategori_id),
+                            'kategori_required' => true,
+                        ])
                         <label class="required" for="periode">Periode</label>
                         <div class="form-row gutters">
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <input type="date" class="form-control" value="{{ $start_date }}"
+                                    <input type="date" class="form-control" value=""
                                         name="start_date" required>
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <input type="date" class="form-control" value="{{ $end_date }}"
+                                    <input type="date" class="form-control" value=""
                                         name="end_date" required>
                                 </div>
                             </div>

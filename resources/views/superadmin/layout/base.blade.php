@@ -140,6 +140,7 @@
     @include('superadmin.layout.modal_notif')
     @yield('javascript')
     @stack('scripts')
+    @livewireScripts
 </body>
 
 </html>

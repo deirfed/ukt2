@@ -227,6 +227,13 @@
                             </td>
                         </tr>
                     @endforeach
+                    @if ($kinerja->count() == 0)
+                        <tr>
+                            <td class="text-center" colspan="6">
+                                <p>Tidak ada data kinerja.</p>
+                            </td>
+                        </tr>
+                    @endif
                 </tbody>
             </table>
         </div>
