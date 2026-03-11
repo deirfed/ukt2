@@ -202,7 +202,7 @@ class AbsensiDataTable extends DataTable
             Column::computed('status_masuk')->title('Status Datang')->sortable(false),
             Column::make('jam_pulang')->title('Jam Pulang')->sortable(false),
             Column::computed('status_pulang')->title('Status Pulang')->sortable(false),
-            Column::make('status')->title('Status')->sortable(false),
+            Column::make('status')->title('Status')->addClass('text-center')->sortable(false),
             Column::computed('catatan')->title('Catatan')->sortable(false),
             Column::computed('maps')->title('Lokasi')->addClass('text-center text-nowrap')->sortable(false),
             Column::computed('#')

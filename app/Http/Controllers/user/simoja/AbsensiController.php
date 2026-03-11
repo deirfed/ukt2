@@ -22,6 +22,7 @@ use App\Services\ReverseGeocodingService;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Storage;
 use Barryvdh\Snappy\Facades\SnappyPdf as SnappyPDF;
+use Illuminate\Validation\Rule;
 
 class AbsensiController extends Controller
 {
@@ -970,5 +971,117 @@ class AbsensiController extends Controller
             'end_date' => $end_date,
             'sort' => $sort,
         ]);
+    }
+
+    public function create_piket_pjlp()
+    {
+        $jenis_absensi = JenisAbsensi::findOrFail(2); //Absensi Piket
+        $user_id = auth()->user()->id;
+        $formasi_tim = FormasiTim::where('koordinator_id', $user_id)->orWhere('anggota_id', $user_id)->firstOrFail();
+
+        $now = Carbon::now();
+        $bulan = $now->month;
+        $bulan_full = $now->translatedFormat('F');
+        $tahun = $now->year;
+
+        $jatah_piket = 4; //hanya 4 hari
+
+        $absensi_piket = Absensi::where('user_id', $user_id)
+                        ->whereMonth('tanggal', $bulan)
+                        ->whereYear('tanggal', $tahun)
+                        ->where('jenis_absensi_id', 2) //jenis absensi piket
+                        ->count();
+
+        $sisa_jatah_piket = $jatah_piket - $absensi_piket;
+
+        /* ambil tanggal yang sudah ada absensi */
+        $absensi = Absensi::where('user_id', $user_id)
+            ->whereMonth('tanggal', $bulan)
+            ->whereYear('tanggal', $tahun)
+            ->pluck('tanggal')
+            ->toArray();
+
+        /* generate semua tanggal dalam bulan */
+        $start = Carbon::create($tahun, $bulan, 1);
+        $end = $start->copy()->endOfMonth();
+
+        $period = CarbonPeriod::create($start, $end);
+
+        $tanggals = [];
+
+        foreach ($period as $date) {
+
+            if (!in_array($date->toDateString(), $absensi)) {
+
+                $tanggals[] = (object)[
+                    'tanggal' => $date->toDateString(),
+                    'hari' => $date->locale('id')->translatedFormat('l'),
+                    'tanggal_fullname' => $date->locale('id')->translatedFormat('d F Y')
+                ];
+            }
+
+        }
+
+        return view('user.simoja.pjlp.absensi.piket.create', compact([
+            'jenis_absensi',
+            'formasi_tim',
+            'bulan_full',
+            'tahun',
+            'tanggals',
+            'sisa_jatah_piket',
+        ]));
+    }
+
+    public function store_piket_pjlp(Request $request) {
+        $request->validate([
+            'jenis_absensi_id' => 'required|exists:jenis_absensi,id',
+            'tanggal' => [
+                'required',
+                'date',
+                'after_or_equal:' . Carbon::now()->startOfMonth()->toDateString(),
+                'before_or_equal:' . Carbon::now()->endOfMonth()->toDateString(),
+                Rule::unique('absensi', 'tanggal')->where(function ($query) {
+                    return $query->where('user_id', auth()->id());
+                }),
+            ],
+            'catatan' => 'nullable|string|max:255',
+        ]);
+
+        $user_id = auth()->user()->id;
+        $now = Carbon::now();
+        $bulan = $now->month;
+        $bulan_full = $now->translatedFormat('F');
+        $tahun = $now->year;
+        $jatah_piket = 4; //hanya 4 hari
+
+        $absensi_piket = Absensi::where('user_id', $user_id)
+                        ->whereMonth('tanggal', $bulan)
+                        ->whereYear('tanggal', $tahun)
+                        ->where('jenis_absensi_id', 2) //jenis absensi piket
+                        ->count();
+
+        if ($absensi_piket >= $jatah_piket) {
+            return back()->withErrors(['tanggal' => "Jatah piket bulan <b>{$bulan_full} {$tahun}</b> ini sudah mencapai 4 hari."]);
+        }
+
+        $konfigurasi_absensi = KonfigurasiAbsensi::where('jenis_absensi_id', 1)->firstOrFail();
+
+        $rawData = [
+            'user_id' => $user_id,
+            'jenis_absensi_id' => $request->jenis_absensi_id,
+            'tanggal' => $request->tanggal,
+            'jam_masuk' => $konfigurasi_absensi->jam_masuk,
+            'jam_pulang' => $konfigurasi_absensi->jam_pulang,
+            'telat_masuk' => 0,
+            'cepat_pulang' => 0,
+            'status_masuk' => "Datang tepat waktu",
+            'status_pulang' => "Pulang tepat waktu",
+            'status' => 'Absensi Piket',
+            'catatan_masuk' => $request->catatan,
+        ];
+
+        Absensi::updateOrCreate($rawData, $rawData);
+
+        return redirect()->route('simoja.pjlp.my-absensi')->withNotify("Data absensi piket berhasil disimpan.");
     }
 }

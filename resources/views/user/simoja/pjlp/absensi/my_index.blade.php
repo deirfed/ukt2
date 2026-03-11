@@ -38,6 +38,11 @@
                                     title="Reset Filter">
                                     <i class="fa fa-refresh"></i>
                                 </a>
+                                <a href="{{ route('simoja.pjlp.absensi.piket.create') }}" class="btn btn-warning mr-2 mb-2 mb-sm-0"
+                                    title="Tambah Absensi Piket">
+                                    <i class="fa fa-plus"></i>
+                                    Tambah Absensi Piket
+                                </a>
                             </div>
                         </div>
                     </div>

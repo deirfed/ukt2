@@ -24,11 +24,21 @@
                 @method('post')
                 <div class="card m-0">
                     <div class="card-body">
-                        <div class="mb-3">
-                            <a href="{{ route('simoja.pjlp.my-absensi') }}"
-                                class="btn btn-primary col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
-                                style="border-radius: 6px">Lihat Daftar
-                                Absensi Saya</a>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <a href="{{ route('simoja.pjlp.my-absensi') }}"
+                                    class="btn btn-primary btn-lg rounded w-100">
+                                    <i class="fa fa-eye"></i>
+                                    Lihat Daftar Absensi Saya
+                                </a>
+                            </div>
+                            <div class="col-6">
+                                <a href="{{ route('simoja.pjlp.absensi.piket.create') }}"
+                                    class="btn btn-warning btn-lg rounded w-100">
+                                    <i class="fa fa-plus"></i>
+                                    Tambah Absensi Piket
+                                </a>
+                            </div>
                         </div>
                         <h4 class="text-center"><u>Form Absensi</u></h4>
                         <div class="form-group">
@@ -93,12 +103,12 @@
                                 </div>
                                 <div class="text-center">
                                     <div class="btn-group">
-                                        <button id="takeButton" type="button" class="btn btn-warning"
+                                        <button id="takeButton" type="button" class="btn btn-warning rounded"
                                             onClick="take_snapshot()">
                                             <i class="fa fa-camera" aria-hidden="true"></i> Ambil Foto
                                         </button>
                                         <button id="retakeButton" style="display: none" type="button"
-                                            class="btn btn-danger" onClick="retake()">
+                                            class="btn btn-danger rounded" onClick="retake()">
                                             <i class="fa fa-times" aria-hidden="true"></i> Ambil Ulang Foto
                                         </button>
                                     </div>
@@ -111,10 +121,16 @@
                             <input type="hidden" name="latitude" id="latitude" required>
                             <input type="hidden" name="longitude" id="longitude" required>
                         </div>
-                        <div class="btn group-button mt-2">
-                            <button type="submit" id="submit" name="submit" class="btn btn-primary float-right ml-3"
-                                style="display: none">Kirim</button>
-                            <a href="{{ route('simoja.pjlp.index') }}" class="btn btn-dark">Batal</a>
+                        <div class="btn group-button mt-2 d-flex justify-content-end">
+                            <a href="{{ route('simoja.pjlp.index') }}" class="btn btn-dark rounded me-3">
+                                <i class="fa fa-times"></i>
+                                Batal
+                            </a>
+                            <button type="submit" id="submit" name="submit" class="btn btn-primary rounded ml-3"
+                                style="display: none">
+                                <i class="fa fa-paper-plane"></i>
+                                Kirim
+                            </button>
                         </div>
                     </div>
             </form>

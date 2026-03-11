@@ -49,9 +49,13 @@ class AbsensiSayaDataTable extends DataTable
                 return $actionButton;
             })
             ->addColumn('status', function ($item) {
-                $badgeClass = $item->status === 'Tidak Absen Datang'
-                    ? 'badge badge-pill badge-danger'
-                    : 'badge badge-pill badge-primary';
+                $badgeClass = match ($item->status) {
+                    'Tidak Absen Datang' => 'badge badge-pill badge-danger',
+                    'Absensi Datang'     => 'badge badge-pill badge-warning',
+                    'Cuti Tahunan'       => 'badge badge-pill badge-dark',
+                    'Izin Sakit'         => 'badge badge-pill badge-dark',
+                    default              => 'badge badge-pill badge-primary',
+                };
 
                 return "
                     <div class='{$badgeClass}'>
@@ -117,7 +121,7 @@ class AbsensiSayaDataTable extends DataTable
             Column::make('user.area.pulau.name')->title('Pulau')->sortable(false),
             Column::make('jam_masuk')->title('Jam Datang')->sortable(false),
             Column::make('jam_pulang')->title('Jam Pulang')->sortable(false),
-            Column::make('status')->title('Status')->sortable(false),
+            Column::make('status')->title('Status')->addClass('text-center')->sortable(false),
             Column::computed('#')
                     ->exportable(false)
                     ->printable(false)

@@ -56,11 +56,10 @@ class AbsensiController extends Controller
 
         $seksi = Seksi::all();
         $pulau = Pulau::orderBy('name', 'ASC')->get();
-        $tahuns = Kinerja::selectRaw('YEAR(tanggal) as tahun')
+        $tahuns = Absensi::selectRaw('YEAR(tanggal) as tahun')
                 ->distinct()
                 ->orderBy('tahun', 'asc')
                 ->pluck('tahun');
-
 
         return $dataTable->with([
             'seksi_id' => $seksi_id,
