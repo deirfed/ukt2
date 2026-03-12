@@ -6,6 +6,15 @@
     </title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.min.js"></script>
     <style>
+        /* wrapper kamera */
+        .camera-wrapper {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: auto;
+        }
+
+        /* video webcam */
         #my_camera video {
             width: 100%;
             height: 100%;
@@ -13,11 +22,108 @@
             border-radius: 12px;
         }
 
+        /* hasil foto */
         #result img {
             width: 300px;
             height: 300px;
             object-fit: cover;
             border-radius: 12px;
+        }
+
+        /* overlay scanner */
+        .scanner-overlay {
+            position: absolute;
+            inset: 0;
+            border-radius: 12px;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        /* lingkaran wajah */
+        .face-guide {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 180px;
+            height: 180px;
+            transform: translate(-50%, -50%);
+            border: 3px dashed rgba(255, 255, 255, .9);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        /* animasi lingkaran */
+        @keyframes pulse {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: .6;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1.05);
+                opacity: 1;
+            }
+        }
+
+        /* scan line */
+        .scan-line {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: #00ffb3;
+            box-shadow: 0 0 10px #00ffb3;
+            animation: scan 2.5s linear infinite;
+        }
+
+        @keyframes scan {
+            0% {
+                top: 20%;
+            }
+
+            50% {
+                top: 80%;
+            }
+
+            100% {
+                top: 20%;
+            }
+        }
+
+        /* frame corner */
+        .corner {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 3px solid transparent;
+        }
+
+        .top-left {
+            top: 10px;
+            left: 10px;
+            border-top-color: #00bfff;
+            border-left-color: #00bfff;
+        }
+
+        .top-right {
+            top: 10px;
+            right: 10px;
+            border-top-color: #00bfff;
+            border-right-color: #00bfff;
+        }
+
+        .bottom-left {
+            bottom: 10px;
+            left: 10px;
+            border-bottom-color: #00bfff;
+            border-left-color: #00bfff;
+        }
+
+        .bottom-right {
+            bottom: 10px;
+            right: 10px;
+            border-bottom-color: #00bfff;
+            border-right-color: #00bfff;
         }
     </style>
 @endsection
@@ -109,11 +215,23 @@
                                 disabled>
                         </div>
                         <div class="form-group">
-                            <label class="required" for="">Photo:</label>
+                            <label class="required">Photo:</label>
                             <input type="hidden" class="form-control input-photo" name="photo" id="photo"
-                                accept="image/*" required hidden>
+                                accept="image/*" required>
                             <div class="container text-center">
-                                <div class="mt-2 mx-auto" id="my_camera"></div>
+                                <div class="camera-wrapper mt-2 mx-auto">
+                                    <div id="my_camera"></div>
+                                    <div class="scanner-overlay">
+                                        <div class="face-guide"></div>
+                                        <div class="scan-line"></div>
+                                        <div class="corners">
+                                            <div class="corner top-left"></div>
+                                            <div class="corner top-right"></div>
+                                            <div class="corner bottom-left"></div>
+                                            <div class="corner bottom-right"></div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="mb-3 text-center">
                                     <div id="result">Silahkan ambil foto absen terlebih dahulu...</div>
                                 </div>
@@ -121,11 +239,11 @@
                                     <div class="btn-group">
                                         <button id="takeButton" type="button" class="btn btn-warning rounded"
                                             onClick="take_snapshot()">
-                                            <i class="fa fa-camera" aria-hidden="true"></i> Ambil Foto
+                                            <i class="fa fa-camera"></i> Ambil Foto
                                         </button>
-                                        <button id="retakeButton" style="display: none" type="button"
+                                        <button id="retakeButton" style="display:none" type="button"
                                             class="btn btn-danger rounded" onClick="retake()">
-                                            <i class="fa fa-times" aria-hidden="true"></i> Ambil Ulang Foto
+                                            <i class="fa fa-times"></i> Ambil Ulang Foto
                                         </button>
                                     </div>
                                 </div>
@@ -157,111 +275,160 @@
 
 @section('javascript')
     <script>
-        Webcam.set({
-            width: 300,
-            height: 300,
-            image_format: 'jpeg',
-            jpeg_quality: 50
-        });
+        document.addEventListener("DOMContentLoaded", function() {
 
-        Webcam.attach('#my_camera');
+            const camera = document.getElementById("my_camera");
+            const cameraWrapper = document.querySelector(".camera-wrapper");
+            const scanner = document.querySelector(".scanner-overlay");
 
-        setTimeout(function () {
-            let video = document.querySelector('#my_camera video');
-            if (video) {
-                video.classList.add('img-thumbnail', 'shadow-lg');
+            const takeButton = document.getElementById("takeButton");
+            const retakeButton = document.getElementById("retakeButton");
+            const result = document.getElementById("result");
+            const submitButton = document.getElementById("submit");
+
+            const photoInput = document.getElementById("photo");
+            const latitudeInput = document.getElementById("latitude");
+            const longitudeInput = document.getElementById("longitude");
+
+            /* ==============================
+               INIT CAMERA
+            ============================== */
+            function initCamera() {
+
+                Webcam.set({
+                    width: 300,
+                    height: 300,
+                    image_format: "jpeg",
+                    jpeg_quality: 50
+                });
+
+                Webcam.attach("#my_camera");
+
+                setTimeout(() => {
+                    const video = document.querySelector("#my_camera video");
+                    if (video) {
+                        video.classList.add("img-thumbnail", "shadow-lg");
+                    }
+                }, 300);
+
             }
-        }, 300);
 
-        var camera = document.getElementById('my_camera');
-        var takeButton = document.getElementById('takeButton');
-        var retakeButton = document.getElementById('retakeButton');
-        var result = document.getElementById('result');
-        var submitButton = document.getElementById('submit');
+            initCamera();
 
-        function take_snapshot() {
-            if (navigator.geolocation) {
+
+            /* ==============================
+               TAKE PHOTO
+            ============================== */
+            window.take_snapshot = function() {
+
+                if (!navigator.geolocation) {
+                    alert("Geolocation tidak didukung browser.");
+                    return;
+                }
+
                 navigator.geolocation.getCurrentPosition(
-                    function(position) {
-                        // Simpan latitude & longitude ke input hidden
-                        $('#latitude').val(parseFloat(position.coords.latitude));
-                        $('#longitude').val(parseFloat(position.coords.longitude));
 
-                        // Ambil foto setelah lokasi didapat
+                    function(position) {
+
+                        latitudeInput.value = parseFloat(position.coords.latitude);
+                        longitudeInput.value = parseFloat(position.coords.longitude);
+
                         Webcam.snap(function(data_uri) {
-                            $(".input-photo").val(data_uri);
-                            result.innerHTML = '<img class="img-thumbnail shadow-lg" src="' + data_uri + '"/>';
+
+                            photoInput.value = data_uri;
+
+                            result.innerHTML =
+                                `<img class="img-thumbnail shadow-lg" src="${data_uri}" />`;
+
+                            Webcam.reset();
+
+                            /* sembunyikan kamera */
+                            cameraWrapper.style.display = "none";
+                            scanner.style.display = "none";
+
+                            takeButton.style.display = "none";
+                            retakeButton.style.display = "inline-block";
+
+                            if (submitButton) {
+                                submitButton.style.display = "inline-block";
+                            }
+
                         });
 
-                        Webcam.reset();
-                        camera.style.display = 'none';
-                        takeButton.style.display = 'none';
-                        retakeButton.style.display = 'block';
-                        submitButton.style.display = 'block';
                     },
+
                     function(error) {
                         alert("Gagal mendapatkan lokasi: " + error.message);
-                    }, {
-                        enableHighAccuracy: true, // Lokasi lebih presisi
-                        timeout: 10000, // Tunggu max 10 detik
-                        maximumAge: 0 // Jangan pakai lokasi cache
+                    },
+
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 0
                     }
+
                 );
-            } else {
-                alert("Geolocation tidak didukung oleh browser ini.");
-            }
-        }
 
-        function retake() {
-            // Re-attach webcam
-            Webcam.attach('#my_camera');
-            setTimeout(function () {
-                let video = document.querySelector('#my_camera video');
-                if (video) {
-                    video.classList.add('img-thumbnail', 'shadow-lg');
-                }
-            }, 300);
-
-            // Tampilkan/hilangkan tombol dan kamera
-            retakeButton.style.display = 'none';
-            camera.style.display = 'block';
-            takeButton.style.display = 'block';
-            submitButton.style.display = 'none';
-
-            // Kosongkan preview foto
-            result.innerHTML = '';
-
-            // Kosongkan input hidden
-            $(".input-photo").val('');
-            $('#latitude').val('');
-            $('#logitude').val('');
-        }
-
-        function startTime() {
-            const today = new Date();
-            let h = today.getHours();
-            let m = today.getMinutes();
-            let s = today.getSeconds();
-            m = checkTime(m);
-            s = checkTime(s);
-
-            let jam = h + ":" + m + ":" + s + ' WIB';
-
-            $('#jam').val(jam);
-
-            setTimeout(startTime, 1000);
-        }
-
-
-        function checkTime(i) {
-            if (i < 10) {
-                i = "0" + i
             };
-            return i;
-        }
 
-        $(document).ready(function() {
+
+            /* ==============================
+               RETAKE PHOTO
+            ============================== */
+            window.retake = function() {
+
+                cameraWrapper.style.display = "block";
+                scanner.style.display = "block";
+
+                initCamera();
+
+                retakeButton.style.display = "none";
+                takeButton.style.display = "inline-block";
+
+                if (submitButton) {
+                    submitButton.style.display = "none";
+                }
+
+                result.innerHTML = "Silahkan ambil foto absen terlebih dahulu...";
+
+                photoInput.value = "";
+                latitudeInput.value = "";
+                longitudeInput.value = "";
+
+            };
+
+
+            /* ==============================
+               CLOCK
+            ============================== */
+            function startTime() {
+
+                const today = new Date();
+
+                let h = today.getHours();
+                let m = today.getMinutes();
+                let s = today.getSeconds();
+
+                h = checkTime(h);
+                m = checkTime(m);
+                s = checkTime(s);
+
+                const jam = h + ":" + m + ":" + s + " WIB";
+
+                const jamInput = document.getElementById("jam");
+                if (jamInput) {
+                    jamInput.value = jam;
+                }
+
+                setTimeout(startTime, 1000);
+            }
+
+            function checkTime(i) {
+                return (i < 10) ? "0" + i : i;
+            }
+
             startTime();
+
         });
     </script>
 @endsection
