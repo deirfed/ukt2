@@ -22,9 +22,11 @@
                 <div class="card-body">
                     <div class="mb-3">
                         <a href="{{ route('simoja.pjlp.my-cuti') }}"
-                            class="btn btn-primary col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
-                            style="border-radius: 6px">Lihat Pengajuan
-                            Cuti Saya</a>
+                            class="btn btn-lg btn-primary col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
+                            style="border-radius: 6px">
+                            <i class="fa fa-eye"></i>
+                            Lihat Pengajuan Cuti Saya
+                        </a>
                     </div>
                     <h4 class="text-center mb-3"><u>Form Pengajuan Cuti</u></h4>
                     <form action="{{ route('simoja.cuti.pjlp.store') }}" method="POST" enctype="multipart/form-data">
@@ -33,7 +35,7 @@
                         <div class="row">
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <label for="jenis_pengajuan">Jenis Pengajuan</label>
+                                    <label class="required" for="jenis_pengajuan">Jenis Pengajuan:</label>
                                     <select class="form-control" id="jenis_cuti_id" name="jenis_cuti_id" required>
                                         <option value="" selected disabled>- pilih jenis cuti -</option>
                                         @foreach ($jenis_cuti as $item)
@@ -46,13 +48,13 @@
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 mt-2">
-                                            <label for="jenis_pengajuan">Tanggal Mulai:</label>
+                                            <label class="required" for="jenis_pengajuan">Tanggal Mulai:</label>
                                             <input type="text" onfocus="(this.type='date')" onblur="(this.type='text')"
                                                 class="form-control" id="tanggal_awal" name="tanggal_awal"
                                                 placeholder="Tanggal Awal" required>
                                         </div>
                                         <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 mt-2">
-                                            <label for="jenis_pengajuan">Tanggal Akhir:</label>
+                                            <label class="required" for="jenis_pengajuan">Tanggal Akhir:</label>
                                             <input type="text" onfocus="(this.type='date')" onblur="(this.type='text')"
                                                 class="form-control" id="tanggal_akhir" name="tanggal_akhir"
                                                 placeholder="Tanggal Akhir" required>
@@ -86,16 +88,18 @@
                         </div>
                         <div class="row">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-2">
-                                <label for="catatan">Catatan:</label>
-                                <textarea id="catatan" class="form-control" name="catatan" rows="5"></textarea>
+                                <label class="optional" for="catatan">Catatan:</label>
+                                <textarea id="catatan" class="form-control" name="catatan" rows="3"></textarea>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-2">
-                                <label for="catatan">Lampiran:</label>
-                                <div class="">
-                                    <input type="file" id="lampiran" name="lampiran" accept="image/*">
+                                <div class="form-group">
+                                    <label class="optional" id="lampiran_label" for="lampiran">Lampiran:</label>
+                                    <input class="form-control" type="file" id="lampiran" name="lampiran" accept="image/*">
                                 </div>
+                                <img class="img-thumbnail mt-2" id="previewImage" src="#" alt="Preview"
+                                    style="max-width: 250px; max-height: 250px; display: none;">
                                 @error('lampiran')
                                     <div class="container">
                                         <p class="text-danger">
@@ -105,13 +109,16 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-2 justify-content-center d-flex">
-                                <div class="row">
-                                    <a href="{{ route('dashboard.index') }}" class="btn btn-dark mx-2">Batal</a>
-                                    <button type="submit" class="btn btn-primary mx-2">Ajukan</button>
-                                </div>
-                            </div>
+                        <hr>
+                        <div class="btn group-button mt-3 d-flex justify-content-end">
+                            <a href="{{ route('simoja.pjlp.index') }}" class="btn btn-dark rounded me-3">
+                                <i class="fa fa-times"></i>
+                                Batal
+                            </a>
+                            <button type="submit" id="submit" name="submit" class="btn btn-primary rounded ml-3">
+                                <i class="fa fa-paper-plane"></i>
+                                Ajukan
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -122,6 +129,24 @@
 
 @section('javascript')
     <script>
+        const imageInput = document.getElementById('lampiran');
+        const previewImage = document.getElementById('previewImage');
+
+        imageInput.addEventListener('change', function(event) {
+            const selectedFile = event.target.files[0];
+
+            if (selectedFile) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    previewImage.style.display = 'block';
+                }
+
+                reader.readAsDataURL(selectedFile);
+            }
+        });
+
         var tanggalAkhir = document.getElementById('tanggal_akhir');
         tanggalAkhir.addEventListener('change', hitungJumlahHariCuti);
 
@@ -162,20 +187,24 @@
             var totalCutiTahunan = document.getElementById('total_cuti_tahunan');
             var alert = document.getElementById('alert');
             var lampiran = document.getElementById('lampiran');
+            var lampiran_label = document.getElementById('lampiran_label');
 
             jenisCuti.addEventListener('change', function() {
                 if (jenisCuti.value === '2') {
                     alert.style.display = 'block';
                     totalCutiTahunan.style.display = 'none';
                     lampiran.required = true;
+                    lampiran_label.className = 'required';
                 } else if (jenisCuti.value === '1') {
                     totalCutiTahunan.style.display = 'block';
                     alert.style.display = 'none';
                     lampiran.required = false;
+                    lampiran_label.className = 'optional';
                 } else {
                     alert.style.display = 'none';
                     totalCutiTahunan.style.display = 'none';
                     lampiran.required = false;
+                    lampiran_label.className = 'optional';
                 }
             });
         });

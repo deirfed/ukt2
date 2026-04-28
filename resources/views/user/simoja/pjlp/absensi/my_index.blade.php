@@ -38,6 +38,11 @@
                                     title="Reset Filter">
                                     <i class="fa fa-refresh"></i>
                                 </a>
+                                <a href="{{ route('simoja.pjlp.absensi.piket.create') }}" class="btn btn-warning mr-2 mb-2 mb-sm-0"
+                                    title="Tambah Absensi Piket">
+                                    <i class="fa fa-plus"></i>
+                                    Tambah Absensi Piket
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -68,23 +73,23 @@
                         <div class="form-row gutters">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <label for="">Personel</label>
+                                    <label class="required" for="">Personel:</label>
                                     <input type="text" class="form-control" value="{{ auth()->user()->name }}" disabled>
                                 </div>
                             </div>
                         </div>
-                        <label for="periode">Periode</label>
+                        <label class="required" for="periode">Periode:</label>
                         <div class="form-row gutters">
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
                                     <input type="date" class="form-control" value="{{ $start_date }}"
-                                        name="start_date">
+                                        name="start_date" required>
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
                                     <input type="date" class="form-control" value="{{ $end_date }}"
-                                        name="end_date">
+                                        name="end_date" required>
                                 </div>
                             </div>
                         </div>

@@ -435,6 +435,8 @@ Route::group(['middleware' => ['auth', 'CheckBanned', 'CheckKonfigurasiPJLP']], 
             Route::get('/simoja-pjlp-absensi', 'my_index_pjlp')->name('simoja.pjlp.my-absensi');
             Route::get('/simoja-pjlp-absensi-create', 'create_pjlp')->name('simoja.pjlp.absensi-create');
             Route::post('/simoja-pjlp-absensi', 'store_pjlp')->name('simoja.pjlp.absensi.store');
+            Route::get('/simoja-pjlp-absensi-piket-create', 'create_piket_pjlp')->name('simoja.pjlp.absensi.piket.create');
+            Route::post('/simoja-pjlp-absensi-piket', 'store_piket_pjlp')->name('simoja.pjlp.absensi.piket.store');
             Route::get('/simoja-pjlp-absensi/filter', 'filter_pjlp')->name('simoja.pjlp.absensi.filter');
         });
     });

@@ -96,7 +96,39 @@ class AbsensiDataTable extends DataTable
                     <span class='font-weight-bold'>Pulang:</span> {$catatanPulang}
                 ";
             })
-            ->rawColumns(['status_masuk', 'status_pulang', 'status', 'catatan', '#']);
+            ->addColumn('maps', function ($item) {
+                // Ambil value dari kolom database
+                $lat_masuk  = $item->latitude_masuk;
+                $lng_masuk  = $item->longitude_masuk;
+                $lat_pulang = $item->latitude_pulang;
+                $lng_pulang = $item->longitude_pulang;
+
+                // Cek apakah minimal salah satu pasangan lengkap
+                $masuk_ada  = $lat_masuk && $lng_masuk;
+                $pulang_ada = $lat_pulang && $lng_pulang;
+
+                if (!$masuk_ada && !$pulang_ada) {
+                    return null;
+                }
+
+                // Jika minimal satu pasangan ada, generate button
+                $mapsButton = "
+                    <a href='#' title='Lihat Lokasi di Maps'
+                        data-toggle='modal'
+                        data-target='#mapsModal'
+                        data-latitude_masuk='{$lat_masuk}'
+                        data-longitude_masuk='{$lng_masuk}'
+                        data-latitude_pulang='{$lat_pulang}'
+                        data-longitude_pulang='{$lng_pulang}'>
+                        <button class='btn btn-outline-info'>
+                            <i class='fa fa-map'></i>
+                        </button>
+                    </a>
+                ";
+
+                return $mapsButton;
+            })
+            ->rawColumns(['status_masuk', 'status_pulang', 'status', 'maps', 'catatan', '#']);
     }
 
     public function query(Absensi $model): QueryBuilder
@@ -170,8 +202,9 @@ class AbsensiDataTable extends DataTable
             Column::computed('status_masuk')->title('Status Datang')->sortable(false),
             Column::make('jam_pulang')->title('Jam Pulang')->sortable(false),
             Column::computed('status_pulang')->title('Status Pulang')->sortable(false),
-            Column::make('status')->title('Status')->sortable(false),
+            Column::make('status')->title('Status')->addClass('text-center')->sortable(false),
             Column::computed('catatan')->title('Catatan')->sortable(false),
+            Column::computed('maps')->title('Lokasi')->addClass('text-center text-nowrap')->sortable(false),
             Column::computed('#')
                 ->exportable(false)
                 ->printable(false)

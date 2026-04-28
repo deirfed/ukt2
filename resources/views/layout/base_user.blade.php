@@ -10,6 +10,24 @@
         <link rel="shortcut icon" href="{{ asset('assets/img/ukt2logo.png') }}" />
         @yield('title-head')
         {{-- CSS --}}
+        <style>
+            label.required::after {
+                content: ' *';
+                color: red;
+            }
+
+            label.optional::after {
+                content: ' (optional)';
+                color: blue;
+                font-size: 0.75em;
+            }
+
+            label.auto::after {
+                content: ' (autocomplete)';
+                color: rgb(0, 116, 17);
+                font-size: 0.75em;
+            }
+        </style>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/fonts/style.css') }}">

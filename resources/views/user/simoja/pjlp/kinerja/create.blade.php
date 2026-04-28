@@ -22,20 +22,22 @@
                 @csrf
                 @method('post')
                 <div class="card m-0">
-                    <input type="text" name="formasi_tim_id" value="#" hidden>
-                    <input type="text" name="anggota_id" value="#" hidden>
+                    <input type="hidden" name="formasi_tim_id" value="#">
+                    <input type="hidden" name="anggota_id" value="#">
                     <div class="card-body">
                         <div class="mb-3">
                             <a href="{{ route('simoja.pjlp.my-kinerja') }}"
-                                class="btn btn-primary col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
-                                style="border-radius: 6px">Lihat Daftar
-                                Kinerja Saya</a>
+                                class="btn btn-primary btn-lg col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
+                                style="border-radius: 6px">
+                                <i class="fa fa-eye"></i>
+                                Lihat Daftar Kinerja Saya
+                            </a>
                         </div>
                         <h4 class="text-center">Form Input Kinerja</h4>
                         <div class="form-group">
                             <input type="text" name="formasi_tim_id" value="{{ $formasi_tim->id }}" hidden>
                             <input type="text" name="anggota_id" value="{{ auth()->user()->id }}" hidden>
-                            <label>Data Lengkap</label>
+                            <label>Data Lengkap:</label>
                             <table>
                                 <tr>
                                     <td style="width: 90px">Nama</td>
@@ -71,7 +73,7 @@
                         </div>
                         <hr>
                         <div class="form-group">
-                            <label>Nama Kegiatan</label>
+                            <label class="required">Nama Kegiatan:</label>
                             <select id="kategori_id" name="kategori_id" class="form-control" required>
                                 <option value="" selected disabled>- pilih nama kegiatan -</option>
                                 @foreach ($kategori as $item)
@@ -81,23 +83,23 @@
                             </select>
                         </div>
                         <div class="form-group" id="kegiatan_lainnya_container" style="display: none">
-                            <label>Kegiatan Lainnya</label>
+                            <label>Kegiatan Lainnya:</label>
                             <input type="text" id="kegiatan_lainnya" class="form-control" name="kegiatan"
                                 placeholder="input nama kegiatan lainnya" autocomplete="off">
                         </div>
                         <div class="form-group">
-                            <label>Lokasi Kegiatan</label>
+                            <label class="required">Lokasi Kegiatan:</label>
                             <input type="text" class="form-control" name="lokasi" placeholder="input lokasi kegiatan"
                                 autocomplete="off" required>
                         </div>
                         <div class="form-group">
-                            <label>Tanggal</label>
+                            <label class="required">Tanggal:</label>
                             <input type="text" onfocus="(this.type='date')" onblur="(this.type='text')"
                                 class="form-control" name="tanggal" placeholder="input tanggal kegiatan" required
                                 autocomplete="off">
                         </div>
                         <div class="form-group">
-                            <label for="">Photo Kegiatan <span class="text-secondary">(Max: 3 photo)</span></label>
+                            <label class="required" for="">Photo Kegiatan: <span class="text-secondary">(Max: 3 photo)</span></label>
                             <input type="file" class="form-control image-input" name="photo[]" multiple accept="image/*"
                                 required>
                             @error('photo')
@@ -109,12 +111,19 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Catatan <span class="text-success">(opsional)</span></label>
+                            <label class="optional">Catatan:</label>
                             <textarea class="form-control" name="deskripsi" rows="3"></textarea>
                         </div>
-                        <div class="btn group-button">
-                            <button type="submit" class="btn btn-primary float-right ml-3">Kirim</button>
-                            <a href="{{ route('dashboard.index') }}" class="btn btn-dark">Batal</a>
+                        <hr>
+                        <div class="btn group-button mt-2 d-flex justify-content-end">
+                            <a href="{{ route('simoja.pjlp.index') }}" class="btn btn-dark rounded me-3">
+                                <i class="fa fa-times"></i>
+                                Batal
+                            </a>
+                            <button type="submit" id="submit" name="submit" class="btn btn-primary rounded ml-3">
+                                <i class="fa fa-paper-plane"></i>
+                                Kirim
+                            </button>
                         </div>
                     </div>
                 </div>

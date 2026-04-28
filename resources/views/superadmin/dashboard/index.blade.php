@@ -94,11 +94,20 @@
                                         </div>
                                         <div class="doc-title text-white">Generate Report Absensi PJLP</div>
                                         <div class="dropdown">
-                                            <button class="btn btn-dark mr-2 mb-2 mb-sm-0 text-white" data-toggle="modal"
-                                                data-target="#modalDownloadPDFAbsensi" aria-haspopup="true"
+                                            <button class="btn btn-dark mr-2 mb-2 mb-sm-0 text-white" href="#"
+                                                id="appsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
                                                 aria-expanded="false" title="Export">
                                                 <i class="fa fa-paper-plane"></i> Export PDF
                                             </button>
+
+                                            <ul class="dropdown-menu" aria-labelledby="dashboardsDropdown">
+                                                <li>
+                                                    <a class="dropdown-item" href="javascript:;" data-toggle="modal"
+                                                        data-target="#modalDownloadPDFAbsensi">
+                                                        <i class="fa fa-file-pdf text-danger"></i> PDF per Personil
+                                                    </a>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </div>
                                 </div>
@@ -107,7 +116,7 @@
                                         <div class="doc-icon">
                                             <i class="fa fa-list fa-2x"></i>
                                         </div>
-                                        <div class="doc-title text-white">Generate Report Kegiatan PJLP</div>
+                                        <div class="doc-title text-white">Generate Report Kinerja PJLP</div>
                                         <div class="dropdown">
                                             <button class="btn btn-dark mr-2 mb-2 mb-sm-0 text-white" href="#"
                                                 id="appsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
@@ -181,7 +190,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="resetPasswordModalLabel">Export Laporan Absensi</h5>
+                    <h5 class="modal-title" id="resetPasswordModalLabel">Export Laporan Absensi per Personel</h5>
                 </div>
                 <div class="modal-body">
                     <form id="formPDFAbsensi" action="{{ route('simoja.kasi.absensi.export.pdf') }}" method="GET">
@@ -189,22 +198,22 @@
                         @method('GET')
                         <div class="form-row gutters">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label for="">Personel</label>
-                                    <select name="user_id" class="form-control" required>
-                                        <option value="" selected disabled>- Pilih Personel -</option>
-                                        @foreach ($user as $item)
-                                            <option value="{{ $item->id }}"
-                                                @if ($item->id == $user_id) selected @endif>{{ $item->name }} -
-                                                {{ $item->nip ?? '-' }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="">Periode</label>
-                                    <input type="month" class="form-control" name="periode"
-                                        value="{{ $periode }}">
+                                @livewire('form-filter-absensi', [
+                                    'user_required' => true,
+                                ])
+                                <label for="periode" class="required">Periode</label>
+                                <div class="form-row gutters">
+                                    <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="form-group">
+                                            <input type="date" class="form-control" value="" name="start_date"
+                                                required>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="form-group">
+                                            <input type="date" class="form-control" value="" name="end_date" required>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -213,7 +222,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
                     <button type="submit" form="formPDFAbsensi" formtarget="_blank"
-                        class="btn btn-primary">Buat</button>
+                        class="btn btn-primary">Generate</button>
                 </div>
             </div>
         </div>
@@ -228,30 +237,17 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="resetPasswordModalLabel">Export Laporan Kinerja</h5>
+                    <h5 class="modal-title" id="resetPasswordModalLabel">Export Laporan Kinerja per Personel</h5>
                 </div>
                 <div class="modal-body">
                     <form id="formPDFKegiatanPersonel" action="{{ route('simoja.kasi.kinerja.export.pdf') }}"
                         method="GET">
                         @csrf
                         @method('GET')
-                        <div class="form-row gutters">
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label for="">Personil</label>
-                                    <select name="user_id" class="form-control" required>
-                                        <option value="" selected disabled>- Pilih Personil -</option>
-                                        @foreach ($user as $item)
-                                            <option value="{{ $item->id }}"
-                                                @if ($item->id == $user_id) selected @endif>{{ $item->name }} -
-                                                {{ $item->nip ?? '-' }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <label for="periode">Periode</label>
+                        @livewire('form-filter-absensi', [
+                            'user_required' => true,
+                        ])
+                        <label class="required" for="periode">Periode</label>
                         <div class="form-row gutters">
                             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
@@ -271,7 +267,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
                     <button type="submit" form="formPDFKegiatanPersonel" formtarget="_blank"
-                        class="btn btn-primary">Buat</button>
+                        class="btn btn-primary">Generate</button>
                 </div>
             </div>
         </div>

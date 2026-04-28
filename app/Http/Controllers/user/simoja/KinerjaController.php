@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Barryvdh\Snappy\Facades\SnappyPdf as SnappyPDF;
 
 class KinerjaController extends Controller
 {
@@ -172,13 +173,27 @@ class KinerjaController extends Controller
     {
         $request->validate([
             'user_id' => 'required',
-            'start_date' => 'date|required',
-            'end_date' => 'date|required|after_or_equal:start_date',
+
+            // salah satu harus ada
+            'periode'     => 'required_without:start_date|date_format:Y-m',
+            'start_date'  => 'required_without:periode|date',
+            'end_date'    => 'nullable|date|after_or_equal:start_date',
         ]);
 
         $user_id = $request->user_id;
-        $start_date = Carbon::parse($request->start_date);
-        $end_date = Carbon::parse($request->end_date) ?? $start_date;
+
+        if ($request->filled('periode')) {
+            // Jika pakai periode (Y-m)
+            $start_date = Carbon::createFromFormat('Y-m', $request->periode)->startOfMonth();
+            $end_date   = Carbon::createFromFormat('Y-m', $request->periode)->endOfMonth();
+        } else {
+            // Jika pakai start & end date
+            $start_date = Carbon::parse($request->start_date);
+            $end_date   = Carbon::parse($request->end_date ?? $request->start_date);
+        }
+
+        $start_date = Carbon::parse($start_date);
+        $end_date = Carbon::parse($end_date) ?? $start_date;
 
         $user = FormasiTim::where('anggota_id', $user_id)->first();
 
@@ -187,12 +202,22 @@ class KinerjaController extends Controller
                         ->orderBy('updated_at', 'DESC')
                         ->first();
 
-        $kinerja = Kinerja::where('anggota_id', $user_id)
-                            ->whereBetween('tanggal', [$start_date, $end_date])
-                            ->orderBy('tanggal', 'ASC')
-                            ->get();
+        $sub = Kinerja::query()
+            ->selectRaw('*, ROW_NUMBER() OVER (PARTITION BY tanggal ORDER BY id ASC) as row_num')
+            ->where('anggota_id', $user_id)
+            ->whereBetween('tanggal', [$start_date, $end_date]);
 
-        $pdf = Pdf::loadView('user.simoja.kasi.kinerja.export.pdf', [
+        $kinerja = Kinerja::query()
+            ->fromSub($sub, 'kinerja')
+            ->where('row_num', '<=', 3)
+            ->orderBy('tanggal')
+            ->get();
+
+        if($kinerja->count() > 200) {
+            return back()->withError("Data kinerja yang di-export menjadi PDF lebih dari 200. <br> Silahkan export secara parsial untuk menjaga performance server tetap optimal");
+        }
+
+        $pdf = SnappyPDF::loadView('user.simoja.kasi.kinerja.export.pdf', [
             'user' => $user,
             'kepala_seksi' => $kepala_seksi,
             'kinerja' => $kinerja,
@@ -200,7 +225,9 @@ class KinerjaController extends Controller
             'end_date' => $end_date->isoFormat('D MMMM Y'),
         ]);
 
-        return $pdf->setPaper('A4', 'potrait')->stream(Carbon::now()->format('Ymd_') . 'Data Kinerja.pdf');
+        $pdf->setOption('header-html', storage_path('app/pdf/header.html'));
+
+        return $pdf->stream(Carbon::now()->format('Ymd_') . 'Data Kinerja.pdf');
     }
 
     public function export_pdf_kegiatan_kasi(Request $request)
@@ -231,14 +258,20 @@ class KinerjaController extends Controller
                             ->orderBy('tanggal', 'ASC')
                             ->get();
 
-        $pdf = Pdf::loadView('user.simoja.kasi.kinerja.export.pdf_kegiatan', [
+        if($kinerja->count() > 200) {
+            return back()->withError("Data kinerja yang di-export menjadi PDF lebih dari 200. <br> Silahkan export secara parsial untuk menjaga performance server tetap optimal");
+        }
+
+        $pdf = SnappyPDF::loadView('user.simoja.kasi.kinerja.export.pdf_kegiatan', [
             'kategori' => $kategori,
             'kinerja' => $kinerja,
             'start_date' => $start_date->isoFormat('D MMMM Y'),
             'end_date' => $end_date->isoFormat('D MMMM Y'),
         ]);
 
-        return $pdf->setPaper('A4', 'potrait')->stream(Carbon::now()->format('Ymd_') . 'Data Kinerja_Kegiatan ' . $kategori->name . '.pdf');
+        $pdf->setOption('header-html', storage_path('app/pdf/header.html'));
+
+        return $pdf->stream(Carbon::now()->format('Ymd_') . 'Data Kinerja_Kegiatan ' . $kategori->name . '.pdf');
     }
 
     public function export_pdf_all_kasi(Request $request)
@@ -283,13 +316,25 @@ class KinerjaController extends Controller
 
         $kinerja = $query->orderBy('tanggal', 'ASC')->get();
 
-        $pdf = Pdf::loadView('user.simoja.kasi.kinerja.export.pdf_all', [
+        // $pdf = Pdf::loadView('user.simoja.kasi.kinerja.export.pdf_all', [
+        //     'kinerja' => $kinerja,
+        //     'start_date' => $start_date->isoFormat('D MMMM Y'),
+        //     'end_date' => $end_date->isoFormat('D MMMM Y'),
+        // ]);
+
+        if($kinerja->count() > 200) {
+            return back()->withError("Data kinerja yang di-export menjadi PDF lebih dari 200. <br> Silahkan export secara parsial untuk menjaga performance server tetap optimal");
+        }
+
+        $pdf = SnappyPDF::loadView('user.simoja.kasi.kinerja.export.pdf_all', [
             'kinerja' => $kinerja,
             'start_date' => $start_date->isoFormat('D MMMM Y'),
             'end_date' => $end_date->isoFormat('D MMMM Y'),
         ]);
 
-        return $pdf->setPaper('A4', 'potrait')->stream(Carbon::now()->format('Ymd_') . 'Data Kinerja.pdf');
+        $pdf->setOption('header-html', storage_path('app/pdf/header.html'));
+
+        return $pdf->stream(Carbon::now()->format('Ymd_') . 'Data Kinerja.pdf');
     }
 
 

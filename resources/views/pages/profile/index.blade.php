@@ -120,7 +120,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="text-center">
+                    <div class="text-center mx-auto">
                         <img class="img-thumbnail" id="previewImage" src="#" alt="Preview"
                             style="max-width: 250px; max-height: 250px; display: none;">
                     </div>

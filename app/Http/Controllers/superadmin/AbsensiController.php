@@ -17,6 +17,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\absensi\AbsensiExport;
 use App\Models\Seksi;
 use Illuminate\Support\Facades\Storage;
+use Barryvdh\Snappy\Facades\SnappyPdf as SnappyPDF;
 
 class AbsensiController extends Controller
 {
@@ -55,11 +56,10 @@ class AbsensiController extends Controller
 
         $seksi = Seksi::all();
         $pulau = Pulau::orderBy('name', 'ASC')->get();
-        $tahuns = Kinerja::selectRaw('YEAR(tanggal) as tahun')
+        $tahuns = Absensi::selectRaw('YEAR(tanggal) as tahun')
                 ->distinct()
                 ->orderBy('tahun', 'asc')
                 ->pluck('tahun');
-
 
         return $dataTable->with([
             'seksi_id' => $seksi_id,
@@ -157,6 +157,7 @@ class AbsensiController extends Controller
 
     public function export_pdf_kasi(Request $request)
     {
+        dd($request);
         $request->validate([
             'user_id' => 'required|exists:users,id',
             'periode' => 'required',
@@ -206,13 +207,23 @@ class AbsensiController extends Controller
             ];
         }
 
-        $pdf = Pdf::loadView('user.simoja.kasi.absensi.export.pdf', [
+        // $pdf = Pdf::loadView('user.simoja.kasi.absensi.export.pdf', [
+        //     'user' => $user,
+        //     'datesInRange' => $datesInRange,
+        //     'absensi' => $absensi,
+        //     'start_date' => $start_date->isoFormat('D MMMM Y'),
+        //     'end_date' => $end_date->isoFormat('D MMMM Y'),
+        // ]);
+
+        $pdf = SnappyPDF::loadView('user.simoja.kasi.absensi.export.pdf', [
             'user' => $user,
             'datesInRange' => $datesInRange,
             'absensi' => $absensi,
             'start_date' => $start_date->isoFormat('D MMMM Y'),
             'end_date' => $end_date->isoFormat('D MMMM Y'),
         ]);
+
+        $pdf->setOption('header-html', storage_path('app/pdf/header.html'));
 
         return $pdf->stream(Carbon::now()->format('Ymd_') . 'Data Absensi_' . $user->anggota->name . '_' . $user->anggota->nip . '_Seksi ' . $user->struktur->seksi->name . '_Pulau ' . $user->area->pulau->name . '.pdf');
     }
