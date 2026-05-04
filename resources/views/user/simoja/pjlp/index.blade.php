@@ -120,7 +120,7 @@
                     <ol style="padding-left: 18px;">
                         <li class="mb-3">
                             <strong>Piket Berurutan</strong><br>
-                            Pengambilan jadwal piket selama <strong>2 s/d 4 hari berturut-turut</strong>,
+                            Pengambilan jadwal piket selama <strong>2 s/d 4 hari berturut-turut</strong> (misalnya Senin–Selasa–Rabu atau Kamis–Jumat–Sabtu dan seterusnya),
                             <strong class="text-danger">WAJIB</strong> mendapatkan persetujuan dari
                             <strong>Koordinator</strong> dan <strong>Kepala Seksi</strong>,
                             serta wajib diinformasikan kepada rekan kerja terkait.
