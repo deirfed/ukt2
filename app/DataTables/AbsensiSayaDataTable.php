@@ -51,6 +51,7 @@ class AbsensiSayaDataTable extends DataTable
             ->addColumn('status', function ($item) {
                 $badgeClass = match ($item->status) {
                     'Tidak Absen Datang' => 'badge badge-pill badge-danger',
+                    'Absensi Tidak Lengkap' => 'badge badge-pill badge-danger',
                     'Absensi Datang'     => 'badge badge-pill badge-warning',
                     'Cuti Tahunan'       => 'badge badge-pill badge-dark',
                     'Izin Sakit'         => 'badge badge-pill badge-dark',

@@ -741,7 +741,7 @@ class AbsensiController extends Controller
         // Tentukan mode absensi
         if(($waktu >= $batas_mulai_absen_masuk) and ($waktu <= $batas_selesai_absen_masuk)) {
             $mode = 'masuk';
-            $status = 'Absensi Datang';
+            $status = 'Absensi Tidak Lengkap'; //Absensi Datang
             $label = 'Absensi Datang';
 
             // Cek keterlambatan
@@ -755,7 +755,7 @@ class AbsensiController extends Controller
         }
         elseif(($waktu >= $batas_mulai_absen_pulang) and ($waktu <= $batas_selesai_absen_pulang)) {
             $mode = 'pulang';
-            $status = 'Absensi Pulang';
+            $status = 'Absensi Tidak Lengkap'; //Absensi Pulang
             $label = 'Absensi Pulang';
 
             // Cek pulang cepat
@@ -835,7 +835,7 @@ class AbsensiController extends Controller
                     'latitude_pulang' => $latitude,
                     'longitude_pulang' => $longitude,
                     'status_pulang' => $status_absensi,
-                    'status'=> 'Tidak Absen Datang',
+                    'status'=> 'Absensi Tidak Lengkap', //Tidak Absen Datang
                     'catatan_pulang' => $catatan,
                     'lokasi_pulang' => $lokasi,
                 ]);
@@ -1076,7 +1076,7 @@ class AbsensiController extends Controller
             'cepat_pulang' => 0,
             'status_masuk' => "Datang tepat waktu",
             'status_pulang' => "Pulang tepat waktu",
-            'status' => 'Absensi Piket',
+            'status' => 'Absensi Lepas Piket',
             'catatan_masuk' => $request->catatan,
         ];
 
