@@ -143,7 +143,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-dark" data-dismiss="modal">
+                    <button type="button" class="btn btn-dark rounded" data-dismiss="modal">
                         Saya Mengerti
                     </button>
                 </div>
