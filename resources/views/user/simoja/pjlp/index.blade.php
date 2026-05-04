@@ -95,11 +95,72 @@
             </div>
         </div>
     </div>
+
+    {{-- START: MODAL INFORMASI --}}
+    <div class="modal fade" id="modalInformasi" tabindex="-1" role="dialog" aria-labelledby="modalInformasi"
+        aria-hidden="true">
+        <div class="modal-dialog modal-md modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 12px; overflow: hidden;">
+
+                <div class="modal-header bg-warning text-dark">
+                    <h5 class="modal-title font-weight-bold">
+                        ⚠️ PERHATIAN PENTING
+                    </h5>
+                    <button type="button" class="close text-dark" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body" style="font-size: 14.5px; line-height: 1.6;">
+
+                    <p class="mb-3">
+                        <strong>Harap diperhatikan dan dipatuhi oleh seluruh personel PJLP:</strong>
+                    </p>
+
+                    <ol style="padding-left: 18px;">
+                        <li class="mb-3">
+                            <strong>Piket Berurutan</strong><br>
+                            Pengambilan jadwal piket selama <strong>2 s/d 4 hari berturut-turut</strong>,
+                            <strong class="text-danger">WAJIB</strong> mendapatkan persetujuan dari
+                            <strong>Koordinator</strong> dan <strong>Kepala Seksi</strong>,
+                            serta wajib diinformasikan kepada rekan kerja terkait.
+                        </li>
+
+                        <li class="mb-2">
+                            <strong>Absensi</strong><br>
+                            Kelalaian dalam melakukan absensi, termasuk lupa melakukan absen,
+                            <strong class="text-danger">TIDAK DAPAT DITOLERANSI</strong>
+                            dengan alasan apa pun.
+                        </li>
+                    </ol>
+
+                    <hr>
+
+                    <p class="text-right mb-0">
+                        <strong><em>— SIMOJA UKT2 —</em></strong>
+                    </p>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dark" data-dismiss="modal">
+                        Saya Mengerti
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {{-- END: MODAL INFORMASI --}}
 @endsection
 
 
 @section('javascript')
     <script>
+        $(document).ready(function() {
+            $('#modalInformasi').modal('show');
+        });
+
         function toggleModal(id) {
             $('#id').val(id);
         }
