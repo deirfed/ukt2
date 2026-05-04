@@ -189,7 +189,7 @@
     </div> --}}
 
     {{-- PAGE SUMMARY --}}
-    <div class="text-center">
+    {{-- <div class="text-center">
         <h5 class="mt-3 mb-1 text-uppercase font-weight-bold">
             <u>LAPORAN KEHADIRAN</u>
         </h5>
@@ -211,11 +211,11 @@
                 <td>:</td>
                 <td>{{ $user->anggota->jabatan->name }}</td>
             </tr>
-            {{-- <tr>
+            <tr>
                 <td>Koordinator</td>
                 <td>:</td>
                 <td>{{ $user->koordinator->name }}</td>
-            </tr> --}}
+            </tr>
             <tr>
                 <td>Seksi</td>
                 <td>:</td>
@@ -331,13 +331,13 @@
         <p>% Efisiensi Kerja: Presentase Jam Kerja Efektif terhadap Jam Absensi</p>
     </div>
 
-    <div class="page-break"></div>
+    <div class="page-break"></div> --}}
 
     {{-- PAGE DETAIL --}}
     <div class="text-center">
-        <p class="mt-3 mb-1 text-uppercase font-weight-bold">
-            <u>DETAIL KEHADIRAN</u>
-        </p>
+        <h5 class="mt-3 mb-1 text-uppercase font-weight-bold">
+            <u>LAPORAN KEHADIRAN</u>
+        </h5>
     </div>
 
     <div class="mt-2">
@@ -416,7 +416,8 @@
                             <img class="img-thumbnail" src="{{ $item['url_photo_pulang'] }}" alt="photo_pulang"
                                 style="height: 70px">
                         </td>
-                        <td class="{{ $item['bg'] }} p-1">{{ $item['status'] }}</td>
+                        {{-- <td class="{{ $item['bg'] }} p-1">{{ $item['status'] }}</td> --}}
+                        <td class="p-1">{{ $item['status'] }}</td>
                     </tr>
                 @endforeach
             </tbody>
